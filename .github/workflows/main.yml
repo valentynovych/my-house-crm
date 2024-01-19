@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Telegram Notify
-        uses: appleboy/telegram-action@v0.1.1
-        with:
-          to: ${{ secrets.TG_CHANNEL_NAME }}
-          token: ${{ secrets.TG_CHANNEL_TOKEN }}
+        uses: Lukasss93/telegram-action@v2
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TG_CHANNEL_TOKEN }}
+          TELEGRAM_CHAT: ${{ secrets.TG_CHANNEL_NAME }}
