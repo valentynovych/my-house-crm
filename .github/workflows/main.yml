@@ -11,8 +11,8 @@ jobs:
     name: Notification on push
     runs-on: ubuntu-latest
     steps:
-      - name: send default message
-        uses: appleboy/telegram-action@master
+      - name: Telegram Notify
+        uses: appleboy/telegram-action@v0.1.1
         with:
           to: ${{ secrets.TG_CHANNEL_NAME }}
           token: ${{ secrets.TG_CHANNEL_TOKEN }}
