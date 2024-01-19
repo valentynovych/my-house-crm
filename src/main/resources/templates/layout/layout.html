@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en"
+      class="light-style layout-navbar-fixed layout-menu-fixed"
+      dir="ltr"
+      data-theme="theme-default"
+      data-assets-path="../../assets/"
+      data-template="vertical-menu-template"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Мій Дім 24</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/tabler-icons.css}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/core.css}" class="template-customizer-core-css" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/theme-default.css}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" th:href="@{/assets/css/demo.css}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}" />
+
+
+    <!-- Helpers -->
+    <script th:src="@{/assets/vendor/js/helpers.js}"></script>
+
+    <script th:src="@{/assets/js/config.js}"></script>
+</head>
+<body>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+            <div class="app-brand demo">
+                <a th:href="@{/templates/statistic}" class="app-brand-link">
+              <span class="app-brand-logo demo">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 106 106"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#ffc868;}.cls-3{fill:#12adb8;}.cls-4{fill:#ff7575;}.cls-5{opacity:0.1;}.cls-6{fill:#171c1f;}.cls-7{opacity:0.15;}</style></defs><title>home</title><g id="Home"><g id="Fill"><path class="cls-1" d="M53,19,15,49V98a6,6,0,0,0,6,6H85a6,6,0,0,0,6-6V49Z"/></g>
+                   <g id="Yellow">
+                       <path class="cls-2" d="M17,96v2a4,4,0,0,0,4,4H85a4,4,0,0,0,4-4V96Z"/>
+                   </g>
+                   <g id="Orange">
+                       <polygon class="cls-3" points="53 2 2 43 2 59 53 19 104 59 104 43 53 2"/>
+                   </g>
+                   <g id="Red">
+                       <path class="cls-4" d="M63,64H43a2,2,0,0,0-2,2v36H65V66A2,2,0,0,0,63,64Z"/>
+                   </g>
+                   <g id="Shadows" class="cls-5">
+                       <path d="M85,100H21a4,4,0,0,1-4-4v2a4,4,0,0,0,4,4H85a4,4,0,0,0,4-4V96A4,4,0,0,1,85,100ZM54.29,21.47h0a2,2,0,0,0-2.57,0h0L17,48.7v5.08L53,25.54,89,53.78V48.7Z"/></g><g id="Inner_Lines_1" data-name="Inner Lines 1"><path class="cls-6" d="M17,96H39V94H17ZM58,83a1,1,0,1,0,1,1A1,1,0,0,0,58,83Zm9,11v2H89V94Z"/></g><g id="Inner_Lines_2" data-name="Inner Lines 2" class="cls-7"><path class="cls-6" d="M6,55H8V39H6Zm31,1H32a1,1,0,0,0,0,2h5a1,1,0,0,0,0-2ZM27,78H23a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2ZM26,53h8a1,1,0,0,0,0-2H26a1,1,0,0,0,0,2ZM98,39V55h2V39ZM84,68H76a1,1,0,0,0,0,2h8a1,1,0,0,0,0-2ZM57,38H54a1,1,0,0,0,0,2h3a1,1,0,0,0,0-2ZM78,83H74a1,1,0,1,0,0,2h4a1,1,0,1,0,0-2ZM70,53H64a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2Z"/></g><g id="Outline"><path class="cls-6" d="M105.29,41.48h0l-51-41h0a2,2,0,0,0-2.58,0h0l-51,41h0A2,2,0,0,0,0,43V59a2,2,0,0,0,3.28,1.52h0L13,52.91V98a8,8,0,0,0,8,8H85a8,8,0,0,0,8-8V52.91l9.71,7.62h0A2,2,0,0,0,106,59V43A2,2,0,0,0,105.29,41.48ZM63,102H43V66H63Zm26-4a4,4,0,0,1-4,4H67V66a4,4,0,0,0-4-4H43a4,4,0,0,0-4,4v36H21a4,4,0,0,1-4-4V49.78L53,21.54,89,49.78Zm13-43.11L54.29,17.47h0a1.94,1.94,0,0,0-2-.35h0a2,2,0,0,0-.58.34h0L4,54.89V44L53,4.57,102,44Z"/></g></g></svg>
+              </span>
+                    <span class="app-brand-text demo menu-text fw-bold">Мій Дім 24</span>
+                </a>
+
+                <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+                    <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+                    <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+                </a>
+            </div>
+
+            <div class="menu-inner-shadow"></div>
+
+            <ul class="menu-inner py-1">
+
+                <li class="menu-item">
+                    <a th:href="@{/statistic}" class="menu-link" id="lin">
+                        <i class="menu-icon tf-icons ti ti-chart-pie"></i>
+                        <div data-i18n="Email">Статистика</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/cashRegister}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-cash"></i>
+                        <div data-i18n="Kanban">Каса</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/invoices}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-file-spreadsheet"></i>
+                        <div data-i18n="Kanban">Квитанції на оплату</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/personalAccounts}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-star"></i>
+                        <div data-i18n="Kanban">Особисті рахунки</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/appartments}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-bed"></i>
+                        <div data-i18n="Users">Квартири</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/owners}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-user"></i>
+                        <div data-i18n="Users">Власники квартир</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/houses}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-home"></i>
+                        <div data-i18n="Users">Будинки</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/messages}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-mail"></i>
+                        <div data-i18n="Users">Повідомлення</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/masterRequests}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-users"></i>
+                        <div data-i18n="Users">Заявки для виклику майстра</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/meterReadings}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-table"></i>
+                        <div data-i18n="Users">Показання лічильників</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-layout"></i>
+                        <div data-i18n="Roles & Permissions">Управління сайтом</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a th:href="@{/mainPage}" class="menu-link">
+                                <div data-i18n="Roles">Головна сторінка</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a th:href="@{/aboutPage}"  class="menu-link">
+                                <div data-i18n="Permission">Про нас</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a th:href="@{/servicePage}"  class="menu-link">
+                                <div data-i18n="Permission">Послуги</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a th:href="@{/contactsPage}"  class="menu-link">
+                                <div data-i18n="Permission">Контакти</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-settings"></i>
+                        <div data-i18n="Roles & Permissions">Налаштування системи</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a th:href="@{/services}" class="menu-link">
+                                <div data-i18n="Roles">Послуги</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a th:href="@{/tariffs}" class="menu-link">
+                                <div data-i18n="Permission">Тарифи</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a th:href="@{/roles}" class="menu-link">
+                                <div data-i18n="Permission">Ролі</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a th:href="@{/staff}" class="menu-link">
+                                <div data-i18n="Permission">Користувачі</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a th:href="@{/paymentDetails}" class="menu-link">
+                                <div data-i18n="Permission">Платіжні реквізити</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a th:href="@{/paymentItems}" class="menu-link">
+                                <div data-i18n="Permission">Статті платежів</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </aside>
+        <div class="layout-page">
+            <!-- Navbar -->
+
+            <nav
+                    class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                    id="layout-navbar"
+            >
+                <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                        <i class="ti ti-menu-2 ti-sm"></i>
+                    </a>
+                </div>
+
+                <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+
+                    <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+                        <!-- Notification -->
+                        <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
+                            <a
+                                    class="nav-link dropdown-toggle hide-arrow"
+                                    href="javascript:void(0);"
+                                    data-bs-toggle="dropdown"
+                                    data-bs-auto-close="outside"
+                                    aria-expanded="false"
+                            >
+                                <i class="ti ti-bell ti-md"></i>
+                                <span class="badge bg-danger rounded-pill badge-notifications">2</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end py-0">
+                                <li class="dropdown-menu-header border-bottom">
+                                    <div class="dropdown-header d-flex align-items-center py-3">
+                                        <h6 class="text-body mb-0 me-auto">Нових користувачів: 2</h6>
+                                        <a
+                                                href="javascript:void(0)"
+                                                class="dropdown-notifications-all text-body"
+                                                data-bs-toggle="tooltip"
+                                                data-bs-placement="top"
+                                                title="Mark all as read"
+                                        ><i class="ti ti-mail-opened fs-4"></i
+                                        ></a>
+                                    </div>
+                                </li>
+                                <li class="dropdown-notifications-list scrollable-container">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                                            <div class="d-flex">
+                                                <h6 class="mb-1">Іван Іванов</h6>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item list-group-item-action dropdown-notifications-item">
+                                            <div class="d-flex">
+                                                <h6 class="mb-1">Марія Марія</h6>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-menu-footer border-top">
+                                    <a
+                                            th:href="@{/staff}"
+                                            class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center"
+                                    >
+                                        Перейти в розділ користувачів
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--/ Notification -->
+
+                        <!-- User -->
+                        <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                <div class="avatar avatar-online ms-3 me-2">
+                                    <img th:src="@{/assets/img/avatars/1.png}" alt class="h-auto rounded-circle" />
+                                </div>
+                        </li>
+                        <li class="nav-item me-3">
+                            <div> Full Name</div>
+                            <div> Role </div>
+
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/logout}" id="logoutLink">
+                                <h3 class="mb-0"><i class="bi bi-box-arrow-right"></i></h3>
+                            </a>
+                        </li>
+
+                        <!--/ User -->
+                    </ul>
+                </div>
+            </nav>
+            <div class="content-wrapper">
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="card py-5 px-5" layout:fragment="content">
+                    </div>
+                </div>
+            </div>
+            <footer class="content-footer footer bg-footer-theme">
+                <div class="container-xxl">
+                    <div
+                            class="footer-container d-flex align-items-center justify-content-center py-2 flex-md-row flex-column"
+                    >
+                        <div class="text-center">
+                             Розроблено AVADA-MEDIA
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <div class="layout-overlay layout-menu-toggle"></div>
+
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="drag-target"></div>
+</div>
+
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+
+<script>
+    var pathname = window.location.pathname;
+    $(".menu-link").each(function () {
+        let aHref = $(this).attr("href");
+        if(aHref === pathname.slice(0,aHref.length)){
+            if($(this).parent().parent().attr("class") === "menu-sub"){
+                $(this).parent().parent().parent().addClass("active open");
+            }
+            $(this).parent().addClass("active");
+        }
+    })
+</script>
+
+<script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
+<script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
+
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+<!-- endbuild -->
+
+<!-- Main JS -->
+<script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+</html>
