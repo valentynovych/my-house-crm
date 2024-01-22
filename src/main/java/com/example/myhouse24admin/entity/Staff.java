@@ -29,7 +29,7 @@ public class Staff {
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
     private Role role;
-    @ManyToMany(mappedBy = "houses")
+    @ManyToMany(mappedBy = "staff")
     private List<House> houses = new ArrayList<>();
 
     public Long getId() {
