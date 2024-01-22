@@ -1,0 +1,18 @@
+name: Notification
+on:
+  push:
+    branches:
+      - master
+      - main
+      - dev
+jobs:
+
+  build:
+    name: Notification on push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Telegram Notify
+        uses: Lukasss93/telegram-action@v2
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TG_CHANNEL_TOKEN }}
+          TELEGRAM_CHAT: ${{ secrets.TG_CHANNEL_NAME }}
