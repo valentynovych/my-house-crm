@@ -1,1 +1,3 @@
-message: testMessage
+spring:
+  main:
+    allow-bean-definition-overriding: true
