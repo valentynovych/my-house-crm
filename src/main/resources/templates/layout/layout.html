@@ -38,6 +38,8 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}"/>
 
 
     <!-- Helpers -->
@@ -174,7 +176,8 @@
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons ti ti-layout"></i>
-                        <div data-i18n="Roles & Permissions" th:text="#{menu-item-site-management}">Управління сайтом</div>
+                        <div data-i18n="Roles & Permissions" th:text="#{menu-item-site-management}">Управління сайтом
+                        </div>
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
@@ -202,37 +205,41 @@
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons ti ti-settings"></i>
-                        <div data-i18n="Roles & Permissions" th:text="#{menu-item-system-settings}">Налаштування системи</div>
+                        <div data-i18n="Roles & Permissions" th:text="#{menu-item-system-settings}">Налаштування
+                            системи
+                        </div>
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a th:href="@{/services}" class="menu-link">
+                            <a th:href="@{/system-settings/services}" class="menu-link">
                                 <div data-i18n="Roles" th:text="#{menu-item-services}">Послуги</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/tariffs}" class="menu-link">
+                            <a th:href="@{/system-settings/tariffs}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-tariffs}">Тарифи</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/roles}" class="menu-link">
+                            <a th:href="@{/system-settings/roles}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-roles}">Ролі</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/staff}" class="menu-link">
+                            <a th:href="@{/system-settings/staff}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-users}">Користувачі</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/paymentDetails}" class="menu-link">
-                                <div data-i18n="Permission" th:text="#{menu-item-payments-details}">Платіжні реквізити</div>
+                            <a th:href="@{/system-settings/payment-details}" class="menu-link">
+                                <div data-i18n="Permission" th:text="#{menu-item-payments-details}">Платіжні реквізити
+                                </div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/paymentItems}" class="menu-link">
-                                <div data-i18n="Permission" th:text="#{menu-item-articles-payments}">Статті платежів</div>
+                            <a th:href="@{/system-settings/payment-items}" class="menu-link">
+                                <div data-i18n="Permission" th:text="#{menu-item-articles-payments}">Статті платежів
+                                </div>
                             </a>
                         </li>
                     </ul>
@@ -265,13 +272,13 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
                                     <a href="?lang=en" class="dropdown-item" data-language="en"
-                                          th:classappend="${#locale.language == 'en'} ? 'active' : ''">
+                                       th:classappend="${#locale.language == 'en'} ? 'active' : ''">
                                         <span class="align-middle" th:text="#{lang.eng}">English</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="?lang=uk" class="dropdown-item" data-language="uk"
-                                          th:classappend="${#locale.language == 'uk'} ? 'active' : ''">
+                                       th:classappend="${#locale.language == 'uk'} ? 'active' : ''">
                                         <span class="align-middle" th:text="#{lang.ukr}">Ukrainian</span>
                                     </a>
                                 </li>
@@ -352,9 +359,9 @@
                 </div>
             </nav>
             <div class="content-wrapper">
+                <div class="container-xxl container-p-y breadcrumbs pb-0" layout:fragment="breadcrumb"></div>
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <div class="card py-5 px-5" layout:fragment="content">
-                    </div>
+                    <div class="card" layout:fragment="content"></div>
                 </div>
             </div>
             <footer class="content-footer footer bg-footer-theme">
@@ -398,6 +405,8 @@
 
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
 <script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
+<script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"> </script>
 
 <script th:src="@{/assets/vendor/js/menu.js}"></script>
 <!-- endbuild -->

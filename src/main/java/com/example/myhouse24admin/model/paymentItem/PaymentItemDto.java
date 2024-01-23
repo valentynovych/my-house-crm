@@ -1,19 +1,21 @@
-package com.example.myhouse24admin.entity;
+package com.example.myhouse24admin.model.paymentItem;
 
-import jakarta.persistence.*;
+import com.example.myhouse24admin.entity.PaymentType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-@Entity
-@Table(name = "payment_items")
-public class PaymentItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PaymentItemDto {
+
     private Long id;
-    @Column(length = 50, nullable = false)
+    @NotEmpty(message = "Обов'язкове поле")
+    @Size(min = 2, max = 50, message = "Довжина поля від {min} до {max} символів")
     private String name;
-    @Column(nullable = false)
     private boolean deleted;
+    @NotNull(message = "Обов'язкове поле")
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_type", nullable = false)
     private PaymentType paymentType;
 
     public Long getId() {

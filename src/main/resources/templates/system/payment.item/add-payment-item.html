@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{payment-items-title}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{breadcrumb-add}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{menu-item-system-settings} + ' / '"></span>
+            <a th:href="@{/system-settings/payment-items}" class="" th:text="#{menu-item-articles-payments} + ' / '"></a>
+            <span th:text="#{breadcrumb-add}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <form id="paymentItemForm">
+            <div class="mb-3 col-5">
+                <label for="name" class="form-label" th:text="#{payment-item-name}"></label>
+                <input class="form-control" type="text" id="name" th:placeholder="'Дохід від ...'">
+            </div>
+            <div class="mb-3 col-5">
+                <label class="form-label" for="paymentType" th:text="#{payment-item-type}"></label>
+                <select class="form-select" id="paymentType"></select>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button type="button" class="button-save btn btn-primary mt-4" th:text="#{general-button-save}"></button>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/paymentItem/add-payment-item.js}"></script>
+</html>
