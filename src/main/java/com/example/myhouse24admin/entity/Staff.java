@@ -31,6 +31,8 @@ public class Staff {
     private Role role;
     @ManyToMany(mappedBy = "staff")
     private List<House> houses = new ArrayList<>();
+    @OneToOne(mappedBy = "staff", cascade = CascadeType.ALL)
+    private PasswordResetToken passwordResetToken;
 
     public Long getId() {
         return id;
@@ -110,5 +112,13 @@ public class Staff {
 
     public void setHouses(List<House> houses) {
         this.houses = houses;
+    }
+
+    public PasswordResetToken getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    public void setPasswordResetToken(PasswordResetToken passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
     }
 }

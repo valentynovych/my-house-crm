@@ -19,7 +19,7 @@ public class SecurityConfiguration {
                 .csrf((c)-> c.disable())
                 .securityMatcher("/**")
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/assets/**").permitAll()
+                        .requestMatchers("/assets/**", "/forgotPassword", "/sentToken", "/changePassword", "/tokenExpired", "/success").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
