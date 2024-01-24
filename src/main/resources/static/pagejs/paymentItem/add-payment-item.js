@@ -50,6 +50,8 @@ $(window).on("load", function () {
     })
 
     $(".button-save").on("click", function () {
+        clearAllErrorMessage();
+
         let formData = new FormData();
 
         for (var key in paymentItem) {
@@ -63,10 +65,11 @@ $(window).on("load", function () {
             contentType: false,
             data: formData,
             success: function (response) {
-                toastr.success("Vse ok");
+                toastr.success("Редагування успішно завершено");
             },
-            error: function () {
-                toastr.error('Error');
+            error: function (error) {
+                printErrorMessageToField(error);
+                toastr.error("Помилка час редагування сталась помилка :(");
             }
         })
     })

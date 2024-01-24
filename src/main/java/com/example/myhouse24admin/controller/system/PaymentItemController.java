@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -55,14 +56,23 @@ public class PaymentItemController {
 
     @ResponseBody
     @PostMapping("edit-item/{itemId}")
-    public ResponseEntity<?> editItemById(@PathVariable Long itemId, @Valid @ModelAttribute PaymentItemDto paymentItem) {
+    public ResponseEntity<?> editItemById(@PathVariable Long itemId,
+                                          @Valid @ModelAttribute PaymentItemDto paymentItem,
+                                          BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
+        }
         paymentItemService.editItemById(itemId, paymentItem);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ResponseBody
     @PostMapping("add-item")
-    public ResponseEntity<?> addItem(@Valid @ModelAttribute PaymentItemDto paymentItem) {
+    public ResponseEntity<?> addItem(@Valid @ModelAttribute PaymentItemDto paymentItem,
+                                     BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
+        }
         paymentItemService.addItem(paymentItem);
         return new ResponseEntity<>(HttpStatus.OK);
     }

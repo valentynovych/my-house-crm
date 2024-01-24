@@ -1,4 +1,5 @@
 
+
 $(window).on("load", function () {
 
     const windowPath = window.location.pathname;
@@ -76,6 +77,10 @@ $(window).on("load", function () {
         });
     }
 
+    $('input, select, textarea').on("focus", function () {
+        $(this).removeClass("is-invalid");
+    })
+
     $name.on("change", function () {
         paymentItem.name = this.value;
     })
@@ -85,6 +90,8 @@ $(window).on("load", function () {
     })
 
     $(".button-save").on("click", function () {
+        clearAllErrorMessage();
+
         let formData = new FormData();
 
         for (var key in paymentItem) {
@@ -98,10 +105,11 @@ $(window).on("load", function () {
             contentType: false,
             data: formData,
             success: function (response) {
-                toastr.success("Vse ok");
+                toastr.success("Стаття успішно створенна");
             },
-            error: function () {
-                toastr.error('Error');
+            error: function (error) {
+                printErrorMessageToField(error);
+                toastr.error("Сталась помилка під час створення статті :(");
             }
         })
     })
