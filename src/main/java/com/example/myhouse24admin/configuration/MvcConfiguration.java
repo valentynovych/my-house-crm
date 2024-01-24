@@ -1,8 +1,10 @@
 package com.example.myhouse24admin.configuration;
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -23,13 +25,11 @@ public class MvcConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public ResourceBundleMessageSource messageSource() {
+    public MessageSource messageSource() {
         ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
-        resourceBundleMessageSource.setBasename("localization/messages");
-        resourceBundleMessageSource.setUseCodeAsDefaultMessage(true);
+        resourceBundleMessageSource.setBasenames("localization/messages", "localization/CustomValidationMessages");
         resourceBundleMessageSource.setDefaultLocale(Locale.forLanguageTag("uk_UA"));
         resourceBundleMessageSource.setDefaultEncoding("UTF-8");
-        resourceBundleMessageSource.setAlwaysUseMessageFormat(true);
         return resourceBundleMessageSource;
     }
 
@@ -52,4 +52,10 @@ public class MvcConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(localeChangeInterceptor());
     }
 
+    @Bean
+    public LocalValidatorFactoryBean getValidator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource());
+        return bean;
+    }
 }
