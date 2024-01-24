@@ -6,7 +6,7 @@
       data-assets-path="../../assets/"
       data-template="vertical-menu-template"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
+<head th:fragment="head">
     <meta charset="UTF-8">
     <meta
             name="viewport"
@@ -40,7 +40,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}"/>
-
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-auth.css}" />
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
