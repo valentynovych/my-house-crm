@@ -5,7 +5,7 @@
       data-theme="theme-default"
       data-assets-path="../../assets/"
       data-template="vertical-menu-template"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:fragment="head">
     <meta charset="UTF-8">
     <meta
@@ -344,8 +344,10 @@
                             </div>
                         </li>
                         <li class="nav-item me-3">
-                            <div> Full Name</div>
-                            <div> Role</div>
+                            <div sec:authentication="principal.fullName"></div>
+                            <div th:each="authority : ${#authentication?.getAuthorities()}"
+                                 th:if="${authority?.getAuthority().startsWith('ROLE_')}"
+                                 th:text="${authority?.getAuthority().replaceFirst('ROLE_', '')}"></div>
 
                         </li>
                         <li class="nav-item">
