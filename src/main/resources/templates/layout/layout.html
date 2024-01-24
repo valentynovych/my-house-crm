@@ -5,7 +5,8 @@
       data-theme="theme-default"
       data-assets-path="../../assets/"
       data-template="vertical-menu-template"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta
@@ -407,6 +408,7 @@
 <script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
 <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
 <script th:src="@{/assets/vendor/libs/toastr/toastr.js}"> </script>
+<script th:src="@{/assets/vendor/libs/autosize/autosize.js}"></script>
 
 <script th:src="@{/assets/vendor/js/menu.js}"></script>
 <!-- endbuild -->
@@ -414,7 +416,8 @@
 <!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
 <script th:src="@{/pagejs/general/validation-messages-util.js}"></script>
-<script layout:fragment="script">
 
-</script>
+<!-- Page JS -->
+<script layout:fragment="script"></script>
+<th:block layout:fragment="initThymeleafVarianle"></th:block>
 </html>
