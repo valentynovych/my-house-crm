@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       class="light-style layout-navbar-fixed layout-menu-fixed"
       dir="ltr"
       data-theme="theme-default"
@@ -8,7 +8,7 @@
 <body>
 <div class="container-xxl">
     <div class="authentication-wrapper authentication-basic container-p-y">
-        <div class="authentication-inner py-4 mt-4">
+        <div class="authentication-inner py-4">
             <!-- Login -->
                     <!-- Logo -->
                     <div class="app-brand justify-content-center mb-4 mt-2">
@@ -64,8 +64,10 @@
                         </div>
                     </div>
                     <!-- /Logo -->
-            <div class="col-xl-5 mx-auto">
-                <div class="nav-align-top nav-tabs-shadow mb-4">
+
+            <div class="col-xl-12 mx-auto">
+                <div class="card">
+                <div class="nav-align-top nav-tabs-shadow">
                     <ul class="nav nav-tabs col-12 mx-auto d-flex justify-content-around" role="tablist">
                         <li class="nav-item mt-2">
                             <button
@@ -156,6 +158,7 @@
                     </div>
                 </div>
             </div>
+            </div>
         </div>
     </div>
 </div>
@@ -171,8 +174,5 @@
 <script th:src="@{/assets/vendor/libs/toastr/toastr.js}"> </script>
 
 <script th:src="@{/assets/vendor/js/menu.js}"></script>
-<!-- endbuild -->
-
-<!-- Main JS -->
 <script th:src="@{/assets/js/main.js}"></script>
 </html>
