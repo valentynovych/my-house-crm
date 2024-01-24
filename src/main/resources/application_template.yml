@@ -1,5 +1,12 @@
 secret-key:
 sender:
+#ReCaptcha
+google:
+  recaptcha:
+    key:
+      site:
+      secret:
+
 spring:
   main:
     allow-bean-definition-overriding: true

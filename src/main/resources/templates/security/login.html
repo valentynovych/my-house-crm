@@ -144,14 +144,16 @@
                                         <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
                                     </div>
                                 </div>
-                                <div class="mb-3">
+                                <div class="g-recaptcha" th:data-sitekey="${@environment.getProperty('google.recaptcha.key.site')}" data-action="LOGIN"></div>
+                                <div class="text-danger" id="captchaValidation"></div>
+                                <div class="mb-3 mt-2">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="remember-me" name="remember-me"/>
                                         <label class="form-check-label" for="remember-me"> Запам'ятати мене </label>
                                     </div>
                                 </div>
                                 <div class="mb-3">
-                                    <button class="btn btn-primary d-grid w-100" type="submit">Увійти</button>
+                                    <button class="btn btn-primary d-grid w-100" type="submit" >Увійти</button>
                                 </div>
                             </form>
                         </div>
@@ -163,6 +165,7 @@
     </div>
 </div>
 </body>
+<script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 <script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
 <script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
 <script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
@@ -175,4 +178,5 @@
 
 <script th:src="@{/assets/vendor/js/menu.js}"></script>
 <script th:src="@{/assets/js/main.js}"></script>
+
 </html>
