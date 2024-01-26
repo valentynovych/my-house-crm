@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{menu-item-users}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{menu-item-users}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{menu-item-system-settings} + ' / '"></span>
+            <span th:text="#{menu-item-users}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-header d-flex justify-content-end">
+        <a th:href="@{staff/add}" class="btn btn-primary me-2">
+            <span class="tf-icons ti-xs ti ti-plus me-1"></span>
+            <span th:text="#{staff-button-add}"></span>
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive table-bordered overflow-visible">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th th:text="#{staff-title}"></th>
+                    <th th:text="#{staff-label-role}"></th>
+                    <th th:text="#{staff-label-phone-number}"></th>
+                    <th th:text="#{staff-label-email}"></th>
+                    <th th:text="#{staff-label-status}"></th>
+                    <th th:text="#{general-table-action}"></th>
+                </tr>
+                <tr>
+                    <th><input type="text" id="filter-by-name" class="form-control password"></th>
+                    <th style="min-width: 13rem"><select class="form-select" id="filter-by-role"></select></th>
+                    <th><input type="text" id="filter-by-phone" class="form-control"></th>
+                    <th><input type="text" id="filter-by-email" class="form-control password"></th>
+                    <th style="min-width: 12rem"><select class="form-select" id="filter-by-status"></select></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/system/staff/staff.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    var statusNew = /*[[#{staff-status-new}]]*/ 'default';
+    var statusActive = /*[[#{staff-status-active}]]*/ 'default';
+    var statusDisabled = /*[[#{staff-status-disabled}]]*/ 'default';
+
+    var roleLabel = /*[[#{staff-label-role}]]*/ 'default';
+    var roleDirector = /*[[#{staff-role-director}]]*/ 'default';
+    var roleManager = /*[[#{staff-role-manager}]]*/ 'default';
+    var roleAccountant = /*[[#{staff-role-accountant}]]*/ 'default';
+    var roleElectrician = /*[[#{staff-role-electrician}]]*/ 'default';
+    var rolePlumber = /*[[#{staff-role-plumber}]]*/ 'default';
+    var basePath = /*[[@{/system-settings/staff}]]*/ 'default';
+
+</script>
+</html>

@@ -16,7 +16,6 @@ public class EmailExistValidator implements ConstraintValidator<EmailExist,Strin
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext constraintValidatorContext) {
-        Optional<Staff> staff = staffRepo.findByEmail(email);
-        return staff.isPresent();
+        return !staffRepo.existsStaffByEmail(email);
     }
 }
