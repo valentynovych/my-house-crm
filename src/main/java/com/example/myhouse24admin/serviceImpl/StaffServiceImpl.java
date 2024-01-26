@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class StaffServiceImpl implements StaffService {
@@ -58,33 +59,79 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void addNewStaff(StaffEditRequest staffEditRequest) {
+        logger.info("addNewStaff() -> Start adding new staff");
         Staff staff = Mappers.getMapper(StaffMapper.class).staffEditRequestToStaff(staffEditRequest);
         staff.setLanguage(getLanguageFromLocale());
+        staff.setStatus(StaffStatus.NEW);
         staffRepo.save(staff);
+        logger.info("addNewStaff() -> New Staff is added, exit");
     }
 
     @Override
     public List<Role> getRoles() {
-        return roleRepo.findAll();
+        logger.info("getRoles() -> Start find all staff roles");
+        List<Role> roles = roleRepo.findAll();
+        logger.info("getRoles() -> Success, return list size: " + roles.size());
+        return roles;
     }
 
     @Override
     public Page<StaffResponse> getStaff(int page, int pageSize, Map<String, String> searchParams) {
+        logger.info(String.format("getStaff() -> Start with parameters - %s", searchParams));
         Pageable pageable = PageRequest.of(page, pageSize);
         searchParams.remove("page");
         searchParams.remove("pageSize");
         StaffSpecification spec = new StaffSpecification(searchParams);
         Page<Staff> staffPage = staffRepo.findAll(spec, pageable);
         List<StaffResponse> staffResponseList = mapper.staffListToStaffResponseList(staffPage.getContent());
-
         Page<StaffResponse> staffResponsePage =
                 new PageImpl<>(staffResponseList, pageable, staffPage.getTotalElements());
+        logger.info(String.format("getStaff() -> Exit, return elements in page - %s", staffResponseList.size()));
         return staffResponsePage;
     }
 
     @Override
     public List<String> getStatuses() {
+        logger.info(("getStatuses() -> Start"));
         return Arrays.stream(StaffStatus.values()).map(Enum::name).toList();
+    }
+
+    @Override
+    public StaffResponse getStaffById(Long staffId) {
+        logger.info("getStaffById() -> Start with id: " + staffId);
+        Optional<Staff> byId = staffRepo.findById(staffId);
+        Staff staff = byId.orElseThrow(() -> {
+            logger.error(String.format("Staff with id: %s not found", staffId));
+            return new EntityNotFoundException(String.format("Staff with id: %s not found", staffId));
+        });
+
+        StaffResponse staffResponse = mapper.staffToStaffResponse(staff);
+        logger.info("getStaffById() -> Exit, return staff with id: " + staffResponse.id());
+        return staffResponse;
+    }
+
+    @Override
+    public void updateStaffById(Long staffId, StaffEditRequest staffEditRequest) {
+        logger.info("updateStaffById() -> start, with id: " + staffId);
+        Optional<Staff> byId = staffRepo.findById(staffId);
+        if (byId.isEmpty()) {
+            logger.error(String.format("updateStaffById() -> Staff with id: %s not found", staffId));
+            throw new EntityNotFoundException(String.format("Staff with id: %s not found", staffId));
+        } else {
+            logger.info(String.format("updateStaffById() -> Staff with id: %s is present", staffId));
+            Staff staff = byId.get();
+            if (staffEditRequest.password() != null) {
+                logger.info("updateStaffById() -> Start update entity with new password");
+                mapper.updateWithPassword(staff, staffEditRequest);
+                staff.setPassword(passwordEncoder.encode(staffEditRequest.password()));
+                // todo send notification to staff email
+            } else {
+                logger.info("updateStaffById() -> Start update entity without password");
+                mapper.updateWithoutPassword(staff, staffEditRequest);
+            }
+            staffRepo.save(staff);
+            logger.info("updateStaffById() -> exit, success update Staff with id: " + staffId);
+        }
     }
 
     private boolean isTableEmpty() {
@@ -96,7 +143,11 @@ public class StaffServiceImpl implements StaffService {
     }
 
     private Language getLanguageFromLocale() {
+        logger.info("getLanguageFromLocale() -> Start");
         String language = LocaleContextHolder.getLocale().getLanguage();
-        return language.equals("en") ? Language.ENG : Language.UKR;
+        logger.info("getLanguageFromLocale() -> Current locale language: " + language);
+        Language language1 = language.equals("en") ? Language.ENG : Language.UKR;
+        logger.info("getLanguageFromLocale() -> Return language: " + language1);
+        return language1;
     }
 }

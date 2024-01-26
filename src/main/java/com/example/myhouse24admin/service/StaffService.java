@@ -18,4 +18,8 @@ public interface StaffService {
     Page<StaffResponse> getStaff(int page, int pageSize, Map<String, String> searchParams);
 
     List<String> getStatuses();
+
+    StaffResponse getStaffById(Long staffId);
+
+    void updateStaffById(Long staffId, StaffEditRequest staffEditRequest);
 }

@@ -41,6 +41,11 @@ public class StaffController {
         return new ModelAndView("system/staff/edit-staff");
     }
 
+    @GetMapping("view-staff/{staffId}")
+    public ModelAndView viewStaff(@PathVariable Long staffId) {
+        return new ModelAndView("system/staff/view-staff");
+    }
+
     @PostMapping("add")
     @ResponseBody
     public ResponseEntity<?> addNewStaff(@Valid @ModelAttribute StaffEditRequest staffEditRequest) {
@@ -69,5 +74,19 @@ public class StaffController {
                                       @RequestParam(required = false) Map<String, String> searchParams) {
         Page<StaffResponse> staffResponses = staffService.getStaff(page, pageSize, searchParams);
         return new ResponseEntity<>(staffResponses, HttpStatus.OK);
+    }
+
+    @GetMapping("get-staff/{staffId}")
+    @ResponseBody
+    public ResponseEntity<?> getStaffById(@PathVariable @Min(1) Long staffId) {
+        StaffResponse staffResponse = staffService.getStaffById(staffId);
+        return new ResponseEntity<>(staffResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("edit-staff/{staffId}")
+    public ResponseEntity<?> updateStaffById(@PathVariable Long staffId,
+                                             @ModelAttribute @Valid StaffEditRequest staffEditRequest) {
+        staffService.updateStaffById(staffId, staffEditRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

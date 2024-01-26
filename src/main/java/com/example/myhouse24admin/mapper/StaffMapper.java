@@ -5,9 +5,7 @@ import com.example.myhouse24admin.entity.Role;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.staff.StaffEditRequest;
 import com.example.myhouse24admin.model.staff.StaffResponse;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -28,4 +26,18 @@ public interface StaffMapper {
     StaffResponse staffToStaffResponse(Staff staffList);
 
     List<StaffResponse> staffListToStaffResponseList(List<Staff> staffList);
+
+    @Mapping(target = "role", source = "roleId", qualifiedByName = "setNewRole")
+    void updateWithPassword(@MappingTarget Staff staff, StaffEditRequest staffEditRequest);
+
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "role", source = "roleId", qualifiedByName = "setNewRole")
+    void updateWithoutPassword(@MappingTarget Staff staff, StaffEditRequest staffEditRequest);
+
+    @Named(value = "setNewRole")
+    static Role setNewRole(Long roleId) {
+        Role role = new Role();
+        role.setId(roleId);
+        return role;
+    }
 }

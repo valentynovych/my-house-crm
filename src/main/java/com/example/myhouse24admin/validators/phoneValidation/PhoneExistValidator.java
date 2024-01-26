@@ -1,4 +1,4 @@
-package com.example.myhouse24admin.validators.emailValidation;
+package com.example.myhouse24admin.validators.phoneValidation;
 
 import com.example.myhouse24admin.repository.StaffRepo;
 import jakarta.validation.ConstraintValidator;
