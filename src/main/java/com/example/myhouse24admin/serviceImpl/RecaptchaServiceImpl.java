@@ -2,6 +2,8 @@ package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.model.authentication.RecaptchaResponse;
 import com.example.myhouse24admin.service.RecaptchaService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ public class RecaptchaServiceImpl implements RecaptchaService {
     @Value("${google.recaptcha.key.secret}")
     private String secretKey;
     private String verifyUrl = "https://www.google.com/recaptcha/api/siteverify";
+    private final Logger logger = LogManager.getLogger("serviceLogger");
     private final RestTemplate restTemplate;
 
     public RecaptchaServiceImpl(RestTemplate restTemplate) {
@@ -22,7 +25,9 @@ public class RecaptchaServiceImpl implements RecaptchaService {
 
     @Override
     public boolean isRecaptchaValid(String recaptcha) {
+        logger.info("isRecaptchaValid() - Checking if recaptcha "+recaptcha+" is valid");
         RecaptchaResponse recaptchaResponse = sendCaptchaForVerifying(recaptcha);
+        logger.info("isRecaptchaValid() - Recaptcha was checked");
         return recaptchaResponse.success();
     }
 
