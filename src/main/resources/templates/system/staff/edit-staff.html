@@ -14,7 +14,8 @@
         <h6>
             <span class="text-muted fw-light" th:text="#{menu-item-system-settings} + ' / '"></span>
             <a th:href="@{/system-settings/staff}" th:text="#{menu-item-users} + ' / '"></a>
-            <span class="text-muted fw-light" th:text="#{breadcrumb-add}"></span>
+            <a th:href="@{/system-settings/staff/view-staff/}" th:text="#{staff-title} + ' / '" id="current-staff-link"></a>
+            <span class="" th:text="#{breadcrumb-add}"></span>
         </h6>
     </div>
 </div>
@@ -88,7 +89,7 @@
 </div>
 
 </body>
-<script layout:fragment="script" th:src="@{/pagejs/system/staff/add-staff.js}"></script>
+<script layout:fragment="script" th:src="@{/pagejs/system/staff/edit-staff.js}"></script>
 <script layout:fragment="initThymeleafVarianle" th:inline="javascript">
     var errorMessage = /*[[#{staff-add-error-message}]]*/ 'default';
     var roleLabel = /*[[#{staff-label-role}]]*/ 'default';

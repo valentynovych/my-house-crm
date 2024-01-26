@@ -171,8 +171,8 @@ function drawTable(result) {
             '    <i class="ti ti-dots-vertical"></i>\n' +
             '     </button>\n' +
             '     <div class="dropdown-menu">\n' +
-            '     <a class="dropdown-item" href="payment-items/edit-item/' + staff.id + '">\n' +
-            '     <i class="ti ti-pencil me-1"></i>Редагувати\n' +
+            '     <a class="dropdown-item" href="staff/view-staff/' + staff.id + '">\n' +
+            '     <i class="ti ti-pencil me-1"></i>Перегляд\n' +
             '     </a>\n' +
             '     <button type="button" class="dropdown-item btn justify-content-start" data-bs-toggle="modal" data-bs-target="#modalCenter"' +
             '     onclick="addDeleteLink(' + staff.id + ')">\n' +
