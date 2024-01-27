@@ -24,11 +24,11 @@
             <span th:text="#{staff-button-add}"></span>
         </a>
     </div>
-    <div class="card-body">
-        <div class="table-responsive table-bordered overflow-visible">
-            <table class="table">
+    <div class="card-body" id="dropdownParent">
+        <div class="table-responsive  overflow-visible">
+            <table class="table table-bordered">
                 <thead>
-                <tr>
+                <tr class="table-primary text-center">
                     <th th:text="#{staff-title}"></th>
                     <th th:text="#{staff-label-role}"></th>
                     <th th:text="#{staff-label-phone-number}"></th>
@@ -37,12 +37,20 @@
                     <th th:text="#{general-table-action}"></th>
                 </tr>
                 <tr>
-                    <th><input type="text" id="filter-by-name" class="form-control password"></th>
-                    <th style="min-width: 13rem"><select class="form-select" id="filter-by-role"></select></th>
-                    <th><input type="text" id="filter-by-phone" class="form-control"></th>
-                    <th><input type="text" id="filter-by-email" class="form-control password"></th>
-                    <th style="min-width: 12rem"><select class="form-select" id="filter-by-status"></select></th>
-                    <th></th>
+                    <td><input type="text" id="filter-by-name" class="form-control password"></td>
+                    <td style="min-width: 13rem">
+                        <div id="filterRoleWrapper" style="position: relative">
+                            <select class="form-select" id="filter-by-role"></select>
+                        </div>
+                    </td>
+                    <td><input type="text" id="filter-by-phone" class="form-control"></td>
+                    <td><input type="text" id="filter-by-email" class="form-control password"></td>
+                    <td style="min-width: 12rem">
+                        <div id="filterStatusWrapper" style="position: relative">
+                            <select class="form-select" id="filter-by-status"></select>
+                        </div>
+                    </td>
+                    <td></td>
                 </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">

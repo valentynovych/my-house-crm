@@ -9,8 +9,8 @@ let timer;
 
 let $role = $('#filter-by-role');
 $role.select2({
+    dropdownParent: $('#filterRoleWrapper'),
     minimumResultsForSearch: -1,
-    dropdownParent: $(".card"),
     ajax: {
         type: "GET",
         url: 'staff/get-roles',
@@ -29,11 +29,12 @@ $role.select2({
 
 let $status = $('#filter-by-status');
 $status.select2({
+    dropdownParent: $('#filterStatusWrapper'),
     minimumResultsForSearch: -1,
-    dropdownParent: $("thead"),
     ajax: {
         type: "GET",
         url: 'staff/get-statuses',
+        dataType: 'json',
         processResults: function (response) {
             return {
                 results: $.map(response, function (status) {
