@@ -109,7 +109,7 @@
                             </p>
                         </div>
                         <div class="tab-pane fade show active" id="navs-top-profile" role="tabpanel">
-                            <form id="formAuthentication" class="mb-3" th:action = "@{/login}" method="post">
+                            <form id="formAuthentication" class="mb-3" th:action = "@{/admin/login}" method="post">
                                 <p class="text-center">Вхід в панель управління</p>
                                 <div th:if="${param.error}" class="text-danger text-center">
                                     Невірний email або пароль
@@ -128,7 +128,7 @@
                                 <div class="mb-3 form-password-toggle">
                                     <div class="d-flex justify-content-between">
                                         <label class="form-label" for="password">Пароль</label>
-                                        <a th:href="@{/forgotPassword}">
+                                        <a th:href="@{/admin/forgotPassword}">
                                             <small>Забули Пароль?</small>
                                         </a>
                                     </div>
