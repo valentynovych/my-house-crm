@@ -47,7 +47,7 @@ function drawTable(result) {
             '     <i class="ti ti-pencil me-1"></i>Редагувати\n' +
             '     </a>\n' +
             '     <button type="button" class="dropdown-item btn justify-content-start" data-bs-toggle="modal" data-bs-target="#modalCenter"' +
-            '     onclick="addDeleteLink(' + data.id + ')">\n' +
+            '     onclick="addDeleteEvent(' + data.id + ')">\n' +
             '     <i class="ti ti-trash me-1"></i>Видалити\n' +
             '     </button>\n' +
             '     </div>\n' +

@@ -23,30 +23,30 @@
         <div class="card-header d-flex justify-content-end">
             <a th:href="@{staff/edit-staff/}" class="btn btn-primary me-2" id="current-staff-link">
                 <span class="tf-icons ti-xs ti ti-plus me-1"></span>
-                <span th:text="#{staff-button-edit}"></span>
+                <span th:text="#{staff-button-edit-staff}"></span>
             </a>
         </div>
-        <div class="table-responsive table-bordered border-1 overflow-visible">
-            <table class="table">
+        <div class="table-responsive overflow-visible">
+            <table class="table table-bordered">
                 <tbody class="table-border-bottom-0">
-                <tr>
-                    <td class="fw-bold" th:text="#{staff-title}"></td>
+                <tr >
+                    <td class="fw-bold w-25" th:text="#{staff-title}"></td>
                     <td id="name"></td>
                 </tr>
                 <tr>
-                    <td class="fw-bold" th:text="#{staff-label-role}"></td>
+                    <td class="fw-bold w-25" th:text="#{staff-label-role}"></td>
                     <td id="role"></td>
                 </tr>
                 <tr>
-                    <td class="fw-bold" th:text="#{staff-label-phone-number}"></td>
+                    <td class="fw-bold w-25" th:text="#{staff-label-phone-number}"></td>
                     <td id="phoneNumber"></td>
                 </tr>
                 <tr>
-                    <td class="fw-bold" th:text="#{staff-label-email}"></td>
+                    <td class="fw-bold w-25" th:text="#{staff-label-email}"></td>
                     <td id="email"></td>
                 </tr>
                 <tr>
-                    <td class="fw-bold" th:text="#{staff-label-status}"></td>
+                    <td class="fw-bold w-25" th:text="#{staff-label-status}"></td>
                     <td id="status"></td>
                 </tr>
                 </tbody>

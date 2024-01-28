@@ -22,4 +22,6 @@ public interface StaffService {
     StaffResponse getStaffById(Long staffId);
 
     void updateStaffById(Long staffId, StaffEditRequest staffEditRequest);
+
+    boolean deleteStaffById(Long staffId);
 }

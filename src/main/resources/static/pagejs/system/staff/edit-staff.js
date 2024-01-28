@@ -8,7 +8,8 @@ $(window).on("load", function () {
         email: '',
         password: '',
         confirmPassword: '',
-        roleId: ''
+        roleId: '',
+        status: ''
     };
 
     let href = window.location.href;
@@ -71,6 +72,41 @@ $(window).on("load", function () {
         }
     });
 
+    let $status = $('#status');
+    $status.select2({
+        dropdownParent: $('.card-body'),
+        placeholder: statusLabel,
+        minimumResultsForSearch: -1,
+        ajax: {
+            type: "GET",
+            url: '../get-statuses',
+            dataType: 'json',
+            processResults: function (response) {
+                return {
+                    results: $.map(response, function (status) {
+                        return {
+                            id: status,
+                            text: getStatusLabel(status)
+                        }
+                    })
+                };
+            }
+        }
+    });
+
+    function getStatusLabel(status) {
+        switch (status) {
+            case 'NEW':
+                return statusNew;
+            case 'ACTIVE':
+                return statusActive;
+            case 'DISABLED':
+                return statusDisabled;
+            default:
+                return 'Не відомий'
+        }
+    }
+
     function generatePassword() {
         var chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         var passwordLength = 12;
@@ -93,7 +129,6 @@ $(window).on("load", function () {
         url: '../get-staff/' + staff.id,
         success: function (response) {
             staff = response;
-            console.log(staff);
             fillInputs(staff);
         }, error: function (error) {
             toastr.error(errorMessage);
@@ -111,6 +146,8 @@ $(window).on("load", function () {
         $('#email').val(staff.email);
         $('<option value="' + staff.role.id + '">' + getRoleLabel(staff.role.name) + '</option>').appendTo('#roleId');
         $role.trigger('change');
+        $('<option value="' + staff.status + '">' + getStatusLabel(staff.status) + '</option>').appendTo('#status');
+        $status.trigger('change');
     }
 
     $(".button-save").on("click", function () {
@@ -129,10 +166,9 @@ $(window).on("load", function () {
             contentType: false,
             data: formData,
             success: function (response) {
-                window.history.back();
+                setTimeout(() => window.history.back(), 500);
             },
             error: function (error) {
-                console.log(error)
                 printErrorMessageToField(error);
                 toastr.error(errorMessage);
             }

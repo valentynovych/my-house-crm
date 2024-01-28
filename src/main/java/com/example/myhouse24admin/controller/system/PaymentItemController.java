@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Map;
 
 @Controller
-@RequestMapping("system-settings/payment-items")
+@RequestMapping("admin/system-settings/payment-items")
 public class PaymentItemController {
 
     private final PaymentItemService paymentItemService;
@@ -57,22 +57,14 @@ public class PaymentItemController {
     @ResponseBody
     @PostMapping("edit-item/{itemId}")
     public ResponseEntity<?> editItemById(@PathVariable Long itemId,
-                                          @Valid @ModelAttribute PaymentItemDto paymentItem,
-                                          BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
-        }
+                                          @Valid @ModelAttribute PaymentItemDto paymentItem) {
         paymentItemService.editItemById(itemId, paymentItem);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ResponseBody
     @PostMapping("add-item")
-    public ResponseEntity<?> addItem(@Valid @ModelAttribute PaymentItemDto paymentItem,
-                                     BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> addItem(@Valid @ModelAttribute PaymentItemDto paymentItem) {
         paymentItemService.addItem(paymentItem);
         return new ResponseEntity<>(HttpStatus.OK);
     }

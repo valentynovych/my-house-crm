@@ -26,8 +26,17 @@
     </div>
     <div class="card-body" id="dropdownParent">
         <div class="table-responsive  overflow-visible">
-            <table class="table table-bordered">
+            <table class="table table-bordered table-hover">
                 <thead>
+                <tr>
+                    <th colspan="6" class="p-1">
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary clear-filters"
+                                    th:text="#{general-button-clear-table}">Clear
+                            </button>
+                        </div>
+                    </th>
+                </tr>
                 <tr class="table-primary text-center">
                     <th th:text="#{staff-title}"></th>
                     <th th:text="#{staff-label-role}"></th>
@@ -59,23 +68,51 @@
         </div>
     </div>
     <div class="card-footer d-flex justify-content-between"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="#{staff-modal-delete-title}"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{staff-modal-delete-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal" th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete" th:text="#{general-button-delete}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+
 
 </body>
 <script layout:fragment="script" th:src="@{/pagejs/system/staff/staff.js}"></script>
 <script layout:fragment="initThymeleafVarianle" th:inline="javascript">
 
-    var statusNew = /*[[#{staff-status-new}]]*/ 'default';
-    var statusActive = /*[[#{staff-status-active}]]*/ 'default';
-    var statusDisabled = /*[[#{staff-status-disabled}]]*/ 'default';
+    const statusNew = /*[[#{staff-status-new}]]*/ 'default';
+    const statusActive = /*[[#{staff-status-active}]]*/ 'default';
+    const statusDisabled = /*[[#{staff-status-disabled}]]*/ 'default';
 
-    var roleLabel = /*[[#{staff-label-role}]]*/ 'default';
-    var roleDirector = /*[[#{staff-role-director}]]*/ 'default';
-    var roleManager = /*[[#{staff-role-manager}]]*/ 'default';
-    var roleAccountant = /*[[#{staff-role-accountant}]]*/ 'default';
-    var roleElectrician = /*[[#{staff-role-electrician}]]*/ 'default';
-    var rolePlumber = /*[[#{staff-role-plumber}]]*/ 'default';
-    var basePath = /*[[@{/system-settings/staff}]]*/ 'default';
+    const roleLabel = /*[[#{staff-label-role}]]*/ 'default';
+    const roleDirector = /*[[#{staff-role-director}]]*/ 'default';
+    const roleManager = /*[[#{staff-role-manager}]]*/ 'default';
+    const roleAccountant = /*[[#{staff-role-accountant}]]*/ 'default';
+    const roleElectrician = /*[[#{staff-role-electrician}]]*/ 'default';
+    const rolePlumber = /*[[#{staff-role-plumber}]]*/ 'default';
+    const basePath = /*[[@{/system-settings/staff}]]*/ 'default';
+
+    const buttonLabelInvite = /*[[#{general-button-invite}]]*/ 'default';
+    const buttonLabelEdit = /*[[#{general-button-edit}]]*/ 'default';
+    const buttonLabelDelete = /*[[#{general-button-delete}]]*/ 'default';
+    const successMessageOnDelete = /*[[#{staff-message-success-delete}]]*/ 'default';
+    const errorMessageOnDelete = /*[[#{staff-message-error-delete}]]*/ 'default';
 
 </script>
 </html>

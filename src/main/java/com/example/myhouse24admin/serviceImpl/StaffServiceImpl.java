@@ -134,6 +134,21 @@ public class StaffServiceImpl implements StaffService {
         }
     }
 
+    @Override
+    public boolean deleteStaffById(Long staffId) {
+        Optional<Staff> byId = staffRepo.findById(staffId);
+        if (byId.isPresent()) {
+            Staff staff = byId.get();
+            if (!staff.getRole().getName().equals("DIRECTOR")) {
+                staff.setStatus(StaffStatus.DISABLED);
+                staff.setDeleted(true);
+                staffRepo.save(staff);
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean isTableEmpty() {
         return staffRepo.count() == 0;
     }

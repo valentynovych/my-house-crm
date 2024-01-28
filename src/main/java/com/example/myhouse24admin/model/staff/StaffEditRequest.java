@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.model.staff;
 
+import com.example.myhouse24admin.entity.StaffStatus;
 import com.example.myhouse24admin.validators.emailValidation.StaffEmailOwner;
 import com.example.myhouse24admin.validators.phoneValidation.PhoneOwner;
 import jakarta.validation.constraints.NotNull;
@@ -23,6 +24,7 @@ public record StaffEditRequest(
         @Size(min = 8, max = 72, message = "{validation-size-min-max}")
         String confirmPassword,
         @NotNull(message = "{validation-role-required}")
-        Long roleId
+        Long roleId,
+        StaffStatus status
 ) {
 }

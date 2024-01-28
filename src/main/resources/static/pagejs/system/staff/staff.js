@@ -47,9 +47,6 @@ $status.select2({
         }
     }
 });
-$(window).on("load", function () {
-    getStaff(currentPage);
-})
 
 $('#filter-by-name').on('input', function () {
     byName = this.value;
@@ -72,8 +69,14 @@ $('#filter-by-email').on('input', function () {
     delayBeforeSearch();
 })
 
+$('.clear-filters').on('click', function () {
+    $('#filter-by-role, #filter-by-status')
+        .val('').trigger('change');
+    $('#filter-by-name, #filter-by-phone, #filter-by-email')
+        .val('').trigger('input');
+})
+
 function delayBeforeSearch() {
-    console.log("start")
     let keyPause = 400;
     clearTimeout(timer);
     timer = setTimeout(function () {
@@ -81,10 +84,13 @@ function delayBeforeSearch() {
     }, keyPause);
 }
 
+$(window).on("load", function () {
+    getStaff(currentPage);
+})
 
 function getStaff(page) {
 
-    let url = new URL('system-settings/staff/get-staff', window.location.origin);
+    let url = new URL('admin/system-settings/staff/get-staff', window.location.origin);
     url.searchParams.append('page', page);
     url.searchParams.append('pageSize', tableLength);
     if (byName) {
@@ -108,7 +114,6 @@ function getStaff(page) {
         url: url,
         dataType: 'json',
         success: function (result) {
-            console.log(result);
             currentPage = page;
             clearTableLine();
             $(".card-footer").children().remove();
@@ -152,14 +157,20 @@ function drawTable(result) {
     const page = result.pageable.pageNumber;
     for (const staff of result.content) {
 
-
         const badgeStatus = staff.status === 'NEW'
-            ? '<span class="badge bg-label-success me-1">' + statusNew + '</span>'
+            ? '<span class="badge bg-label-info me-1">' + statusNew + '</span>'
             : staff.status === 'ACTIVE'
                 ? '<span class="badge bg-label-success me-1">' + statusActive + '</span>'
                 : '<span class="badge bg-label-danger me-1">' + statusDisabled + '</span>';
 
-        $('<tr>\n' +
+        const buttonToDelete = (staff.role.name !== 'DIRECTOR')
+            ?   '<button type="button" class="dropdown-item btn justify-content-start delete-staff" data-bs-toggle="modal" data-bs-target="#modalToDelete"' +
+                '       onclick="addDeleteEvent(' + staff.id + ')">\n' +
+                '       <i class="ti ti-trash me-1"></i>' + buttonLabelDelete + '\n' +
+                '</button>\n'
+            : '';
+
+        $('<tr data-href="staff/view-staff/' + staff.id + '" class="cursor-pointer">\n' +
             '<td>' + staff.firstName + ' ' + staff.lastName + '</td>\n' +
             '<td>' + getRoleLabel(staff.role.name) + '</td>\n' +
             '<td>' + staff.phoneNumber + '</td>\n' +
@@ -170,19 +181,19 @@ function drawTable(result) {
             '   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"\n' +
             '           data-bs-toggle="dropdown">\n' +
             '    <i class="ti ti-dots-vertical"></i>\n' +
-            '     </button>\n' +
+            '   </button>\n' +
             '     <div class="dropdown-menu">\n' +
-            '     <a class="dropdown-item" href="staff/view-staff/' + staff.id + '">\n' +
-            '     <i class="ti ti-pencil me-1"></i>Перегляд\n' +
-            '     </a>\n' +
-            '     <button type="button" class="dropdown-item btn justify-content-start" data-bs-toggle="modal" data-bs-target="#modalCenter"' +
-            '     onclick="addDeleteLink(' + staff.id + ')">\n' +
-            '     <i class="ti ti-trash me-1"></i>Видалити\n' +
-            '     </button>\n' +
+            '       <button type="button" class="dropdown-item btn justify-content-start" onclick="sendInvite(' + staff.id + ')">' +
+            '           <i class="ti ti-mail me-1"></i>' + buttonLabelInvite + '</button>' +
+            '       <a class="dropdown-item" href="staff/edit-staff/' + staff.id + '">\n' +
+            '           <i class="ti ti-pencil me-1"></i>' + buttonLabelEdit + '\n' +
+            '       </a>\n' + buttonToDelete +
             '     </div>\n' +
-            '     </div>\n' +
+            '  </div>\n' +
             '</td>\n' +
-            '</tr>').appendTo("tbody");
+            '</tr>'
+        ).appendTo("tbody");
+        addListenerToRow();
     }
 
     if (result.totalPages > 0) {
@@ -258,6 +269,34 @@ function drawTable(result) {
 
         $(paginationList).appendTo(".card-footer");
     }
+}
+
+function addListenerToRow() {
+    $('tr[data-href] td:not(:last-child)').on('click', function () {
+        window.location = $(this).parent().attr('data-href');
+    })
+}
+
+function addDeleteEvent(staffId) {
+    $('.submit-delete').on('click', function () {
+        if (staffId && staffId > 0) {
+
+            $.ajax({
+                type: 'delete',
+                url: 'staff/delete/' + staffId,
+                success: function () {
+                    $('.close-modal').click()
+                    toastr.success(successMessageOnDelete)
+                    setTimeout(() => getStaff(currentPage), 400);
+                },
+                error: function () {
+                    $('.close-modal').click()
+                    toastr.error(errorMessageOnDelete);
+
+                }
+            })
+        }
+    })
 }
 
 function clearTableLine() {

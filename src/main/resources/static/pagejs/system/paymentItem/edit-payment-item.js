@@ -18,7 +18,7 @@ $(window).on("load", function () {
         switch (status) {
             case 'INCOME':
                 return 'Дохід';
-            case 'EXPOSE':
+            case 'EXPENSE':
                 return 'Витрати';
             default:
                 return 'Не відомо';

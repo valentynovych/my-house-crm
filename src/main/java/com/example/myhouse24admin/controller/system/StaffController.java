@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("system-settings/staff")
+@RequestMapping("admin/system-settings/staff")
 public class StaffController {
 
     private final StaffService staffService;
@@ -88,5 +88,13 @@ public class StaffController {
                                              @ModelAttribute @Valid StaffEditRequest staffEditRequest) {
         staffService.updateStaffById(staffId, staffEditRequest);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("delete/{staffId}")
+    public ResponseEntity<?> deleteStaffById(@PathVariable @Min(1) Long staffId) {
+        boolean isDeleted = staffService.deleteStaffById(staffId);
+        return isDeleted
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
