@@ -17,7 +17,12 @@ public class ValidationExceptionHandler {
     public ResponseEntity<?> notValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
+            String fieldName;
+            try{
+                fieldName = ((FieldError) error).getField();
+            } catch (ClassCastException e) {
+                fieldName = error.getArguments()[1].toString();
+            }
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });

@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.model.authentication.EmailRequest;
+import com.example.myhouse24admin.model.authentication.ForgotPasswordRequest;
 import com.example.myhouse24admin.service.MailService;
 import com.example.myhouse24admin.service.PasswordResetTokenService;
 import com.example.myhouse24admin.service.StaffService;
@@ -59,12 +60,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/changePassword")
-    public @ResponseBody ResponseEntity<?> setNewPassword(@RequestParam("token")String token,@RequestParam("password")String password){
+    public @ResponseBody ResponseEntity<?> setNewPassword(@RequestParam("token")String token,@Valid @ModelAttribute ForgotPasswordRequest forgotPasswordRequest){
         if(passwordResetTokenService.isPasswordResetTokenValid(token)){
-            passwordResetTokenService.updatePassword(token,password);
+            passwordResetTokenService.updatePassword(token, forgotPasswordRequest.password());
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
     @GetMapping("/success")
