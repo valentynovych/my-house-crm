@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.model.authentication.EmailRequest;
+import com.example.myhouse24admin.model.authentication.ForgotPasswordRequest;
 import com.example.myhouse24admin.service.MailService;
 import com.example.myhouse24admin.service.PasswordResetTokenService;
 import com.example.myhouse24admin.service.StaffService;
@@ -10,13 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/admin")
 public class AuthenticationController {
     private final StaffService staffService;
     private final PasswordResetTokenService passwordResetTokenService;
@@ -61,12 +60,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/changePassword")
-    public @ResponseBody ResponseEntity<?> setNewPassword(@RequestParam("token")String token,@RequestParam("password")String password){
+    public @ResponseBody ResponseEntity<?> setNewPassword(@RequestParam("token")String token,@Valid @ModelAttribute ForgotPasswordRequest forgotPasswordRequest){
         if(passwordResetTokenService.isPasswordResetTokenValid(token)){
-            passwordResetTokenService.updatePassword(token,password);
+            passwordResetTokenService.updatePassword(token, forgotPasswordRequest.password());
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
     }
     @GetMapping("/success")

@@ -116,61 +116,61 @@
             <ul class="menu-inner py-1">
 
                 <li class="menu-item">
-                    <a th:href="@{/statistic}" class="menu-link" id="lin">
+                    <a th:href="@{/admin/statistic}" class="menu-link" id="lin">
                         <i class="menu-icon tf-icons ti ti-chart-pie"></i>
                         <div data-i18n="Email" th:text="#{menu-item-statistic}">Статистика</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a th:href="@{/cashRegister}" class="menu-link">
+                    <a th:href="@{/admin/cash-register}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-cash"></i>
                         <div data-i18n="Kanban" th:text="#{menu-item-cash-register}">Каса</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a th:href="@{/invoices}" class="menu-link">
+                    <a th:href="@{/admin/invoices}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-file-spreadsheet"></i>
                         <div data-i18n="Kanban" th:text="#{menu-item-invoices}">Квитанції на оплату</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a th:href="@{/personalAccounts}" class="menu-link">
+                    <a th:href="@{/admin/personal-accounts}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-star"></i>
                         <div data-i18n="Kanban" th:text="#{menu-item-personal-account}">Особисті рахунки</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a th:href="@{/appartments}" class="menu-link">
+                    <a th:href="@{/admin/apartments}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-bed"></i>
                         <div data-i18n="Users" th:text="#{menu-item-apartments}">Квартири</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a th:href="@{/owners}" class="menu-link">
+                    <a th:href="@{/admin/owners}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-user"></i>
                         <div data-i18n="Users" th:text="#{menu-item-apartment-owners}">Власники квартир</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a th:href="@{/houses}" class="menu-link">
+                    <a th:href="@{/admin/houses}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-home"></i>
                         <div data-i18n="Users" th:text="#{menu-item-houses}">Будинки</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a th:href="@{/messages}" class="menu-link">
+                    <a th:href="@{/admin/messages}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-mail"></i>
                         <div data-i18n="Users" th:text="#{menu-item-messages}">Повідомлення</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a th:href="@{/masterRequests}" class="menu-link">
+                    <a th:href="@{/admin/master-requests}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-users"></i>
                         <div data-i18n="Users" th:text="#{menu-item-master-request}">Заявки для виклику майстра</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a th:href="@{/meterReadings}" class="menu-link">
+                    <a th:href="@{/admin/meter-readings}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-table"></i>
                         <div data-i18n="Users" th:text="#{menu-item-meters}">Показання лічильників</div>
                     </a>
@@ -183,22 +183,22 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a th:href="@{/mainPage}" class="menu-link">
+                            <a th:href="@{/admin/site-management/mainPage}" class="menu-link">
                                 <div data-i18n="Roles" th:text="#{menu-item-home-page}">Головна сторінка</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/aboutPage}" class="menu-link">
+                            <a th:href="@{/admin/site-management/aboutPage}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-about-us}">Про нас</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/servicePage}" class="menu-link">
+                            <a th:href="@{/admin/site-management/servicePage}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-services-page}">Послуги</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/contactsPage}" class="menu-link">
+                            <a th:href="@{/admin/site-management/contactsPage}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-contacts}">Контакти</div>
                             </a>
                         </li>
@@ -213,33 +213,33 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a th:href="@{/system-settings/services}" class="menu-link">
+                            <a th:href="@{/admin/system-settings/services}" class="menu-link">
                                 <div data-i18n="Roles" th:text="#{menu-item-services}">Послуги</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/system-settings/tariffs}" class="menu-link">
+                            <a th:href="@{/admin/system-settings/tariffs}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-tariffs}">Тарифи</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/system-settings/roles}" class="menu-link">
+                            <a th:href="@{/admin/system-settings/roles}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-roles}">Ролі</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/system-settings/staff}" class="menu-link">
+                            <a th:href="@{/admin/system-settings/staff}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-users}">Користувачі</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/system-settings/payment-details}" class="menu-link">
+                            <a th:href="@{/admin/system-settings/payment-details}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-payments-details}">Платіжні реквізити
                                 </div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/system-settings/payment-items}" class="menu-link">
+                            <a th:href="@{/admin/system-settings/payment-items}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-articles-payments}">Статті платежів
                                 </div>
                             </a>
@@ -329,7 +329,7 @@
                                 </li>
                                 <li class="dropdown-menu-footer border-top">
                                     <a
-                                            th:href="@{/staff}"
+                                            th:href="@{/admin/staff}"
                                             class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center"
                                     >
                                         Перейти в розділ користувачів
@@ -353,7 +353,7 @@
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/logout}" id="logoutLink">
+                            <a class="nav-link" th:href="@{/admin/logout}" id="logoutLink">
                                 <h3 class="mb-0"><i class="bi bi-box-arrow-right"></i></h3>
                             </a>
                         </li>
@@ -394,17 +394,52 @@
 <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
 <script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
 
-<script>
-    var pathname = window.location.pathname;
-    $(".menu-link").each(function () {
-        let aHref = $(this).attr("href");
-        if (aHref === pathname.slice(0, aHref.length)) {
-            if ($(this).parent().parent().attr("class") === "menu-sub") {
-                $(this).parent().parent().parent().addClass("active open");
+<script th:inline="javascript">
+    var roles = [[${#authentication?.getAuthorities()}]];
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/admin/getPermissions",
+            data: {
+                role: roles[0].authority
+            },
+            success: function (response) {
+                showMenuItems(response);
+            },
+            error: function (){
+                toastr.error("Сталась помилка");
             }
-            $(this).parent().addClass("active");
-        }
-    })
+        });
+    });
+
+    function showMenuItems(permissions){
+        var pathname = window.location.pathname;
+        let i = 0;
+        let count = 0;
+        $(".menu-link").each(function () {
+            let aHref = $(this).attr("href");
+            if(permissions[i].allowed === false && aHref.includes("/")){
+                $(this).parent().hide();
+                if(aHref.includes("site-management")){
+                    $(this).parent().parent().parent().hide();
+                }
+            } else {
+                if (aHref === pathname.slice(0, aHref.length)) {
+                    if ($(this).parent().parent().attr("class") === "menu-sub") {
+                        $(this).parent().parent().parent().addClass("active open");
+                    }
+                    $(this).parent().addClass("active");
+                }
+            }
+            if(!aHref.includes("site-management") && aHref.includes("/")) {
+                i++;
+            } else if(aHref.includes("site-management") && count === 0 ){
+                i++;
+                count++;
+            }
+        })
+    }
+
 </script>
 
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>

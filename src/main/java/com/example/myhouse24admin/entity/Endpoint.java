@@ -6,15 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "roles")
-public class Role {
+@Table(name = "endpoints")
+public class Endpoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 50, nullable = false)
-    private String name;
-    @OneToMany(mappedBy = "role")
-    private List<Staff> staff = new ArrayList<>();
+    private String endpoint;
 
     public Long getId() {
         return id;
@@ -24,12 +22,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEndpoint() {
+        return endpoint;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
     }
-
 }
