@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.configuration;
 
 import com.example.myhouse24admin.securityFilter.RecaptchaFilter;
+import com.example.myhouse24admin.securityFilter.RoleBasedVoter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,10 +19,12 @@ import javax.sql.DataSource;
 public class SecurityConfiguration {
     private final DataSource dataSource;
     private final RecaptchaFilter recaptchaFilter;
+    private final RoleBasedVoter roleBasedVoter;
 
-    public SecurityConfiguration(DataSource dataSource, RecaptchaFilter recaptchaFilter) {
+    public SecurityConfiguration(DataSource dataSource, RecaptchaFilter recaptchaFilter, RoleBasedVoter roleBasedVoter) {
         this.dataSource = dataSource;
         this.recaptchaFilter = recaptchaFilter;
+        this.roleBasedVoter = roleBasedVoter;
     }
 
     @Bean
@@ -32,21 +35,21 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf((c)-> c.disable())
-                .securityMatcher("/**")
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/assets/**", "/forgotPassword", "/sentToken", "/changePassword", "/tokenExpired", "/success").permitAll()
+                        .requestMatchers("/assets/**","/admin/assets/**", "/admin/forgotPassword", "/admin/sentToken", "/admin/changePassword", "/admin/tokenExpired", "/admin/success").permitAll()
+                        .requestMatchers("/admin/**").access(roleBasedVoter)
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/statistic",true)
+                        .loginPage("/admin/login")
+                        .loginProcessingUrl("/admin/login")
+                        .defaultSuccessUrl("/admin/statistic",true)
                         .permitAll()
                 )
                 .rememberMe((rm)-> rm
                         .tokenRepository(persistentTokenRepository()))
                 .logout((logout) -> logout
-                        .logoutUrl("/logout")
+                        .logoutUrl("/admin/logout")
                         .permitAll())
                 .addFilterBefore(recaptchaFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

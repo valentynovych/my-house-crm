@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="#{menu-item-roles}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{menu-item-roles}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{menu-item-system-settings} + ' / '"></span>
+            <span th:text="#{menu-item-roles}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="table-responsive m-4">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Роль</th>
+                <th>Статистика</th>
+                <th>Каса</th>
+                <th>Квитанції</th>
+                <th>Особисті рахунки</th>
+                <th>Квартири</th>
+                <th>Власники квартир</th>
+                <th>Будинки</th>
+                <th>Повідомлення</th>
+                <th>Заявки для виклику майстра</th>
+                <th>Лічильники</th>
+                <th>Управління сайтом</th>
+                <th>Послуги</th>
+                <th>Тарифи</th>
+                <th>Ролі</th>
+                <th>Користувачі</th>
+                <th>Платіжні реквізити</th>
+                <th>Статті платежів</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Директор</td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks" checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks" checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks" checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks"   checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks" value=""  checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks"  checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks"  checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks"  checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="directorChecks" checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="directorChecks" checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks" checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"   name="directorChecks" checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks"  checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks"  checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks"  checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks"   checked disabled/>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="directorChecks"   checked disabled/>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Керуючий</td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="managerChecks"  />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="managerChecks"  />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="managerChecks"  />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="managerChecks"  />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="managerChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="managerChecks"  />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="managerChecks"  />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Бухгалтер</td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="accountantChecks"  />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox"  name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"  />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="accountantChecks"   />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Електрик</td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="electricianChecks"   />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Сантехнік</td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"  />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"   />
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" name="plumberChecks"  />
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-12 mb-4 d-flex justify-content-end">
+        <button type="button" class="btn btn-primary me-4" id="saveButton">Зберегти</button>
+    </div>
+</div>
+
+</body>
+<script layout:fragment="script">
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "roles/getRoles",
+            data: {},
+            success: function (response) {
+                let i = 0;
+                $("input[name='managerChecks']").each(function() {
+                    $(this).prop('checked', response.managerAllowances[i]);
+                    i++;
+                });
+                i=0;
+                $("input[name='accountantChecks']").each(function() {
+                    $(this).prop('checked', response.accountantAllowances[i]);
+                    i++;
+                });
+                i=0;
+                $("input[name='electricianChecks']").each(function() {
+                    $(this).prop('checked', response.electricianAllowances[i]);
+                    i++;
+                });
+                i=0;
+                $("input[name='plumberChecks']").each(function() {
+                    $(this).prop('checked', response.plumberAllowances[i]);
+                    i++;
+                });
+            },
+            error: function () {
+                toastr.error("Сталась помилка")
+            }
+        });
+    });
+    $("#saveButton").on("click", function(){
+        $(this).prop('disabled', true);
+        const managerChecks = [];
+        const electricianChecks = [];
+        const plumberChecks = [];
+        const accountantChecks = [];
+        $("input[name='managerChecks']").each(function() {
+            managerChecks.push(this.checked);
+        });
+        $("input[name='accountantChecks']").each(function() {
+            accountantChecks.push(this.checked);
+        });
+        $("input[name='electricianChecks']").each(function() {
+            electricianChecks.push(this.checked);
+        });
+        $("input[name='plumberChecks']").each(function() {
+            plumberChecks.push(this.checked);
+        });
+        $.ajax({
+            type: "POST",
+            url: "roles/update",
+            data: {
+                managerPermissions: managerChecks,
+                accountantPermissions: accountantChecks,
+                electricianPermissions: electricianChecks,
+                plumberPermissions: plumberChecks
+            },
+            success: async function () {
+                toastr.success("Дані успішно оновлено");
+                setTimeout(() => location.reload(), 6000)
+            },
+            error: function () {
+                toastr.error("Сталась помилка")
+            }
+        });
+
+    });
+</script>
+</html>
