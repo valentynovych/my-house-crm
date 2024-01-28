@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/system-settings/payment-details")
+@RequestMapping("admin/system-settings/payment-details")
 public class PaymentDetailsController {
 
     private final PaymentDetailsService paymentDetailsService;
@@ -34,11 +34,7 @@ public class PaymentDetailsController {
 
     @PostMapping("update-details")
     @ResponseBody
-    public ResponseEntity<?> updatePaymentDetails(@Valid @ModelAttribute PaymentDetailsDto paymentDetailsDto,
-                                                  BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getFieldErrors(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> updatePaymentDetails(@Valid @ModelAttribute PaymentDetailsDto paymentDetailsDto) {
         paymentDetailsService.updatePaymentDetails(paymentDetailsDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

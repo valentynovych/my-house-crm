@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{staff-title}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{staff-title}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{menu-item-system-settings} + ' / '"></span>
+            <a th:href="@{/system-settings/staff}" th:text="#{menu-item-users} + ' / '"></a>
+            <span class="" th:text="#{staff-title}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <div class="card-header d-flex justify-content-end">
+            <a th:href="@{staff/edit-staff/}" class="btn btn-primary me-2" id="current-staff-link">
+                <span class="tf-icons ti-xs ti ti-plus me-1"></span>
+                <span th:text="#{staff-button-edit-staff}"></span>
+            </a>
+        </div>
+        <div class="table-responsive overflow-visible">
+            <table class="table table-bordered">
+                <tbody class="table-border-bottom-0">
+                <tr >
+                    <td class="fw-bold w-25" th:text="#{staff-title}"></td>
+                    <td id="name"></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold w-25" th:text="#{staff-label-role}"></td>
+                    <td id="role"></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold w-25" th:text="#{staff-label-phone-number}"></td>
+                    <td id="phoneNumber"></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold w-25" th:text="#{staff-label-email}"></td>
+                    <td id="email"></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold w-25" th:text="#{staff-label-status}"></td>
+                    <td id="status"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/system/staff/view-staff.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    var statusNew = /*[[#{staff-status-new}]]*/ 'default';
+    var statusActive = /*[[#{staff-status-active}]]*/ 'default';
+    var statusDisabled = /*[[#{staff-status-disabled}]]*/ 'default';
+
+    var errorMessage = /*[[#{staff-add-error-message}]]*/ 'default';
+    var roleLabel = /*[[#{staff-label-role}]]*/ 'default';
+    var roleDirector = /*[[#{staff-role-director}]]*/ 'default';
+    var roleManager = /*[[#{staff-role-manager}]]*/ 'default';
+    var roleAccountant = /*[[#{staff-role-accountant}]]*/ 'default';
+    var roleElectrician = /*[[#{staff-role-electrician}]]*/ 'default';
+    var rolePlumber = /*[[#{staff-role-plumber}]]*/ 'default';
+
+</script>
+
+</html>

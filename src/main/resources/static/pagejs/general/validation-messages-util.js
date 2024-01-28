@@ -1,12 +1,12 @@
-
 function printErrorMessageToField(errorResponse) {
 
     if (errorResponse.status === 400) {
-        for (let fieldError of errorResponse.responseJSON) {
-            $("#" + fieldError.field).addClass("is-invalid").parent().append($(
-                '<p class="error-message invalid-feedback m-0">' + fieldError.defaultMessage + '</p>'
+        const errorMap = new Map(Object.entries((errorResponse.responseJSON)));
+        errorMap.forEach((value, key) => {
+            $("#" + key).addClass("is-invalid").parent().append($(
+                '<p class="error-message invalid-feedback m-0">' + value + '</p>'
             ));
-        }
+        })
     }
 }
 

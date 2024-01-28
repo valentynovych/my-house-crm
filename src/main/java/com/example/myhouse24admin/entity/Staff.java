@@ -11,11 +11,11 @@ public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "first_name",length = 50, nullable = false)
+    @Column(name = "first_name", length = 50, nullable = false)
     private String firstName;
-    @Column(name = "last_name",length = 50, nullable = false)
+    @Column(name = "last_name", length = 50, nullable = false)
     private String lastName;
-    @Column(name = "phone_number",length = 13, nullable = false, unique = true)
+    @Column(name = "phone_number", length = 13, nullable = false, unique = true)
     private String phoneNumber;
     @Column(length = 100, nullable = false, unique = true)
     private String email;
@@ -33,6 +33,9 @@ public class Staff {
     private List<House> houses = new ArrayList<>();
     @OneToOne(mappedBy = "staff", cascade = CascadeType.ALL)
     private PasswordResetToken passwordResetToken;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StaffStatus status;
 
     public Long getId() {
         return id;
@@ -120,5 +123,13 @@ public class Staff {
 
     public void setPasswordResetToken(PasswordResetToken passwordResetToken) {
         this.passwordResetToken = passwordResetToken;
+    }
+
+    public StaffStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(StaffStatus status) {
+        this.status = status;
     }
 }
