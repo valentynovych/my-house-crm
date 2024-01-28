@@ -21,7 +21,7 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     private final PasswordResetTokenRepo passwordResetTokenRepo;
     private final StaffRepo staffRepo;
     private final PasswordEncoder passwordEncoder;
-    private final Logger logger = LogManager.getLogger("serviceLogger");
+    private final Logger logger = LogManager.getLogger(PasswordResetTokenServiceImpl.class);
 
     public PasswordResetTokenServiceImpl(PasswordResetTokenRepo passwordResetTokenRepo, StaffRepo staffRepo, PasswordEncoder passwordEncoder) {
         this.passwordResetTokenRepo = passwordResetTokenRepo;

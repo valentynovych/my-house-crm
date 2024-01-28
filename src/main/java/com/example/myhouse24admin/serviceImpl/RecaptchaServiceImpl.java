@@ -16,7 +16,7 @@ public class RecaptchaServiceImpl implements RecaptchaService {
     @Value("${google.recaptcha.key.secret}")
     private String secretKey;
     private String verifyUrl = "https://www.google.com/recaptcha/api/siteverify";
-    private final Logger logger = LogManager.getLogger("serviceLogger");
+    private final Logger logger = LogManager.getLogger(RecaptchaServiceImpl.class);
     private final RestTemplate restTemplate;
 
     public RecaptchaServiceImpl(RestTemplate restTemplate) {

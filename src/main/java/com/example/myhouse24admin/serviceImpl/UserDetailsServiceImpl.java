@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final StaffRepo staffRepo;
-    private final Logger logger = LogManager.getLogger("serviceLogger");
+    private final Logger logger = LogManager.getLogger(UserDetailsServiceImpl.class);
     public UserDetailsServiceImpl(StaffRepo staffRepo) {
         this.staffRepo = staffRepo;
     }

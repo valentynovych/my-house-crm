@@ -16,7 +16,7 @@ import java.util.List;
 import static com.example.myhouse24admin.specification.PermissionSpecification.*;
 @Service
 public class RoleServiceImpl implements RoleService {
-    private final Logger logger = LogManager.getLogger("serviceLogger");
+    private final Logger logger = LogManager.getLogger(RoleServiceImpl.class);
     private final PermissionRepo permissionRepo;
     private final PermissionMapper permissionMapper;
     private final RoleMapper roleMapper;

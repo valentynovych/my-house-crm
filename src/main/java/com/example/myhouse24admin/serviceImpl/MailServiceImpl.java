@@ -24,7 +24,7 @@ import java.io.IOException;
 public class MailServiceImpl implements MailService {
     private final TemplateEngine templateEngine;
     private final SendGrid sendGrid;
-    private final Logger logger = LogManager.getLogger("serviceLogger");
+    private final Logger logger = LogManager.getLogger(MailServiceImpl.class);
 
     @Value("${sender}")
     private String sender;

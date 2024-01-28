@@ -19,7 +19,7 @@ public class StaffServiceImpl implements StaffService {
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
     private final StaffMapper staffMapper;
-    private final Logger logger = LogManager.getLogger("serviceLogger");
+    private final Logger logger = LogManager.getLogger(StaffServiceImpl.class);
 
     public StaffServiceImpl(StaffRepo staffRepo, RoleRepo roleRepo, PasswordEncoder passwordEncoder, StaffMapper staffMapper) {
         this.staffRepo = staffRepo;
