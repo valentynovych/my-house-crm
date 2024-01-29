@@ -36,7 +36,7 @@ public class SecurityConfiguration {
         http
                 .csrf((c)-> c.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/assets/**","/admin/assets/**", "/admin/forgotPassword", "/admin/sentToken", "/admin/changePassword", "/admin/tokenExpired", "/admin/success").permitAll()
+                        .requestMatchers("/assets/**","/pagejs/**", "/admin/forgotPassword", "/admin/sentToken", "/admin/changePassword", "/admin/tokenExpired", "/admin/success").permitAll()
                         .requestMatchers("/admin/**").access(roleBasedVoter)
                         .anyRequest().authenticated()
                 )
