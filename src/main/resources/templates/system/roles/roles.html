@@ -19,29 +19,29 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>Роль</th>
-                <th>Статистика</th>
-                <th>Каса</th>
-                <th>Квитанції</th>
-                <th>Особисті рахунки</th>
-                <th>Квартири</th>
-                <th>Власники квартир</th>
-                <th>Будинки</th>
-                <th>Повідомлення</th>
-                <th>Заявки для виклику майстра</th>
-                <th>Лічильники</th>
-                <th>Управління сайтом</th>
-                <th>Послуги</th>
-                <th>Тарифи</th>
-                <th>Ролі</th>
-                <th>Користувачі</th>
-                <th>Платіжні реквізити</th>
-                <th>Статті платежів</th>
+                <th th:text="#{role-table}" >Роль</th>
+                <th th:text="#{menu-item-statistic}">Статистика</th>
+                <th th:text="#{menu-item-cash-register}">Каса</th>
+                <th th:text="#{menu-item-invoices}">Квитанції</th>
+                <th th:text="#{menu-item-personal-account}">Особисті рахунки</th>
+                <th th:text="#{menu-item-apartments}">Квартири</th>
+                <th th:text="#{menu-item-apartment-owners}">Власники квартир</th>
+                <th th:text="#{menu-item-houses}">Будинки</th>
+                <th th:text="#{menu-item-messages}">Повідомлення</th>
+                <th th:text="#{menu-item-master-request}">Заявки для виклику майстра</th>
+                <th th:text="#{menu-item-meters}">Лічильники</th>
+                <th th:text="#{menu-item-site-management}">Управління сайтом</th>
+                <th th:text="#{menu-item-services}">Послуги</th>
+                <th th:text="#{menu-item-tariffs}">Тарифи</th>
+                <th th:text="#{menu-item-roles}">Ролі</th>
+                <th th:text="#{menu-item-users}">Користувачі</th>
+                <th th:text="#{menu-item-payments-details}">Платіжні реквізити</th>
+                <th th:text="#{menu-item-articles-payments}">Статті платежів</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>Директор</td>
+                <td th:text="#{staff-role-director}">Директор</td>
                 <td>
                     <div class="d-flex justify-content-center">
                         <input class="form-check-input" type="checkbox" name="directorChecks" checked disabled/>
@@ -129,7 +129,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Керуючий</td>
+                <td th:text="#{staff-role-manager}">Керуючий</td>
                 <td>
                     <div class="d-flex justify-content-center">
                         <input class="form-check-input" type="checkbox" name="managerChecks"   />
@@ -217,7 +217,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Бухгалтер</td>
+                <td th:text="#{staff-role-accountant}">Бухгалтер</td>
                 <td>
                     <div class="d-flex justify-content-center">
                         <input class="form-check-input" type="checkbox" name="accountantChecks"   />
@@ -305,7 +305,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Електрик</td>
+                <td th:text="#{staff-role-electrician}">Електрик</td>
                 <td>
                     <div class="d-flex justify-content-center">
                         <input class="form-check-input" type="checkbox" name="electricianChecks"   />
@@ -393,7 +393,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Сантехнік</td>
+                <td th:text="#{staff-role-plumber}">Сантехнік</td>
                 <td>
                     <div class="d-flex justify-content-center">
                         <input class="form-check-input" type="checkbox" name="plumberChecks"   />
@@ -484,12 +484,14 @@
         </table>
     </div>
     <div class="col-md-12 mb-4 d-flex justify-content-end">
-        <button type="button" class="btn btn-primary me-4" id="saveButton">Зберегти</button>
+        <button type="button" class="btn btn-primary me-4" id="saveButton" th:text="#{general-button-save}">Зберегти</button>
     </div>
 </div>
 
 </body>
-<script layout:fragment="script">
+<script th:inline="javascript" layout:fragment="script">
+    var successMessage = /*[[#{role-success-message}]]*/;
+    var errorMessage = /*[[#{role-error-message}]]*/;
     $(document).ready(function () {
         $.ajax({
             type: "GET",
@@ -518,7 +520,7 @@
                 });
             },
             error: function () {
-                toastr.error("Сталась помилка")
+                toastr.error(errorMessage)
             }
         });
     });
@@ -550,11 +552,11 @@
                 plumberPermissions: plumberChecks
             },
             success: async function () {
-                toastr.success("Дані успішно оновлено");
+                toastr.success(successMessage);
                 setTimeout(() => location.reload(), 6000)
             },
             error: function () {
-                toastr.error("Сталась помилка")
+                toastr.error(errorMessage)
             }
         });
 
