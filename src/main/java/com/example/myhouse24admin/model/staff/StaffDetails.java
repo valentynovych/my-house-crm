@@ -11,7 +11,7 @@ import java.util.List;
 
 public class StaffDetails implements UserDetails {
     private Staff staff;
-
+    private boolean isEnabled = true;
     public StaffDetails(Staff staff) {
         this.staff = staff;
     }
@@ -21,6 +21,9 @@ public class StaffDetails implements UserDetails {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_"+staff.getRole().getName()));
         return authorities;
+    }
+    public void setAccountEnabled(boolean isEnabled){
+        this.isEnabled = isEnabled;
     }
 
     @Override
@@ -50,7 +53,7 @@ public class StaffDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
     public String getFullName() {
         return staff.getFirstName()+" "+staff.getLastName();

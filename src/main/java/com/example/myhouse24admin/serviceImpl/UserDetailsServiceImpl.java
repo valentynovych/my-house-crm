@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.entity.Staff;
+import com.example.myhouse24admin.entity.StaffStatus;
 import com.example.myhouse24admin.model.staff.StaffDetails;
 import com.example.myhouse24admin.repository.StaffRepo;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +23,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("loadUserByUsername() - Finding staff by email "+username+" for staff details");
         Staff staff = staffRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Staff don't exists by email "+username));
+        StaffDetails staffDetails = new StaffDetails(staff);
+        if(staff.getStatus().equals(StaffStatus.DISABLED)){
+            staffDetails.setAccountEnabled(false);
+        }
         logger.info("loadUserByUsername() - Staff was found");
-        return new StaffDetails(staff);
+        return staffDetails;
     }
 }

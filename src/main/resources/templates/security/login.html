@@ -112,7 +112,12 @@
                             <form id="formAuthentication" class="mb-3" th:action = "@{/admin/login}" method="post">
                                 <p class="text-center">Вхід в панель управління</p>
                                 <div th:if="${param.error}" class="text-danger text-center">
-                                    Невірний email або пароль
+                                    <p th:if="${#strings.contains(session.SPRING_SECURITY_LAST_EXCEPTION, 'DisabledException')}">
+                                        Користувач вимкнений
+                                    </p>
+                                    <p th:if="${#strings.contains(session.SPRING_SECURITY_LAST_EXCEPTION, 'BadCredentialsException')}">
+                                        Невірний пароль або пошта
+                                    </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
