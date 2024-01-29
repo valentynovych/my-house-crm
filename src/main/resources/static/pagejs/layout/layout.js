@@ -1,7 +1,10 @@
+const currentUrl = window.location.href;
+const myArray = currentUrl.split("/");
+var root = myArray[3];
 $(document).ready(function () {
     $.ajax({
         type: "GET",
-        url: "/admin/getPermissions",
+        url: "/"+root+"/admin/getPermissions",
         data: {
             role: roles[0].authority
         },

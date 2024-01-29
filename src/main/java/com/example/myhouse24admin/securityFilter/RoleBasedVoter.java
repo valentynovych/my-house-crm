@@ -24,17 +24,20 @@ public class RoleBasedVoter implements AuthorizationManager<RequestAuthorization
         if(authentication.get().getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.get().getPrincipal();
             String requestURI = object.getRequest().getRequestURI();
-            String[] uris = requestURI.split("/");
-            if (uris[2].equals("system-settings")) {
-                requestURI = "/" + uris[1] + "/" + uris[2] + "/" + uris[3];
-            } else {
-                requestURI = "/" + uris[1] + "/" + uris[2];
-            }
-            Optional<Permission> permission = permissionRepo.findByStaffEmailAndEndpoint(userDetails.getUsername(), requestURI);
+            String uriToFind = formUriToFind(requestURI);
+            Optional<Permission> permission = permissionRepo.findByStaffEmailAndEndpoint(userDetails.getUsername(), uriToFind);
             return permission.map(value -> new AuthorizationDecision(value.isAllowed()))
                     .orElseGet(() -> new AuthorizationDecision(true));
         } else {
             return new AuthorizationDecision(false);
+        }
+    }
+    private String formUriToFind(String requestURI){
+        String[] uris = requestURI.split("/");
+        if (uris[3].equals("system-settings")) {
+            return "/" + uris[2] + "/" + uris[3] + "/" + uris[4];
+        } else {
+             return "/" + uris[2] + "/" + uris[3];
         }
     }
 }
