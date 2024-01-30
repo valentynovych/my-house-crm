@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.configuration;
 
+import com.example.myhouse24admin.exceptionHandler.CustomAccessDeniedHandler;
 import com.example.myhouse24admin.securityFilter.RecaptchaFilter;
 import com.example.myhouse24admin.securityFilter.RoleBasedVoter;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -40,6 +42,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/admin/**").access(roleBasedVoter)
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling((ex) -> ex
+                        .accessDeniedHandler(accessDeniedHandler()))
                 .formLogin((form) -> form
                         .loginPage("/admin/login")
                         .loginProcessingUrl("/admin/login")
@@ -58,5 +62,9 @@ public class SecurityConfiguration {
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
         return jdbcTokenRepository;
+    }
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
     }
 }
