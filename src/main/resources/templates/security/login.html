@@ -118,6 +118,9 @@
                                     <p th:if="${#strings.contains(session.SPRING_SECURITY_LAST_EXCEPTION, 'BadCredentialsException')}">
                                         Невірний пароль або пошта
                                     </p>
+                                    <p th:if="${#strings.contains(session.SPRING_SECURITY_LAST_EXCEPTION, 'AuthenticationServiceException')}">
+                                        Доведіть що ви не робот
+                                    </p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
