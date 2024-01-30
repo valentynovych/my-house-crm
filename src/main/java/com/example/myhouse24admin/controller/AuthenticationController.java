@@ -17,19 +17,16 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/admin")
 public class AuthenticationController {
-    private final StaffService staffService;
     private final PasswordResetTokenService passwordResetTokenService;
     private final MailService mailService;
 
-    public AuthenticationController(StaffService staffService, PasswordResetTokenService passwordResetTokenService, MailService mailService) {
-        this.staffService = staffService;
+    public AuthenticationController(PasswordResetTokenService passwordResetTokenService, MailService mailService) {
         this.passwordResetTokenService = passwordResetTokenService;
         this.mailService = mailService;
     }
 
     @GetMapping("/login")
     public ModelAndView getLoginPage() {
-        staffService.createFirstStaff();
         return new ModelAndView("security/login");
     }
 

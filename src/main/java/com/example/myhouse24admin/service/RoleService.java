@@ -11,4 +11,5 @@ public interface RoleService {
                            boolean[] electricianPermissions, boolean[] plumberPermissions);
     List<PermissionResponse> getPermissionResponsesByRole(String role);
     String getAllowedEndPoint(String email);
+    void createPermissions();
 }

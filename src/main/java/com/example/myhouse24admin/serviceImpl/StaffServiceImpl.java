@@ -53,8 +53,10 @@ public class StaffServiceImpl implements StaffService {
                     passwordEncoder.encode("admin"),
                     "Директор", "+380991111111", role, Language.UKR);
             saveStaffInDB(staff);
+            logger.info("createFirstStaff() - First staff was created");
+        } else {
+            logger.info("createFirstStaff() - First staff has already been created");
         }
-        logger.info("createFirstStaff() - First staff was created");
     }
 
     @Override
