@@ -10,4 +10,5 @@ public interface RoleService {
     void updatePermissions(boolean[] managerPermissions, boolean[] accountantPermissions,
                            boolean[] electricianPermissions, boolean[] plumberPermissions);
     List<PermissionResponse> getPermissionResponsesByRole(String role);
+    String getAllowedEndPoint(String email);
 }

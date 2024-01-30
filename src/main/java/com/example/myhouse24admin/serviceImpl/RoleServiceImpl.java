@@ -104,5 +104,12 @@ public class RoleServiceImpl implements RoleService {
         permissionRepo.saveAll(permissions);
     }
 
-
+    @Override
+    public String getAllowedEndPoint(String email) {
+        logger.info("getAllowedEndPoint() - Getting endpoint that allowed by staff email "+email);
+        List<Permission> permissions = permissionRepo.findByStaffEmailThatAllowed(email);
+        String endpoint = permissions.get(0).getEndpoint().getEndpoint();
+        logger.info("getAllowedEndPoint() - Endpoint was got");
+        return endpoint;
+    }
 }
