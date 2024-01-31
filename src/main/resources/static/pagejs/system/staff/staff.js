@@ -90,7 +90,7 @@ $(window).on("load", function () {
 
 function getStaff(page) {
 
-    let url = new URL('admin/system-settings/staff/get-staff', window.location.origin);
+    let url = new URL('staff/get-staff', window.location.origin + window.location.pathname);
     url.searchParams.append('page', page);
     url.searchParams.append('pageSize', tableLength);
     if (byName) {
