@@ -67,7 +67,7 @@ public class RoleServiceImpl implements RoleService {
     public List<PermissionResponse> getPermissionResponsesByRole(String role) {
         logger.info("getPermissionResponsesByRole() - Getting permission responses by role "+role);
         String[] roles = role.split("_");
-        List<Permission> permissions = permissionRepo.findAll(byRoleName(roles[1]));
+        List<Permission> permissions = permissionRepo.findAllByRoleName(roles[1]);
         List<PermissionResponse> permissionResponses = permissionMapper.permissionListToPermissionResponseList(permissions);
         logger.info("getPermissionResponsesByRole() - Permission responses was got");
         return permissionResponses;
