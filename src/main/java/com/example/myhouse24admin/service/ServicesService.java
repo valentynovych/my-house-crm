@@ -10,4 +10,6 @@ public interface ServicesService {
     List<ServiceResponse> getAllServices();
 
     void updateServices(ServiceDtoListWrap services);
+
+    ServiceResponse getServiceById(Long serviceId);
 }

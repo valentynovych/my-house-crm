@@ -6,12 +6,14 @@ import com.example.myhouse24admin.model.services.ServiceDtoListWrap;
 import com.example.myhouse24admin.model.services.ServiceResponse;
 import com.example.myhouse24admin.repository.ServicesRepo;
 import com.example.myhouse24admin.service.ServicesService;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ServicesServiceImpl implements ServicesService {
@@ -60,5 +62,16 @@ public class ServicesServiceImpl implements ServicesService {
             }
             logger.info("updateServices() -> exit, success update service list");
         }
+    }
+
+    @Override
+    public ServiceResponse getServiceById(Long serviceId) {
+        logger.info("getServiceById() -> start with id: {}", serviceId);
+        Optional<Service> byId = servicesRepo.findById(serviceId);
+        Service service = byId.orElseThrow(() ->
+                new EntityNotFoundException(String.format("Service with id: %s not found", serviceId)));
+        ServiceResponse serviceResponse = mapper.serviceResponseToService(service);
+        logger.info("getServiceById() -> exit, service with id: {} was found", serviceId);
+        return serviceResponse;
     }
 }

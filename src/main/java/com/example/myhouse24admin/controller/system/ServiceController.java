@@ -1,10 +1,13 @@
 package com.example.myhouse24admin.controller.system;
 
-import com.example.myhouse24admin.model.services.*;
+import com.example.myhouse24admin.model.services.ServiceDtoListWrap;
+import com.example.myhouse24admin.model.services.ServiceResponse;
+import com.example.myhouse24admin.model.services.UnitOfMeasurementDto;
+import com.example.myhouse24admin.model.services.UnitOfMeasurementDtoListWrap;
 import com.example.myhouse24admin.service.ServicesService;
 import com.example.myhouse24admin.service.UnitOfMeasurementService;
 import jakarta.validation.Valid;
-import org.mapstruct.factory.Mappers;
+import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,7 +27,6 @@ public class ServiceController {
         this.unitOfMeasurementService = unitOfMeasurementService;
         this.servicesService = servicesService;
     }
-
 
     @GetMapping()
     public ModelAndView viewServices() {
@@ -53,6 +55,12 @@ public class ServiceController {
     public ResponseEntity<?> updateServices(@ModelAttribute @Valid ServiceDtoListWrap servicesList) {
         servicesService.updateServices(servicesList);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("get-service-by-id/{serviceId}")
+    public ResponseEntity<ServiceResponse> getAllServices(@PathVariable @Min(1) Long serviceId) {
+        ServiceResponse serviceResponse = servicesService.getServiceById(serviceId);
+        return new ResponseEntity<>(serviceResponse, HttpStatus.OK);
     }
 
 

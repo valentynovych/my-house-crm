@@ -19,6 +19,12 @@ public class Tariff {
     @Column(name = "last_modify", nullable = false)
     private Instant lastModify;
     private boolean deleted;
+    @OneToMany(mappedBy = "tariff",
+            cascade = {
+                    CascadeType.MERGE,
+                    CascadeType.REMOVE})
+    private List<TariffItem> tariffItems = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
@@ -59,4 +65,11 @@ public class Tariff {
         this.deleted = deleted;
     }
 
+    public List<TariffItem> getTariffItems() {
+        return tariffItems;
+    }
+
+    public void setTariffItems(List<TariffItem> tariffItems) {
+        this.tariffItems = tariffItems;
+    }
 }
