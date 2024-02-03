@@ -164,10 +164,10 @@ function drawTable(result) {
                 : '<span class="badge bg-label-danger me-1">' + statusDisabled + '</span>';
 
         const buttonToDelete = (staff.role.name !== 'DIRECTOR')
-            ?   '<button type="button" class="dropdown-item btn justify-content-start delete-staff" data-bs-toggle="modal" data-bs-target="#modalToDelete"' +
-                '       onclick="addDeleteEvent(' + staff.id + ')">\n' +
-                '       <i class="ti ti-trash me-1"></i>' + buttonLabelDelete + '\n' +
-                '</button>\n'
+            ? '<button type="button" class="dropdown-item btn justify-content-start delete-staff" data-bs-toggle="modal" data-bs-target="#modalToDelete"' +
+            '       onclick="addDeleteEvent(' + staff.id + ')">\n' +
+            '       <i class="ti ti-trash me-1"></i>' + buttonLabelDelete + '\n' +
+            '</button>\n'
             : '';
 
         $('<tr data-href="staff/view-staff/' + staff.id + '" class="cursor-pointer">\n' +

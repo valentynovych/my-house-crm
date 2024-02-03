@@ -25,7 +25,7 @@
         </a>
     </div>
     <div class="card-body" id="dropdownParent">
-        <div class="table-responsive  overflow-visible">
+        <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
@@ -63,9 +63,21 @@
                 </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
+<!--                <tr>-->
+<!--                    <td colspan="5">-->
+<!--                        <div class="text-center">-->
+<!--                            <div class="spinner-border" role="status">-->
+<!--                                <span class="visually-hidden">Loading...</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </td>-->
+<!--                </tr>-->
+
                 </tbody>
             </table>
+
         </div>
+
     </div>
     <div class="card-footer d-flex justify-content-between"></div>
     <!-- Modal -->
@@ -82,14 +94,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal" th:text="#{general-button-close}"></button>
-                    <button type="button" class="btn btn-danger submit-delete" th:text="#{general-button-delete}"></button>
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete"
+                            th:text="#{general-button-delete}"></button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 
 </body>

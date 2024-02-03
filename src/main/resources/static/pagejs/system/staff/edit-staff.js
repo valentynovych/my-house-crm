@@ -131,7 +131,7 @@ $(window).on("load", function () {
             staff = response;
             fillInputs(staff);
         }, error: function (error) {
-            toastr.error(errorMessage);
+            toastr.error(staffErrorMessage);
         }
     })
 

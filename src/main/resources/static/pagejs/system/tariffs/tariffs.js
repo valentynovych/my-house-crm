@@ -12,7 +12,6 @@ function getTariffs(page) {
         url: getUrl,
         dataType: 'json',
         success: function (result) {
-            console.log(result);
             currentPage = page;
             clearTableLine();
             $(".card-footer").children().remove();

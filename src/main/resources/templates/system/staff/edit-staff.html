@@ -13,8 +13,8 @@
         <h3 th:text="#{staff-title}"></h3>
         <h6>
             <span class="text-muted fw-light" th:text="#{menu-item-system-settings} + ' / '"></span>
-            <a th:href="@{/system-settings/staff}" th:text="#{menu-item-users} + ' / '"></a>
-            <a th:href="@{/system-settings/staff/view-staff/}" th:text="#{staff-title} + ' / '"
+            <a th:href="@{/admin/system-settings/staff}" th:text="#{menu-item-users} + ' / '"></a>
+            <a th:href="@{/admin/system-settings/staff/view-staff/}" th:text="#{staff-title} + ' / '"
                id="current-staff-link"></a>
             <span class="" th:text="#{breadcrumb-add}"></span>
         </h6>
@@ -100,7 +100,7 @@
 </body>
 <script layout:fragment="script" th:src="@{/pagejs/system/staff/edit-staff.js}"></script>
 <script layout:fragment="initThymeleafVarianle" th:inline="javascript">
-    const errorMessage = /*[[#{staff-add-error-message}]]*/ 'default';
+    const staffErrorMessage = /*[[#{staff-add-error-message}]]*/ 'default';
     const roleLabel = /*[[#{staff-label-role}]]*/ 'default';
     const roleDirector = /*[[#{staff-role-director}]]*/ 'default';
     const roleManager = /*[[#{staff-role-manager}]]*/ 'default';

@@ -43,6 +43,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-auth.css}" />
     <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-misc.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}" />
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
@@ -393,10 +394,11 @@
 <script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
 <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
 <script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+<script th:src="@{/pagejs/general/custom-block-ui.js}"></script>
 
 <script th:inline="javascript">
     var roles = [[${#authentication?.getAuthorities()}]];
-    var errorMessage = /*[[#{role-error-message}]]*/;
+    var errorMessage = /*[[#{role-error-message}]]*/ 'default';
 </script>
 <script th:src="@{/pagejs/layout/layout.js}"></script>
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
@@ -404,6 +406,7 @@
 <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
 <script th:src="@{/assets/vendor/libs/toastr/toastr.js}"> </script>
 <script th:src="@{/assets/vendor/libs/autosize/autosize.js}"></script>
+<script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
 
 <script th:src="@{/assets/vendor/js/menu.js}"></script>
 <!-- endbuild -->
