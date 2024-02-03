@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{tariff-title}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{tariff-title}" class="current-tariff"></h3>
+        <h6 class="d-inline-flex">
+            <span class="text-muted fw-light" th:text="#{menu-item-system-settings} + ' / '"></span>
+            <a th:href="@{/admin/system-settings/tariffs}" th:text="#{menu-item-tariffs} + ' / '"></a>
+            <span class="text-muted fw-light current-tariff" th:text="#{breadcrumb-view}"
+                  style="display: block; white-space: nowrap; max-width: 8rem; overflow: hidden; text-overflow: ellipsis;">
+
+            </span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-header d-flex justify-content-end">
+        <a th:href="@{../edit-tariff/}" id="current-tariff" class="btn btn-primary me-2">
+            <span th:text="#{tariffs-button-edit}"></span>
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="header-table table-responsive">
+            <table class="table table-bordered">
+                <tbody class="table-border-bottom-0">
+                <tr>
+                    <td class="fw-bold w-25" th:text="#{tariffs-title-name}"></td>
+                    <td id="tariff-name"></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold w-25" th:text="#{tariffs-title-description}"></td>
+                    <td id="tariff-description"></td>
+                </tr>
+                <tr>
+                    <td class="fw-bold w-25" th:text="#{tariffs-title-edit-date}"></td>
+                    <td id="tariff-edit-date"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tariff-items-table mt-5 table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-primary text-center">
+                <tr>
+                    <th>#</th>
+                    <th th:text="#{service-label}"></th>
+                    <th th:text="#{service-unit-of-measurement-label}"></th>
+                    <th th:text="#{tariff-item-price-label}"></th>
+                    <th th:text="#{tariff-item-currency-label}"></th>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/system/tariffs/view-tariff.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const successSaveMessage = /*[[#{service-message-success-save}]]*/ 'default';
+    const errorSaveMessage = /*[[#{service-message-error-save}]]*/ 'default';
+
+    const serviceLabel = /*[[#{service-label}]]*/ 'default';
+    const unitLabel = /*[[#{tariff-item-unit-of-measurement-label}]]*/ 'default';
+    const servicePriceLabel = /*[[#{tariff-item-price-label}]]*/ 'default';
+    const serviceCurrency = /*[[#{tariff-item-currency-label}]]*/ 'default';
+    const tariffTitle = /*[[#{tariff-title}]]*/ 'default';
+</script>
+
+</html>
