@@ -30,12 +30,12 @@ $(window).on("load", function () {
         }
     }
 
+    blockCardDody();
     $.ajax({
         type: 'get',
         url: '../get-staff/' + staff.id,
         success: function (response) {
             staff = response;
-            console.log(staff);
             fillTable(staff);
         }, error: function (error) {
             toastr.error(errorMessage);

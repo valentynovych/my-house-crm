@@ -78,9 +78,9 @@ function initButtonAndInputs(item, index) {
             type: 'get',
             dataType: 'json',
             success: function (response) {
-                $(item).find('[name="tariffItems[' + index + '].service.unitOfMeasurement.name"]')
+                $(item).find('[name="tariffRequest.tariffItems[' + index + '].service.unitOfMeasurement.name"]')
                     .val(response.unitOfMeasurement.name);
-                $(item).find('[name="tariffItems[' + index + '].currency"]').val('грн')
+                $(item).find('[name="tariffRequest.tariffItems[' + index + '].currency"]').val('грн')
             },
             error: function (error) {
                 toastr.error(errorMessage);
@@ -122,6 +122,7 @@ function reorderServiceIndexes() {
 }
 
 $('#save-tariff').on('click', function () {
+    blockCardDody();
     clearAllErrorMessage();
 
     let formData = new FormData($('#tariffForm')[0]);
@@ -141,7 +142,7 @@ $('#save-tariff').on('click', function () {
         data: formData,
         success: function (response) {
             toastr.success(successSaveMessage);
-            window.location = '../'
+            window.history.back();
         },
         error: function (error) {
             console.log(error)

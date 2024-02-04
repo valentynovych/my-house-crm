@@ -90,6 +90,7 @@ $(window).on("load", function () {
 
 function getStaff(page) {
 
+    blockCardDody();
     let url = new URL('staff/get-staff', window.location.origin + window.location.pathname);
     url.searchParams.append('page', page);
     url.searchParams.append('pageSize', tableLength);

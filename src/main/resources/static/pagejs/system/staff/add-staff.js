@@ -19,7 +19,7 @@ $(window).on("load", function () {
     })
 
     $('.button-cancel').on('click', function () {
-        window.location.href = '../staff';
+        window.history.back();
     })
 
     function parseToMap(data) {
@@ -101,6 +101,7 @@ $(window).on("load", function () {
 
     $(".button-save").on("click", function () {
         clearAllErrorMessage();
+        blockCardDody();
 
         let formData = new FormData();
 
@@ -118,6 +119,7 @@ $(window).on("load", function () {
                 window.history.back();
             },
             error: function (error) {
+                console.log(error);
                 printErrorMessageToField(error);
                 toastr.error(errorMessage);
             }

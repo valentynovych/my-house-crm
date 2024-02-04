@@ -5,7 +5,7 @@ $(window).on('load', function () {
         companyName: '',
         companyDetails: ''
     };
-
+    blockCardDody();
     $.ajax({
         type: 'get',
         url: 'payment-details/get-details',
@@ -42,7 +42,7 @@ $(window).on('load', function () {
 
     $(".button-save").on("click", function () {
         clearAllErrorMessage();
-
+        blockCardDody();
         let formData = new FormData();
 
         for (var key in paymentDetails) {

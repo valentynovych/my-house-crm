@@ -18,13 +18,13 @@
     </div>
 </div>
 <div layout:fragment="content">
-    <div class="card-header d-flex justify-content-end">
-        <a th:href="@{staff/add}" class="btn btn-primary me-2">
-            <span class="tf-icons ti-xs ti ti-plus me-1"></span>
-            <span th:text="#{staff-button-add}"></span>
-        </a>
-    </div>
     <div class="card-body" id="dropdownParent">
+        <div class="mb-3 d-flex justify-content-end">
+            <a th:href="@{staff/add}" class="btn btn-primary me-2">
+                <span class="tf-icons ti-xs ti ti-plus me-1"></span>
+                <span th:text="#{staff-button-add}"></span>
+            </a>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>

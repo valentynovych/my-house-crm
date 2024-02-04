@@ -1,5 +1,3 @@
-
-
 $(window).on("load", function () {
 
     const windowPath = window.location.pathname;
@@ -40,6 +38,7 @@ $(window).on("load", function () {
         return list;
     }
 
+    blockCardDody();
     $.ajax({
         type: 'get',
         url: '../get-item/' + itemId,
@@ -91,6 +90,7 @@ $(window).on("load", function () {
 
     $(".button-save").on("click", function () {
         clearAllErrorMessage();
+        blockCardDody();
 
         let formData = new FormData();
 
@@ -106,6 +106,7 @@ $(window).on("load", function () {
             data: formData,
             success: function (response) {
                 toastr.success("Стаття успішно створенна");
+                window.history.back();
             },
             error: function (error) {
                 printErrorMessageToField(error);

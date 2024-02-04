@@ -26,9 +26,9 @@ $(document).on('ajaxStop', function () {
     $('.card-body').unblock();
 })
 
-function blockClass(className) {
-    $(`.${className}`).block({
-        message: `<div class="col d-flex justify-content-center ">
+function blockBy(selector) {
+    $(`${selector}`).block({
+        message: `<div class="col d-flex justify-content-center">
                  <!-- Wave -->
                  <div class="sk-wave sk-primary">
                    <div class="sk-wave-rect"></div>
@@ -50,6 +50,6 @@ function blockClass(className) {
     })
 }
 
-function unblockClass(className) {
-    $(`.${className}`).unblock();
+function unblockBy(selector) {
+    $(`${selector}`).unblock();
 }

@@ -10,11 +10,11 @@ import jakarta.validation.constraints.Size;
 public class PaymentItemDto {
 
     private Long id;
-    @NotEmpty(message = "Обов'язкове поле")
-    @Size(min = 2, max = 50, message = "Довжина поля від {min} до {max} символів")
+    @NotEmpty(message = "{validation-not-empty}")
+    @Size(min = 2, max = 50, message = "{validation-size-min-max}")
     private String name;
     private boolean deleted;
-    @NotNull(message = "Обов'язкове поле")
+    @NotNull(message = "{validation-not-empty}")
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 

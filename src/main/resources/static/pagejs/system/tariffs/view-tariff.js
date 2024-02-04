@@ -4,13 +4,12 @@ let $currentUrl = $('#current-tariff');
 
 $currentUrl.attr('href', $currentUrl.attr('href') + tariffId)
 $(document).ready(function () {
-
+    blockCardDody();
     $.ajax({
         url: '../get-tariff-by-id/' + tariffId,
         type: 'get',
         dataType: 'json',
         success: function (response) {
-            console.log(response)
             fillInputs(response);
         },
         error: function (error) {
@@ -33,7 +32,6 @@ function fillInputs(tariff) {
 }
 
 function addTariffItem(index, item) {
-    console.log(index)
     $(`<tr>
           <td>${index + 1}</td>
           <td>${item.service.name}</td>

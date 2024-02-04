@@ -1,4 +1,3 @@
-
 $(window).on("load", function () {
 
     let $paymentType = $('#paymentType');
@@ -7,7 +6,7 @@ $(window).on("load", function () {
         id: 0,
         name: '',
         deleted: false,
-        paymentType: 'INCOME'
+        paymentType: ''
     };
 
     function parseToMap(data) {
@@ -51,7 +50,7 @@ $(window).on("load", function () {
 
     $(".button-save").on("click", function () {
         clearAllErrorMessage();
-
+        blockCardDody();
         let formData = new FormData();
 
         for (var key in paymentItem) {
@@ -66,8 +65,10 @@ $(window).on("load", function () {
             data: formData,
             success: function (response) {
                 toastr.success("Редагування успішно завершено");
+                window.history.back();
             },
             error: function (error) {
+                console.log(error)
                 printErrorMessageToField(error);
                 toastr.error("Помилка час редагування сталась помилка :(");
             }

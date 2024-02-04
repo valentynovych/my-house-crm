@@ -4,12 +4,14 @@ $(document).ready(getServices);
 $('[aria-controls="navs-services"]').on('click', getServices);
 
 function getServices() {
+    blockBy('#servicesForm')
     $.ajax({
         type: 'get',
         url: 'services/get-services',
         success: function (response) {
             console.log(response)
             drawFormServices(response);
+            unblockBy('#servicesForm');
         },
         error: function (err) {
         }
@@ -23,7 +25,7 @@ function drawFormServices(listService) {
         lastServiceIndex = listService.length;
         let i = 0;
         for (const service of serviceArray) {
-            $(`<div class="row g-4 mb-3 service-item" id="service-${i}">
+            $(`<div class="row g-4 service-item" id="service-${i}">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="services[${i}].name">${serviceLabel}</label>
                                     <input class="form-control" type="text" name="services[${i}].name"
@@ -86,7 +88,7 @@ function drawFormServices(listService) {
 $('#add-service').on('click', addNewService);
 
 function addNewService() {
-    let $service = $(`<div class="row g-4 mb-3 service-item" id="service-${lastServiceIndex}">
+    let $service = $(`<div class="row g-4 service-item" id="service-${lastServiceIndex}">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="services[${lastServiceIndex}].name">${serviceLabel}</label>
                                     <input class="form-control" type="text" name="services[${lastServiceIndex}].name"
@@ -165,6 +167,7 @@ function reorderServiceIndexes() {
 }
 
 $('#save-services').on('click', function () {
+    blockBy('#servicesForm');
     clearAllErrorMessage();
 
     let formData = new FormData($('#servicesForm')[0]);
@@ -186,10 +189,12 @@ $('#save-services').on('click', function () {
         data: formData,
         success: function (response) {
             toastr.success(successSaveMessage);
+            unblockBy('#servicesForm');
         },
         error: function (error) {
             console.log(error)
             printErrorMessageToField(error);
+            unblockBy('#servicesForm');
             toastr.error(errorSaveMessage)
         }
     });
@@ -200,14 +205,16 @@ $('#save-services').on('click', function () {
 let lastUnitIndex = 0;
 
 $('[aria-controls="navs-units"]').on('click', function () {
-
+    blockBy('#measurementUnist');
     $.ajax({
         type: 'get',
         url: 'services/get-measurement-units',
         success: function (response) {
             drawFormUnits(response);
+            unblockBy('#measurementUnist');
         },
         error: function (err) {
+            unblockBy('#measurementUnist');
         }
     });
 
@@ -298,6 +305,7 @@ function reorderIndexes() {
 
 $('#save-units').on('click', function () {
     clearAllErrorMessage();
+    blockBy('#measurementUnist');
 
     let formData = new FormData($('#measurementUnist')[0]);
     for (const unitsToDeleteElement of unitsToDelete) {
@@ -316,10 +324,12 @@ $('#save-units').on('click', function () {
         data: formData,
         success: function (response) {
             toastr.success(successSaveMessage);
+            unblockBy('#measurementUnist');
         },
         error: function (error) {
             console.log(error)
             printErrorMessageToField(error);
+            unblockBy('#measurementUnist');
             toastr.error(errorSaveMessage)
         }
     });

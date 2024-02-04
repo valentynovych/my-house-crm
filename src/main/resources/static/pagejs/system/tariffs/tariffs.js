@@ -5,6 +5,7 @@ $(window).on("load", function () {
 })
 
 function getTariffs(page) {
+    blockCardDody();
     const getUrl = 'tariffs/get-tariffs?page=' + page + '&pageSize=' + tableLength;
 
     $.ajax({

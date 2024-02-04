@@ -6,6 +6,7 @@ $(window).on("load", function () {
 })
 
 function getPaymentItems(page) {
+    blockCardDody();
     var getUrl = 'payment-items/get-items?page=' + page + '&pageSize=' + tableLength;
 
     $.ajax({
@@ -13,7 +14,6 @@ function getPaymentItems(page) {
         url: getUrl,
         dataType: 'json',
         success: function (result) {
-            console.log(result);
             currentPage = page;
             clearTableLine();
             $(".card-footer").children().remove();

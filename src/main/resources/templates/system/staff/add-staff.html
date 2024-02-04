@@ -25,26 +25,26 @@
                 <div class="col-md-6">
                     <label for="firstName" class="form-label"
                            th:text="#{staff-label-first-name}"></label>
-                    <input class="form-control" type="text" id="firstName"
+                    <input class="form-control" type="text" id="firstName" name="firstName"
                            th:placeholder="#{staff-label-first-name}">
                 </div>
                 <div class="col-md-6">
                     <label for="email" class="form-label"
                            th:text="#{staff-label-email}"></label>
-                    <input class="form-control" type="text" id="email"
+                    <input class="form-control" type="text" id="email" name="email"
                            th:placeholder="#{staff-label-email}">
                 </div>
                 <div class="col-md-6">
                     <label for="lastName" class="form-label"
                            th:text="#{staff-label-last-name}"></label>
-                    <input class="form-control" type="text" id="lastName"
+                    <input class="form-control" type="text" id="lastName" name="lastName"
                            th:placeholder="#{staff-label-last-name}">
                 </div>
                 <div class="col-md-6">
                     <label for="password" class="form-label"
                            th:text="#{staff-label-password}"></label>
                     <div class="input-group input-group-merge">
-                        <input type="password" id="password" class="form-control password"
+                        <input type="password" id="password" class="form-control password" name="password"
                                th:placeholder="#{staff-label-password}">
                         <button class="btn btn-secondary generate-password" type="button"
                                 th:text="#{general-button-generate}">Генерувати</button>
@@ -56,14 +56,14 @@
                 <div class="col-md-6">
                     <label for="phoneNumber" class="form-label"
                            th:text="#{staff-label-phone-number}"></label>
-                    <input class="form-control" type="text" id="phoneNumber"
+                    <input class="form-control" type="text" id="phoneNumber" name="phoneNumber"
                            th:placeholder="#{staff-label-phone-number}">
                 </div>
                 <div class="col-md-6">
                     <label for="confirmPassword" class="form-label"
                            th:text="#{staff-label-confirm-password}"></label>
                     <div class="input-group input-group-merge">
-                        <input type="password" id="confirmPassword" class="form-control password"
+                        <input type="password" id="confirmPassword" class="form-control password" name="confirmPassword"
                                th:placeholder="#{staff-label-confirm-password}">
                         <span class="input-group-text cursor-pointer show-password" id="confirmPassword-hide">
                             <i class="ti ti-eye-off"></i>
@@ -73,7 +73,7 @@
                 <div class="col-md-6">
                     <label for="roleId" class="form-label"
                            th:text="#{staff-label-role}"></label>
-                    <select class="form-select" id="roleId"></select>
+                    <select class="form-select" id="roleId" name="roleId"></select>
                 </div>
             </div>
             <div class="d-flex justify-content-end gap-3">

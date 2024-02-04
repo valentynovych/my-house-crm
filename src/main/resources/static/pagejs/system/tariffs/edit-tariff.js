@@ -12,7 +12,7 @@ $currentUrl.css({
     'text-overflow': 'ellipsis'
 })
 $(document).ready(function () {
-
+    blockCardDody()
     $.ajax({
         url: '../get-tariff-by-id/' + tariffId,
         type: 'get',
@@ -25,7 +25,7 @@ $(document).ready(function () {
             toastr.error(errorMessage);
         }
     })
-    //addTariffItem(lastItemIndex);
+
 });
 
 $('input[name="tariffRequest.name"]').on('input', function () {
@@ -127,13 +127,13 @@ function initButtonAndInputs(itemBlock, index, tariffItem) {
 
     $(serviceSelect).on('change', function () {
         $.ajax({
-            url: '../services/get-service-by-id/' + this.value,
+            url: '../../services/get-service-by-id/' + this.value,
             type: 'get',
             dataType: 'json',
             success: function (response) {
-                $(itemBlock).find('[name="tariffItems[' + index + '].service.unitOfMeasurement.name"]')
+                $(itemBlock).find('[name="tariffRequest.tariffItems[' + index + '].service.unitOfMeasurement.name"]')
                     .val(response.unitOfMeasurement.name);
-                $(itemBlock).find('[name="tariffItems[' + index + '].currency"]').val('грн')
+                $(itemBlock).find('[name="tariffRequest.tariffItems[' + index + '].currency"]').val('грн')
             },
             error: function (error) {
                 toastr.error(errorMessage);
@@ -206,13 +206,14 @@ function addNewTariffItem(index) {
 
     $(serviceSelect).on('change', function () {
         $.ajax({
-            url: '../services/get-service-by-id/' + this.value,
+            url: '../../services/get-service-by-id/' + this.value,
             type: 'get',
             dataType: 'json',
             success: function (response) {
-                $service.find('[name="tariffItems[' + index + '].service.unitOfMeasurement.name"]')
+                console.log(response)
+                $service.find('[name="tariffRequest.tariffItems[' + index + '].service.unitOfMeasurement.name"]')
                     .val(response.unitOfMeasurement.name);
-                $service.find('[name="tariffItems[' + index + '].currency"]').val('грн')
+                $service.find('[name="tariffRequest.tariffItems[' + index + '].currency"]').val('грн')
             },
             error: function (error) {
                 toastr.error(errorMessage);
@@ -248,6 +249,7 @@ function reorderServiceIndexes() {
 }
 
 $('#save-tariff').on('click', function () {
+    blockCardDody();
     clearAllErrorMessage();
 
     let formData = new FormData($('#tariffForm')[0]);
@@ -267,7 +269,7 @@ $('#save-tariff').on('click', function () {
         data: formData,
         success: function (response) {
             toastr.success(successSaveMessage);
-            window.location = '../view-tariff/' + tariffId;
+            window.history.back();
         },
         error: function (error) {
             console.log(error)
