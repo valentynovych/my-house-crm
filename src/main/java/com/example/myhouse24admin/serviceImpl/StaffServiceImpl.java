@@ -35,7 +35,6 @@ public class StaffServiceImpl implements StaffService {
     private final PasswordEncoder passwordEncoder;
     private final StaffMapper staffMapper;
     private final Logger logger = LogManager.getLogger(StaffServiceImpl.class);
-    private final StaffMapper mapper = Mappers.getMapper(StaffMapper.class);
 
     public StaffServiceImpl(StaffRepo staffRepo, RoleRepo roleRepo, PasswordEncoder passwordEncoder, StaffMapper staffMapper) {
         this.staffRepo = staffRepo;
@@ -86,7 +85,7 @@ public class StaffServiceImpl implements StaffService {
         searchParams.remove("pageSize");
         StaffSpecification spec = new StaffSpecification(searchParams);
         Page<Staff> staffPage = staffRepo.findAll(spec, pageable);
-        List<StaffResponse> staffResponseList = mapper.staffListToStaffResponseList(staffPage.getContent());
+        List<StaffResponse> staffResponseList = staffMapper.staffListToStaffResponseList(staffPage.getContent());
         Page<StaffResponse> staffResponsePage =
                 new PageImpl<>(staffResponseList, pageable, staffPage.getTotalElements());
         logger.info(String.format("getStaff() -> Exit, return elements in page - %s", staffResponseList.size()));
@@ -108,7 +107,7 @@ public class StaffServiceImpl implements StaffService {
             return new EntityNotFoundException(String.format("Staff with id: %s not found", staffId));
         });
 
-        StaffResponse staffResponse = mapper.staffToStaffResponse(staff);
+        StaffResponse staffResponse = staffMapper.staffToStaffResponse(staff);
         logger.info("getStaffById() -> Exit, return staff with id: " + staffResponse.id());
         return staffResponse;
     }
@@ -125,12 +124,12 @@ public class StaffServiceImpl implements StaffService {
             Staff staff = byId.get();
             if (staffEditRequest.password() != null) {
                 logger.info("updateStaffById() -> Start update entity with new password");
-                mapper.updateWithPassword(staff, staffEditRequest);
+                staffMapper.updateWithPassword(staff, staffEditRequest);
                 staff.setPassword(passwordEncoder.encode(staffEditRequest.password()));
                 // todo send notification to staff email
             } else {
                 logger.info("updateStaffById() -> Start update entity without password");
-                mapper.updateWithoutPassword(staff, staffEditRequest);
+                staffMapper.updateWithoutPassword(staff, staffEditRequest);
             }
             staffRepo.save(staff);
             logger.info("updateStaffById() -> exit, success update Staff with id: " + staffId);
