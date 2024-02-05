@@ -62,9 +62,10 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public void addNewStaff(StaffEditRequest staffEditRequest) {
         logger.info("addNewStaff() -> Start adding new staff");
-        Staff staff = Mappers.getMapper(StaffMapper.class).staffEditRequestToStaff(staffEditRequest);
+        Staff staff = staffMapper.staffEditRequestToStaff(staffEditRequest);
         staff.setLanguage(getLanguageFromLocale());
         staff.setStatus(StaffStatus.NEW);
+        staff.setPassword(passwordEncoder.encode(staffEditRequest.password()));
         staffRepo.save(staff);
         logger.info("addNewStaff() -> New Staff is added, exit");
     }
