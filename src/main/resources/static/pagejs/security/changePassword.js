@@ -11,9 +11,9 @@ function send() {
         success: function () {
             window.location.href = 'success';
         },
-        error: function (XMLHttpRequest) {
+        error: function (error) {
             printErrorMessageToField(error);
-            if (XMLHttpRequest.status == 403) {
+            if (error.status == 403) {
                 window.location.href = 'tokenExpired';
             }
         }

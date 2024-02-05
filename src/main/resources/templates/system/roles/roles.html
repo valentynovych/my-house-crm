@@ -491,7 +491,7 @@
 </body>
 <script layout:fragment="script" th:src="@{/pagejs/system/roles/roles.js}"></script>
 <script layout:fragment="initThymeleafVarianle" th:inline="javascript">
-    var successMessage = /*[[#{role-success-message}]]*/;
-    var errorMessage = /*[[#{role-error-message}]]*/;
+    var successMessage = [[#{role-success-message}]];
+    var errorMessage = [[#{toastr-error-message}]];
 </script>
 </html>
