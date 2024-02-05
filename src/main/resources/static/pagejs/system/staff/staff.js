@@ -231,44 +231,8 @@ function drawTable(result) {
         });
         $select.val(tableLength);
 
-        if (result.totalPages > 1) {
-            showPagination(result.totalPages);
+        drawPagination(result.totalPages, page, 'getStaff');
 
-            switch (page) {
-                case (result.totalPages - 1):
-                    $(".page-item.last").addClass('disabled');
-                    $(".page-item.next").addClass('disabled');
-                    break;
-                case 0:
-                    $(".page-item.first").addClass('disabled');
-                    $(".page-item.prev").addClass('disabled');
-                    break;
-            }
-        }
-    }
-
-    function showPagination(countItems) {
-        var paginationList = '<ul class="pagination pagination-sm">\n' +
-            '<li class="page-item first">\n' +
-            '   <a class="page-link waves-effect" onclick="getStaff(0)"><i class="ti ti-chevrons-left tf-icon fs-6"></i></a>\n' +
-            '</li>\n' +
-            '<li class="page-item prev">\n' +
-            '   <a class="page-link waves-effect" onclick="getStaff(' + (page - 1) + ')"><i class="ti ti-chevron-left tf-icon fs-6"></i></a>\n' +
-            '</li>\n';
-        for (let item = 0; item < countItems; item++) {
-            paginationList += '<li class="page-item ' + (page === item ? 'active' : '') + '">\n' +
-                '<a class="page-link waves-effect" onclick="getStaff(' + item + ')">' + (item + 1) + '</a>\n' +
-                '</li>';
-        }
-        paginationList += '<li class="page-item next">\n' +
-            '       <a class="page-link waves-effect" onclick="getStaff(' + (page + 1) + ')"><i class="ti ti-chevron-right tf-icon fs-6"></i></a>\n' +
-            '   </li>\n' +
-            '      <li class="page-item last">\n' +
-            '       <a class="page-link waves-effect" onclick="getStaff(' + (countItems - 1) + ')"><i class="ti ti-chevrons-right tf-icon fs-6"></i></a>\n' +
-            '      </li>\n' +
-            '   </ul>\n'
-
-        $(paginationList).appendTo(".card-footer");
     }
 }
 
