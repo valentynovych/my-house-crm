@@ -44,7 +44,7 @@ function drawPagination(countPages, page, getMethod, classToAdd) {
         lastItem(paginationList, getMethod);
     }
 
-    if (page > 4 && page >= countPages - 4) {
+    if ((page >= 4 && page >= countPages - 4)) {
         firstItem(paginationList, getMethod)
         createDotsItem(paginationList);
         for (let elemIndex = countPages - 5; elemIndex < countPages; elemIndex++) {
