@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="#{menu-item-apartment-owners}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{menu-item-apartment-owners}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
+            <a th:href="@{/owners}" th:text="#{menu-item-apartment-owners} + ' / '"></a>
+            <span id="breadCrumb"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+    <form enctype="multipart/form-data" id="form" class="row g-3">
+        <div class="col-md-6">
+            <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <img  src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                      style="width:100px; height:100px;"
+                      class="d-block h-auto ms-0 ms-sm-4 rounded user-profile-img"
+                      id="avatar-img">
+                <input type="file" accept=".jpeg, .jpg, .png" class="form-control d-none"  id="avatar" name="avatar">
+            </div>
+            <div class="col-auto">
+                <label class="input-group-text col-form-label" for="avatar" style="color:black;" th:text="#{owners-label-image}">Завантажити</label>
+                <div class="text-danger" id="avatarValidation"></div>
+            </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="status" class="form-label" th:text="#{staff-label-status}">Статус</label>
+            <select class="form-select" id="status" name="status"></select>
+        </div>
+
+        <div class="col-md-6">
+            <div>
+            <label for="lastName" class="form-label" th:text="#{staff-label-first-name}">Прізвище</label>
+            <input type="text" class="form-control" id="lastName" name="lastName" th:placeholder="#{staff-label-first-name}"
+                   maxlength="50">
+            </div>
+            <div>
+            <label for="firstName" class="form-label mt-3" th:text="#{staff-label-last-name}">Ім'я</label>
+            <input type="text" class="form-control" id="firstName" name="firstName" th:placeholder="#{staff-label-last-name}"
+                   maxlength="50">
+            </div>
+            <div>
+            <label for="middleName" class="form-label mt-3" th:text="#{owners-label-middle-name}">По батькові</label>
+            <input type="text" class="form-control" id="middleName" name="middleName" th:placeholder="#{owners-label-middle-name}"
+                   maxlength="50">
+            </div>
+            <div>
+            <label for="birthDate" class="form-label mt-3" th:text="#{owners-label-dob}">Дата народження</label>
+            <input id="birthDate" name="birthDate" class="form-control flatpickr" type="text" th:placeholder="#{owners-label-dob}">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="aboutOwner" class="form-label" th:text="#{owners-label-about}">Про власника</label>
+            <textarea type="text" class="form-control" rows="11" id="aboutOwner" name="aboutOwner"
+                      maxlength="300"></textarea>
+        </div>
+            <div class="col-md-6 mt-2">
+                <div class="py-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+                    <h5 class="mb-0" th:text="#{owners-label-contacts}">Контактні дані</h5>
+                </div>
+            </div>
+            <div class="col-md-6 mt-2">
+                <div class="py-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+                    <h5 class="mb-0" th:text="#{owners-label-change-password}">Змінити пароль</h5>
+                </div>
+            </div>
+        <div class="col-md-6">
+            <label for="phoneNumber" class="form-label" th:text="#{staff-label-phone-number}">Номер телефону</label>
+            <input type="text" class="form-control phoneNumber" id="phoneNumber" name="phoneNumber"
+                   placeholder="+380994445566" maxlength="13">
+        </div>
+        <div class="col-md-6 form-password-toggle">
+            <label for="password" class="form-label" th:text="#{staff-label-password}">Пароль</label>
+            <div class="input-group input-group-merge">
+                <input
+                        type="password"
+                        id="password"
+                        class="form-control"
+                        name="password"
+                        th:placeholder="#{staff-label-password}"
+                        aria-describedby="password"
+                        maxlength="100"
+                >
+                <button type="button" class="btn btn-secondary" id="generatePassword" th:text="#{general-button-generate}">
+                </button>
+                <span class="input-group-text cursor-pointer">
+                    <i class="ti ti-eye-off"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="viberNumber" class="form-label">Viber</label>
+            <input type="text" class="form-control viberNumber" id="viberNumber" name="viberNumber"
+                   placeholder="+380994445566" maxlength="13">
+        </div>
+        <div class="col-md-6 form-password-toggle">
+            <label for="confirmPassword" class="form-label" th:text="#{staff-label-confirm-password}">Повторити пароль</label>
+            <div class="input-group input-group-merge">
+                <input
+                        type="password"
+                        id="confirmPassword"
+                        class="form-control"
+                        name="confirmPassword"
+                        th:placeholder="#{staff-label-confirm-password}"
+                        aria-describedby="password"
+                        maxlength="100"
+                >
+                <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="telegramUsername" class="form-label">Telegram</label>
+            <input type="text" class="form-control telegramUsername" id="telegramUsername" name="telegramUsername"
+                   placeholder="@username" maxlength="50">
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control inputPhone" id="email" name="email"
+                   placeholder="Email" maxlength="100">
+        </div>
+
+        <div class="col-md-12 mt-5 d-flex justify-content-end">
+            <button type="button" class="btn btn-primary" id="save-button" th:text="#{general-button-save}">Зберегти</button>
+        </div>
+    </form>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/owners/owner.js}"></script>
+<script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    var statusLink = [[${statusLink}]];
+    var errorMessage = [[#{toastr-error-message}]];
+    var fileValidation = [[#{validation-file-extension}]];
+    var breadCrumbAdd = [[#{breadcrumb-add}]];
+    var breadCrumbEdit = [[#{breadcrumb-edit}]];
+    var newStatus = [[#{staff-status-new}]];
+    var activeStatus = [[#{staff-status-active}]];
+    var disabledStatus = [[#{staff-status-disabled}]];
+</script>
+</html>

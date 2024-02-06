@@ -25,13 +25,13 @@ public class ApartmentOwner {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OwnerStatus status;
-    @Column(name = "about_owner", nullable = false)
+    @Column(name = "about_owner", length = 300, nullable = false)
     private String aboutOwner;
     @Column(name = "phone_number",length = 13, nullable = false, unique = true)
     private String phoneNumber;
-    @Column(name = "viber_number",length = 13, unique = true)
+    @Column(name = "viber_number",length = 13)
     private String viberNumber;
-    @Column(name = "telegram_username",length = 50, unique = true)
+    @Column(name = "telegram_username",length = 50)
     private String telegramUsername;
     @Column(length = 100, nullable = false, unique = true)
     private String email;

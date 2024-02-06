@@ -12,10 +12,4 @@ public interface PermissionSpecification {
             return builder.equal(roleJoin.get("id"), roleId);
         };
     }
-    static Specification<Permission> byRoleName(String roleName){
-        return (root, query, builder) -> {
-            Join<Permission, Role> roleJoin = root.join("role");
-            return builder.equal(roleJoin.get("name"), roleName);
-        };
-    }
 }
