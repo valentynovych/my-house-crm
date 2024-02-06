@@ -30,10 +30,14 @@ public class House {
     @ManyToMany
     @JoinTable(
             name = "house_staff",
-            joinColumns = { @JoinColumn(name = "house_id") },
-            inverseJoinColumns = { @JoinColumn(name = "staff_id") }
+            joinColumns = {@JoinColumn(name = "house_id")},
+            inverseJoinColumns = {@JoinColumn(name = "staff_id")}
     )
     private List<Staff> staff = new ArrayList<>();
+    @OneToMany(mappedBy = "house")
+    private List<Section> sections = new ArrayList<>();
+    @OneToMany(mappedBy = "house")
+    private List<Floor> floors = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -113,5 +117,21 @@ public class House {
 
     public void setStaff(List<Staff> staff) {
         this.staff = staff;
+    }
+
+    public List<Section> getSections() {
+        return sections;
+    }
+
+    public void setSections(List<Section> sections) {
+        this.sections = sections;
+    }
+
+    public List<Floor> getFloors() {
+        return floors;
+    }
+
+    public void setFloors(List<Floor> floors) {
+        this.floors = floors;
     }
 }

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{house-new-title}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{house-new-title}" id="tariff-title"></h3>
+        <h6 class="d-inline-flex">
+            <span class="text-muted fw-light" th:text="#{menu-item-houses} + ' / '"></span>
+            <span class="text-muted fw-light" th:text="${' / '} + #{breadcrumb-add}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <div class="form-wrapper">
+            <form id="houseForm">
+                <div class="inputs-left">
+                    <div class="mb-3 col-md-4">
+                        <label for="name" class="form-label"
+                               th:text="#{tariffs-title-name}"></label>
+                        <input class="form-control" type="text" id="name" name="name"
+                               th:placeholder="#{tariffs-title-name}">
+                    </div>
+                    <div class="mb-3 col-md-4">
+                        <label for="address" class="form-label"
+                               th:text="#{tariffs-title-name}"></label>
+                        <input class="form-control" type="text" id="address" name="address"
+                               th:placeholder="#{tariffs-title-name}">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/system/tariffs/edit-tariff.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const successSaveMessage = /*[[#{service-message-success-save}]]*/ 'default';
+    const errorSaveMessage = /*[[#{service-message-error-save}]]*/ 'default';
+
+    // const serviceLabel = /*[[#{service-label}]]*/ 'default';
+    // const unitLabel = /*[[#{tariff-item-unit-of-measurement-label}]]*/ 'default';
+    // const servicePriceLabel = /*[[#{tariff-item-price-label}]]*/ 'default';
+    // const serviceCurrency = /*[[#{tariff-item-currency-label}]]*/ 'default';
+    // const tariffTitle = /*[[#{tariff-title}]]*/ 'default';
+</script>
+
+</html>
