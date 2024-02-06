@@ -68,4 +68,30 @@ public class MailServiceImpl implements MailService {
         String link = baseUrl +"/changePassword?token="+token;
         return link;
     }
+
+    @Override
+    public void sendNewPassword(String to, String newPassword) {
+        logger.info("sendToken() - Sending password "+newPassword+" to email "+to);
+        Email from = new Email(sender);
+        String subject = "Новий пароль";
+        Email toEmail = new Email(to);
+        Content content = new Content("text/html", buildPasswordContent(newPassword));
+        Mail mail = new Mail(from, subject, toEmail, content);
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            sendGrid.api(request);
+            logger.info("sendToken() - New password was sent");
+        } catch (IOException ex) {
+            logger.error(ex.getMessage());
+        }
+    }
+
+    private String buildPasswordContent(String newPassword) {
+        Context context = new Context();
+        context.setVariable("password", newPassword);
+        return templateEngine.process("email/newPasswordTemplate", context);
+    }
 }

@@ -5,4 +5,5 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface MailService {
     void sendToken(String token, EmailRequest emailRequest, HttpServletRequest httpRequest);
+    void sendNewPassword(String to, String newPassword);
 }
