@@ -13,4 +13,6 @@ public interface PermissionRepo extends JpaRepository<Permission, Long>, JpaSpec
     Optional<Permission> findByStaffEmailAndEndpoint(String email, String endpoint);
     @Query(value = "SELECT p FROM Permission p LEFT JOIN FETCH p.role r LEFT JOIN FETCH r.staff s WHERE s.email = :email AND p.allowed = true")
     List<Permission> findByStaffEmailThatAllowed(String email);
+    @Query(value = "SELECT p FROM Permission p LEFT JOIN FETCH p.role r LEFT JOIN FETCH p.endpoint e WHERE r.name = :roleName")
+    List<Permission> findAllByRoleName(String roleName);
 }
