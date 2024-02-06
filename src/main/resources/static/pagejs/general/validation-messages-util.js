@@ -1,5 +1,5 @@
 function printErrorMessageToField(errorResponse) {
-
+    console.log(errorResponse.responseJSON);
     if (errorResponse.status === 400) {
         const errorMap = new Map(Object.entries((errorResponse.responseJSON)));
         errorMap.forEach((value, key) => {

@@ -18,10 +18,11 @@ import java.util.Locale;
 @Configuration
 @EnableWebMvc
 public class MvcConfiguration implements WebMvcConfigurer {
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:uploads/");
     }
 
     @Bean
