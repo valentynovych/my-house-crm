@@ -2,43 +2,55 @@ const currentUrl = window.location.href;
 const myArray = currentUrl.split("/");
 var root = myArray[3];
 $(document).ready(function () {
+    const currHref = window.location.pathname;
+    $('.menu-item a').each(function (i, item) {
+        if (currHref.includes($(item).attr('href'))) {
+            $(item).parent().addClass('active')
+            if (currHref.includes("site-management") || currHref.includes("system-settings")) {
+                $(this).parent().parent().parent().addClass("active open");
+            }
+        }
+    });
+
+    // костиль для фіксу дропдаунів у маленьукій табличці
+    // $('.table-responsive').on('show.bs.dropdown select2:opening', function () {
+    //     $('.table-responsive').css({"overflow": "visible"});
+    // });
+    // $('.table-responsive').on('hide.bs.dropdown select2:closing', function () {
+    //     $('.table-responsive').css({"overflow-y": "auto"});
+    // })
+
     $.ajax({
         type: "GET",
-        url: "/"+root+"/admin/getPermissions",
+        url: "/" + root + "/admin/getPermissions",
         data: {
             role: roles[0].authority
         },
         success: function (response) {
             showMenuItems(response);
         },
-        error: function (){
+        error: function () {
             toastr.error(errorMessage);
         }
     });
 });
 
-function showMenuItems(permissions){
-    var pathname = window.location.pathname;
+function showMenuItems(permissions) {
+
     let i = 0;
     let count = 0;
-    $(".menu-link").each(function () {
+    $(".menu-item a").each(function () {
         let aHref = $(this).attr("href");
-        if(permissions[i].allowed === false && aHref.includes("/")){
+        if (permissions[i].allowed === false) {
             $(this).parent().hide();
-            if(aHref.includes("site-management")){
+            if (aHref.includes("site-management")) {
                 $(this).parent().parent().parent().hide();
             }
-        } else {
-            if (aHref === pathname.slice(0, aHref.length)) {
-                if ($(this).parent().parent().attr("class") === "menu-sub") {
-                    $(this).parent().parent().parent().addClass("active open");
-                }
-                $(this).parent().addClass("active");
-            }
         }
-        if(!aHref.includes("site-management") && aHref.includes("/")) {
+
+        if (!aHref.includes("site-management") && aHref.includes("/")) {
             i++;
-        } else if(aHref.includes("site-management") && count === 0 ){
+        } else if (aHref.includes("site-management") && count === 0) {
             i++;
             count++;
         }
@@ -70,6 +82,7 @@ $("#logoutLink").on("click", function (e) {
     )
     $('#logoutModal').modal('show');
 });
-function logout () {
+
+function logout() {
     window.location = $('#logoutLink').attr('href');
 }
