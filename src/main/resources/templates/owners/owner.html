@@ -140,7 +140,6 @@
 <script layout:fragment="script" th:src="@{/pagejs/owners/owner.js}"></script>
 <script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
     var statusLink = [[${statusLink}]];
-    var errorMessage = [[#{toastr-error-message}]];
     var fileValidation = [[#{validation-file-extension}]];
     var breadCrumbAdd = [[#{breadcrumb-add}]];
     var breadCrumbEdit = [[#{breadcrumb-edit}]];

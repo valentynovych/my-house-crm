@@ -135,7 +135,7 @@ $("#save-button").on("click", function () {
     var status = $("#status").val() == null? '': $("#status").val();
     formData.append($("#status").attr("id"), status);
     formData.append($("#aboutOwner").attr("id"), $("#aboutOwner").val());
-    var date = $("#birthDate").val().localeCompare('') == 0? '': moment($("#birthDate").val(), 'DD.MM.YYYY').format('DD-MM-YYYY');
+    var date = $("#birthDate").val().localeCompare('') == 0? '': $("#birthDate").val();
     formData.append($("#birthDate").attr("id"), date);
     formData.append('avatar', $('#avatar').prop('files')[0]);
     sendData(formData);
@@ -164,7 +164,7 @@ function getOwner(){
         url: "get-owner/"+id,
         success: function (response) {
             console.log(response);
-            const responseMap = new Map(Object.entries((response.responseJSON)));
+            const responseMap = new Map(Object.entries((response)));
             responseMap.forEach((value, key) => {
                 if(key.localeCompare("birthDate") !== 0)
                     $("#" + key).val(value);
@@ -172,10 +172,10 @@ function getOwner(){
             $("#avatar-img").attr("src", '/uploads/'+response.image);
             $("#birthDate").flatpickr({
                 locale: "uk",
-                defaultDate: moment(response.birthDate, 'YYYY-MM-DD').format('DD.MM.YYYY'),
+                defaultDate: response.birthDate,
                 dateFormat: "d.m.Y"
             });
-            var option = new Option(response.status, response.status, true, true);
+            var option = new Option(getStatus(response.status), response.status, true, true);
             $('#status').append(option).trigger('change');
         },
         error: function () {
