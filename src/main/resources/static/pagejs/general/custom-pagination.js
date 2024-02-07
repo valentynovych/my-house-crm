@@ -105,15 +105,15 @@ function drawPaginationElements(result, method) {
 
     if (from === total) {
         $('<div class="dataTables_info text-nowrap"">' +
-            'Показано ' + from + ' з ' + total + ' елементів' +
+            tableShowing + ' ' + from + ' ' + tableOf + ' ' + total + ' ' + tableEntries +
             '</div>').appendTo(".details-table");
     } else {
         $('<div class="dataTables_info text-nowrap">' +
-            'Показано ' + from + '-' + to + ' з ' + total + ' елементів' +
+            tableShowing + ' ' + from + '-' + to + ' ' + tableOf + ' ' + total + ' ' + tableEntries +
             '</div>').appendTo(".details-table")
     }
 
-    $('<label class="ms-3 text-nowrap">Показати по: </label>' +
+    $('<label class="ms-3 text-nowrap">'+ ' '+ tableShow + ' ' + ' </label>' +
         '<div class="selecte-wrapper col-3 position-relative"><select name="tables_length" class="form-select form-select-sm">\n' +
         '      <option value="2">2</option>\n' +
         '      <option value="5">5</option>\n' +
