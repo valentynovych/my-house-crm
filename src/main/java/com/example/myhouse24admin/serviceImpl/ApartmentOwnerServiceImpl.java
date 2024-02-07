@@ -2,9 +2,7 @@ package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.entity.ApartmentOwner;
 import com.example.myhouse24admin.mapper.ApartmentOwnerMapper;
-import com.example.myhouse24admin.model.apartmentOwner.CreateApartmentOwnerRequest;
-import com.example.myhouse24admin.model.apartmentOwner.ApartmentOwnerResponse;
-import com.example.myhouse24admin.model.apartmentOwner.EditApartmentOwnerRequest;
+import com.example.myhouse24admin.model.apartmentOwner.*;
 import com.example.myhouse24admin.repository.ApartmentOwnerRepo;
 import com.example.myhouse24admin.service.ApartmentOwnerService;
 import com.example.myhouse24admin.service.MailService;
@@ -14,15 +12,24 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
+import static com.example.myhouse24admin.specification.ApartmentOwnerSpecification.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -33,7 +40,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
     private final MailService mailService;
     private final ResourceLoader resourceLoader;
     private final Logger logger = LogManager.getLogger(ApartmentOwnerServiceImpl.class);
-    private String uploadPath = "C:\\Users\\Anastassia\\IdeaProjects\\MyHouse24-Admin\\src\\main\\uploads";
+    private String uploadPath = "C:\\Users\\Anastassia\\IdeaProjects\\MyHouse24-Admin\\src\\uploads";
 
     public ApartmentOwnerServiceImpl(ApartmentOwnerRepo apartmentOwnerRepo,
                                      ApartmentOwnerMapper apartmentOwnerMapper,
@@ -87,6 +94,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
 
     @Override
     public void updateApartmentOwner(EditApartmentOwnerRequest editApartmentOwnerRequest, Long id, MultipartFile multipartFile) {
+        logger.info("updateApartmentOwner - Updating apartment owner with id "+id);
         ApartmentOwner apartmentOwner = apartmentOwnerRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Owner not found by id "+id));
         if(editApartmentOwnerRequest.password().isEmpty()) {
             apartmentOwnerMapper.setApartmentOwnerWithoutPassword(apartmentOwner, editApartmentOwnerRequest);
@@ -97,6 +105,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         }
         updateImage(multipartFile, apartmentOwner);
         apartmentOwnerRepo.save(apartmentOwner);
+        logger.info("updateApartmentOwner - Apartment owner was updated");
     }
 
     private void updateImage(MultipartFile multipartFile, ApartmentOwner apartmentOwner) {
@@ -106,6 +115,48 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
             apartmentOwner.setAvatar(createdImageName);
         }
     }
+
+    @Override
+    public Page<TableApartmentOwnerResponse> getApartmentOwnerResponsesForTable(int page, int pageSize, FilterRequest filterRequest) {
+        logger.info("getApartmentOwnerResponsesForTable - Getting apartment owner responses for table with filters "+filterRequest.toString());
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<ApartmentOwner> apartmentOwners = getFilteredOwners(pageable, filterRequest);
+        List<TableApartmentOwnerResponse> apartmentOwnerResponseList = apartmentOwnerMapper.apartmentOwnerListToTableApartmentOwnerResponseList(apartmentOwners.getContent());
+        Page<TableApartmentOwnerResponse> apartmentOwnerResponsePage = new PageImpl<>(apartmentOwnerResponseList, pageable, apartmentOwners.getTotalElements());
+        logger.info("getApartmentOwnerResponsesForTable - Apartment owner responses were got");
+        return apartmentOwnerResponsePage;
+    }
+
+    private Page<ApartmentOwner> getFilteredOwners(Pageable pageable, FilterRequest filterRequest) {
+        Specification<ApartmentOwner> ownerSpecification = Specification.where(byDeleted());
+        if(filterRequest.id() != null){
+            ownerSpecification = ownerSpecification.and(byId(filterRequest.id()));
+        }
+        if(!filterRequest.phoneNumber().isEmpty()){
+            ownerSpecification = ownerSpecification.and(byPhoneNumber(filterRequest.phoneNumber()));
+        }
+        if(!filterRequest.fullName().isEmpty()){
+            ownerSpecification = ownerSpecification.and(byFirstName(filterRequest.fullName())
+                    .or(byLastName(filterRequest.fullName()))
+                    .or(byMiddleName(filterRequest.fullName())));
+        }
+        if(!filterRequest.email().isEmpty()){
+            ownerSpecification = ownerSpecification.and(byEmail(filterRequest.email()));
+        }
+        if(!filterRequest.creationDate().isEmpty()){
+            LocalDateTime localDateTime = LocalDateTime.of(LocalDate.parse(filterRequest.creationDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    LocalTime.MIDNIGHT);
+            ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+            Instant dateFrom = zonedDateTime.toInstant();
+            Instant dateTo = zonedDateTime.toInstant().plus(1, ChronoUnit.DAYS);
+            ownerSpecification = ownerSpecification.and(byCreationDateGreaterThan(dateFrom)).and(byCreationDateLessThan(dateTo));
+        }
+        if(filterRequest.status() != null){
+            ownerSpecification = ownerSpecification.and(byStatus(filterRequest.status()));
+        }
+        return apartmentOwnerRepo.findAll(ownerSpecification, pageable);
+    }
+
     void createUploadDirectoryIfNotExist(){
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()){

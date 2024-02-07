@@ -1,13 +1,11 @@
 package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.entity.OwnerStatus;
-import com.example.myhouse24admin.model.apartmentOwner.CreateApartmentOwnerRequest;
-import com.example.myhouse24admin.model.apartmentOwner.ApartmentOwnerResponse;
-import com.example.myhouse24admin.model.apartmentOwner.EditApartmentOwnerRequest;
+import com.example.myhouse24admin.model.apartmentOwner.*;
 import com.example.myhouse24admin.service.ApartmentOwnerService;
-import com.example.myhouse24admin.validators.fileExtensionValidation.ValidFileExtension;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,6 +25,13 @@ public class ApartmentOwnerController {
     @GetMapping()
     public ModelAndView getOwnersPage() {
         return new ModelAndView("owners/owners");
+    }
+
+    @GetMapping("/getOwners")
+    public @ResponseBody Page<TableApartmentOwnerResponse> getOwners(@RequestParam(name = "page") int page,
+                                                                     @RequestParam(name = "pageSize") int pageSize,
+                                                                     FilterRequest filterRequest) {
+        return apartmentOwnerService.getApartmentOwnerResponsesForTable(page,pageSize,filterRequest);
     }
     @GetMapping("/add")
     public ModelAndView getOwnerPageForCreate() {

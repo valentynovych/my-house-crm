@@ -395,8 +395,8 @@
 <script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
 <script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
 <script th:inline="javascript">
-    var roles = [[${#authentication?.getAuthorities()}]];
-    var errorMessage = [[#{role-error-message}]];
+    const roles = [[${#authentication?.getAuthorities()}]];
+    const errorMessage = [[#{toastr-error-message}]];
 </script>
 <script th:src="@{/pagejs/layout/layout.js}"></script>
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>

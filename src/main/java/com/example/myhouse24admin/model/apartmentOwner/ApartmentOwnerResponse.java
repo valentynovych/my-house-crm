@@ -8,7 +8,7 @@ public record ApartmentOwnerResponse(
         String firstName,
         String lastName,
         String middleName,
-        Instant birthDate,
+        String birthDate,
         OwnerStatus status,
         String aboutOwner,
         String phoneNumber,

@@ -93,3 +93,45 @@ function drawPagination(countPages, page, getMethod, classToAdd) {
         dots.appendTo(paginationList);
     }
 }
+
+function drawPaginationElements(result, method) {
+    $('<div class="details-table d-flex gap-2 align-items-center"></div>').appendTo('.card-footer')
+
+    const size = result.size;
+    const page = result.pageable.pageNumber;
+    const from = page > 0 ? (page * size) + 1 : 1;
+    const to = from + result.numberOfElements - 1;
+    const total = result.totalElements;
+
+    if (from === total) {
+        $('<div class="dataTables_info text-nowrap"">' +
+            'Показано ' + from + ' з ' + total + ' елементів' +
+            '</div>').appendTo(".details-table");
+    } else {
+        $('<div class="dataTables_info text-nowrap">' +
+            'Показано ' + from + '-' + to + ' з ' + total + ' елементів' +
+            '</div>').appendTo(".details-table")
+    }
+
+    $('<label class="ms-3 text-nowrap">Показати по: </label>' +
+        '<div class="selecte-wrapper col-3 position-relative"><select name="tables_length" class="form-select form-select-sm">\n' +
+        '      <option value="2">2</option>\n' +
+        '      <option value="5">5</option>\n' +
+        '      <option value="10">10</option>\n' +
+        '       <option value="20">20</option>\n' +
+        '</select> </div>').appendTo(".details-table");
+
+    var $select = $('select[name="tables_length"]');
+    $select.select2({
+        language: "uk",
+        minimumResultsForSearch: -1,
+        dropdownParent: $select.parent()
+    });
+    $select.on("change", function () {
+        tableLength = this.value;
+        window[method](0);
+    });
+    $select.val(tableLength);
+    $select.trigger('change.select2');
+
+}

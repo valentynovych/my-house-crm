@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="#{menu-item-apartment-owners}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{menu-item-apartment-owners}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
+            <span th:text="#{menu-item-apartment-owners}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-end my-4">
+            <div class="btn-group me-4">
+                <button
+                        type="button"
+                        class="btn btn-success dropdown-toggle"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        th:text="#{general-choose-action}"
+                >
+                    Оберіть дію
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" th:href="@{/admin/owners/add}" th:text="#{owners-action-create}"></a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" th:text="#{owners-action-message-to-debtor}"></a></li>
+                    <li>
+                        <hr class="dropdown-divider" />
+                    </li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" th:text="#{owners-action-send-invitation}"></a></li>
+                </ul>
+        </div>
+    </div>
+    <div class="card-body pt-0" id="dropdownParent">
+        <div class="d-flex justify-content-end" style="border-style: solid; border-width: thin; border-color: #dbdade #dbdade white #dbdade">
+            <button type="button" class="btn btn-outline-secondary clear-filters m-1"
+                    th:text="#{general-button-clear-table}">Clear
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr class="table-primary text-center">
+                    <th>ID</th>
+                    <th th:text="#{owners-table-full-name}"></th>
+                    <th th:text="#{owners-table-phone-number}"></th>
+                    <th>Email</th>
+                    <th th:text="#{owners-table-house}"></th>
+                    <th th:text="#{owners-table-apartment}"></th>
+                    <th th:text="#{owners-table-added}"></th>
+                    <th th:text="#{staff-label-status}"></th>
+                    <th th:text="#{owners-table-debt}"></th>
+                    <th th:text="#{general-table-action}"></th>
+                </tr>
+                <tr>
+                    <td class="px-2"><input type="text" id="filter-by-id" class="form-control"></td>
+                    <td class="px-2"><input type="text" id="filter-by-fullName" class="form-control"></td>
+                    <td class="px-2"><input type="text" id="filter-by-phoneNumber" class="form-control"></td>
+                    <td class="px-2"><input type="text" id="filter-by-email" class="form-control"></td>
+                    <td class="px-2" style="min-width: 13rem">
+                        <div id="filterHouseWrapper" style="position: relative">
+                            <select class="form-select" id="filter-by-house">
+                            </select>
+                        </div>
+                    </td>
+                    <td class="px-2"><input type="text" id="filter-by-apartment" class="form-control"></td>
+                    <td class="px-2"><input type="text" id="filter-by-creation-date" class="form-control"></td>
+                    <td class="px-2" style="min-width: 9rem">
+                        <div id="filterStatusWrapper" style="position: relative">
+                            <select class="form-select" id="filter-by-status"></select>
+                        </div>
+                    </td>
+                    <td class="px-2" style="min-width: 13rem">
+                        <div id="filterDebtWrapper" style="position: relative">
+                            <select class="form-select" id="filter-by-debt">
+                                <option value=""></option>
+                                <option th:text="#{owners-have-debt}" th:value="true"></option>
+                                <option th:text="#{owners-not-have-debt}" th:value="false"></option>
+                            </select>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:inline="javascript">
+    const newStatus = [[#{staff-status-new}]];
+    const activeStatus = [[#{staff-status-active}]];
+    const disabledStatus = [[#{staff-status-disabled}]];
+    const buttonLabelEdit = [[#{general-button-edit}]];
+    const buttonLabelDelete = [[#{general-button-delete}]];
+    const dataNotFound = [[#{table-data-not-found}]];
+    let tableLength = 2;
+    let timer;
+    let request = {
+        page: 0,
+        pageSize: tableLength,
+        id: "",
+        fullName: "",
+        phoneNumber: "",
+        email: "",
+        houseId: "",
+        apartment: "",
+        creationDate: "",
+        status: "",
+        debt: true
+    };
+
+
+    $(document).ready(function () {
+        getOwners(0);
+        initializeStatusSelect();
+        initializeDebtSelect();
+        initializeFlatPickr();
+    });
+    function initializeStatusSelect() {
+        $('#filter-by-status').select2({
+            language: "uk",
+            dropdownParent: $('#dropdownParent'),
+            minimumResultsForSearch: -1,
+            allowClear: true,
+            ajax: {
+                type: "GET",
+                url: "owners/get-statuses",
+                processResults: function (response) {
+                    return {
+                        results: $.map(response, function (item) {
+                            return {
+                                text: getStatus(item),
+                                id: item
+                            }
+                        })
+                    };
+                }
+
+            }
+        });
+    }
+    function initializeDebtSelect() {
+        $('#filter-by-debt').select2({
+            language: "uk",
+            minimumResultsForSearch: -1,
+            dropdownParent: $('#dropdownParent'),
+            placeholder: " ",
+            allowClear: true
+        });
+    }
+    function getStatus(status) {
+        switch (status) {
+            case 'NEW':
+                return newStatus;
+            case 'ACTIVE':
+                return activeStatus;
+            case 'DISABLED':
+                return disabledStatus;
+        }
+    }
+    function initializeFlatPickr() {
+        $("#filter-by-creation-date").flatpickr({
+            locale: "uk",
+            dateFormat: "d.m.Y"
+        });
+    }
+
+    $("#filter-by-id").on("input", function () {
+        request.id = $(this).val();
+        searchAfterDelay();
+    });
+    $("#filter-by-fullName").on("input", function () {
+        request.fullName = $(this).val();
+        searchAfterDelay();
+    });
+    $("#filter-by-phoneNumber").on("input", function () {
+        request.phoneNumber = $(this).val();
+        searchAfterDelay();
+    });
+    $("#filter-by-email").on("input", function () {
+        request.email = $(this).val();
+        searchAfterDelay();
+    });
+    $("#filter-by-house").on("change", function () {
+        request.houseId = $(this).val();
+        searchAfterDelay();
+    });
+    $("#filter-by-apartment").on("input", function () {
+        request.apartment = $(this).val();
+        searchAfterDelay();
+    });
+    $("#filter-by-creation-date").on("change", function () {
+        request.creationDate = $(this).val();
+        searchAfterDelay();
+    });
+    $("#filter-by-debt").on("change", function () {
+        request.debt = $(this).val();
+        searchAfterDelay();
+    });
+    $("#filter-by-status").on("change", function () {
+        request.status = $(this).val();
+        searchAfterDelay();
+    });
+
+    function searchAfterDelay() {
+        clearTimeout(timer);
+        timer = setTimeout(function() {
+            getOwners(0);
+        }, 800);
+    }
+
+    function getOwners(currentPage) {
+        blockCardDody();
+        request.page = currentPage;
+        request.pageSize = tableLength;
+        $.ajax({
+            type: "GET",
+            url: "owners/getOwners",
+            data: request,
+            success: function (response) {
+                $("tbody").children().remove();
+                $(".card-footer").children().remove();
+                drawTable(response);
+            },
+            error: function () {
+                toastr.error(errorMessage);
+            }
+        });
+    }
+
+    function drawTable(response) {
+        if (response.numberOfElements == 0) {
+            let tdCount = $("td").length;
+            $("tbody").append(`<tr class="tr"><td colspan="${tdCount}" class="text-center">${dataNotFound}</td>></tr>`);
+        } else {
+            for (const owner of response.content) {
+                $("tbody")
+                    .append(
+                        `<tr class="tr text-nowrap">
+                    <td>${owner.id}</td>
+                    <td>${owner.fullName}</td>
+                    <td>${owner.phoneNumber}</td>
+                    <td>${owner.email}</td>
+                    <td>${owner.house}</td>
+                    <td>${owner.apartment}</td>
+                    <td>${owner.creationDate}</td>
+                    <td>${getStatusSpan(owner.status)}</td>
+                    <td>${owner.hasDebt}</td>
+                    <td>
+                    <div class="dropdown">
+                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                            <i class="ti ti-dots-vertical"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="owners/edit/${owner.id}">
+                                <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
+                            </a>
+                            <button type="button" class="dropdown-item btn justify-content-start" onclick="openDeleteModal(${owner.id})">
+                                <i class="ti ti-trash me-1"></i>${buttonLabelDelete}
+                            </button>
+                    </td> </tr>`);
+            }
+            if (response.totalPages > 0) {
+                const page = response.pageable.pageNumber;
+                drawPaginationElements(response, "getOwners");
+                drawPagination(response.totalPages, page, 'getOwners');
+            }
+        }
+    }
+    function getStatusSpan(status){
+        switch (status) {
+            case 'NEW':
+                return '<span class="badge bg-label-info">'+ newStatus +'</span>';
+            case 'ACTIVE':
+                return '<span class="badge bg-label-success">'+ activeStatus +'</span>';
+            case 'DISABLED':
+                return '<span class="badge bg-label-danger">'+ disabledStatus +'</span>';
+        }
+    }
+
+    function openDeleteModal(id) {
+
+    }
+</script>
+</html>
