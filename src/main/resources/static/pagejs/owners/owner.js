@@ -1,5 +1,7 @@
+let defaultOwner;
 $(document).ready(function () {
     console.log(statusLink);
+    console.log(defaultOwner === undefined);
     initializeInputMasks();
     autosize($("#aboutOwner"));
     initializeStatusSelect();
@@ -130,19 +132,13 @@ $("#save-button").on("click", function () {
 
 function collectData() {
     let formData = new FormData();
-    $('input[type=text]').each(function () {
-        if($(this).attr("id").localeCompare('birthDate') !== 0) {
+    $("#form").find('input:text, input:password, select, textarea').each(function (){
+        if($(this).attr("id").localeCompare('status') !== 0) {
             formData.append($(this).attr("id"), $(this).val());
         }
     });
-    $('input[type=password]').each(function () {
-        formData.append($(this).attr("id"), $(this).val());
-    });
     var status = $("#status").val() == null? '': $("#status").val();
     formData.append($("#status").attr("id"), status);
-    formData.append($("#aboutOwner").attr("id"), $("#aboutOwner").val());
-    var date = $("#birthDate").val().localeCompare('') == 0? '': $("#birthDate").val();
-    formData.append($("#birthDate").attr("id"), date);
     formData.append('avatar', $('#avatar').prop('files')[0]);
     return formData;
 }
@@ -171,6 +167,7 @@ function getOwner(){
         url: "get-owner/"+id,
         success: function (response) {
             console.log(response);
+            defaultOwner = response;
             setFields(response);
         },
         error: function () {
@@ -197,3 +194,12 @@ function setFields(response) {
     var option = new Option(getStatus(response.status), response.status, true, true);
     $('#status').append(option).trigger('change');
 }
+$("#cancel-button").on("click", function () {
+    blockCardDody();
+    $("#form").find('input:text, input:password, input:file, select, textarea').val('');
+    if(defaultOwner === undefined){
+        $("#avatar-img").attr("src", "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg");
+    } else {
+        setFields(defaultOwner);
+    }
+})
