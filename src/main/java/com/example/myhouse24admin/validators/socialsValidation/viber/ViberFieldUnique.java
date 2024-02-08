@@ -1,4 +1,4 @@
-package com.example.myhouse24admin.validators.socialsValidation;
+package com.example.myhouse24admin.validators.socialsValidation.viber;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

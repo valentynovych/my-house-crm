@@ -1,6 +1,7 @@
-package com.example.myhouse24admin.validators.socialsValidation;
+package com.example.myhouse24admin.validators.socialsValidation.viber;
 
 import com.example.myhouse24admin.repository.ApartmentOwnerRepo;
+import com.example.myhouse24admin.validators.socialsValidation.viber.ViberFieldUnique;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
