@@ -40,7 +40,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
     private final MailService mailService;
     private final ResourceLoader resourceLoader;
     private final Logger logger = LogManager.getLogger(ApartmentOwnerServiceImpl.class);
-    private String uploadPath = "C:\\Users\\Anastassia\\IdeaProjects\\MyHouse24-Admin\\src\\uploads";
+    private String uploadPath = "C:\\Users\\Anastassia\\IdeaProjects\\MyHouse24-Admin\\uploads";
 
     public ApartmentOwnerServiceImpl(ApartmentOwnerRepo apartmentOwnerRepo,
                                      ApartmentOwnerMapper apartmentOwnerMapper,
