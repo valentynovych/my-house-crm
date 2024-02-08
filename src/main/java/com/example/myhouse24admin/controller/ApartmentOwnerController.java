@@ -75,7 +75,7 @@ public class ApartmentOwnerController {
         apartmentOwnerService.updateApartmentOwner(editApartmentOwnerRequest,id,avatar);
         String url = request.getRequestURL().toString();
         int index = url.lastIndexOf("/");
-        url = url.substring(0,index-4);
+        url = url.substring(0,index-5);
         return new ResponseEntity<>(url, HttpStatus.OK);
     }
 
