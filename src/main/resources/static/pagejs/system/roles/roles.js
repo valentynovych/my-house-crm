@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    blockCardDody();
     $.ajax({
         type: "GET",
         url: "roles/getRoles",
@@ -36,7 +37,7 @@ function setPermissions (response){
 }
 
 $("#saveButton").on("click", function(){
-    $(this).prop('disabled', true);
+    blockCardDody();
     const managerChecks = [];
     const electricianChecks = [];
     const plumberChecks = [];
@@ -71,3 +72,4 @@ $("#saveButton").on("click", function(){
         }
     });
 });
+
