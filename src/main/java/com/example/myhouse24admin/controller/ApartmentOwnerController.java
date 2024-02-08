@@ -78,6 +78,10 @@ public class ApartmentOwnerController {
         url = url.substring(0,index-5);
         return new ResponseEntity<>(url, HttpStatus.OK);
     }
-
+    @GetMapping("/delete/{id}")
+    public @ResponseBody ResponseEntity<?> deleteOwner(@PathVariable Long id) {
+        apartmentOwnerService.deleteOwnerById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

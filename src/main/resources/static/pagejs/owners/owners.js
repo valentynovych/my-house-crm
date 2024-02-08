@@ -1,5 +1,6 @@
 let tableLength = 5;
 let timer;
+let entryId;
 let request = {
     page: 0,
     pageSize: tableLength,
@@ -190,5 +191,48 @@ $('.clear-filters').on('click', function () {
         .val('').trigger('input');
 })
 function openDeleteModal(id) {
-
+    if($("#deleteModal").length === 0) {
+        $("div.card").append(
+            `<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>${deleteModalText}</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">
+                        ${modalCloseButton}
+                        </button>
+                        <button type="button" class="btn btn-danger" id="delete-button" onclick="deleteEntry()">
+                            ${modalDeleteButton}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+        )
+    }
+    $('#deleteModal').modal('show');
+    entryId = id;
+}
+function deleteEntry() {
+    $("#delete-button").prop('disabled', true);
+    $.ajax({
+        type: "GET",
+        url: "owners/delete/"+entryId,
+        success: function () {
+            $('#deleteModal').modal('hide');
+            toastr.success(deleteSuccessful);
+            getOwners(0)
+        },
+        error: function () {
+            $('#deleteModal').modal('hide');
+            toastr.error(errorMessage);
+        }
+    });
 }

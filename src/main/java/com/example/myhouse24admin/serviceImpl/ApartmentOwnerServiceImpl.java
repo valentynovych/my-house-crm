@@ -30,6 +30,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -155,6 +156,15 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
             ownerSpecification = ownerSpecification.and(byStatus(filterRequest.status()));
         }
         return apartmentOwnerRepo.findAll(ownerSpecification, pageable);
+    }
+
+    @Override
+    public void deleteOwnerById(Long id) {
+        logger.info("deleteOwnerById - Deleting apartment owner by id "+id);
+        ApartmentOwner apartmentOwner = apartmentOwnerRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Owner was not found with id "+id));
+        apartmentOwner.setDeleted(true);
+        apartmentOwnerRepo.save(apartmentOwner);
+        logger.info("deleteOwnerById - Apartment owner was deleted");
     }
 
     void createUploadDirectoryIfNotExist(){
