@@ -8,8 +8,10 @@ $(document).ready(function () {
     if(statusLink.includes("..")){
         getOwner();
         $("#breadCrumb").text(breadCrumbEdit);
+        $("#pageTitle").text(editOwner)
     } else {
         $("#breadCrumb").text(breadCrumbAdd);
+        $("#pageTitle").text(newOwner)
         $("#birthDate").flatpickr({
             locale: "uk",
             dateFormat: "d.m.Y"

@@ -7,7 +7,7 @@
 <body>
 <div layout:fragment="breadcrumb">
     <div class="d-flex justify-content-between px-3 align-items-end">
-        <h3 th:text="#{menu-item-apartment-owners}"></h3>
+        <h3 id="pageTitle"></h3>
         <h6>
             <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
             <a th:href="@{/owners}" th:text="#{menu-item-apartment-owners} + ' / '"></a>
@@ -147,5 +147,7 @@
     var newStatus = [[#{staff-status-new}]];
     var activeStatus = [[#{staff-status-active}]];
     var disabledStatus = [[#{staff-status-disabled}]];
+    const newOwner = [[#{owners-new}]]
+    const editOwner = [[#{owners-edit}]]
 </script>
 </html>
