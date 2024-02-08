@@ -38,9 +38,11 @@ public interface ApartmentOwnerMapper {
     @Mapping(target = "birthDate", expression = "java(convertDateToString(apartmentOwner.getBirthDate()))")
     ApartmentOwnerResponse apartmentOwnerToApartmentOwnerResponse(ApartmentOwner apartmentOwner);
     @Mapping(ignore = true, target = "password")
-    void setApartmentOwnerWithoutPassword(@MappingTarget ApartmentOwner apartmentOwner, EditApartmentOwnerRequest apartmentOwnerRequest);
+    @Mapping(target = "birthDate", expression = "java(convertDateToInstant(editApartmentOwnerRequest.birthDate()))")
+    void setApartmentOwnerWithoutPassword(@MappingTarget ApartmentOwner apartmentOwner, EditApartmentOwnerRequest editApartmentOwnerRequest);
     @Mapping(target = "password", source = "encodedPassword")
-    void setApartmentOwnerWithPassword(@MappingTarget ApartmentOwner apartmentOwner, EditApartmentOwnerRequest apartmentOwnerRequest, String encodedPassword);
+    @Mapping(target = "birthDate", expression = "java(convertDateToInstant(editApartmentOwnerRequest.birthDate()))")
+    void setApartmentOwnerWithPassword(@MappingTarget ApartmentOwner apartmentOwner, EditApartmentOwnerRequest editApartmentOwnerRequest, String encodedPassword);
     List<TableApartmentOwnerResponse> apartmentOwnerListToTableApartmentOwnerResponseList(List<ApartmentOwner> apartmentOwners);
     @Mapping(target = "fullName", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
     @Mapping(target = "creationDate", expression = "java(convertDateToString(apartmentOwner.getCreationDate()))")
