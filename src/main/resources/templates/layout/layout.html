@@ -397,6 +397,8 @@
 <script th:inline="javascript">
     const roles = [[${#authentication?.getAuthorities()}]];
     const errorMessage = [[#{toastr-error-message}]];
+    const logoutModalMessage = [[#{logout-modal-message}]]
+    const logoutModalYes = [[#{logout-modal-yes}]]
 </script>
 <script th:src="@{/pagejs/layout/layout.js}"></script>
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
