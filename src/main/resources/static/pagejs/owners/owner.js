@@ -122,7 +122,13 @@ function validateFile(value){
 
 
 $("#save-button").on("click", function () {
+    blockCardDody();
     clearAllErrorMessage();
+    let formData = collectData();
+    sendData(formData);
+});
+
+function collectData() {
     let formData = new FormData();
     $('input[type=text]').each(function () {
         if($(this).attr("id").localeCompare('birthDate') !== 0) {
@@ -138,8 +144,8 @@ $("#save-button").on("click", function () {
     var date = $("#birthDate").val().localeCompare('') == 0? '': $("#birthDate").val();
     formData.append($("#birthDate").attr("id"), date);
     formData.append('avatar', $('#avatar').prop('files')[0]);
-    sendData(formData);
-});
+    return formData;
+}
 function sendData(formData) {
     $.ajax({
         type: "POST",
@@ -157,6 +163,7 @@ function sendData(formData) {
 }
 
 function getOwner(){
+    blockCardDody();
     let url = window.location.pathname;
     let id = url.substring(url.lastIndexOf('/') + 1);
     $.ajax({
@@ -164,22 +171,29 @@ function getOwner(){
         url: "get-owner/"+id,
         success: function (response) {
             console.log(response);
-            const responseMap = new Map(Object.entries((response)));
-            responseMap.forEach((value, key) => {
-                if(key.localeCompare("birthDate") !== 0)
-                    $("#" + key).val(value);
-            })
-            $("#avatar-img").attr("src", '/uploads/'+response.image);
-            $("#birthDate").flatpickr({
-                locale: "uk",
-                defaultDate: response.birthDate,
-                dateFormat: "d.m.Y"
-            });
-            var option = new Option(getStatus(response.status), response.status, true, true);
-            $('#status').append(option).trigger('change');
+            setFields(response);
         },
         error: function () {
             toastr.error(errorMessage);
         }
     });
+}
+
+function setFields(response) {
+    const responseMap = new Map(Object.entries((response)));
+    responseMap.forEach((value, key) => {
+        if(key.localeCompare("birthDate") !== 0)
+            $("#" + key).val(value);
+    })
+    const currentUrl = window.location.href;
+    const myArray = currentUrl.split("/");
+    let root = myArray[3];
+    $("#avatar-img").attr("src",'/'+root+ '/uploads/'+response.image);
+    $("#birthDate").flatpickr({
+        locale: "uk",
+        defaultDate: response.birthDate,
+        dateFormat: "d.m.Y"
+    });
+    var option = new Option(getStatus(response.status), response.status, true, true);
+    $('#status').append(option).trigger('change');
 }
