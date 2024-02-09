@@ -156,6 +156,7 @@ function getStatusLabel(status) {
 
 function drawTable(result) {
     const page = result.pageable.pageNumber;
+    let iter = 0;
     for (const staff of result.content) {
 
         const badgeStatus = staff.status === 'NEW'
@@ -172,11 +173,12 @@ function drawTable(result) {
             : '';
 
         $('<tr data-href="staff/view-staff/' + staff.id + '" class="cursor-pointer">\n' +
+            '<td>' + ++iter + '</td>' +
             '<td>' + staff.firstName + ' ' + staff.lastName + '</td>\n' +
             '<td>' + getRoleLabel(staff.role.name) + '</td>\n' +
             '<td>' + staff.phoneNumber + '</td>\n' +
             '<td>' + staff.email + '</td>\n' +
-            '<td>' + badgeStatus + '</td>\n' +
+            '<td class="text-center">' + badgeStatus + '</td>\n' +
             '<td>\n' +
             '  <div class="dropdown">\n' +
             '   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"\n' +
