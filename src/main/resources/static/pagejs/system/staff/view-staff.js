@@ -38,7 +38,7 @@ $(window).on("load", function () {
             staff = response;
             fillTable(staff);
         }, error: function (error) {
-            toastr.error(errorMessage);
+            toastr.error(errorMessageStaff);
         }
     })
 
