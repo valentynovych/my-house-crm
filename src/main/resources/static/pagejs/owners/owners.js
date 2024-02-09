@@ -142,7 +142,7 @@ function drawTable(response) {
         for (const owner of response.content) {
             $("tbody")
                 .append(
-                    `<tr class="tr text-nowrap">
+                    `<tr class="tr text-nowrap clickable-row" onclick="showOwner(this)" data-href="owners/view-owner/${owner.id}">
                     <td>${owner.id}</td>
                     <td>${owner.fullName}</td>
                     <td>${owner.phoneNumber}</td>
@@ -235,4 +235,8 @@ function deleteEntry() {
             toastr.error(errorMessage);
         }
     });
+}
+function showOwner(row) {
+    console.log(row);
+    window.location.href = $(row).attr("data-href");
 }

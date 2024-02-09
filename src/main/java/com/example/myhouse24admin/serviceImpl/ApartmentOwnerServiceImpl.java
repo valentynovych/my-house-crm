@@ -166,6 +166,15 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         apartmentOwnerRepo.save(apartmentOwner);
         logger.info("deleteOwnerById - Apartment owner was deleted");
     }
+    @Override
+    public ViewApartmentOwnerResponse getApartmentOwnerResponseForView(Long id) {
+        logger.info("getApartmentOwnerResponseForView - Getting apartment owner response for view by id "+id);
+        ApartmentOwner apartmentOwner = apartmentOwnerRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Owner was not found by id "+id));
+        ViewApartmentOwnerResponse viewApartmentOwnerResponse = apartmentOwnerMapper.apartmentOwnerToViewApartmentOwnerResponse(apartmentOwner);
+        logger.info("getApartmentOwnerResponseForView - Apartment owner response for view was got");
+        return viewApartmentOwnerResponse;
+    }
+
 
     void createUploadDirectoryIfNotExist(){
         File uploadDir = new File(uploadPath);

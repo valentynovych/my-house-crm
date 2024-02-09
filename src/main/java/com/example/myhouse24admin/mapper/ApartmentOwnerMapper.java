@@ -2,10 +2,7 @@ package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.ApartmentOwner;
 import com.example.myhouse24admin.entity.Language;
-import com.example.myhouse24admin.model.apartmentOwner.CreateApartmentOwnerRequest;
-import com.example.myhouse24admin.model.apartmentOwner.ApartmentOwnerResponse;
-import com.example.myhouse24admin.model.apartmentOwner.EditApartmentOwnerRequest;
-import com.example.myhouse24admin.model.apartmentOwner.TableApartmentOwnerResponse;
+import com.example.myhouse24admin.model.apartmentOwner.*;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -30,10 +27,7 @@ public interface ApartmentOwnerMapper {
     default Language getLanguage(){
         return Language.UKR;
     }
-    default Instant convertDateToInstant(String birthDate){
-        LocalDate date = LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        return date.atStartOfDay(ZoneId.systemDefault()).toInstant();
-    }
+
     @Mapping(target = "image", source = "avatar")
     @Mapping(target = "birthDate", expression = "java(convertDateToString(apartmentOwner.getBirthDate()))")
     ApartmentOwnerResponse apartmentOwnerToApartmentOwnerResponse(ApartmentOwner apartmentOwner);
@@ -47,8 +41,15 @@ public interface ApartmentOwnerMapper {
     @Mapping(target = "fullName", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
     @Mapping(target = "creationDate", expression = "java(convertDateToString(apartmentOwner.getCreationDate()))")
     TableApartmentOwnerResponse apartmentOwnerToTableApartmentOwnerResponse(ApartmentOwner apartmentOwner);
+    @Mapping(target = "birthDate", expression = "java(convertDateToString(apartmentOwner.getBirthDate()))")
+    ViewApartmentOwnerResponse apartmentOwnerToViewApartmentOwnerResponse(ApartmentOwner apartmentOwner);
     default String convertDateToString(Instant date){
         LocalDate localDate = LocalDate.ofInstant(date, ZoneId.systemDefault());
         return localDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
+    default Instant convertDateToInstant(String birthDate){
+        LocalDate date = LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        return date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+    }
+
 }

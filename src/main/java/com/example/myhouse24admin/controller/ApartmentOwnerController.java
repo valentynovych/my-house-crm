@@ -83,5 +83,13 @@ public class ApartmentOwnerController {
         apartmentOwnerService.deleteOwnerById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @GetMapping("/view-owner/{id}")
+    public ModelAndView getViewOwnerPage() {
+        return new ModelAndView("owners/view-owner");
+    }
+    @GetMapping("/view-owner/get/{id}")
+    public @ResponseBody ViewApartmentOwnerResponse getViewOwner(@PathVariable Long id) {
+        return apartmentOwnerService.getApartmentOwnerResponseForView(id);
+    }
 
 }

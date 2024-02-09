@@ -10,4 +10,5 @@ public interface ApartmentOwnerService {
     void updateApartmentOwner(EditApartmentOwnerRequest editApartmentOwnerRequest, Long id, MultipartFile multipartFile);
     Page<TableApartmentOwnerResponse> getApartmentOwnerResponsesForTable(int page, int pageSize, FilterRequest filterRequest);
     void deleteOwnerById(Long id);
+    ViewApartmentOwnerResponse getApartmentOwnerResponseForView(Long id);
 }

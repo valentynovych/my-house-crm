@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <title th:text="#{menu-item-apartment-owners}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+  <div class="d-flex justify-content-between px-3 align-items-end">
+    <h3 th:text="#{owners-profile}"></h3>
+    <h6>
+      <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
+      <a th:href="@{/admin/owners}" th:text="#{menu-item-apartment-owners} + ' / '"></a>
+      <span th:text="#{owners-profile}"></span>
+    </h6>
+  </div>
+</div>
+<div layout:fragment="content">
+  <div class="card-body">
+    <div class="card-header ps-2 d-flex justify-content-between align-items-center">
+      <img class="d-block h-auto ms-0 rounded user-profile-img"
+           style="width:100px; height:100px;"
+           id="avatar-img">
+      <div>
+      <a class="btn btn-primary me-2" id="current-owner-link">
+        <span th:text="#{owners-edit}"></span>
+      </a>
+      </div>
+    </div>
+    <div class="table-responsive overflow-visible">
+      <table class="table table-bordered">
+        <tbody class="table-border-bottom-0">
+        <tr >
+          <td class="fw-bold w-25" th:text="#{staff-label-status}"></td>
+          <td id="status"></td>
+        </tr>
+        <tr>
+          <td class="fw-bold w-25">ID</td>
+          <td id="id"></td>
+        </tr>
+        <tr>
+          <td class="fw-bold w-25" th:text="#{staff-label-first-name}"></td>
+          <td id="lastName"></td>
+        </tr>
+        <tr>
+          <td class="fw-bold w-25" th:text="#{staff-label-last-name}"></td>
+          <td id="firstName"></td>
+        </tr>
+        <tr>
+          <td class="fw-bold w-25" th:text="#{owners-label-middle-name}"></td>
+          <td id="middleName"></td>
+        </tr>
+        <tr>
+          <td class="fw-bold w-25" th:text="#{owners-label-dob}"></td>
+          <td id="birthDate"></td>
+        </tr>
+        <tr>
+          <td class="fw-bold w-25" th:text="#{owners-label-about}"></td>
+          <td id="aboutOwner"></td>
+        </tr>
+        <tr>
+          <td class="fw-bold w-25" th:text="#{staff-label-phone-number}"></td>
+          <td id="phoneNumber"></td>
+        </tr>
+        <tr>
+          <td class="fw-bold w-25">Viber</td>
+          <td id="viberNumber"></td>
+        </tr>
+        <tr>
+          <td class="fw-bold w-25">Telegram</td>
+          <td id="telegramUsername"></td>
+        </tr>
+        <tr>
+          <td class="fw-bold w-25">Email</td>
+          <td id="email"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/owners/view-owner.js}"></script>
+<script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
+  var newStatus = [[#{staff-status-new}]];
+  var activeStatus = [[#{staff-status-active}]];
+  var disabledStatus = [[#{staff-status-disabled}]];
+</script>
+</html>
