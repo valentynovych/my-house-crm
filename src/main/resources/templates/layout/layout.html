@@ -348,9 +348,7 @@
                         </li>
                         <li class="nav-item me-3">
                             <div sec:authentication="principal.fullName"></div>
-                            <div th:each="authority : ${#authentication?.getAuthorities()}"
-                                 th:if="${authority?.getAuthority().startsWith('ROLE_')}"
-                                 th:text="${authority?.getAuthority().replaceFirst('ROLE_', '')}"></div>
+                            <div id="roleName"></div>
 
                         </li>
                         <li class="nav-item">
@@ -399,6 +397,11 @@
     const errorMessage = [[#{toastr-error-message}]];
     const logoutModalMessage = [[#{logout-modal-message}]]
     const logoutModalYes = [[#{logout-modal-yes}]]
+    const directorRole = [[#{staff-role-director}]];
+    const managerRole = [[#{staff-role-manager}]];
+    const accountantRole = [[#{staff-role-accountant}]];
+    const electricianRole = [[#{staff-role-electrician}]];
+    const plumberRole = [[#{staff-role-plumber}]];
 </script>
 <script th:src="@{/pagejs/layout/layout.js}"></script>
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>

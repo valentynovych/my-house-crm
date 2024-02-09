@@ -2,6 +2,7 @@ const currentUrl = window.location.href;
 const myArray = currentUrl.split("/");
 var root = myArray[3];
 $(document).ready(function () {
+    $("#roleName").text(getRoleName(roles[0].authority));
     $.ajax({
         type: "GET",
         url: "/"+root+"/admin/getPermissions",
@@ -16,6 +17,21 @@ $(document).ready(function () {
         }
     });
 });
+
+function getRoleName(role) {
+    switch (role) {
+        case 'ROLE_DIRECTOR':
+            return directorRole;
+        case 'ROLE_MANAGER':
+            return managerRole;
+        case 'ROLE_ACCOUNTANT':
+            return accountantRole;
+        case 'ROLE_ELECTRICIAN':
+            return electricianRole;
+        case 'ROLE_PLUMBER':
+            return plumberRole;
+    }
+}
 
 function showMenuItems(permissions){
     var pathname = window.location.pathname;
