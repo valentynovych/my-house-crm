@@ -8,10 +8,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = FileRequiredValidator.class)
+@Constraint(validatedBy = FirstFileRequiredValidator.class)
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FileRequired {
+public @interface FirstFileRequired {
 
     String message() default "{validation-file-required}";
 

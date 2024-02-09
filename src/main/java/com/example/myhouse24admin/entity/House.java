@@ -34,9 +34,9 @@ public class House {
             inverseJoinColumns = {@JoinColumn(name = "staff_id")}
     )
     private List<Staff> staff = new ArrayList<>();
-    @OneToMany(mappedBy = "house")
+    @OneToMany(mappedBy = "house", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Section> sections = new ArrayList<>();
-    @OneToMany(mappedBy = "house")
+    @OneToMany(mappedBy = "house", cascade = {CascadeType.MERGE, CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Floor> floors = new ArrayList<>();
 
     public Long getId() {

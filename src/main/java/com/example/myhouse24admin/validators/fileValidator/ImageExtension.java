@@ -8,10 +8,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = FileExtensionValidator.class)
-@Target({ElementType.FIELD})
+@Constraint(validatedBy = ImagesExtensionValidator.class)
+@Target({ElementType.FIELD, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FileExtension {
+public @interface ImageExtension {
 
     String message() default "{validation-file-extension-not-valid}";
 

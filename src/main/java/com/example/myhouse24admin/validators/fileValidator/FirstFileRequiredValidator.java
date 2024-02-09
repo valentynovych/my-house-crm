@@ -6,9 +6,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-public class FileExtensionValidator implements ConstraintValidator<FileExtension, List<MultipartFile>> {
+public class FirstFileRequiredValidator implements ConstraintValidator<FirstFileRequired, List<MultipartFile>> {
+
     @Override
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext constraintValidatorContext) {
-        return false;
+        if (!multipartFiles.isEmpty()) {
+            MultipartFile file = multipartFiles.get(0);
+            return !file.isEmpty();
+        }
+        return true;
     }
 }
