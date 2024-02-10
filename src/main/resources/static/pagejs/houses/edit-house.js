@@ -2,20 +2,28 @@ let lastSectionIndex = 0;
 let lastFloorIndex = 0;
 let lastStaffIndex = 0;
 const houseId = window.location.pathname.match('\\d+');
+let houseToRestore;
 
 $('#add-section').on('click', () => addNewSection({name: '', rangeApartmentNumbers: '', id: ''}));
 $('#add-floor').on('click', () => addNewFloor({name: '', id: ''}));
 $('#add-staff').on('click', () => addNewStaff(
     {id: '', firstName: '', lastName: '', role: {name: ''}}));
 
+$('.cancel-button').on('click', function () {
+    if (houseToRestore) {
+        fillInputs(houseToRestore)
+    } else {
+        toastr.error(errorMessage);
+    }
+});
+
 $(window).on('load', function () {
     blockCardDody();
-    $('.section-list, .floor-list, .staff-list').children().remove();
     $.ajax({
         url: '../../houses/get-house/' + houseId,
         method: 'get',
         success: function (houseResponse) {
-            console.log(houseResponse);
+            houseToRestore = houseResponse;
             fillInputs(houseResponse);
         },
         error: function (error) {
@@ -27,7 +35,7 @@ $(window).on('load', function () {
 })
 
 function fillInputs(house) {
-
+    $('.section-list, .floor-list, .staff-list').children().remove();
     $('#view-house-link').attr('href', `../view-house/${houseId}`);
     $('title, #house-title, #view-house-link').html(house.name);
     $('#id').val(house.id);
