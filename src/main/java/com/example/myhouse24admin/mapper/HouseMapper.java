@@ -1,10 +1,13 @@
 package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.House;
-import com.example.myhouse24admin.entity.Section;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.houses.HouseAddRequest;
-import org.mapstruct.*;
+import com.example.myhouse24admin.model.houses.HouseShortResponse;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,4 +31,8 @@ public interface HouseMapper {
         }
         return staffList;
     }
+
+    List<HouseShortResponse> houseListToHouseShortResponseList(List<House> houses);
+
+    HouseShortResponse houseToHouseShortResponse(House house);
 }

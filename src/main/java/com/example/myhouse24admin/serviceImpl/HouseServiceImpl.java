@@ -3,15 +3,21 @@ package com.example.myhouse24admin.serviceImpl;
 import com.example.myhouse24admin.entity.House;
 import com.example.myhouse24admin.mapper.HouseMapper;
 import com.example.myhouse24admin.model.houses.HouseAddRequest;
+import com.example.myhouse24admin.model.houses.HouseShortResponse;
 import com.example.myhouse24admin.repository.HouseRepo;
 import com.example.myhouse24admin.service.HouseService;
+import com.example.myhouse24admin.specification.HouseSpecification;
 import com.example.myhouse24admin.util.UploadFileUtil;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class HouseServiceImpl implements HouseService {
@@ -43,5 +49,34 @@ public class HouseServiceImpl implements HouseService {
         house.getSections().forEach(section -> section.setHouse(house));
         House save = houseRepo.save(house);
         logger.info("addNewHouse() - success save new House with id: {}", save.getId());
+    }
+
+    @Override
+    public Page<HouseShortResponse> getHouses(int page, int pageSize, Map<String, String> searchParams) {
+        logger.info("getHouses() -> start with parameters: {}", searchParams);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("name").descending());
+        searchParams.remove("page");
+        searchParams.remove("pageSize");
+        HouseSpecification specification = new HouseSpecification(searchParams);
+        Page<House> all = houseRepo.findAll(specification, pageable);
+        List<HouseShortResponse> shortResponses = houseMapper.houseListToHouseShortResponseList(all.getContent());
+        Page<HouseShortResponse> shortResponsePage = new PageImpl<>(shortResponses, pageable, all.getTotalElements());
+        logger.info("getHouses() -> exit, return pages element: {}", shortResponsePage.getNumberOfElements());
+        return shortResponsePage;
+    }
+
+    @Override
+    public boolean deleteHouseById(Long houseId) {
+        logger.info("deleteHouseById() - start");
+        Optional<House> byId = houseRepo.findById(houseId);
+        House house = byId.orElseThrow(() -> {
+            logger.error("House with id: {} not found", houseId);
+            return new EntityNotFoundException(String.format("ERROR: House with id: %s not found", houseId));
+        });
+        //TODO add check uses house anymore
+        house.setDeleted(true);
+        houseRepo.save(house);
+        logger.info("deleteHouseById() - exit, house with id: {} marked deleted", houseId);
+        return true;
     }
 }
