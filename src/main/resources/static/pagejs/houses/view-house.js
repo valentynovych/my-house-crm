@@ -3,7 +3,7 @@ const houseId = window.location.pathname.match('\\d+');
 $(window).on('load', function () {
     blockCardDody();
     $.ajax({
-        url: '../get-house/' + houseId,
+        url: '../get-view-house/' + houseId,
         type: 'get',
         success: function (response) {
             fillTableWithImages(response);

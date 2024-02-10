@@ -1,8 +1,6 @@
 package com.example.myhouse24admin.service;
 
-import com.example.myhouse24admin.model.houses.HouseAddRequest;
-import com.example.myhouse24admin.model.houses.HouseViewResponse;
-import com.example.myhouse24admin.model.houses.HouseShortResponse;
+import com.example.myhouse24admin.model.houses.*;
 import org.springframework.data.domain.Page;
 
 import java.util.Map;
@@ -15,4 +13,8 @@ public interface HouseService {
     boolean deleteHouseById(Long houseId);
 
     HouseViewResponse getHouseById(Long houseId);
+
+    HouseResponse getHouseResponseById(Long houseId);
+
+    void editHouse(Long houseId, HouseEditRequest houseEditRequest);
 }

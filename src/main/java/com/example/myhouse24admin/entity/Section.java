@@ -15,6 +15,8 @@ public class Section {
     @ManyToOne
     @JoinColumn(name = "house_id", referencedColumnName = "id", nullable = false)
     private House house;
+    @Column(length = 8, nullable = false)
+    private String rangeApartmentNumbers;
 
     public Long getId() {
         return id;
@@ -46,5 +48,13 @@ public class Section {
 
     public void setHouse(House house) {
         this.house = house;
+    }
+
+    public String getRangeApartmentNumbers() {
+        return rangeApartmentNumbers;
+    }
+
+    public void setRangeApartmentNumbers(String rangeApartmentNumbers) {
+        this.rangeApartmentNumbers = rangeApartmentNumbers;
     }
 }

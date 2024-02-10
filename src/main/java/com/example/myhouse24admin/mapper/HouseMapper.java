@@ -2,13 +2,8 @@ package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.House;
 import com.example.myhouse24admin.entity.Staff;
-import com.example.myhouse24admin.model.houses.HouseAddRequest;
-import com.example.myhouse24admin.model.houses.HouseViewResponse;
-import com.example.myhouse24admin.model.houses.HouseShortResponse;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import com.example.myhouse24admin.model.houses.*;
+import org.mapstruct.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,5 +34,9 @@ public interface HouseMapper {
 
     @Mapping(target = "sectionsCount", expression = "java(house.getSections().size())")
     @Mapping(target = "floorsCount", expression = "java(house.getFloors().size())")
-    HouseViewResponse houseToHouseResponse(House house);
+    HouseViewResponse houseToHouseViewResponse(House house);
+
+    HouseResponse houseToHouseResponse(House house);
+
+    void updateHouseFromHouseRequest(@MappingTarget House house, HouseEditRequest houseEditRequest);
 }

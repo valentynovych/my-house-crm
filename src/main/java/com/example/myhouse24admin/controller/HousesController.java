@@ -1,8 +1,6 @@
 package com.example.myhouse24admin.controller;
 
-import com.example.myhouse24admin.model.houses.HouseAddRequest;
-import com.example.myhouse24admin.model.houses.HouseViewResponse;
-import com.example.myhouse24admin.model.houses.HouseShortResponse;
+import com.example.myhouse24admin.model.houses.*;
 import com.example.myhouse24admin.service.HouseService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -71,9 +69,22 @@ public class HousesController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("get-house/{houseId}")
-    public @ResponseBody ResponseEntity<?> getHouseById(@PathVariable @Min(1) Long houseId) {
+    @GetMapping("get-view-house/{houseId}")
+    public @ResponseBody ResponseEntity<?> getViewHouseById(@PathVariable @Min(1) Long houseId) {
         HouseViewResponse houseViewResponse = houseService.getHouseById(houseId);
         return new ResponseEntity<>(houseViewResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("get-house/{houseId}")
+    public @ResponseBody ResponseEntity<?> getFullHouseById(@PathVariable @Min(1) Long houseId) {
+        HouseResponse houseViewResponse = houseService.getHouseResponseById(houseId);
+        return new ResponseEntity<>(houseViewResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("edit-house/{houseId}")
+    public @ResponseBody ResponseEntity<?> editHouse(@PathVariable Long houseId,
+                                                     @ModelAttribute @Valid HouseEditRequest houseEditRequest) {
+        houseService.editHouse(houseId, houseEditRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -88,8 +88,8 @@ function drawTable(result) {
         addListenerToRow();
     }
 
-    drawPagination(result.totalPages, page, 'getHouses');
     drawPaginationElements(result, 'getHouses')
+    drawPagination(result.totalPages, page, 'getHouses');
 }
 
 function addListenerToRow() {

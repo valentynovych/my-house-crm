@@ -3,8 +3,10 @@ package com.example.myhouse24admin.mapper;
 import com.example.myhouse24admin.entity.Language;
 import com.example.myhouse24admin.entity.Role;
 import com.example.myhouse24admin.entity.Staff;
+import com.example.myhouse24admin.model.houses.StaffShortRequest;
 import com.example.myhouse24admin.model.staff.StaffEditRequest;
 import com.example.myhouse24admin.model.staff.StaffResponse;
+import com.example.myhouse24admin.model.staff.StaffShortResponse;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -33,6 +35,9 @@ public interface StaffMapper {
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "role", source = "roleId", qualifiedByName = "setNewRole")
     void updateWithoutPassword(@MappingTarget Staff staff, StaffEditRequest staffEditRequest);
+
+    StaffShortResponse staffToStaffShortResponse(Staff staff);
+    StaffShortRequest staffToStaffShortRequest(Staff staff);
 
     @Named(value = "setNewRole")
     static Role setNewRole(Long roleId) {
