@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "seo")
-public class SEO {
+public class Seo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String title;
-    @Column(length = 300, nullable = false)
+    @Column(length = 300)
     private String description;
-    @Column(length = 200, nullable = false)
+    @Column(length = 200)
     private String keywords;
 
     public Long getId() {

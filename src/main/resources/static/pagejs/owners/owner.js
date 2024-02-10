@@ -197,11 +197,12 @@ function setFields(response) {
     $('#status').append(option).trigger('change');
 }
 $("#cancel-button").on("click", function () {
-    blockCardDody();
+    blockBy("#form");
     $("#form").find('input:text, input:password, input:file, select, textarea').val('');
     if(defaultOwner === undefined){
         $("#avatar-img").attr("src", "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg");
     } else {
         setFields(defaultOwner);
     }
+    unblockBy("#form");
 })
