@@ -3,6 +3,7 @@ package com.example.myhouse24admin.serviceImpl;
 import com.example.myhouse24admin.entity.House;
 import com.example.myhouse24admin.mapper.HouseMapper;
 import com.example.myhouse24admin.model.houses.HouseAddRequest;
+import com.example.myhouse24admin.model.houses.HouseViewResponse;
 import com.example.myhouse24admin.model.houses.HouseShortResponse;
 import com.example.myhouse24admin.repository.HouseRepo;
 import com.example.myhouse24admin.service.HouseService;
@@ -78,5 +79,18 @@ public class HouseServiceImpl implements HouseService {
         houseRepo.save(house);
         logger.info("deleteHouseById() - exit, house with id: {} marked deleted", houseId);
         return true;
+    }
+
+    @Override
+    public HouseViewResponse getHouseById(Long houseId) {
+        logger.info("getHouseById() -> start, with id: {}", houseId);
+        Optional<House> byId = houseRepo.findById(houseId);
+        House house = byId.orElseThrow(() -> {
+            logger.error("getHouseById() -> House with id: {} not found", houseId);
+            return new EntityNotFoundException(String.format("House with id: %s not found", houseId));
+        });
+        HouseViewResponse response = houseMapper.houseToHouseResponse(house);
+        logger.info("getHouseById() -> exit");
+        return response;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.service;
 
 import com.example.myhouse24admin.model.houses.HouseAddRequest;
+import com.example.myhouse24admin.model.houses.HouseViewResponse;
 import com.example.myhouse24admin.model.houses.HouseShortResponse;
 import org.springframework.data.domain.Page;
 
@@ -12,4 +13,6 @@ public interface HouseService {
     Page<HouseShortResponse> getHouses(int page, int pageSize, Map<String, String> searchParams);
 
     boolean deleteHouseById(Long houseId);
+
+    HouseViewResponse getHouseById(Long houseId);
 }

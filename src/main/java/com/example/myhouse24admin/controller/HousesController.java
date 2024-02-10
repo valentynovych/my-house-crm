@@ -1,10 +1,12 @@
 package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.model.houses.HouseAddRequest;
+import com.example.myhouse24admin.model.houses.HouseViewResponse;
 import com.example.myhouse24admin.model.houses.HouseShortResponse;
 import com.example.myhouse24admin.service.HouseService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,11 @@ public class HousesController {
         return new ModelAndView("houses/houses");
     }
 
+    @GetMapping("view-house/{houseId}")
+    public ModelAndView viewHouseCard(@PathVariable Long houseId) {
+        return new ModelAndView("houses/view-house");
+    }
+
     @PostMapping("add")
     public @ResponseBody ResponseEntity<?> addNewHouse(@ModelAttribute @Valid HouseAddRequest houseAddRequest) {
         houseService.addNewHouse(houseAddRequest);
@@ -55,12 +62,18 @@ public class HousesController {
     }
 
     @DeleteMapping("delete/{houseId}")
-    public @ResponseBody ResponseEntity<?> deleteHouseById(@PathVariable Long houseId) {
+    public @ResponseBody ResponseEntity<?> deleteHouseById(@PathVariable @Min(1) Long houseId) {
         try {
             houseService.deleteHouseById(houseId);
         } catch (EntityNotFoundException exception) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("get-house/{houseId}")
+    public @ResponseBody ResponseEntity<?> getHouseById(@PathVariable @Min(1) Long houseId) {
+        HouseViewResponse houseViewResponse = houseService.getHouseById(houseId);
+        return new ResponseEntity<>(houseViewResponse, HttpStatus.OK);
     }
 }
