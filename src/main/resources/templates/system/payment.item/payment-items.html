@@ -44,4 +44,10 @@
 
 </body>
 <script layout:fragment="script" th:src="@{/pagejs/system/paymentItem/payment-items.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const tableShow = [[#{table-show}]];
+    const tableShowing = [[#{table-showing}]];
+    const tableEntries = [[#{table-entries}]];
+    const tableOf = [[#{table-of}]];
+</script>
 </html>

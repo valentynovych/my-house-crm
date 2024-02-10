@@ -55,43 +55,11 @@ function drawTable(result) {
     }
     addListenerToRow();
 
-    if (result.totalPages) {
-        $('<div class="details-table d-flex gap-2 align-items-center"></div>').appendTo('.card-footer')
+    drawPaginationElements(result, 'getTariffs')
+    drawPagination(result.totalPages, page, 'getTariffs');
 
-        const size = result.size;
-
-        const from = page > 0 ? (page * size) + 1 : 1;
-        const to = from + result.numberOfElements - 1;
-        const total = result.totalElements;
-
-        if (from === total) {
-            $('<div class="dataTables_info"">' +
-                'Показано ' + from + ' з ' + total + ' тарифів' +
-                '</div>').appendTo(".details-table");
-        } else {
-            $('<div class="dataTables_info">' +
-                'Показано ' + from + '-' + to + ' з ' + total + ' тарифів' +
-                '</div>').appendTo(".details-table")
-        }
-
-        $('<label class="ms-3">Показати по: </label>' +
-            '<div class="selecte-wrapper"><select name="tables_length" class="form-select form-select-sm">\n' +
-            '      <option value="2">2</option>\n' +
-            '      <option value="5">5</option>\n' +
-            '      <option value="10">10</option>\n' +
-            '       <option value="20">20</option>\n' +
-            '</select> </div>').appendTo(".details-table");
-
-        var $select = $('select[name="tables_length"]');
-        $select.on("change", function () {
-            tableLength = this.value;
-            getTariffs(0);
-        });
-        $select.val(tableLength);
-
-        drawPagination(result.totalPages, page, 'getTariffs');
-    }
 }
+
 function addDeleteEvent(tariffId) {
     $('.submit-delete').on('click', function () {
         if (tariffId && tariffId > 0) {
