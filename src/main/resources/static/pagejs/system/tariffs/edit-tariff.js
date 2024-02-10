@@ -2,6 +2,7 @@ let lastItemIndex = 0;
 const tariffEditPathname = window.location.pathname;
 let tariffId = tariffEditPathname.substring(tariffEditPathname.lastIndexOf('/') + 1, tariffEditPathname.length);
 let $currentUrl = $('#current-tariff');
+let tariffToRestore;
 
 $currentUrl.attr('href', $currentUrl.attr('href') + tariffId)
 $currentUrl.css({
@@ -18,7 +19,7 @@ $(document).ready(function () {
         type: 'get',
         dataType: 'json',
         success: function (response) {
-            console.log(response)
+            tariffToRestore = response;
             fillInputs(response);
         },
         error: function (error) {
@@ -30,6 +31,10 @@ $(document).ready(function () {
 
 $('input[name="tariffRequest.name"]').on('input', function () {
     dynamicTitle(this.value)
+})
+
+$('.button-cancel').on('click', function () {
+    fillInputs(tariffToRestore);
 })
 
 function dynamicTitle(secondPart) {
@@ -91,8 +96,10 @@ function addTariffItem(index, item) {
                             </button>
                         </div>`);
     }
+    $service.hide();
     $service.appendTo('.tariff-items-list');
     initButtonAndInputs($service, index, item);
+    $service.show('fade');
 }
 
 function initButtonAndInputs(itemBlock, index, tariffItem) {
@@ -179,10 +186,11 @@ function addNewTariffItem(index) {
                             </button>
                         </div>`);
     }
+    $service.hide();
     $service.appendTo('.tariff-items-list');
 
     $service.find('.delete-item').on('click', deleteTariffItem);
-
+    $service.show('');
     let serviceSelect = $service.find('select');
     serviceSelect.select2({
         placeholder: serviceLabel,
@@ -226,13 +234,16 @@ let tariffItemToDelete = [];
 
 function deleteTariffItem() {
     const serviceItemBlock = $(this).closest('.tariff-item');
+    serviceItemBlock.hide('');
     let serviceIdToDelete = serviceItemBlock.find('.tariff-item-id').attr('value');
     if (serviceIdToDelete) {
         tariffItemToDelete.push(Number(serviceIdToDelete));
     }
-    serviceItemBlock.remove();
 
-    reorderServiceIndexes();
+    setTimeout(function () {
+        serviceItemBlock.remove();
+        reorderServiceIndexes();
+    }, 1000);
 }
 
 function reorderServiceIndexes() {

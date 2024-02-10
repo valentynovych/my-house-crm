@@ -11,6 +11,8 @@ $('input[name="tariffRequest.name"]').on('input', function () {
     $('#tariff-title').html(tariffTitle + ': ' + this.value);
 })
 
+$('.button-cancel').on('click', () => window.history.back())
+
 function addTariffItem(index) {
     let $service = $(`<div class="row g-4 mb-3 tariff-item" id="item-${index}">
                         <input type="text" class="visually-hidden tariff-item-id" name="tariffRequest.tariffItems[${index}].id" 
@@ -43,8 +45,10 @@ function addTariffItem(index) {
                             </button>
                         </div>`);
     }
+    $service.hide();
     $service.appendTo('.tariff-items-list');
     initButtonAndInputs($service, index);
+    $service.show('');
 }
 
 function initButtonAndInputs(item, index) {
@@ -99,13 +103,16 @@ let tariffItemToDelete = [];
 
 function deleteTariffItem() {
     const serviceItemBlock = $(this).closest('.tariff-item');
+    serviceItemBlock.hide('');
     let serviceIdToDelete = serviceItemBlock.find('.tariff-item-id').attr('value');
     if (serviceIdToDelete) {
         tariffItemToDelete.push(Number(serviceIdToDelete));
     }
-    serviceItemBlock.remove();
 
-    reorderServiceIndexes();
+    setTimeout(function () {
+        serviceItemBlock.remove();
+        reorderServiceIndexes();
+    }, 1000)
 }
 
 function reorderServiceIndexes() {
