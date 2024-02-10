@@ -12,6 +12,8 @@ let staff = {
     status: ''
 };
 
+let staffToRestore;
+
 $(window).on("load", function () {
 
 
@@ -106,6 +108,7 @@ function getRoleLabel(role) {
 }
 
 function fillInputs(staff) {
+    console.log(staff);
     let $current = $('#current-staff-link');
     let attr = $current.attr('href');
     $current.attr('href', attr + staff.id);
@@ -176,5 +179,6 @@ function generatePassword() {
 }
 
 $('.button-cancel').on('click', function () {
-    window.history.back();
+    //staff = staffToRestore;
+    fillInputs(staff);
 })
