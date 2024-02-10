@@ -1,15 +1,15 @@
 var $role = $("#roleId");
 let $status = $('#status');
 let staff = {
-    id: 0,
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    roleId: '',
-    status: ''
+    // id: 0,
+    // firstName: '',
+    // lastName: '',
+    // phoneNumber: '',
+    // email: '',
+    // password: '',
+    // confirmPassword: '',
+    // roleId: '',
+    // status: ''
 };
 
 let staffToRestore;
@@ -71,6 +71,7 @@ $(window).on("load", function () {
         type: 'get',
         url: '../get-staff/' + staff.id,
         success: function (response) {
+            staffToRestore = JSON.parse(JSON.stringify(response));
             staff = response;
             fillInputs(staff);
         }, error: function (error) {
@@ -108,7 +109,6 @@ function getRoleLabel(role) {
 }
 
 function fillInputs(staff) {
-    console.log(staff);
     let $current = $('#current-staff-link');
     let attr = $current.attr('href');
     $current.attr('href', attr + staff.id);
@@ -179,6 +179,5 @@ function generatePassword() {
 }
 
 $('.button-cancel').on('click', function () {
-    //staff = staffToRestore;
-    fillInputs(staff);
+    fillInputs(staffToRestore);
 })
