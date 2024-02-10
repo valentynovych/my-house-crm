@@ -12,14 +12,6 @@ $(document).ready(function () {
         }
     });
 
-    // костиль для фіксу дропдаунів у маленьукій табличці
-    // $('.table-responsive').on('show.bs.dropdown select2:opening', function () {
-    //     $('.table-responsive').css({"overflow": "visible"});
-    // });
-    // $('.table-responsive').on('hide.bs.dropdown select2:closing', function () {
-    //     $('.table-responsive').css({"overflow-y": "auto"});
-    // })
-
     $.ajax({
         type: "GET",
         url: "/" + root + "/admin/getPermissions",
