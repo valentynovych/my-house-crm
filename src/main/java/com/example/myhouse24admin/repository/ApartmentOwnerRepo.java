@@ -16,7 +16,7 @@ public interface ApartmentOwnerRepo extends JpaRepository<ApartmentOwner,Long>, 
     Optional<ApartmentOwner> findByPhoneNumber(String phoneNumber);
     Optional<ApartmentOwner> findByViberNumber(String viberNumber);
     Optional<ApartmentOwner> findByTelegramUsername(String telegramUsername);
-    @Query(value = "SELECT * FROM apartment_owners WHERE deleted = true ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM apartment_owners WHERE deleted = false ORDER BY id DESC LIMIT 1", nativeQuery = true)
     ApartmentOwner findLast();
 
 }
