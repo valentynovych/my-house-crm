@@ -142,7 +142,7 @@ function drawTable(response) {
         for (const owner of response.content) {
             $("tbody")
                 .append(
-                    `<tr class="tr text-nowrap clickable-row" onclick="showOwner(this)" data-href="owners/view-owner/${owner.id}">
+                    `<tr class="tr text-nowrap" data-href="owners/view-owner/${owner.id}">
                     <td>${owner.ownerId}</td>
                     <td>${owner.fullName}</td>
                     <td>${owner.phoneNumber}</td>
@@ -171,6 +171,7 @@ function drawTable(response) {
             drawPaginationElements(response, "getOwners");
             drawPagination(response.totalPages, page, 'getOwners');
         }
+        addListenerToRow();
     }
 }
 function getStatusSpan(status){
@@ -236,7 +237,8 @@ function deleteEntry() {
         }
     });
 }
-function showOwner(row) {
-    console.log(row);
-    window.location.href = $(row).attr("data-href");
+function addListenerToRow() {
+    $('tr[data-href] td:not(:last-child)').on('click', function () {
+        window.location = $(this).parent().attr('data-href');
+    })
 }
