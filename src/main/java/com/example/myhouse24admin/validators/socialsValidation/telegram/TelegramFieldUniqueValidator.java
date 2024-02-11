@@ -1,9 +1,11 @@
 package com.example.myhouse24admin.validators.socialsValidation.telegram;
 
+import com.example.myhouse24admin.entity.ApartmentOwner;
 import com.example.myhouse24admin.repository.ApartmentOwnerRepo;
-import com.example.myhouse24admin.validators.socialsValidation.telegram.TelegramFieldUnique;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
+import java.util.Optional;
 
 public class TelegramFieldUniqueValidator implements ConstraintValidator<TelegramFieldUnique, String> {
     private final ApartmentOwnerRepo apartmentOwnerRepo;
@@ -14,6 +16,8 @@ public class TelegramFieldUniqueValidator implements ConstraintValidator<Telegra
 
     @Override
     public boolean isValid(String telegramUsername, ConstraintValidatorContext constraintValidatorContext) {
-        return telegramUsername.isEmpty()? true : !apartmentOwnerRepo.existsApartmentOwnerByTelegramUsername(telegramUsername);
+        if(telegramUsername.isEmpty()) return true;
+        Optional<ApartmentOwner> apartmentOwner = apartmentOwnerRepo.findByTelegramUsernameAndDeletedIsFalse(telegramUsername);
+        return apartmentOwner.isEmpty();
     }
 }

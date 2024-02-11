@@ -29,13 +29,13 @@ public class ApartmentOwner {
     private OwnerStatus status;
     @Column(name = "about_owner", length = 300, nullable = false)
     private String aboutOwner;
-    @Column(name = "phone_number",length = 13, nullable = false, unique = true)
+    @Column(name = "phone_number",length = 13, nullable = false)
     private String phoneNumber;
     @Column(name = "viber_number",length = 13)
     private String viberNumber;
     @Column(name = "telegram_username",length = 50)
     private String telegramUsername;
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false)
     private String email;
     @Column(length = 200, nullable = false)
     private String avatar;

@@ -28,7 +28,7 @@ public class EditEmailFieldUniqueValidator implements ConstraintValidator<EditEm
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Long> map = objectMapper
                 .convertValue(object, new TypeReference<Map<String, Long>>() {});
-        Optional<ApartmentOwner> apartmentOwner = apartmentOwnerRepo.findByEmail(email);
+        Optional<ApartmentOwner> apartmentOwner = apartmentOwnerRepo.findByEmailAndDeletedIsFalse(email);
         if(apartmentOwner.isPresent() && !apartmentOwner.get().getId().equals(map.get("id"))) return false;
         return true;
     }

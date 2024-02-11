@@ -28,7 +28,7 @@ public class EditViberFieldUniqueValidator implements ConstraintValidator<EditVi
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Long> map = objectMapper
                 .convertValue(object, new TypeReference<Map<String, Long>>() {});
-        Optional<ApartmentOwner> apartmentOwner = apartmentOwnerRepo.findByViberNumber(viber);
+        Optional<ApartmentOwner> apartmentOwner = apartmentOwnerRepo.findByViberNumberAndDeletedIsFalse(viber);
         if(apartmentOwner.isPresent() && !apartmentOwner.get().getId().equals(map.get("id"))) return false;
         return true;
     }

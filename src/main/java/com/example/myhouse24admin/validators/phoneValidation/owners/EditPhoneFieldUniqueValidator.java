@@ -27,7 +27,7 @@ public class EditPhoneFieldUniqueValidator implements ConstraintValidator<EditPh
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Long> map = objectMapper
                 .convertValue(object, new TypeReference<Map<String, Long>>() {});
-        Optional<ApartmentOwner> apartmentOwner = apartmentOwnerRepo.findByPhoneNumber(phoneNumber);
+        Optional<ApartmentOwner> apartmentOwner = apartmentOwnerRepo.findByPhoneNumberAndDeletedIsFalse(phoneNumber);
         if(apartmentOwner.isPresent() && !apartmentOwner.get().getId().equals(map.get("id"))) return false;
         return true;
     }

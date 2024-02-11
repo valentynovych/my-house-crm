@@ -8,14 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface ApartmentOwnerRepo extends JpaRepository<ApartmentOwner,Long>, JpaSpecificationExecutor<ApartmentOwner> {
-    boolean existsApartmentOwnerByEmail(String email);
-    boolean existsApartmentOwnerByPhoneNumber(String phoneNumber);
-    boolean existsApartmentOwnerByViberNumber(String viberNumber);
-    boolean existsApartmentOwnerByTelegramUsername(String telegramUsername);
-    Optional<ApartmentOwner> findByEmail(String email);
-    Optional<ApartmentOwner> findByPhoneNumber(String phoneNumber);
-    Optional<ApartmentOwner> findByViberNumber(String viberNumber);
-    Optional<ApartmentOwner> findByTelegramUsername(String telegramUsername);
+    Optional<ApartmentOwner> findByEmailAndDeletedIsFalse (String email);
+    Optional<ApartmentOwner> findByPhoneNumberAndDeletedIsFalse(String phoneNumber);
+    Optional<ApartmentOwner> findByViberNumberAndDeletedIsFalse(String viberNumber);
+    Optional<ApartmentOwner> findByTelegramUsernameAndDeletedIsFalse(String telegramUsername);
     @Query(value = "SELECT * FROM apartment_owners WHERE deleted = false ORDER BY id DESC LIMIT 1", nativeQuery = true)
     ApartmentOwner findLast();
 
