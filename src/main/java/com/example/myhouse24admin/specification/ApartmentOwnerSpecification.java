@@ -14,7 +14,7 @@ public interface ApartmentOwnerSpecification {
     }
     static Specification<ApartmentOwner> byOwnerId(String ownerId){
         return (root, query, builder) ->
-                builder.equal(root.get("ownerId"), ownerId);
+                builder.like(builder.upper(root.get("ownerId")), "%"+ownerId.toUpperCase()+"%");
     }
     static Specification<ApartmentOwner> byFirstName(String firstName){
         return (root, query, builder) ->
