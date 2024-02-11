@@ -40,14 +40,14 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/node-waves/node-waves.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
-    <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}"/>
-    <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-auth.css}" />
-    <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-misc.css}" />
-    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}" />
-    <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/typography.css}" />
-    <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/katex.css}" />
-    <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/editor.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-auth.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-misc.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/typography.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/katex.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/editor.css}"/>
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
@@ -61,10 +61,9 @@
                 position: static !important;
             }
         }
-        @media (min-width: 768px) {
-            .table-responsive {
-                overflow: visible;
-            }
+
+        .select2-container--open {
+            max-width: 30vw;
         }
     </style>
 </head>
@@ -426,7 +425,7 @@
 <script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
 <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/i18n/uk.js"></script>
-<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"> </script>
+<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
 <script th:src="@{/assets/vendor/libs/autosize/autosize.js}"></script>
 <script th:src="@{/assets/vendor/libs/cleavejs/cleave.js}"></script>
 <script th:src="@{/assets/vendor/libs/moment/moment.js}"></script>
