@@ -12,9 +12,9 @@ public interface ApartmentOwnerSpecification {
         return (root, query, builder) ->
             builder.equal(root.get("deleted"), false);
     }
-    static Specification<ApartmentOwner> byId(Long id){
+    static Specification<ApartmentOwner> byOwnerId(String ownerId){
         return (root, query, builder) ->
-                builder.equal(root.get("id"), false);
+                builder.equal(root.get("ownerId"), ownerId);
     }
     static Specification<ApartmentOwner> byFirstName(String firstName){
         return (root, query, builder) ->

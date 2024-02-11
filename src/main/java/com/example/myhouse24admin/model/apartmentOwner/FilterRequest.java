@@ -3,7 +3,7 @@ package com.example.myhouse24admin.model.apartmentOwner;
 import com.example.myhouse24admin.entity.OwnerStatus;
 
 public record FilterRequest(
-        Long id,
+        String ownerId,
         String fullName,
         String phoneNumber,
         String email,

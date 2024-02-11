@@ -6,16 +6,14 @@ import com.example.myhouse24admin.model.apartmentOwner.*;
 import com.example.myhouse24admin.repository.ApartmentOwnerRepo;
 import com.example.myhouse24admin.service.ApartmentOwnerService;
 import com.example.myhouse24admin.service.MailService;
+import com.example.myhouse24admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,20 +37,19 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
     private final ApartmentOwnerMapper apartmentOwnerMapper;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
-    private final ResourceLoader resourceLoader;
+    private final UploadFileUtil uploadFileUtil;
     private final Logger logger = LogManager.getLogger(ApartmentOwnerServiceImpl.class);
-    private String uploadPath = "C:\\Users\\Anastassia\\IdeaProjects\\MyHouse24-Admin\\uploads";
 
     public ApartmentOwnerServiceImpl(ApartmentOwnerRepo apartmentOwnerRepo,
                                      ApartmentOwnerMapper apartmentOwnerMapper,
                                      PasswordEncoder passwordEncoder,
                                      MailService mailService,
-                                     ResourceLoader resourceLoader) {
+                                     UploadFileUtil uploadFileUtil) {
         this.apartmentOwnerRepo = apartmentOwnerRepo;
         this.apartmentOwnerMapper = apartmentOwnerMapper;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
-        this.resourceLoader = resourceLoader;
+        this.uploadFileUtil = uploadFileUtil;
     }
 
     @Override
@@ -60,27 +57,40 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         logger.info("createApartmentOwner - Creating apartment owner");
         String savedImageName = saveImage(avatar);
         ApartmentOwner apartmentOwner = apartmentOwnerMapper.apartmentOwnerRequestToApartmentOwner(createApartmentOwnerRequest, passwordEncoder.encode(createApartmentOwnerRequest.password()), savedImageName);
+        if(apartmentOwner.getOwnerId().isEmpty()){
+            String newOwnerId = createOwnerId();
+            apartmentOwner.setOwnerId(newOwnerId);
+        }
         apartmentOwnerRepo.save(apartmentOwner);
         logger.info("createApartmentOwner - Apartment owner was created");
     }
     private String saveImage(MultipartFile multipartFile){
-        createUploadDirectoryIfNotExist();
         if(multipartFile == null){
-            return saveDefaultImage();
+            return uploadFileUtil.saveDefaultOwnerImage();
         }
-        return saveMultipartFileToDirectory(multipartFile);
+        return uploadFileUtil.saveFile(multipartFile);
     }
 
-    private String saveDefaultImage() {
-        File file = new File(uploadPath+"\\defaultAvatar.png");
-        Resource resource = resourceLoader.getResource("classpath:static/assets/img/avatars/1.png");
-        try {
-            InputStream stream = resource.getInputStream();
-            FileUtils.copyInputStreamToFile(stream, file);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    String createOwnerId(){
+        if (isTableEmpty()){
+            return "00001";
+        } else {
+            return createNewOwnerId();
         }
-        return "defaultAvatar.png";
+    }
+    private boolean isTableEmpty(){
+        return apartmentOwnerRepo.count() == 0;
+    }
+    private String createNewOwnerId(){
+        ApartmentOwner apartmentOwner = apartmentOwnerRepo.findLast();
+        String ownerId = apartmentOwner.getOwnerId();
+        Integer numberPart = Integer.valueOf(ownerId);
+        numberPart +=1;
+        String newOwnerId = "";
+        for(int i = 0; i < 5-numberPart.toString().length(); i++){
+            newOwnerId += "0";
+        }
+        return newOwnerId + numberPart;
     }
 
 
@@ -111,8 +121,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
 
     private void updateImage(MultipartFile multipartFile, ApartmentOwner apartmentOwner) {
         if(multipartFile != null) {
-            createUploadDirectoryIfNotExist();
-            String createdImageName = saveMultipartFileToDirectory(multipartFile);
+            String createdImageName = uploadFileUtil.saveFile(multipartFile);
             apartmentOwner.setAvatar(createdImageName);
         }
     }
@@ -130,8 +139,8 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
 
     private Page<ApartmentOwner> getFilteredOwners(Pageable pageable, FilterRequest filterRequest) {
         Specification<ApartmentOwner> ownerSpecification = Specification.where(byDeleted());
-        if(filterRequest.id() != null){
-            ownerSpecification = ownerSpecification.and(byId(filterRequest.id()));
+        if(!filterRequest.ownerId().isEmpty()){
+            ownerSpecification = ownerSpecification.and(byOwnerId(filterRequest.ownerId()));
         }
         if(!filterRequest.phoneNumber().isEmpty()){
             ownerSpecification = ownerSpecification.and(byPhoneNumber(filterRequest.phoneNumber()));
@@ -175,23 +184,4 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         return viewApartmentOwnerResponse;
     }
 
-
-    void createUploadDirectoryIfNotExist(){
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()){
-            uploadDir.mkdir();
-        }
-    }
-
-    private String saveMultipartFileToDirectory(MultipartFile multipartFile){
-        String uuidFile = UUID.randomUUID().toString();
-        String uniqueName = uuidFile + "." + multipartFile.getOriginalFilename();
-        Path path = Paths.get(uploadPath + "/" + uniqueName);
-        try {
-            multipartFile.transferTo(new File(path.toUri()));
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        return uniqueName;
-    }
 }

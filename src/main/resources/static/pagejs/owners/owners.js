@@ -4,7 +4,7 @@ let entryId;
 let request = {
     page: 0,
     pageSize: tableLength,
-    id: "",
+    ownerId: "",
     fullName: "",
     phoneNumber: "",
     email: "",
@@ -72,7 +72,7 @@ function initializeFlatPickr() {
 }
 
 $("#filter-by-id").on("input", function () {
-    request.id = $(this).val();
+    request.ownerId = $(this).val();
     searchAfterDelay();
 });
 $("#filter-by-fullName").on("input", function () {
@@ -143,7 +143,7 @@ function drawTable(response) {
             $("tbody")
                 .append(
                     `<tr class="tr text-nowrap clickable-row" onclick="showOwner(this)" data-href="owners/view-owner/${owner.id}">
-                    <td>${owner.id}</td>
+                    <td>${owner.ownerId}</td>
                     <td>${owner.fullName}</td>
                     <td>${owner.phoneNumber}</td>
                     <td>${owner.email}</td>

@@ -5,6 +5,7 @@ import com.example.myhouse24admin.entity.OwnerStatus;
 import java.time.Instant;
 
 public record ApartmentOwnerResponse(
+        String ownerId,
         String firstName,
         String lastName,
         String middleName,

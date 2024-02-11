@@ -4,6 +4,7 @@ import com.example.myhouse24admin.entity.OwnerStatus;
 
 public record TableApartmentOwnerResponse(
         Long id,
+        String ownerId,
         String fullName,
         String phoneNumber,
         String email,

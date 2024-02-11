@@ -3,7 +3,7 @@ package com.example.myhouse24admin.model.apartmentOwner;
 import com.example.myhouse24admin.entity.OwnerStatus;
 
 public record ViewApartmentOwnerResponse(
-        Long id,
+        String ownerId,
         String firstName,
         String lastName,
         String middleName,
