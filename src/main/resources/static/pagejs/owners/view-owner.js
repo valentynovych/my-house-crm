@@ -1,7 +1,7 @@
 let url = window.location.pathname;
 let id = url.substring(url.lastIndexOf('/') + 1);
 $(document).ready(function () {
-    $("#current-owner-link").attr("href","owners/edit/"+id);
+    $("#current-owner-link").attr("href","../edit/"+id);
     getOwnerForView();
 });
 
@@ -10,7 +10,7 @@ function getOwnerForView() {
         type: "GET",
         url: "get/"+id,
         success: function (response) {
-            // console.log(response);
+            console.log(response);
             setFields(response);
         },
         error: function () {
