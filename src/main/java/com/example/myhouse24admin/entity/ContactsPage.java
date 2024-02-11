@@ -26,9 +26,9 @@ public class ContactsPage {
     private String email;
     @Column(name = "map_code",length = 100, nullable = false)
     private String mapCode;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "seo_id", referencedColumnName = "id", nullable = false)
-    private SEO seo;
+    private Seo seo;
 
     public Long getId() {
         return id;
@@ -110,11 +110,11 @@ public class ContactsPage {
         this.mapCode = mapCode;
     }
 
-    public SEO getSeo() {
+    public Seo getSeo() {
         return seo;
     }
 
-    public void setSeo(SEO seo) {
+    public void setSeo(Seo seo) {
         this.seo = seo;
     }
 }

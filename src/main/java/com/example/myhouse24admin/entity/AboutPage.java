@@ -20,7 +20,7 @@ public class AboutPage {
     private String directorImage;
     @OneToOne
     @JoinColumn(name = "seo_id", referencedColumnName = "id", nullable = false)
-    private SEO seo;
+    private Seo seo;
 
     public Long getId() {
         return id;
@@ -70,11 +70,11 @@ public class AboutPage {
         this.directorImage = directorImage;
     }
 
-    public SEO getSeo() {
+    public Seo getSeo() {
         return seo;
     }
 
-    public void setSeo(SEO seo) {
+    public void setSeo(Seo seo) {
         this.seo = seo;
     }
 }

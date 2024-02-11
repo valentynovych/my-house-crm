@@ -22,7 +22,7 @@ public class MainPage {
     private String image3;
     @OneToOne
     @JoinColumn(name = "seo_id", referencedColumnName = "id", nullable = false)
-    private SEO seo;
+    private Seo seo;
 
     public Long getId() {
         return id;
@@ -80,11 +80,11 @@ public class MainPage {
         this.image3 = image3;
     }
 
-    public SEO getSeo() {
+    public Seo getSeo() {
         return seo;
     }
 
-    public void setSeo(SEO seo) {
+    public void setSeo(Seo seo) {
         this.seo = seo;
     }
 }

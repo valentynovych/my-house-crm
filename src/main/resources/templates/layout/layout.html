@@ -45,6 +45,9 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-auth.css}" />
     <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-misc.css}" />
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/typography.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/katex.css}" />
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/editor.css}" />
 
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
@@ -199,22 +202,22 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a th:href="@{/admin/site-management/mainPage}" class="menu-link">
+                            <a th:href="@{/admin/site-management/main-page}" class="menu-link">
                                 <div data-i18n="Roles" th:text="#{menu-item-home-page}">Головна сторінка</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/admin/site-management/aboutPage}" class="menu-link">
+                            <a th:href="@{/admin/site-management/about-page}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-about-us}">Про нас</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/admin/site-management/servicePage}" class="menu-link">
+                            <a th:href="@{/admin/site-management/service-page}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-services-page}">Послуги</div>
                             </a>
                         </li>
                         <li class="menu-item">
-                            <a th:href="@{/admin/site-management/contactsPage}" class="menu-link">
+                            <a th:href="@{/admin/site-management/contacts-page}" class="menu-link">
                                 <div data-i18n="Permission" th:text="#{menu-item-contacts}">Контакти</div>
                             </a>
                         </li>
@@ -363,9 +366,7 @@
                         </li>
                         <li class="nav-item me-3">
                             <div sec:authentication="principal.fullName"></div>
-                            <div th:each="authority : ${#authentication?.getAuthorities()}"
-                                 th:if="${authority?.getAuthority().startsWith('ROLE_')}"
-                                 th:text="${authority?.getAuthority().replaceFirst('ROLE_', '')}"></div>
+                            <div id="roleName"></div>
 
                         </li>
                         <li class="nav-item">
@@ -414,6 +415,11 @@
     const errorMessage = [[#{toastr-error-message}]];
     const logoutModalMessage = [[#{logout-modal-message}]]
     const logoutModalYes = [[#{logout-modal-yes}]]
+    const directorRole = [[#{staff-role-director}]];
+    const managerRole = [[#{staff-role-manager}]];
+    const accountantRole = [[#{staff-role-accountant}]];
+    const electricianRole = [[#{staff-role-electrician}]];
+    const plumberRole = [[#{staff-role-plumber}]];
 </script>
 <script th:src="@{/pagejs/layout/layout.js}"></script>
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
@@ -427,6 +433,8 @@
 <script th:src="@{/assets/vendor/libs/flatpickr/flatpickr.js}"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/uk.js"></script>
 <script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
+<script th:src="@{/assets/vendor/libs/quill/katex.js}"></script>
+<script th:src="@{/assets/vendor/libs/quill/quill.js}"></script>
 
 <script th:src="@{/assets/vendor/js/menu.js}"></script>
 <!-- endbuild -->

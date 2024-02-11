@@ -10,7 +10,7 @@ public class ServicesPage {
     private Long id;
     @OneToOne
     @JoinColumn(name = "seo_id", referencedColumnName = "id", nullable = false)
-    private SEO seo;
+    private Seo seo;
 
     public Long getId() {
         return id;
@@ -20,11 +20,11 @@ public class ServicesPage {
         this.id = id;
     }
 
-    public SEO getSeo() {
+    public Seo getSeo() {
         return seo;
     }
 
-    public void setSeo(SEO seo) {
+    public void setSeo(Seo seo) {
         this.seo = seo;
     }
 }
