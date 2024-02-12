@@ -1,4 +1,5 @@
 let lastServiceIndex = 0;
+let serviceListToRestore;
 
 $(document).ready(getServices);
 $('[aria-controls="navs-services"]').on('click', getServices);
@@ -9,7 +10,7 @@ function getServices() {
         type: 'get',
         url: 'services/get-services',
         success: function (response) {
-            console.log(response)
+            serviceListToRestore = response;
             drawFormServices(response);
             unblockBy('#servicesForm');
         },
@@ -25,7 +26,7 @@ function drawFormServices(listService) {
         lastServiceIndex = listService.length;
         let i = 0;
         for (const service of serviceArray) {
-            $(`<div class="row g-4 service-item" id="service-${i}">
+            let $service = $(`<div class="row g-4 service-item" id="service-${i}">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="services[${i}].name">${serviceLabel}</label>
                                     <input class="form-control" type="text" name="services[${i}].name"
@@ -51,13 +52,15 @@ function drawFormServices(listService) {
                                             ${useOnServiceLabel}</label>
                                     </div>
                                 </div>
-                            </div>`).appendTo('.service-list');
-            const currentService = $('#service-' + i);
-            currentService.find('input.form-check-input').prop('checked', service.showInMeter);
-            currentService.find('select').select2({
+                            </div>`);
+            $service.hide();
+            $service.appendTo('.service-list');
+            $service.show('');
+            $service.find('input.form-check-input').prop('checked', service.showInMeter);
+            $service.find('select').select2({
                 placeholder: unitLabel,
                 minimumResultsForSearch: -1,
-                dropdownParent: currentService,
+                dropdownParent: $service,
                 data: [{
                     id: service.unitOfMeasurement.id,
                     text: service.unitOfMeasurement.name
@@ -82,7 +85,7 @@ function drawFormServices(listService) {
     } else {
         addNewService();
     }
-    $('.delete-unit').on('click', deleteService);
+    $('.delete-service').on('click', deleteService);
 }
 
 $('#add-service').on('click', addNewService);
@@ -115,7 +118,10 @@ function addNewService() {
                                     </div>
                                 </div>
                             </div>`);
+    $service.hide();
     $service.appendTo('.service-list');
+    $service.show('');
+
     $service.find('.delete-service').on('click', deleteService);
     $service.find('select').select2({
         placeholder: unitLabel,
@@ -148,9 +154,11 @@ function deleteService() {
     if (serviceIdToDelete) {
         serviceToDelete.push(Number(serviceIdToDelete));
     }
-    serviceItemBlock.remove();
-
-    reorderServiceIndexes();
+    serviceItemBlock.hide('');
+    setTimeout(function () {
+        serviceItemBlock.remove();
+        reorderServiceIndexes();
+    }, 500)
 }
 
 function reorderServiceIndexes() {
@@ -171,7 +179,7 @@ $('#save-services').on('click', function () {
     clearAllErrorMessage();
 
     let formData = new FormData($('#servicesForm')[0]);
-    $('input.form-check-input').each( function (i, input) {
+    $('input.form-check-input').each(function (i, input) {
         formData.set($(input).attr('name'), $(input).prop('checked'));
     })
     for (const servicesToDeleteElement of serviceToDelete) {
@@ -200,9 +208,13 @@ $('#save-services').on('click', function () {
     });
 });
 
+$('#servicesForm .button-cancel').on('click', function () {
+    drawFormServices(serviceListToRestore);
+})
 
 // ### Units of measurement
 let lastUnitIndex = 0;
+let listUnitsToRestore;
 
 $('[aria-controls="navs-units"]').on('click', function () {
     blockBy('#measurementUnist');
@@ -210,6 +222,7 @@ $('[aria-controls="navs-units"]').on('click', function () {
         type: 'get',
         url: 'services/get-measurement-units',
         success: function (response) {
+            listUnitsToRestore = response;
             drawFormUnits(response);
             unblockBy('#measurementUnist');
         },
@@ -217,38 +230,38 @@ $('[aria-controls="navs-units"]').on('click', function () {
             unblockBy('#measurementUnist');
         }
     });
-
-    function drawFormUnits(listUnits) {
-        $('.unit-item-list').empty();
-        const unitsArray = Array.from(listUnits);
-        if (listUnits.length > 0) {
-            lastUnitIndex = listUnits.length;
-            let i = 0;
-            for (const unit of unitsArray) {
-                $(`<div class="row g-4 unit-item" id="item-${i}">\n` +
-                    `   <div class="mb-3 col-md-6" >\n` +
-                    `        <label class="form-label">${unitLabel}</label>\n` +
-                    `        <div class="input-group">\n` +
-                    `             <input class="form-control" type="text" name="unitOfMeasurements[${i}].name" \n` +
-                    `                 id="unitOfMeasurements[${i}].name" value="${unit.name}" \n` +
-                    `                    placeholder="${unitLabel}">\n` +
-                    `             <button type="button" class="btn btn-outline-danger input-group-text delete-unit">\n` +
-                    `                     <i class="ti ti-trash ti-xs me-1"></i>\n` +
-                    `                     <span class="align-middle"></span>\n` +
-                    `             </button>\n` +
-                    `         </div>\n` +
-                    `         <input type="number" class="visually-hidden unit-id" id="unitOfMeasurements[${i}].id"` +
-                    `                 name="unitOfMeasurements[${i}].id" value="${unit.id}">\n` +
-                    `   </div>\n` +
-                    `</div>`).appendTo('.unit-item-list');
-                i++;
-            }
-        } else {
-            addNewUnit();
-        }
-        $('.delete-unit').on('click', deleteUnits);
-    }
 });
+
+function drawFormUnits(listUnits) {
+    $('.unit-item-list').empty();
+    const unitsArray = Array.from(listUnits);
+    if (listUnits.length > 0) {
+        lastUnitIndex = listUnits.length;
+        let i = 0;
+        for (const unit of unitsArray) {
+            $(`<div class="row g-4 unit-item" id="item-${i}">\n` +
+                `   <div class="mb-3 col-md-6" >\n` +
+                `        <label class="form-label">${unitLabel}</label>\n` +
+                `        <div class="input-group">\n` +
+                `             <input class="form-control" type="text" name="unitOfMeasurements[${i}].name" \n` +
+                `                 id="unitOfMeasurements[${i}].name" value="${unit.name}" \n` +
+                `                    placeholder="${unitLabel}">\n` +
+                `             <button type="button" class="btn btn-outline-danger input-group-text delete-unit">\n` +
+                `                     <i class="ti ti-trash ti-xs me-1"></i>\n` +
+                `                     <span class="align-middle"></span>\n` +
+                `             </button>\n` +
+                `         </div>\n` +
+                `         <input type="number" class="visually-hidden unit-id" id="unitOfMeasurements[${i}].id"` +
+                `                 name="unitOfMeasurements[${i}].id" value="${unit.id}">\n` +
+                `   </div>\n` +
+                `</div>`).appendTo('.unit-item-list');
+            i++;
+        }
+    } else {
+        addNewUnit();
+    }
+    $('.delete-unit').on('click', deleteUnits);
+}
 
 $('#add-unit').on('click', addNewUnit);
 
@@ -270,7 +283,9 @@ function addNewUnit() {
         `                 name="unitOfMeasurements[${lastUnitIndex}].id">\n` +
         `   </div>\n` +
         `</div>`);
+    $item.hide('');
     $item.appendTo('.unit-item-list');
+    $item.show('');
     $item.find('.delete-unit').on('click', deleteUnits);
 
     lastUnitIndex++;
@@ -284,10 +299,12 @@ function deleteUnits() {
     if (unitIdToDelete) {
         unitsToDelete.push(Number(unitIdToDelete));
     }
-    unitItemBlock.empty();
-    unitItemBlock.remove();
 
-    reorderIndexes();
+    unitItemBlock.hide('');
+    setTimeout(function () {
+        unitItemBlock.remove();
+        reorderIndexes();
+    }, 500)
 }
 
 function reorderIndexes() {
@@ -334,3 +351,7 @@ $('#save-units').on('click', function () {
         }
     });
 });
+
+$('#measurementUnist .button-cancel').on('click', function () {
+    drawFormUnits(listUnitsToRestore);
+})
