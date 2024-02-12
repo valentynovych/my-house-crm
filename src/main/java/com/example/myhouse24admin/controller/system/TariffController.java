@@ -9,8 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("admin/system-settings/tariffs")
@@ -28,8 +31,10 @@ public class TariffController {
     }
 
     @GetMapping("add")
-    public ModelAndView viewAddTariff() {
-        return new ModelAndView("system/tariffs/add-tariff");
+    public ModelAndView viewAddTariff(ModelMap model,
+                                      @ModelAttribute("copyTariff") TariffResponse copyTariff) {
+        model.addAttribute("copyTariff", copyTariff);
+        return new ModelAndView("system/tariffs/add-tariff", model);
     }
 
     @GetMapping("edit-tariff/{tariffId}")
@@ -74,5 +79,12 @@ public class TariffController {
         return isDeleted
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("copy-tariff/{tariffId}")
+    public RedirectView copyTariffById(@PathVariable Long tariffId, RedirectAttributes attributes) {
+        TariffResponse tariffById = tariffService.getTariffById(tariffId);
+        attributes.addFlashAttribute("copyTariff", tariffById);
+        return new RedirectView("/admin/system-settings/tariffs/add", true);
     }
 }

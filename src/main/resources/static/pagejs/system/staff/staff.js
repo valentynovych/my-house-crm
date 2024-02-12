@@ -9,8 +9,10 @@ let timer;
 
 let $role = $('#filter-by-role');
 $role.select2({
-    dropdownParent: $('#filterRoleWrapper'),
+    dropdownParent: $('#dropdownParent'),
+    placeholder: '',
     minimumResultsForSearch: -1,
+    allowClear: true,
     ajax: {
         type: "GET",
         url: 'staff/get-roles',
@@ -29,8 +31,11 @@ $role.select2({
 
 let $status = $('#filter-by-status');
 $status.select2({
-    dropdownParent: $('#filterStatusWrapper'),
+    debug: true,
+    dropdownParent: $('#dropdownParent'),
     minimumResultsForSearch: -1,
+    placeholder: '',
+    allowClear: true,
     ajax: {
         type: "GET",
         url: 'staff/get-statuses',
