@@ -67,7 +67,7 @@ function showMenuItems(permissions) {
 
 $("#logoutLink").on("click", function (e) {
     e.preventDefault();
-    if($('#logoutModal').length === 0) {
+    if ($('#logoutModal').length === 0) {
         $("div.card").append(
             `<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -96,3 +96,9 @@ $("#logoutLink").on("click", function (e) {
 function logout() {
     window.location = $('#logoutLink').attr('href');
 }
+
+$(document).ready( function () {
+    $('img').on('error', function () {
+        $(this).attr('src', defaultPlaceholderImage);
+    })
+})
