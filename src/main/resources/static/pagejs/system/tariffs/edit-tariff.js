@@ -48,6 +48,7 @@ function dynamicTitle(secondPart) {
 }
 
 function fillInputs(tariff) {
+    $('.tariff-items-list').children().remove();
     dynamicTitle(tariff.name);
     $('input[name="tariffRequest.id"]').val(tariff.id);
     $('input[name="tariffRequest.name"]').val(tariff.name);
