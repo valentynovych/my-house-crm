@@ -5,7 +5,7 @@
       xmlns:th="http://www.thymeleaf.org"
 >
 <head>
-    <title th:text="#{payment-items-title}"></title>
+    <title th:text="#{menu-item-tariffs}"></title>
 </head>
 <body>
 <div layout:fragment="breadcrumb">
@@ -68,6 +68,7 @@
 <script layout:fragment="script" th:src="@{/pagejs/system/tariffs/tariffs.js}"></script>
 <script layout:fragment="initThymeleafVarianle" th:inline="javascript">
     const buttonEdit = /*[[#{general-button-edit}]]*/ 'default';
+    const buttonCopy = /*[[#{general-button-copy}]]*/ 'default';
     const buttonDelete = /*[[#{general-button-delete}]]*/ 'default';
 
     const successMessageOnDelete = /*[[#{staff-message-success-delete}]]*/ 'default';

@@ -40,6 +40,9 @@ function drawTable(result) {
                     <i class="ti ti-dots-vertical"></i>
                 </button>
                 <div class="dropdown-menu">
+                    <a class="dropdown-item" href="tariffs/copy-tariff/${tariff.id}">
+                        <i class="ti ti-copy me-1"></i>${buttonCopy}
+                    </a>
                     <a class="dropdown-item" href="tariffs/edit-tariff/${tariff.id}">
                         <i class="ti ti-pencil me-1"></i>${buttonEdit}
                     </a>
