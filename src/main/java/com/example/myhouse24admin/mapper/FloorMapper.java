@@ -6,6 +6,8 @@ import com.example.myhouse24admin.model.houses.FloorResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface FloorMapper {
@@ -15,4 +17,6 @@ public interface FloorMapper {
     FloorRequest floorToFloorRequest(Floor floor);
 
     FloorResponse floorToFloorResponse(Floor floor);
+
+    List<FloorResponse> floorListToFloorResponseList(List<Floor> content);
 }

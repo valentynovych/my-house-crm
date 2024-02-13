@@ -6,8 +6,6 @@ import com.example.myhouse24admin.model.houses.SectionRequest;
 import com.example.myhouse24admin.model.houses.SectionResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -21,4 +19,6 @@ public interface SectionMapper {
     SectionRequest sectionToSectionRequest(Section section);
 
     SectionResponse sectionToSectionResponse(Section section);
+
+    List<SectionResponse> sectionListToSectionResponseList(List<Section> content);
 }

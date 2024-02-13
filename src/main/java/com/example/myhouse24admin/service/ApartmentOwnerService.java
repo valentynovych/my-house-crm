@@ -11,4 +11,6 @@ public interface ApartmentOwnerService {
     Page<TableApartmentOwnerResponse> getApartmentOwnerResponsesForTable(int page, int pageSize, FilterRequest filterRequest);
     void deleteOwnerById(Long id);
     ViewApartmentOwnerResponse getApartmentOwnerResponseForView(Long id);
+
+    Page<ApartmentOwnerShortResponse> getShortResponseOwners(int page, int pageSize, String fullName);
 }

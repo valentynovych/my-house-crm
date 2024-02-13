@@ -31,35 +31,40 @@ public class ApartmentOwnerController {
     public @ResponseBody Page<TableApartmentOwnerResponse> getOwners(@RequestParam(name = "page") int page,
                                                                      @RequestParam(name = "pageSize") int pageSize,
                                                                      FilterRequest filterRequest) {
-        return apartmentOwnerService.getApartmentOwnerResponsesForTable(page,pageSize,filterRequest);
+        return apartmentOwnerService.getApartmentOwnerResponsesForTable(page, pageSize, filterRequest);
     }
+
     @GetMapping("/add")
     public ModelAndView getOwnerPageForCreate() {
         ModelAndView modelAndView = new ModelAndView("owners/owner");
         modelAndView.addObject("statusLink", "get-statuses");
         return modelAndView;
     }
+
     @GetMapping("/get-statuses")
-    public @ResponseBody OwnerStatus[] getOwnerStatuses(){
+    public @ResponseBody OwnerStatus[] getOwnerStatuses() {
         return OwnerStatus.values();
     }
+
     @PostMapping("/add")
     public @ResponseBody ResponseEntity<?> createOwner(@Valid @ModelAttribute CreateApartmentOwnerRequest createApartmentOwnerRequest,
                                                        @RequestParam(name = "avatar", required = false) MultipartFile avatar,
-                                                       HttpServletRequest request){
+                                                       HttpServletRequest request) {
         apartmentOwnerService.createApartmentOwner(createApartmentOwnerRequest, avatar);
         String url = request.getRequestURL().toString();
         int index = url.lastIndexOf("/");
-        String returnUrl = url.substring(0,index);
+        String returnUrl = url.substring(0, index);
         return new ResponseEntity<>(returnUrl, HttpStatus.OK);
 
     }
+
     @GetMapping("/edit/{id}")
     public ModelAndView getOwnerPageForEdit() {
         ModelAndView modelAndView = new ModelAndView("owners/owner");
         modelAndView.addObject("statusLink", "../get-statuses");
         return modelAndView;
     }
+
     @GetMapping("/edit/get-owner/{id}")
     public @ResponseBody ApartmentOwnerResponse getOwnerForEdit(@PathVariable Long id) {
         return apartmentOwnerService.getApartmentOwnerResponse(id);
@@ -70,26 +75,37 @@ public class ApartmentOwnerController {
                                                        @Valid @ModelAttribute
                                                        EditApartmentOwnerRequest editApartmentOwnerRequest,
                                                        @RequestParam(name = "avatar", required = false)
-                                                           MultipartFile avatar,
+                                                       MultipartFile avatar,
                                                        HttpServletRequest request) {
-        apartmentOwnerService.updateApartmentOwner(editApartmentOwnerRequest,id,avatar);
+        apartmentOwnerService.updateApartmentOwner(editApartmentOwnerRequest, id, avatar);
         String url = request.getRequestURL().toString();
         int index = url.lastIndexOf("/");
-        url = url.substring(0,index-5);
+        url = url.substring(0, index - 5);
         return new ResponseEntity<>(url, HttpStatus.OK);
     }
+
     @GetMapping("/delete/{id}")
     public @ResponseBody ResponseEntity<?> deleteOwner(@PathVariable Long id) {
         apartmentOwnerService.deleteOwnerById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping("/view-owner/{id}")
     public ModelAndView getViewOwnerPage() {
         return new ModelAndView("owners/view-owner");
     }
+
     @GetMapping("/view-owner/get/{id}")
     public @ResponseBody ViewApartmentOwnerResponse getViewOwner(@PathVariable Long id) {
         return apartmentOwnerService.getApartmentOwnerResponseForView(id);
     }
 
+    @GetMapping("get-owners")
+    public @ResponseBody ResponseEntity<?> getOwnersShortDetails(@RequestParam int page,
+                                                                 @RequestParam int pageSize,
+                                                                 @RequestParam String fullName) {
+        Page<ApartmentOwnerShortResponse> responsePage =
+                apartmentOwnerService.getShortResponseOwners(page, pageSize, fullName);
+        return new ResponseEntity<>(responsePage, HttpStatus.OK);
+    }
 }

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{menu-item-apartments}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{menu-item-apartments}"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page} + ' / '"></span>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{menu-item-apartments}"></span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body" id="dropdownParent">
+        <div class="mb-3 d-flex justify-content-end">
+            <a th:href="@{apartments/add}" class="btn btn-primary me-2">
+                <span class="tf-icons ti-xs ti ti-plus me-1"></span>
+                <span th:text="#{apartments-button-add}"></span>
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th colspan="7" class="p-1">
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary clear-filters"
+                                    th:text="#{general-button-clear-table}">Clear
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="table-primary text-center">
+                    <th th:text="#{apartments-label-apartment-number}"></th>
+                    <th th:text="#{apartments-label-house}"></th>
+                    <th th:text="#{apartments-label-section}"></th>
+                    <th th:text="#{apartments-label-floor}"></th>
+                    <th th:text="#{apartments-label-apartment-owner}"></th>
+                    <th th:text="#{apartments-label-balance}"></th>
+                    <th th:text="#{general-table-action}"></th>
+                </tr>
+                <tr>
+                    <td><input type="text" id="filter-by-number" class="form-control"></td>
+                    <td style="min-width: 13rem">
+                        <div>
+                            <select class="form-select select2" id="filter-by-house"></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 13rem">
+                        <div>
+                            <select class="form-select select2" id="filter-by-section"></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 13rem">
+                        <div>
+                            <select class="form-select select2" id="filter-by-floor"></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 13rem">
+                        <div>
+                            <select class="form-select select2" id="filter-by-owner"></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 12rem">
+                        <div>
+                            <select class="form-select select2" id="filter-by-balance"></select>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="#{staff-modal-delete-title}"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{staff-modal-delete-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete"
+                            th:text="#{general-button-delete}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/apartments/apartments.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    const buttonLabelEdit = /*[[#{general-button-edit}]]*/ 'default';
+    const buttonLabelDelete = /*[[#{general-button-delete}]]*/ 'default';
+    const successMessageOnDelete = /*[[#{staff-message-success-delete}]]*/ 'default';
+    const errorMessageOnDelete = /*[[#{staff-message-error-delete}]]*/ 'default';
+
+    const tableShow = [[#{table-show}]];
+    const tableShowing = [[#{table-showing}]];
+    const tableEntries = [[#{table-entries}]];
+    const tableOf = [[#{table-of}]];
+
+</script>
+</html>

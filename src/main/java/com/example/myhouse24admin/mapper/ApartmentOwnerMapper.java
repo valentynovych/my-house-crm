@@ -8,7 +8,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -21,35 +23,47 @@ public interface ApartmentOwnerMapper {
     @Mapping(target = "deleted", expression = "java(false)")
     @Mapping(target = "avatar", source = "avatar")
     ApartmentOwner apartmentOwnerRequestToApartmentOwner(CreateApartmentOwnerRequest createApartmentOwnerRequest, String encodedPassword, String avatar);
-    default Instant getToday(){
+
+    default Instant getToday() {
         return Instant.now();
     }
-    default Language getLanguage(){
+
+    default Language getLanguage() {
         return Language.UKR;
     }
 
     @Mapping(target = "image", source = "avatar")
     @Mapping(target = "birthDate", expression = "java(convertDateToString(apartmentOwner.getBirthDate()))")
     ApartmentOwnerResponse apartmentOwnerToApartmentOwnerResponse(ApartmentOwner apartmentOwner);
+
     @Mapping(ignore = true, target = "password")
     @Mapping(target = "birthDate", expression = "java(convertDateToInstant(editApartmentOwnerRequest.birthDate()))")
     void setApartmentOwnerWithoutPassword(@MappingTarget ApartmentOwner apartmentOwner, EditApartmentOwnerRequest editApartmentOwnerRequest);
+
     @Mapping(target = "password", source = "encodedPassword")
     @Mapping(target = "birthDate", expression = "java(convertDateToInstant(editApartmentOwnerRequest.birthDate()))")
     void setApartmentOwnerWithPassword(@MappingTarget ApartmentOwner apartmentOwner, EditApartmentOwnerRequest editApartmentOwnerRequest, String encodedPassword);
+
     List<TableApartmentOwnerResponse> apartmentOwnerListToTableApartmentOwnerResponseList(List<ApartmentOwner> apartmentOwners);
+
     @Mapping(target = "fullName", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
     @Mapping(target = "creationDate", expression = "java(convertDateToString(apartmentOwner.getCreationDate()))")
     TableApartmentOwnerResponse apartmentOwnerToTableApartmentOwnerResponse(ApartmentOwner apartmentOwner);
+
     @Mapping(target = "birthDate", expression = "java(convertDateToString(apartmentOwner.getBirthDate()))")
     ViewApartmentOwnerResponse apartmentOwnerToViewApartmentOwnerResponse(ApartmentOwner apartmentOwner);
-    default String convertDateToString(Instant date){
+
+    default String convertDateToString(Instant date) {
         LocalDate localDate = LocalDate.ofInstant(date, ZoneId.systemDefault());
         return localDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
-    default Instant convertDateToInstant(String birthDate){
+
+    default Instant convertDateToInstant(String birthDate) {
         LocalDate date = LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         return date.atStartOfDay(ZoneId.systemDefault()).toInstant();
     }
 
+    List<ApartmentOwnerShortResponse> apartmentOwnerListToTApartmentOwnerShortResponseList(List<ApartmentOwner> apartmentOwners);
+    @Mapping(target = "fullName", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
+    ApartmentOwnerShortResponse apartmentOwnerToTApartmentOwnerShortResponse(ApartmentOwner apartmentOwner);
 }

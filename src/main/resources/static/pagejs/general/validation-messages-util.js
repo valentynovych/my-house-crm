@@ -14,3 +14,10 @@ function clearAllErrorMessage() {
     $('.error-message').remove();
     $('.is-invalid').removeClass('is-invalid');
 }
+
+function maxInputLength(input, maxLength) {
+    var val = $(input).val();
+    if (val.length > maxLength) {
+        $(input).val(val.substring(0, maxLength));
+    }
+}

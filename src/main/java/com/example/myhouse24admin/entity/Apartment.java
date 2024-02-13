@@ -13,7 +13,7 @@ public class Apartment {
     @Column(name = "apartment_number", nullable = false)
     private Integer apartmentNumber;
     @Column(nullable = false)
-    private BigDecimal area;
+    private double area;
     @Column(nullable = false)
     private boolean deleted;
     @ManyToOne
@@ -33,6 +33,8 @@ public class Apartment {
     private Tariff tariff;
     @OneToOne(mappedBy = "apartment")
     private PersonalAccount personalAccount;
+    @Column(nullable = false)
+    private BigDecimal balance;
 
     public Long getId() {
         return id;
@@ -50,11 +52,11 @@ public class Apartment {
         this.apartmentNumber = apartmentNumber;
     }
 
-    public BigDecimal getArea() {
+    public double getArea() {
         return area;
     }
 
-    public void setArea(BigDecimal area) {
+    public void setArea(double area) {
         this.area = area;
     }
 
@@ -112,5 +114,13 @@ public class Apartment {
 
     public void setPersonalAccount(PersonalAccount personalAccount) {
         this.personalAccount = personalAccount;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 }
