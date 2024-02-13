@@ -16,6 +16,8 @@ public class PersonalAccount {
     @OneToOne
     @JoinColumn(name = "apartment_id", referencedColumnName = "id", nullable = false)
     private Apartment apartment;
+    @Column(nullable = false, unique = true)
+    private Long accountNumber;
 
     public Long getId() {
         return id;
@@ -47,5 +49,13 @@ public class PersonalAccount {
 
     public void setApartment(Apartment apartment) {
         this.apartment = apartment;
+    }
+
+    public void setAccountNumber(Long personalAccountNew) {
+        this.accountNumber = personalAccountNew;
+    }
+
+    public Long getAccountNumber() {
+        return accountNumber;
     }
 }
