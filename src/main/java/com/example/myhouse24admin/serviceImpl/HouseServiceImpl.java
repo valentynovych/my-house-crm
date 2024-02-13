@@ -49,7 +49,7 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public Page<HouseShortResponse> getHouses(int page, int pageSize, Map<String, String> searchParams) {
         logger.info("getHouses() -> start with parameters: {}", searchParams);
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("name").descending());
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("name").ascending());
         searchParams.remove("page");
         searchParams.remove("pageSize");
         HouseSpecification specification = new HouseSpecification(searchParams);

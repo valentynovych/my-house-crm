@@ -182,7 +182,9 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
 
     @Override
     public Page<ApartmentOwnerShortResponse> getShortResponseOwners(int page, int pageSize, String fullName) {
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("firstName", "lastName").descending());
+        logger.info("getShortResponseOwners() -> start with parameters: " +
+                "[page: {}, pageSize: {}, fullName: {}]", page, pageSize, fullName);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("firstName", "lastName").ascending());
         Page<ApartmentOwner> all = apartmentOwnerRepo.findAll(Specification.where(
                 byFirstName(fullName)
                         .or(byLastName(fullName))
@@ -191,6 +193,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
                 apartmentOwnerMapper.apartmentOwnerListToTApartmentOwnerShortResponseList(all.getContent());
         Page<ApartmentOwnerShortResponse> responsePage =
                 new PageImpl<>(shortResponses, pageable, all.getTotalElements());
+        logger.info("getShortResponseOwners() -> exit, return page, contains element: {}", all.getNumberOfElements());
         return responsePage;
     }
 

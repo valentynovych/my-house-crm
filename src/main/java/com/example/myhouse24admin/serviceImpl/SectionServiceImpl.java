@@ -25,7 +25,7 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public Page<SectionResponse> getSectionsByHouseId(Long houseId, int page, int pageSize, String name) {
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("name").descending());
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("name").ascending());
         SectionSpecification specification = new SectionSpecification(Map.of("name", name, "houseId", houseId.toString()));
         Page<Section> all = sectionRepo.findAll(specification, pageable);
         List<SectionResponse> responseList = sectionMapper.sectionListToSectionResponseList(all.getContent());

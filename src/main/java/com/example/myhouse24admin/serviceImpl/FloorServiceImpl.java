@@ -25,7 +25,7 @@ public class FloorServiceImpl implements FloorService {
 
     @Override
     public Page<FloorResponse> getFloorsByHouseId(Long houseId, int page, int pageSize, String name) {
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("name").descending());
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("name").ascending());
         FloorSpecification specification =
                 new FloorSpecification(Map.of("name", name, "houseId", houseId.toString()));
         Page<Floor> all = floorRepo.findAll(specification, pageable);
