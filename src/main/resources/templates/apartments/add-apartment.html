@@ -6,6 +6,11 @@
 >
 <head>
     <title th:text="#{apartments-title-new}"></title>
+    <style>
+        .light-style  div.account-select-wrap .select2-container--default .select2-selection--single {
+            border-radius: 0 0 .375rem .375rem !important;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="breadcrumb">
@@ -84,10 +89,11 @@
                         <label for="personalAccountId" class="form-label"
                                th:text="#{apartment-label-personal-account}"></label>
                         <div class="account-select-wrap">
-                            <input type="text" class="form-control mt-0" min="1" id="area1" name="area1"
-                                   th:placeholder="#{apartment-enter-area}">
+                            <input type="text" class="form-control mt-0" min="1" id="personalAccountNew" name="personalAccountNew"
+                                   th:placeholder="#{apartment-enter-account}"
+                                   style="border-radius: .375rem .375rem 0 0">
                             <select class="form-control select2" id="personalAccountId"
-                                    name="personalAccountId"></select>
+                                    name="personalAccountId" style=""></select>
                         </div>
                     </div>
                 </div>
@@ -108,13 +114,7 @@
 </body>
 <script layout:fragment="script" th:src="@{/pagejs/apartments/add-apartment.js}"></script>
 <script layout:fragment="initThymeleafVarianle" th:inline="javascript">
-
-    const roleLabel = /*[[#{staff-label-role}]]*/ 'default';
-    const roleDirector = /*[[#{staff-role-director}]]*/ 'default';
-    const roleManager = /*[[#{staff-role-manager}]]*/ 'default';
-    const roleAccountant = /*[[#{staff-role-accountant}]]*/ 'default';
-    const roleElectrician = /*[[#{staff-role-electrician}]]*/ 'default';
-    const rolePlumber = /*[[#{staff-role-plumber}]]*/ 'default';
+    const successSaveMessage = /*[[#{apartment-message-success-save}]]*/ 'default';
 
     const chooseHouse = /*[[#{apartment-choose-house}]]*/ 'default';
     const chooseSection = /*[[#{apartment-choose-section}]]*/ 'default';

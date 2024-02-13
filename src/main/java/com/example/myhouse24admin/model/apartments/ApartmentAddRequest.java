@@ -1,17 +1,27 @@
 package com.example.myhouse24admin.model.apartments;
 
+import com.example.myhouse24admin.validators.apartmentValidation.RequiredNewOrPresentAccount;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-
+@RequiredNewOrPresentAccount
 public class ApartmentAddRequest {
     @NotNull(message = "{validation-field-required}")
     private Long houseId;
+    @NotNull(message = "{validation-field-required}")
     private Long sectionId;
+    @NotNull(message = "{validation-field-required}")
     private Long floorId;
+    @NotNull(message = "{validation-field-required}")
     private Long ownerId;
+    @NotNull(message = "{validation-field-required}")
     private Long tariffId;
+    @NotNull(message = "{validation-field-required}")
+    @Min(value = 1, message = "{validation-field-required}")
     private Integer apartmentNumber;
+    @NotNull(message = "{validation-field-required}")
     private Double area;
     private Long personalAccountId;
+    private Long personalAccountNew;
 
     public Long getHouseId() {
         return houseId;
@@ -75,5 +85,13 @@ public class ApartmentAddRequest {
 
     public void setPersonalAccountId(Long personalAccountId) {
         this.personalAccountId = personalAccountId;
+    }
+
+    public Long getPersonalAccountNew() {
+        return personalAccountNew;
+    }
+
+    public void setPersonalAccountNew(Long personalAccountNew) {
+        this.personalAccountNew = personalAccountNew;
     }
 }
