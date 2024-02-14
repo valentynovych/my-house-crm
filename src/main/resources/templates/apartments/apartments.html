@@ -14,7 +14,7 @@
         <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <span class="text-muted fw-light" th:text="#{menu-item-home-page} + ' / '"></span>
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
                 </li>
                 <li class="breadcrumb-item active">
                     <span th:text="#{menu-item-apartments}"></span>
@@ -24,14 +24,14 @@
     </div>
 </div>
 <div layout:fragment="content">
-    <div class="card-body" id="dropdownParent">
+    <div class="card-body" >
         <div class="mb-3 d-flex justify-content-end">
             <a th:href="@{apartments/add}" class="btn btn-primary me-2">
                 <span class="tf-icons ti-xs ti ti-plus me-1"></span>
                 <span th:text="#{apartments-button-add}"></span>
             </a>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" id="dropdownParent">
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
@@ -53,7 +53,7 @@
                     <th th:text="#{general-table-action}"></th>
                 </tr>
                 <tr>
-                    <td><input type="text" id="filter-by-number" class="form-control"></td>
+                    <td style="width: 9rem"><input type="text" id="filter-by-number" class="form-control"></td>
                     <td style="min-width: 13rem">
                         <div>
                             <select class="form-select select2" id="filter-by-house"></select>
@@ -61,12 +61,12 @@
                     </td>
                     <td style="min-width: 13rem">
                         <div>
-                            <select class="form-select select2" id="filter-by-section"></select>
+                            <select class="form-select select2" id="filter-by-section" disabled></select>
                         </div>
                     </td>
                     <td style="min-width: 13rem">
                         <div>
-                            <select class="form-select select2" id="filter-by-floor"></select>
+                            <select class="form-select select2" id="filter-by-floor" disabled></select>
                         </div>
                     </td>
                     <td style="min-width: 13rem">
@@ -76,7 +76,10 @@
                     </td>
                     <td style="min-width: 12rem">
                         <div>
-                            <select class="form-select select2" id="filter-by-balance"></select>
+                            <select class="form-select select2" id="filter-by-balance">
+                                <option value="arrears" th:text="#{apartment-balance-arrears}"></option>
+                                <option value="overpayment" th:text="#{apartment-balance-overpayment}"></option>
+                            </select>
                         </div>
                     </td>
                     <td></td>
@@ -94,13 +97,9 @@
     <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" th:text="#{staff-modal-delete-title}"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
                     <div class="row">
-                        <h4 th:text="#{staff-modal-delete-body}"></h4>
+                        <h4 th:text="#{apartments-modal-delete-body}"></h4>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -128,6 +127,16 @@
     const tableShowing = [[#{table-showing}]];
     const tableEntries = [[#{table-entries}]];
     const tableOf = [[#{table-of}]];
+
+    const chooseHouse = /*[[#{apartment-choose-house}]]*/ 'default';
+    const chooseSection = /*[[#{apartment-choose-section}]]*/ 'default';
+    const chooseFloor = /*[[#{apartment-choose-floor}]]*/ 'default';
+    const chooseOwner = /*[[#{apartment-choose-owner}]]*/ 'default';
+    const chooseTariff = /*[[#{apartment-choose-tariff}]]*/ 'default';
+    const enterArea = /*[[#{apartment-enter-area}]]*/ 'default';
+    const chooseAccount = /*[[#{apartment-choose-account}]]*/ 'default';
+    const labelApartmentNumber = /*[[#{apartment-label-apartment-number}]]*/ 'default';
+    const emptyTableLabel = /*[[#{apartment-label-empty-table}]]*/ 'default';
 
 </script>
 </html>

@@ -5,13 +5,21 @@ import com.example.myhouse24admin.entity.PersonalAccount;
 import com.example.myhouse24admin.entity.PersonalAccountStatus;
 import com.example.myhouse24admin.mapper.ApartmentMapper;
 import com.example.myhouse24admin.model.apartments.ApartmentAddRequest;
+import com.example.myhouse24admin.model.apartments.ApartmentResponse;
 import com.example.myhouse24admin.repository.ApartmentRepo;
 import com.example.myhouse24admin.repository.PersonalAccountRepo;
 import com.example.myhouse24admin.service.ApartmentService;
-import jakarta.transaction.Transactional;
+import com.example.myhouse24admin.specification.ApartmentSpecification;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ApartmentServiceImpl implements ApartmentService {
@@ -35,6 +43,19 @@ public class ApartmentServiceImpl implements ApartmentService {
         setPersonalAccountToApartment(apartment, apartmentAddRequest);
         Apartment save = apartmentRepo.save(apartment);
         logger.info("addNewApartment() -> success save new Apartment with id: {}", save.getId());
+    }
+
+    @Override
+    public Page<ApartmentResponse> getApartments(int page, int pageSize, Map<String, String> searchParams) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        searchParams.remove("page");
+        searchParams.remove("size");
+        ApartmentSpecification specification = new ApartmentSpecification(searchParams);
+        Page<Apartment> all = apartmentRepo.findAll(specification, pageable);
+        List<ApartmentResponse> apartmentResponses =
+                apartmentMapper.apartmentListToApartmentResponseList(all.getContent());
+        Page<ApartmentResponse> responsePage = new PageImpl<>(apartmentResponses, pageable, all.getTotalElements());
+        return responsePage;
     }
 
     private void setPersonalAccountToApartment(Apartment apartment, ApartmentAddRequest apartmentAddRequest) {

@@ -2,12 +2,19 @@ package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.model.apartments.ApartmentAddRequest;
+import com.example.myhouse24admin.model.apartments.ApartmentResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring",
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        uses = {ApartmentOwnerMapper.class,
+                HouseMapper.class,
+                SectionMapper.class,
+                FloorMapper.class})
 public interface ApartmentMapper {
     @Mapping(target = "owner.id", source = "ownerId")
     @Mapping(target = "house.id", source = "houseId")
@@ -17,4 +24,8 @@ public interface ApartmentMapper {
     @Mapping(target = "personalAccount.id", source = "personalAccountId")
     @Mapping(target = "balance", expression = "java(java.math.BigDecimal.ZERO)")
     Apartment apartmentAddRequestToApartment(ApartmentAddRequest apartmentAddRequest);
+
+    List<ApartmentResponse> apartmentListToApartmentResponseList(List<Apartment> apartments);
+
+    ApartmentResponse apartmentToApartmentResponse(Apartment apartments);
 }
