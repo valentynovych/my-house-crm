@@ -148,7 +148,7 @@
 <script layout:fragment="script" th:src="@{/pagejs/owners/owner.js}"></script>
 <script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
     var statusLink = [[${statusLink}]];
-    var fileValidation = [[#{validation-file-extension}]];
+    var fileValidation = [[#{validation-file-extension-not-valid}]];
     var breadCrumbAdd = [[#{breadcrumb-add}]];
     var breadCrumbEdit = [[#{breadcrumb-edit}]];
     var newStatus = [[#{staff-status-new}]];

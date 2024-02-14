@@ -8,7 +8,7 @@ public class ServicesPage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "seo_id", referencedColumnName = "id", nullable = false)
     private Seo seo;
 
