@@ -267,6 +267,14 @@ function validateFile(value){
     }
 }
 
+$("#cancel-button").on("click", function () {
+    descriptions.length = 0;
+    idsToDelete.length = 0;
+    $("#services").empty();
+    drawServicesPage(defaultServicesPage);
+    setSeoFields(defaultServicesPage);
+});
+
 const fullToolbar = [
     [
         {
