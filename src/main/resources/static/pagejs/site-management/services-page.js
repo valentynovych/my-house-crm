@@ -130,7 +130,7 @@ function deleteService() {
         i = ind;
         ind++;
     });
-    descriptions.splice(index, index);
+    descriptions.splice(index, 1);
     $('#deleteModal').modal('hide');
 }
 $("#add-button").on("click",function () {
@@ -182,6 +182,7 @@ function initializeQuill(id){
 }
 $("#save-button").on("click", function () {
     blockCardDody();
+    clearAllErrorMessage();
     let formData = collectServiceBlocksData();
     appendIdsToDeleteToFormData(formData);
     appendSeoToFormData(formData);
