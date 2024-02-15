@@ -244,7 +244,7 @@ function drawTable(result) {
     if (result.content && result.content.length > 0) {
         for (const apartment of result.content) {
             const apartmentNumber = apartment.apartmentNumber.toString().padStart(5, '00000')
-            $(`<tr data-href="apartments/view-apartment/${apartment.id} + " class="cursor-pointer">
+            $(`<tr data-href="apartments/view-apartment/${apartment.id}" class="cursor-pointer">
             <td>${apartmentNumber}</td>
             <td>${apartment.house.name}</td>
             <td>${apartment.section.name}</td>

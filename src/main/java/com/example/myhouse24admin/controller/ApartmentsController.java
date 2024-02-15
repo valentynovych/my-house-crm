@@ -39,6 +39,11 @@ public class ApartmentsController {
         return new ModelAndView("apartments/edit-apartment");
     }
 
+    @GetMapping("view-apartment/{apartmentId}")
+    public ModelAndView viewApartment(@PathVariable Long apartmentId) {
+        return new ModelAndView("apartments/view-apartment");
+    }
+
     @PostMapping("add")
     public ResponseEntity<?> addNewApartment(@ModelAttribute @Valid ApartmentAddRequest apartmentAddRequest) {
         apartmentService.addNewApartment(apartmentAddRequest);
