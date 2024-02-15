@@ -277,8 +277,8 @@ function drawTable(result) {
            </tr>`).appendTo('tbody');
     }
 
-    drawPaginationElements(result, 'getStaff')
-    drawPagination(result.totalPages, page, 'getStaff');
+    drawPaginationElements(result, 'getApartments')
+    drawPagination(result.totalPages, page, 'getApartments');
 
 }
 
@@ -296,7 +296,7 @@ function addDeleteEvent(staffId) {
                 type: 'delete',
                 url: 'staff/delete/' + staffId,
                 success: function () {
-                    $('.close-modal').click()
+                    $('.close-modal').click();
                     toastr.success(successMessageOnDelete)
                     setTimeout(() => getApartments(currentPage), 400);
                 },
