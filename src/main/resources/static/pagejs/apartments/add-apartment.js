@@ -255,20 +255,20 @@ function initInputAndSelect() {
         },
     });
 
-    new Cleave('input[name="personalAccountNew"]', {
-        delimiter: "-",
-        blocks: [5, 5],
-    })
-
     const $personalAccountNew = $('input[name="personalAccountNew"]');
+
     $personalAccountNew.on('input', function () {
-        let val1 = $(this).val();
-        $(this).val(val1.replace(/[A-Za-z]/, ''));
+        let val = this.value.replace(/\D/g, '');
+        if (Number(val) <= 9999999999) {
+            val = ("0000000000" + val).slice(-10);
+            $(this).val(val.substring(0, 5) + '-' + val.substring(5, 10));
+        }
+        maxInputLength($(this), 11);
     });
 
     $personalAccountNew.on('change', function () {
         let value = this.value;
-        if (value == 0) {
+        if (value == 0 || value === '00000-00000') {
             $personalAccountSelect.removeAttr('disabled');
         } else {
             $personalAccountSelect.select2('enable', false);

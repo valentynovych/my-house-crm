@@ -25,6 +25,13 @@ const $ownerSelect = $('[name="ownerId"]');
 const $tariffSelect = $('[name="tariffId"]');
 
 function fillInputs(apartment) {
+    const apartmentNumber = (apartment.apartmentNumber + '').padStart(5, '00000');
+    const houseName = apartment.house.name;
+    const title = ` №${apartmentNumber}, ${houseName}`
+    const $breadcrumb = $('#view-page');
+    $breadcrumb.html($breadcrumb.html() + title);
+    $breadcrumb.attr('href', $breadcrumb.attr('href') + apartment.id);
+
     $inputApartmentNumber.on('input', function () {
             let val = this.value;
             if (Number(val) <= 99999) {
@@ -298,21 +305,20 @@ function fillInputs(apartment) {
     });
     inputArea.setRawValue(apartment.area);
 
-    new Cleave('input[name="personalAccountNew"]', {
-        delimiter: "-",
-        blocks: [5, 5]
-    });
-
     const $personalAccountNew = $('input[name="personalAccountNew"]');
+
     $personalAccountNew.on('input', function () {
-        let val1 = $(this).val();
-        val1 = val1.replace(/[A-Za-z]/, '')
-        $(this).val(val1)
+        let val = this.value.replace(/\D/g, '');
+        if (Number(val) <= 9999999999) {
+            val = ("0000000000" + val).slice(-10);
+            $(this).val(val.substring(0, 5) + '-' + val.substring(5, 10));
+        }
+        maxInputLength($(this), 11);
     });
 
     $personalAccountNew.on('change', function () {
         let value = this.value;
-        if (value == 0) {
+        if (value == 0 || value === '00000-00000') {
             $personalAccountSelect.removeAttr('disabled');
         } else {
             $personalAccountSelect.select2('enable', false);
@@ -327,6 +333,8 @@ function fillInputs(apartment) {
             $personalAccountNew.removeAttr('disabled');
         }
     });
+
+    $personalAccountSelect.trigger('change');
 
     $('#apartmentForm .button-save, #apartmentForm .button-save-and-add').on('click', function () {
         clearAllErrorMessage();

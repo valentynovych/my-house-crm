@@ -15,17 +15,20 @@
 <body>
 <div layout:fragment="breadcrumb">
     <div class="d-flex justify-content-between px-3 align-items-end">
-        <h3 th:text="#{apartments-title-new}"></h3>
+        <h3 th:text="#{apartments-title-edit}"></h3>
         <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
                 </li>
                 <li class="breadcrumb-item">
-                    <a th:href="@{../apartments}" th:text="#{menu-item-apartments}"></a>
+                    <a th:href="@{../../apartments}" th:text="#{menu-item-apartments}"></a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{../../apartments/view-apartment/}" th:text="#{apartments-label-apartment}" id="view-page"></a>
                 </li>
                 <li class="breadcrumb-item active">
-                    <span th:text="#{apartments-title-new}"></span>
+                    <span th:text="#{apartments-title-edit}"></span>
                 </li>
             </ol>
         </nav>
