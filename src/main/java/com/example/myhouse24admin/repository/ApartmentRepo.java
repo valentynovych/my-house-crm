@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ApartmentRepo extends JpaRepository<Apartment, Long>, JpaSpecificationExecutor<Apartment> {
 
-    boolean existsApartmentByPersonalAccount_Id(Long personalAccountId);
+    Optional<Apartment> findApartmentByPersonalAccount_Id(Long personalAccountId);
 }

@@ -1,10 +1,13 @@
 package com.example.myhouse24admin.validators.apartmentValidation;
 
+import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.model.apartments.ApartmentAddRequest;
 import com.example.myhouse24admin.repository.ApartmentRepo;
 import com.example.myhouse24admin.repository.PersonalAccountRepo;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
+import java.util.Optional;
 
 public class RequiredNewOrPresentAccountValidator implements ConstraintValidator<RequiredNewOrPresentAccount, ApartmentAddRequest> {
 
@@ -24,7 +27,7 @@ public class RequiredNewOrPresentAccountValidator implements ConstraintValidator
     @Override
     public boolean isValid(ApartmentAddRequest request, ConstraintValidatorContext context) {
         context.disableDefaultConstraintViolation();
-        if (request.getPersonalAccountNew() != null) {
+        if (request.getPersonalAccountNew() != null && request.getPersonalAccountNew() > 0) {
 
             boolean isExists = personalAccountRepo.existsPersonalAccountByAccountNumber(request.getPersonalAccountNew());
             context.buildConstraintViolationWithTemplate("{validation-apartment-personal-account-number-exists}")
@@ -36,12 +39,14 @@ public class RequiredNewOrPresentAccountValidator implements ConstraintValidator
 
         if (request.getPersonalAccountId() != null) {
             context.disableDefaultConstraintViolation();
-            boolean isExists = apartmentRepo.existsApartmentByPersonalAccount_Id(request.getPersonalAccountId());
+            Optional<Apartment> apartmentByPersonalAccountId =
+                    apartmentRepo.findApartmentByPersonalAccount_Id(request.getPersonalAccountId());
             context.buildConstraintViolationWithTemplate("{validation-apartment-personal-account-id-exists}")
                     .addPropertyNode("personalAccountId")
                     .addBeanNode()
                     .addConstraintViolation();
-            return !isExists;
+            return apartmentByPersonalAccountId.isEmpty()
+                    || (request.getId() != null && request.getId().equals(apartmentByPersonalAccountId.get().getId()));
         }
         context.buildConstraintViolationWithTemplate("{validation-field-required}")
                 .addPropertyNode("personalAccountNew")

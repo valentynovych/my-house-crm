@@ -107,12 +107,18 @@ public class ApartmentServiceImpl implements ApartmentService {
                 return new EntityNotFoundException(String.format("Apartment with id: %s not found", personalAccountId));
             });
         } else if (apartmentAddRequest.getPersonalAccountNew() != null) {
-            Long personalAccountNew = apartmentAddRequest.getPersonalAccountNew();
-            personalAccount = new PersonalAccount();
-            personalAccount.setApartment(apartment);
-            personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
+            Optional<PersonalAccount> personalAccountByApartment =
+                    personalAccountRepo.findPersonalAccountByApartment(apartment);
+            if (personalAccountByApartment.isPresent()) {
+                personalAccount = personalAccountByApartment.get();
+                personalAccount.setAccountNumber(apartmentAddRequest.getPersonalAccountNew());
+            } else {
+                personalAccount = new PersonalAccount();
+                personalAccount.setApartment(apartment);
+                personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
+                personalAccount.setAccountNumber(apartmentAddRequest.getPersonalAccountNew());
+            }
 
-            personalAccount.setAccountNumber(personalAccountNew);
         } else {
             personalAccount = new PersonalAccount();
             personalAccount.setApartment(apartment);
