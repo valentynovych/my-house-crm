@@ -244,7 +244,7 @@ function drawTable(result) {
     if (result.content && result.content.length > 0) {
         for (const apartment of result.content) {
             const apartmentNumber = apartment.apartmentNumber.toString().padStart(5, '00000')
-            $(`<tr data-href="apartments/view-apartment/${apartment.id} + " class="cursor-pointer">
+            $(`<tr data-href="apartments/view-apartment/${apartment.id}" class="cursor-pointer">
             <td>${apartmentNumber}</td>
             <td>${apartment.house.name}</td>
             <td>${apartment.section.name}</td>
@@ -277,8 +277,8 @@ function drawTable(result) {
            </tr>`).appendTo('tbody');
     }
 
-    drawPaginationElements(result, 'getStaff')
-    drawPagination(result.totalPages, page, 'getStaff');
+    drawPaginationElements(result, 'getApartments')
+    drawPagination(result.totalPages, page, 'getApartments');
 
 }
 
@@ -296,7 +296,7 @@ function addDeleteEvent(staffId) {
                 type: 'delete',
                 url: 'staff/delete/' + staffId,
                 success: function () {
-                    $('.close-modal').click()
+                    $('.close-modal').click();
                     toastr.success(successMessageOnDelete)
                     setTimeout(() => getApartments(currentPage), 400);
                 },

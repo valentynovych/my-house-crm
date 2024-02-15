@@ -31,7 +31,7 @@ public class Apartment {
     @ManyToOne
     @JoinColumn(name = "tariff_id", referencedColumnName = "id", nullable = false)
     private Tariff tariff;
-    @OneToOne(mappedBy = "apartment", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "apartment", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private PersonalAccount personalAccount;
     @Column(nullable = false)
     private BigDecimal balance;

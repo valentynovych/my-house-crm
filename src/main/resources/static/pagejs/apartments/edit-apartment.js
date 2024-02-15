@@ -1,6 +1,22 @@
+const apartmentId = window.location.pathname.match(/\d/);
+let apartmentToRestore;
+blockCardDody();
 $(document).ready(function () {
-    initInputAndSelect();
-})
+
+    $.ajax({
+        url: '../get-apartment/' + apartmentId,
+        type: 'get',
+        success: function (response) {
+            console.log(response)
+            apartmentToRestore = response;
+            fillInputs(response);
+        },
+        error: function (error) {
+            toastr.error(errorMessage);
+        }
+    })
+});
+
 const $inputApartmentNumber = $('[name="apartmentNumber"]');
 const $selectHouse = $('[name="houseId"]');
 const $sectionSelect = $('[name="sectionId"]');
@@ -8,7 +24,13 @@ const $floorSelect = $('[name="floorId"]');
 const $ownerSelect = $('[name="ownerId"]');
 const $tariffSelect = $('[name="tariffId"]');
 
-function initInputAndSelect() {
+function fillInputs(apartment) {
+    const apartmentNumber = (apartment.apartmentNumber + '').padStart(5, '00000');
+    const houseName = apartment.house.name;
+    const title = ` №${apartmentNumber}, ${houseName}`
+    const $breadcrumb = $('#view-page');
+    $breadcrumb.html($breadcrumb.html() + title);
+    $breadcrumb.attr('href', $breadcrumb.attr('href') + apartment.id);
 
     $inputApartmentNumber.on('input', function () {
             let val = this.value;
@@ -19,14 +41,18 @@ function initInputAndSelect() {
             maxInputLength($(this), 5);
         }
     );
-
+    $inputApartmentNumber.val(apartment.apartmentNumber).trigger('input');
 
     $selectHouse.select2({
         placeholder: chooseHouse,
         dropdownParent: $('.house-select-wrap'),
+        data: [{
+            id: apartment.house.id,
+            text: apartment.house.name,
+        }],
         ajax: {
             type: "GET",
-            url: '../houses/get-houses',
+            url: '../../houses/get-houses',
             data: function (params) {
                 return {
                     name: params.term || '',
@@ -50,13 +76,15 @@ function initInputAndSelect() {
         }
     });
 
+
     $selectHouse.on('change', function () {
         $sectionSelect.val('').trigger('change');
         $floorSelect.val('').trigger('change');
         const houseId = $(this).val();
-        if (houseId > 0) {
-            $sectionSelect.removeAttr('disabled');
-            $floorSelect.removeAttr("disabled")
+        if (!houseId > 0) {
+            $sectionSelect.select2('enable', false);
+            $floorSelect.select2('enable', false);
+        } else {
             initHouseNestedSSelects(houseId);
         }
     });
@@ -71,15 +99,22 @@ function initInputAndSelect() {
         dropdownParent: $('.floor-select-wrap')
     });
 
+    $selectHouse.trigger('change');
+
     function initHouseNestedSSelects(houseId) {
         let mapIdRangeNumber = new Map();
+        mapIdRangeNumber.set(apartment.section.id, apartment.section.name);
         $sectionSelect.empty();
         $sectionSelect.select2({
             placeholder: chooseSection,
             dropdownParent: $('.section-select-wrap'),
+            data: [{
+                id: apartment.section.id,
+                text: apartment.section.name,
+            }],
             ajax: {
                 type: "GET",
-                url: '../sections/get-sections-by-house/' + houseId,
+                url: '../../sections/get-sections-by-house/' + houseId,
                 data: function (params) {
                     return {
                         name: params.term || '',
@@ -106,14 +141,12 @@ function initInputAndSelect() {
 
         $sectionSelect.on("select2:select", function () {
             mapIdRangeNumber.forEach((value, key) => {
-                console.log(`key: ${key}, value: ${value}`)
                 $('.section-select-wrap').find(`option[value="${key}"]`).attr("data-range", value);
             });
 
             const $label = $('label[for="apartmentNumber"]');
             const rangeNumbers = $(`option[value="${this.value}"]`).attr("data-range");
             $label.html(labelApartmentNumber + ` (${rangeNumbers})`);
-            $inputApartmentNumber.removeAttr('disabled');
             $inputApartmentNumber.attr('min', rangeNumbers.split('-')[0]);
             $inputApartmentNumber.attr('max', rangeNumbers.split('-')[1]);
         });
@@ -121,9 +154,13 @@ function initInputAndSelect() {
         $floorSelect.select2({
             placeholder: chooseSection,
             dropdownParent: $('.floor-select-wrap'),
+            data: [{
+                id: apartment.floor.id,
+                text: apartment.floor.name
+            }],
             ajax: {
                 type: "GET",
-                url: '../floors/get-floors-by-house/' + houseId,
+                url: '../../floors/get-floors-by-house/' + houseId,
                 data: function (params) {
                     return {
                         name: params.term || '',
@@ -152,9 +189,13 @@ function initInputAndSelect() {
     $ownerSelect.select2({
         placeholder: chooseOwner,
         dropdownParent: $('.owner-select-wrap'),
+        data: [{
+            id: apartment.owner.id,
+            text: apartment.owner.fullName
+        }],
         ajax: {
             type: "GET",
-            url: '../owners/get-owners',
+            url: '../../owners/get-owners',
             data: function (params) {
                 return {
                     fullName: params.term || '',
@@ -182,9 +223,13 @@ function initInputAndSelect() {
     $tariffSelect.select2({
         placeholder: chooseTariff,
         dropdownParent: $('.tariff-select-wrap'),
+        data: [{
+            id: apartment.tariff.id,
+            text: apartment.tariff.name
+        }],
         ajax: {
             type: "GET",
-            url: '../system-settings/tariffs/get-tariffs',
+            url: '../../system-settings/tariffs/get-tariffs',
             data: function (params) {
                 return {
                     page: (params.page - 1) || 0,
@@ -212,9 +257,13 @@ function initInputAndSelect() {
         placeholder: chooseAccount,
         dropdownParent: $('.account-select-wrap'),
         allowClear: true,
+        data: [{
+            id: apartment.personalAccount.id,
+            text: decorateAccountNumber(apartment.personalAccount.accountNumber)
+        }],
         ajax: {
             type: "GET",
-            url: '../personal-accounts/get-accounts-find-number',
+            url: '../../personal-accounts/get-accounts-find-number',
             data: function (params) {
                 return {
                     accountNumber: params.term || '',
@@ -247,13 +296,14 @@ function initInputAndSelect() {
         numeral: true,
         numeralThousandsGroupStyle: "thousand",
         onValueChanged: function () {
-            const maxSize = 6;
+            const maxSize = 5;
             const rawValue = inputArea.getRawValue();
             if (rawValue.length > maxSize || Number(rawValue) > 500) {
                 inputArea.setRawValue(rawValue.substring(0, rawValue.length - 1));
             }
         },
     });
+    inputArea.setRawValue(apartment.area);
 
     const $personalAccountNew = $('input[name="personalAccountNew"]');
 
@@ -284,6 +334,7 @@ function initInputAndSelect() {
         }
     });
 
+    $personalAccountSelect.trigger('change');
 
     $('#apartmentForm .button-save, #apartmentForm .button-save-and-add').on('click', function () {
         clearAllErrorMessage();
@@ -291,10 +342,15 @@ function initInputAndSelect() {
         $('button.bg-label-danger').removeClass('bg-label-danger');
 
         let formData = new FormData($('#apartmentForm')[0]);
+        formData.set('id', apartmentId);
+        let personalAccountNew = formData.get('personalAccountNew');
+        if (personalAccountNew) {
+            formData.set('personalAccountNew', personalAccountNew.replace(/\D/, ''));
+        }
 
-        // for (const formDatum of formData.entries()) {
-        //     console.log(formDatum)
-        // }
+        for (const formDatum of formData.entries()) {
+            console.log(formDatum)
+        }
         const mustReset = $(this).hasClass('button-save-and-add');
         $.ajax({
             type: 'post',

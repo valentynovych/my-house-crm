@@ -97,7 +97,7 @@ function logout() {
     window.location = $('#logoutLink').attr('href');
 }
 
-$(document).ready( function () {
+$(window).on('load, ajaxStop', function () {
     $('img').on('error', function () {
         $(this).attr('src', defaultPlaceholderImage);
     })
