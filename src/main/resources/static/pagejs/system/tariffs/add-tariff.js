@@ -20,8 +20,6 @@ $('.button-cancel').on('click', () => window.history.back())
 
 function addTariffItem(index) {
     let $service = $(`<div class="row g-4 mb-3 tariff-item" id="item-${index}">
-                        <input type="text" class="visually-hidden tariff-item-id" name="tariffRequest.tariffItems[${index}].id" 
-                                id="tariffRequest.tariffItems[${index}].id">
                         <div class="mb-3 col-md-4">
                             <label class="form-label" for="tariffItems[${index}].serviceId">${serviceLabel}</label>
                             <select class="form-select" type="text" name="tariffRequest.tariffItems[${index}].serviceId"
@@ -178,8 +176,6 @@ function fillInputs(tariff) {
 
 function fillTariffItem(index, item) {
     let $service = $(`<div class="row g-4 mb-1 tariff-item" id="item-${index}">
-                        <input type="text" class="visually-hidden tariff-item-id" name="tariffRequest.tariffItems[${index}].id" 
-                                id="tariffRequest.tariffItems[${index}].id" value="${item.id}">
                         <div class="mb-3 col-md-4">
                             <label class="form-label" for="tariffItems[${index}].serviceId">${serviceLabel}</label>
                             <select class="form-select" type="text" name="tariffRequest.tariffItems[${index}].serviceId"
