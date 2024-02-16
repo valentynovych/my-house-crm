@@ -39,11 +39,11 @@ function drawFormServices(listService) {
                                     <select class="form-select" type="text" name="services[${i}].unitOfMeasurementId" 
                                         id="services[${i}].unitOfMeasurementId" ></select>
                                 </div>
-                                <div class="mb-3 col-md-1 d-flex align-items-end">
+                                ${i > 0 ? `<div class="mb-3 col-md-1 d-flex align-items-end">
                                     <button type="button" class="btn btn-outline-danger delete-service">
                                         <i class="ti ti-trash ti-xs me-1"></i>
                                     </button>
-                                </div>
+                                </div>`: ''}
                                 <div class="mb-3 col-md-6 mt-0">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="services[${i}].showInMeter"
@@ -104,11 +104,11 @@ function addNewService() {
                                     <select class="form-select" type="text" name="services[${lastServiceIndex}].unitOfMeasurementId" 
                                         id="services[${lastServiceIndex}].unitOfMeasurementId" ></select>
                                 </div>
-                                <div class="mb-3 col-md-1 d-flex align-items-end">
+                                ${i > 0 ? `<div class="mb-3 col-md-1 d-flex align-items-end">
                                     <button type="button" class="btn btn-outline-danger delete-service">
                                         <i class="ti ti-trash ti-xs me-1"></i>
                                     </button>
-                                </div>
+                                </div>`: ''}
                                 <div class="mb-3 col-md-6 mt-0">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="services[${lastServiceIndex}].showInMeter"
@@ -239,22 +239,22 @@ function drawFormUnits(listUnits) {
         lastUnitIndex = listUnits.length;
         let i = 0;
         for (const unit of unitsArray) {
-            $(`<div class="row g-4 unit-item" id="item-${i}">\n` +
-                `   <div class="mb-3 col-md-6" >\n` +
-                `        <label class="form-label">${unitLabel}</label>\n` +
-                `        <div class="input-group">\n` +
-                `             <input class="form-control" type="text" name="unitOfMeasurements[${i}].name" \n` +
-                `                 id="unitOfMeasurements[${i}].name" value="${unit.name}" \n` +
-                `                    placeholder="${unitLabel}">\n` +
-                `             <button type="button" class="btn btn-outline-danger input-group-text delete-unit">\n` +
-                `                     <i class="ti ti-trash ti-xs me-1"></i>\n` +
-                `                     <span class="align-middle"></span>\n` +
-                `             </button>\n` +
-                `         </div>\n` +
-                `         <input type="number" class="visually-hidden unit-id" id="unitOfMeasurements[${i}].id"` +
-                `                 name="unitOfMeasurements[${i}].id" value="${unit.id}">\n` +
-                `   </div>\n` +
-                `</div>`).appendTo('.unit-item-list');
+            $(`<div class="row g-4 unit-item" id="item-${i}">
+                   <div class="mb-3 col-md-6" >
+                        <label class="form-label">${unitLabel}</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" name="unitOfMeasurements[${i}].name"
+                                 id="unitOfMeasurements[${i}].name" value="${unit.name}"
+                                    placeholder="${unitLabel}">
+                             ${i > 0 ? `<button type="button" class="btn btn-outline-danger input-group-text delete-unit">
+                                     <i class="ti ti-trash ti-xs me-1"></i>
+                                     <span class="align-middle"></span>
+                                    </button>` : ''}
+                         </div>
+                         <input type="number" class="visually-hidden unit-id" id="unitOfMeasurements[${i}].id"
+                                 name="unitOfMeasurements[${i}].id" value="${unit.id}">
+                   </div>
+                </div>`).appendTo('.unit-item-list');
             i++;
         }
     } else {
@@ -266,23 +266,21 @@ function drawFormUnits(listUnits) {
 $('#add-unit').on('click', addNewUnit);
 
 function addNewUnit() {
-    let $item = $(`<div class="row g-4 unit-item" id="item-${lastUnitIndex}">\n` +
-        `   <div class="mb-3 col-md-6" >\n` +
-        `        <label class="form-label">${unitLabel}</label>\n` +
-        `        <div class="input-group">\n` +
-        `             <input class="form-control" type="text" name="unitOfMeasurements[${lastUnitIndex}].name" \n` +
-        `                 id="unitOfMeasurements[${lastUnitIndex}].name"\n` +
-        `                    placeholder="${unitLabel}">\n` +
-        `             <button type="button" class="btn btn-outline-danger input-group-text delete-unit"` +
-        `                   >\n` +
-        `                     <i class="ti ti-trash ti-xs me-1"></i>\n` +
-        `                     <span class="align-middle"></span>\n` +
-        `             </button>\n` +
-        `         </div>\n` +
-        `         <input type="number" class="visually-hidden unit-id" id="unitOfMeasurements[${lastUnitIndex}].id"` +
-        `                 name="unitOfMeasurements[${lastUnitIndex}].id">\n` +
-        `   </div>\n` +
-        `</div>`);
+    let $item = $(`<div class="row g-4 unit-item" id="item-${lastUnitIndex}">
+           <div class="mb-3 col-md-6" >
+                <label class="form-label">${unitLabel}</label>
+                <div class="input-group">
+                     <input class="form-control" type="text" name="unitOfMeasurements[${lastUnitIndex}].name"
+                         id="unitOfMeasurements[${lastUnitIndex}].name" placeholder="${unitLabel}">
+           ${i > 0 ? `<button type="button" class="btn btn-outline-danger input-group-text delete-unit">
+                                <i class="ti ti-trash ti-xs me-1"></i>
+                                <span class="align-middle"></span>
+                      </button>` : ''}
+                </div>
+                <input type="number" class="visually-hidden unit-id" id="unitOfMeasurements[${lastUnitIndex}].id"
+                         name="unitOfMeasurements[${lastUnitIndex}].id">
+           </div>
+        </div>`);
     $item.hide('');
     $item.appendTo('.unit-item-list');
     $item.show('');
