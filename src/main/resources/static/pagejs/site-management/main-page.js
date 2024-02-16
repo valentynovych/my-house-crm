@@ -311,6 +311,14 @@ function validateFile(value) {
     }
 }
 
+$("#cancel-button").on("click", function () {
+    descriptions.length = 0;
+    idsToDelete.length = 0;
+    lastId = 0;
+    $("#blocks").empty();
+    setFields(defaultMainPge);
+});
+
 const fullToolbar = [
     [
         {
