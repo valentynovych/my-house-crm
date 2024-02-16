@@ -7,7 +7,7 @@
 <head>
     <title th:text="#{apartments-title-new}"></title>
     <style>
-        .light-style  div.account-select-wrap .select2-container--default .select2-selection--single {
+        .light-style div.account-select-wrap .select2-container--default .select2-selection--single {
             border-radius: 0 0 .375rem .375rem !important;
         }
     </style>
@@ -25,7 +25,8 @@
                     <a th:href="@{../../apartments}" th:text="#{menu-item-apartments}"></a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a th:href="@{../../apartments/view-apartment/}" th:text="#{apartments-label-apartment}" id="view-page"></a>
+                    <a th:href="@{../../apartments/view-apartment/}" th:text="#{apartments-label-apartment}"
+                       id="view-page"></a>
                 </li>
                 <li class="breadcrumb-item active">
                     <span th:text="#{apartments-title-edit}"></span>
@@ -92,7 +93,8 @@
                         <label for="personalAccountId" class="form-label"
                                th:text="#{apartment-label-personal-account}"></label>
                         <div class="account-select-wrap">
-                            <input type="text" class="form-control mt-0" min="1" id="personalAccountNew" name="personalAccountNew"
+                            <input type="text" class="form-control mt-0" min="1" id="personalAccountNew"
+                                   name="personalAccountNew"
                                    th:placeholder="#{apartment-enter-account}"
                                    style="border-radius: .375rem .375rem 0 0">
                             <select class="form-control select2" id="personalAccountId"
