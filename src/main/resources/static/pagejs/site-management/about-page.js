@@ -158,7 +158,7 @@ function collectData() {
     if(directorImage === undefined) {
         formData.append("directorImage", new File([""], "filename"));
     } else {
-        formData.append("directorImage", $("#directorImage").prop("files")[0]);
+        formData.append("directorImage", directorImage);
     }
 
     formData.append("seoRequest.seoTitle", $("#seoTitle").val());
