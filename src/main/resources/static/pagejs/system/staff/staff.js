@@ -160,6 +160,8 @@ function getStatusLabel(status) {
 }
 
 function drawTable(result) {
+
+    if (result.content && result.content.length > 0) {
     const page = result.pageable.pageNumber;
     let iter = 0;
     for (const staff of result.content) {
@@ -206,7 +208,11 @@ function drawTable(result) {
 
     drawPaginationElements(result, 'getStaff')
     drawPagination(result.totalPages, page, 'getStaff');
-
+    } else {
+        $(`<tr>
+            <td colspan="7" class="text-center fw-bold h4">${dataNotFound}</td>
+           </tr>`).appendTo('tbody');
+    }
 }
 
 function addListenerToRow() {

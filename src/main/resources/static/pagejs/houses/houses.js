@@ -59,11 +59,12 @@ function getHouses(page) {
 }
 
 function drawTable(result) {
-    const page = result.pageable.pageNumber;
-    let iter = 0;
-    for (const house of result.content) {
+    if (result.content && result.content.length > 0) {
+        const page = result.pageable.pageNumber;
+        let iter = 0;
+        for (const house of result.content) {
 
-        $(`<tr data-href="houses/view-house/${house.id}" class="cursor-pointer">
+            $(`<tr data-href="houses/view-house/${house.id}" class="cursor-pointer">
             <td>${++iter}</td>
             <td>${house.name}</td>
             <td>${house.address}</td>
@@ -84,12 +85,17 @@ function drawTable(result) {
               </div>
             </td>
             </tr>`
-        ).appendTo("tbody");
-        addListenerToRow();
-    }
+            ).appendTo("tbody");
+            addListenerToRow();
+        }
 
-    drawPaginationElements(result, 'getHouses')
-    drawPagination(result.totalPages, page, 'getHouses');
+        drawPaginationElements(result, 'getHouses')
+        drawPagination(result.totalPages, page, 'getHouses');
+    } else {
+        $(`<tr>
+            <td colspan="4" class="text-center fw-bold h4">${dataNotFound}</td>
+           </tr>`).appendTo('tbody');
+    }
 }
 
 function addListenerToRow() {

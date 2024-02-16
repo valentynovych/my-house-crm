@@ -26,38 +26,44 @@ function getPaymentItems(page) {
 }
 
 function drawTable(result) {
-    const page = result.pageable.pageNumber;
-    for (const data of result.content) {
+    if (result.content && result.content.length > 0) {
+        const page = result.pageable.pageNumber;
+        for (const data of result.content) {
 
-        const badge = data.paymentType === 'INCOME'
-            ? '<span class="badge bg-label-success me-1">Дохід</span>'
-            : '<span class="badge bg-label-danger me-1">Витрати</span>';
+            const badge = data.paymentType === 'INCOME'
+                ? '<span class="badge bg-label-success me-1">Дохід</span>'
+                : '<span class="badge bg-label-danger me-1">Витрати</span>';
 
-        $('<tr>\n' +
-            '<td>' + data.name + '</td>\n' +
-            '<td>' + badge + '</td>\n' +
-            '<td>\n' +
-            '  <div class="dropdown">\n' +
-            '   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"\n' +
-            '           data-bs-toggle="dropdown">\n' +
-            '    <i class="ti ti-dots-vertical"></i>\n' +
-            '     </button>\n' +
-            '     <div class="dropdown-menu">\n' +
-            '     <a class="dropdown-item" href="payment-items/edit-item/' + data.id + '">\n' +
-            '     <i class="ti ti-pencil me-1"></i>Редагувати\n' +
-            '     </a>\n' +
-            '     <button type="button" class="dropdown-item btn justify-content-start" data-bs-toggle="modal" data-bs-target="#modalCenter"' +
-            '     onclick="addDeleteEvent(' + data.id + ')">\n' +
-            '     <i class="ti ti-trash me-1"></i>Видалити\n' +
-            '     </button>\n' +
-            '     </div>\n' +
-            '     </div>\n' +
-            '</td>\n' +
-            '</tr>').appendTo("tbody");
+            $('<tr>\n' +
+                '<td>' + data.name + '</td>\n' +
+                '<td>' + badge + '</td>\n' +
+                '<td>\n' +
+                '  <div class="dropdown">\n' +
+                '   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"\n' +
+                '           data-bs-toggle="dropdown">\n' +
+                '    <i class="ti ti-dots-vertical"></i>\n' +
+                '     </button>\n' +
+                '     <div class="dropdown-menu">\n' +
+                '     <a class="dropdown-item" href="payment-items/edit-item/' + data.id + '">\n' +
+                '     <i class="ti ti-pencil me-1"></i>Редагувати\n' +
+                '     </a>\n' +
+                '     <button type="button" class="dropdown-item btn justify-content-start" data-bs-toggle="modal" data-bs-target="#modalCenter"' +
+                '     onclick="addDeleteEvent(' + data.id + ')">\n' +
+                '     <i class="ti ti-trash me-1"></i>Видалити\n' +
+                '     </button>\n' +
+                '     </div>\n' +
+                '     </div>\n' +
+                '</td>\n' +
+                '</tr>').appendTo("tbody");
+        }
+
+        drawPaginationElements(result, 'getPaymentItems');
+        drawPagination(result.totalPages, page, 'getPaymentItems');
+    } else {
+        $(`<tr>
+            <td colspan="4" class="text-center fw-bold h4">${dataNotFound}</td>
+           </tr>`).appendTo('tbody');
     }
-
-    drawPaginationElements(result, 'getPaymentItems');
-    drawPagination(result.totalPages, page, 'getPaymentItems');
 
 }
 
