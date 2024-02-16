@@ -104,11 +104,11 @@ function addNewService() {
                                     <select class="form-select" type="text" name="services[${lastServiceIndex}].unitOfMeasurementId" 
                                         id="services[${lastServiceIndex}].unitOfMeasurementId" ></select>
                                 </div>
-                                ${i > 0 ? `<div class="mb-3 col-md-1 d-flex align-items-end">
+                                <div class="mb-3 col-md-1 d-flex align-items-end">
                                     <button type="button" class="btn btn-outline-danger delete-service">
                                         <i class="ti ti-trash ti-xs me-1"></i>
                                     </button>
-                                </div>`: ''}
+                                </div>
                                 <div class="mb-3 col-md-6 mt-0">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="services[${lastServiceIndex}].showInMeter"
@@ -272,10 +272,10 @@ function addNewUnit() {
                 <div class="input-group">
                      <input class="form-control" type="text" name="unitOfMeasurements[${lastUnitIndex}].name"
                          id="unitOfMeasurements[${lastUnitIndex}].name" placeholder="${unitLabel}">
-           ${i > 0 ? `<button type="button" class="btn btn-outline-danger input-group-text delete-unit">
+                     <button type="button" class="btn btn-outline-danger input-group-text delete-unit">
                                 <i class="ti ti-trash ti-xs me-1"></i>
                                 <span class="align-middle"></span>
-                      </button>` : ''}
+                     </button>
                 </div>
                 <input type="number" class="visually-hidden unit-id" id="unitOfMeasurements[${lastUnitIndex}].id"
                          name="unitOfMeasurements[${lastUnitIndex}].id">
