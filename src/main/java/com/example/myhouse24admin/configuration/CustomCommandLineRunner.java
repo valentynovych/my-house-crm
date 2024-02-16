@@ -11,17 +11,20 @@ public class CustomCommandLineRunner implements CommandLineRunner {
     private final ContactsPageService contactsPageService;
     private final ServicesPageService servicesPageService;
     private final AboutPageService aboutPageService;
+    private final MainPageService mainPageService;
 
     public CustomCommandLineRunner(RoleService roleService,
                                    StaffService staffService,
                                    ContactsPageService contactsPageService,
                                    ServicesPageService servicesPageService,
-                                   AboutPageService aboutPageService) {
+                                   AboutPageService aboutPageService,
+                                   MainPageService mainPageService) {
         this.roleService = roleService;
         this.staffService = staffService;
         this.contactsPageService = contactsPageService;
         this.servicesPageService = servicesPageService;
         this.aboutPageService = aboutPageService;
+        this.mainPageService = mainPageService;
     }
 
     @Override
@@ -31,5 +34,6 @@ public class CustomCommandLineRunner implements CommandLineRunner {
         contactsPageService.createContactsPageIfNotExist();
         servicesPageService.createServicesPageIfNotExist();
         aboutPageService.createAboutPageIfNotExist();
+        mainPageService.createMainPageIfNotExist();
     }
 }
