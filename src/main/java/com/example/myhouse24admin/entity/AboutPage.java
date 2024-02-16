@@ -18,7 +18,7 @@ public class AboutPage {
     private String additionalText;
     @Column(name = "director_image",length = 200)
     private String directorImage;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "seo_id", referencedColumnName = "id", nullable = false)
     private Seo seo;
 

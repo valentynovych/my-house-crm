@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="#{menu-item-home-page}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{site-management-main-edit-page}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
+            <span th:text="#{site-management-main-edit-page}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <form enctype="multipart/form-data" id="form" class="row g-3">
+            <div class="col-md-12">
+                <div class="py-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+                    <h5 class="mb-0" th:text="#{home-page-slider}">Слайдер</h5>
+                </div>
+            </div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <p th:text="#{home-page-slide-1}"></p>
+                    <img src="https://highfield-school.co.uk/wp-content/uploads/2021/02/orionthemes-placeholder-image-600x400.png"
+                    style="width: 100%; height: auto;" id="img1"
+                    class="d-block h-auto">
+                    <input type="file" accept=".jpeg, .jpg, .png" class="form-control d-none" id="image1-input" name="directorImage">
+                    <label class="form-label mt-3" th:text="#{home-page-recommended-size}"></label>
+                    <label class="input-group-text col-form-label" for="image1-input"
+                           name="image1" th:text="#{owners-label-image}">Завантажити</label>
+                </div>
+                <div class="col-md-4">
+                    <p th:text="#{home-page-slide-2}"></p>
+                    <img src="https://highfield-school.co.uk/wp-content/uploads/2021/02/orionthemes-placeholder-image-600x400.png"
+                         style="width: 100%; height: auto;" id="img2"
+                         class="d-block h-auto">
+                    <input type="file" accept=".jpeg, .jpg, .png" class="form-control d-none" id="image2-input" name="directorImage">
+                    <label class="form-label mt-3" th:text="#{home-page-recommended-size}"></label>
+                    <label class="input-group-text col-form-label" for="image2-input"
+                           name="image2" th:text="#{owners-label-image}">Завантажити</label>
+                </div>
+                <div class="col-md-4">
+                    <p th:text="#{home-page-slide-3}"></p>
+                    <img src="https://highfield-school.co.uk/wp-content/uploads/2021/02/orionthemes-placeholder-image-600x400.png"
+                         style="width: 100%; height: auto;" id="img3"
+                         class="d-block h-auto">
+                    <input type="file" accept=".jpeg, .jpg, .png" class="form-control d-none" id="image3-input" name="directorImage">
+                    <label class="form-label mt-3" th:text="#{home-page-recommended-size}"></label>
+                    <label class="input-group-text col-form-label" for="image3-input"
+                           name="image3" th:text="#{owners-label-image}">Завантажити</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="py-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+                    <h5 class="mb-0" th:text="#{home-page-short-information}">Коротка інформація</h5>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="title" class="form-label" th:text="#{site-management-title}">Заголовок</label>
+                <input type="text" class="form-control" id="title" name="title"
+                       th:placeholder="#{site-management-title}" maxlength="100">
+            </div>
+            <div class="col-md-12">
+                <label for="text" class="form-label mt-3" th:text="#{site-management-short-text}">Короткий
+                    текст</label>
+                <div id="text" name="text"></div>
+            </div>
+            <div class="col-md-12">
+                <input class="form-check-input" type="checkbox" value="" id="showLinks">
+                <label class="form-check-label ms-1" for="showLinks" th:text="#{home-page-show-links}">
+                    Показувати посилання на застосунки
+                </label>
+            </div>
+            <div class="col-md-12 mt-2">
+                <div class="py-3 d-flex justify-content-between align-items-end" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+                    <h5 class="mb-0" th:text="#{home-page-near-us}">Поруч з нами</h5>
+                    <button type="button" class="btn btn-primary" id="add-button" th:text="#{home-page-add-block}">Додати блок</button>
+                </div>
+            </div>
+            <div class="row g-2" id="blocks">
+            </div>
+
+            <div class="col-md-12 mt-2">
+                <div class="py-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+                    <h5 class="mb-0" th:text="#{seo-settings}">Налаштування SEO</h5>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="seoTitle" class="form-label">Title</label>
+                <input type="text" class="form-control" id="seoTitle" name="seoTitle"
+                       maxlength="100">
+            </div>
+            <div class="col-md-12">
+                <label for="seoDescription" class="form-label">Description</label>
+                <textarea type="text" class="form-control" rows="2" id="seoDescription" name="seoDescription"
+                          maxlength="300"></textarea>
+            </div>
+            <div class="col-md-12">
+                <label for="seoKeywords" class="form-label">Keywords</label>
+                <textarea type="text" class="form-control" rows="2" id="seoKeywords" name="seoKeywords"
+                          maxlength="200"></textarea>
+            </div>
+            <div class="mt-5 d-flex justify-content-end gap-3">
+                <button type="button" class="btn btn-secondary" id="cancel-button" th:text="#{general-button-cancel}">
+                    Відмінити
+                </button>
+                <button type="button" class="btn btn-primary" id="save-button" th:text="#{general-button-save}">
+                    Зберегти
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/site-management/main-page.js}"></script>
+<script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const successMessage = [[#{role-success-message}]];
+    const fileExtension = [[#{validation-file-extension-not-valid}]];
+    const recommendedSize = [[#{home-page-block-recommended-size}]];
+    const title = [[#{site-management-title}]];
+    const description = [[#{home-page-description}]];
+    const block = [[#{home-page-block}]];
+    const imageLabel = [[#{owners-label-image}]];
+    const deleteModalText = [[#{home-page-modal-delete-body}]];
+    const modalDeleteButton = [[#{general-button-delete}]]
+    const modalCloseButton = [[#{general-button-close}]]
+</script>
+</html>

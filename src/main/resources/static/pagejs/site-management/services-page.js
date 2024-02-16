@@ -81,7 +81,7 @@ function initializeQuillAndSetText(descriptionId, description) {
     descriptions.push(fullEditor);
 }
 function getButton(id){
-    return '<button class="btn btn-icon btn-label-danger" onclick="openDeleteModal('+id+')"  style="position: absolute; float:right; z-index: 1; top: 4%; right: -5%;">\n              ' +
+    return '<button type="button" class="btn btn-icon btn-label-danger" onclick="openDeleteModal('+id+')"  style="position: absolute; float:right; z-index: 1; top: 4%; right: -5%;">\n              ' +
         '<span class="ti ti-x"></span>'+
         '      </button>';
 }
@@ -130,7 +130,7 @@ function deleteService() {
         i = ind;
         ind++;
     });
-    descriptions.splice(index, index);
+    descriptions.splice(index, 1);
     $('#deleteModal').modal('hide');
 }
 $("#add-button").on("click",function () {
@@ -149,7 +149,7 @@ $("#add-button").on("click",function () {
                             <label class="input-group-text col-form-label" for="${"image-input" + lastId}">${imageLabel}</label>
                             <input type="file" accept=".jpeg, .jpg, .png" onchange="setImage(this)" class="form-control d-none"  id="${"image-input" + lastId}" name="servicePageBlocks[${i}]">
                         </div>
-                        <button class="btn btn-icon btn-label-danger" onclick="openDeleteModal(${lastId})"  style="position: absolute; float:right; z-index: 1; top: 4%; right: -5%;">
+                        <button type="button" class="btn btn-icon btn-label-danger" onclick="openDeleteModal(${lastId})"  style="position: absolute; float:right; z-index: 1; top: 4%; right: -5%;">
                             <span class="ti ti-x"></span>
                         </button>
                         <div>
@@ -182,6 +182,7 @@ function initializeQuill(id){
 }
 $("#save-button").on("click", function () {
     blockCardDody();
+    clearAllErrorMessage();
     let formData = collectServiceBlocksData();
     appendIdsToDeleteToFormData(formData);
     appendSeoToFormData(formData);

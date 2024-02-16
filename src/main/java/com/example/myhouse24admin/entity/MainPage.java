@@ -20,7 +20,7 @@ public class MainPage {
     private String image2;
     @Column(length = 200)
     private String image3;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "seo_id", referencedColumnName = "id", nullable = false)
     private Seo seo;
 
