@@ -46,7 +46,7 @@ public class TariffServiceImpl implements TariffService {
     public Page<TariffResponse> getAllTariffs(int page, int pageSize) {
         logger.info("getAllTariffs() -> start with parameters - page: {}, pageSize: {}", page, pageSize);
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "name"));
-        Page<Tariff> tariffPage = tariffRepo.findAll(pageable);
+        Page<Tariff> tariffPage = tariffRepo.findAllByDeletedIsFalse(pageable);
         List<TariffResponse> tariffResponseList = mapper.tariffListToTariffResponseList(tariffPage.getContent());
         Page<TariffResponse> tariffResponsePage =
                 new PageImpl<>(tariffResponseList, pageable, tariffPage.getTotalElements());
@@ -68,15 +68,18 @@ public class TariffServiceImpl implements TariffService {
     @Override
     public void editTariff(Long tariffId, TariffRequestWrap tariffRequest) {
         logger.info("editTariff() -> start");
+
+        if (tariffRequest.getTariffItemToDelete() != null
+                && !tariffRequest.getTariffItemToDelete().isEmpty()) {
+            List<Long> tariffItemToDelete = tariffRequest.getTariffItemToDelete();
+            tariffItemRepo.deleteAllById(tariffItemToDelete);
+        }
+
         Optional<Tariff> byId = tariffRepo.findById(tariffId);
         Tariff tariff = byId.orElseThrow(() ->
                 new EntityNotFoundException(String.format("Tariff with id: %s not found", tariffId)));
         mapper.updateTariffFromTariffRequest(tariff, tariffRequest.getTariffRequest());
 
-        if (tariffRequest.getTariffItemToDelete() != null
-                && !tariffRequest.getTariffItemToDelete().isEmpty()) {
-            tariffItemRepo.deleteAllById(tariffRequest.getTariffItemToDelete());
-        }
         tariff.getTariffItems().forEach(tariffItem -> tariffItem.setTariff(tariff));
         tariffRepo.save(tariff);
         logger.info("editTariff() -> exit");

@@ -21,6 +21,7 @@ public class Tariff {
     private boolean deleted;
     @OneToMany(mappedBy = "tariff",
             cascade = {
+                    CascadeType.PERSIST,
                     CascadeType.MERGE,
                     CascadeType.REMOVE})
     private List<TariffItem> tariffItems = new ArrayList<>();
