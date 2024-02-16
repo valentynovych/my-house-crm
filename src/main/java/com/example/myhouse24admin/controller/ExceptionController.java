@@ -8,6 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class ExceptionController {
     @GetMapping("/access-denied")
     public ModelAndView getAccessDenied() {
-        return new ModelAndView("errorPage/403-error");
+        return new ModelAndView("error/403-error");
     }
 }
