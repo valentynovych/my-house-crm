@@ -180,4 +180,5 @@ function generatePassword() {
 
 $('.button-cancel').on('click', function () {
     fillInputs(staffToRestore);
+    $('#password, #confirmPassword').val('');
 })
