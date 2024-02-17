@@ -3,7 +3,7 @@ package com.example.myhouse24admin.serviceImpl;
 import com.example.myhouse24admin.entity.PersonalAccount;
 import com.example.myhouse24admin.entity.PersonalAccountStatus;
 import com.example.myhouse24admin.mapper.PersonalAccountMapper;
-import com.example.myhouse24admin.model.apartments.personaAccount.PersonalAccountShortResponse;
+import com.example.myhouse24admin.model.personalAccounts.PersonalAccountShortResponse;
 import com.example.myhouse24admin.model.personalAccounts.PersonalAccountTableResponse;
 import com.example.myhouse24admin.repository.PersonalAccountRepo;
 import com.example.myhouse24admin.service.PersonalAccountService;

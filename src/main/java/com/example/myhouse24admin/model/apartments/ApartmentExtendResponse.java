@@ -1,7 +1,7 @@
 package com.example.myhouse24admin.model.apartments;
 
 import com.example.myhouse24admin.model.apartmentOwner.ApartmentOwnerShortResponse;
-import com.example.myhouse24admin.model.apartments.personaAccount.PersonalAccountShortResponse;
+import com.example.myhouse24admin.model.personalAccounts.PersonalAccountShortResponse;
 import com.example.myhouse24admin.model.houses.FloorResponse;
 import com.example.myhouse24admin.model.houses.HouseShortResponse;
 import com.example.myhouse24admin.model.houses.SectionResponse;

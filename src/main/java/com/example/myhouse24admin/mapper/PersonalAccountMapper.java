@@ -1,7 +1,7 @@
 package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.PersonalAccount;
-import com.example.myhouse24admin.model.apartments.personaAccount.PersonalAccountShortResponse;
+import com.example.myhouse24admin.model.personalAccounts.PersonalAccountShortResponse;
 import com.example.myhouse24admin.model.personalAccounts.PersonalAccountTableResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
