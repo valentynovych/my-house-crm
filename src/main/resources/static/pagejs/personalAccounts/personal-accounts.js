@@ -250,23 +250,30 @@ function drawTable(result) {
     if (result.content && result.content.length > 0) {
         let iter = 0;
         for (const personalAccount of result.content) {
-            const apartmentNumber = personalAccount.accountNumber.toString().padStart(11, '00000-00000');
+            const accountNumber = personalAccount.accountNumber.toString().padStart(11, '00000-00000');
             const status = getAccountStatusLabel(personalAccount.status);
             const statusBadge = personalAccount.status === 'ACTIVE'
                 ? `<span class="badge rounded-pill bg-success">${status}</span>`
                 : personalAccount.status === 'NONACTIVE'
                     ? `<span class="badge rounded-pill bg-danger">${status}</span>`
                     : `<span class="badge rounded-pill bg-dark">${status}</span>`;
+            const apartmentNumber = (personalAccount.apartment.apartmentNumber).toString().padStart(5, '00000');
+            const numberFormat = new Intl.NumberFormat('uk');
+            const balance = personalAccount.apartment.balance;
+            const balanceText = balance > 0
+                ? `<span class="text-success">${numberFormat.format(balance)}</span>`
+                : balance < 0
+                    ? `<span class="text-danger">${numberFormat.format(balance)}</span>` : `<span class="text-dark">${numberFormat.format(balance)}</span>`;
 
             $(`<tr data-href="personal-accounts/view-account/${personalAccount.id}" class="cursor-pointer">
-            <td>${apartmentNumber}</td>
+            <td>${accountNumber}</td>
             <td class="text-center">${statusBadge}</td>
-            <td>${personalAccount.apartment.apartmentNumber}</td>
+            <td>${apartmentNumber}</td>
             <td>${personalAccount.apartment.house.name}</td>
             <td>${personalAccount.apartment.section.name}</td>
             <td>${personalAccount.apartment.owner.fullName}</td>
-            <td>${personalAccount.apartment.balance}</td>
-            <td>
+            <td class="text-center">${balanceText}</td>
+            <td class="text-center">
               <div class="dropdown">
                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
                        data-bs-toggle="dropdown">
