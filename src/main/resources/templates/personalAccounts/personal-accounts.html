@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{menu-item-personal-account}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{menu-item-personal-account}"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{menu-item-personal-account}"></span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body" >
+        <div class="mb-3 d-flex justify-content-end">
+            <a th:href="@{personal-accounts/add}" class="btn btn-primary me-2">
+                <span class="tf-icons ti-xs ti ti-plus me-1"></span>
+                <span th:text="#{personal-accounts-button-add}"></span>
+            </a>
+        </div>
+        <div class="table-responsive" id="dropdownParent">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th colspan="8" class="p-1">
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary clear-filters"
+                                    th:text="#{general-button-clear-table}">Clear
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="table-primary text-center">
+                    <th th:text="#{personal-accounts-label-account-number}"></th>
+                    <th th:text="#{personal-accounts-label-status}"></th>
+                    <th th:text="#{personal-accounts-label-apartment}"></th>
+                    <th th:text="#{personal-accounts-label-house}"></th>
+                    <th th:text="#{personal-accounts-label-section}"></th>
+                    <th th:text="#{personal-accounts-label-apartment-owner}"></th>
+                    <th th:text="#{personal-accounts-label-balance}"></th>
+                    <th th:text="#{general-table-action}"></th>
+                </tr>
+                <tr>
+                    <td style="width: 9rem"><input type="text" id="filter-by-number" class="form-control"></td>
+                    <td style="min-width: 13rem">
+                        <div id="filter-by-status-wrap">
+                            <select class="form-select select2" id="filter-by-status"></select>
+                        </div>
+                    </td>
+                    <td style="width: 9rem"><input type="text" id="filter-by-apartment" class="form-control"></td>
+                    <td style="min-width: 13rem">
+                        <div id="filter-by-house-wrap">
+                            <select class="form-select select2" id="filter-by-house"></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 13rem">
+                        <div id="filter-by-section-wrap">
+                            <select class="form-select select2" id="filter-by-section" disabled></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 13rem">
+                        <div id="filter-by-owner-wrap">
+                            <select class="form-select select2" id="filter-by-owner"></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 12rem">
+                        <div id="filter-by-balance-wrap">
+                            <select class="form-select select2" id="filter-by-balance">
+                                <option value="arrears" th:text="#{apartment-balance-arrears}"></option>
+                                <option value="overpayment" th:text="#{apartment-balance-overpayment}"></option>
+                            </select>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{personal-accounts-modal-delete-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete"
+                            th:text="#{general-button-delete}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/personalAccounts/personal-accounts.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    const buttonLabelEdit = /*[[#{general-button-edit}]]*/ 'default';
+    const buttonLabelDelete = /*[[#{general-button-delete}]]*/ 'default';
+    const successMessageOnDelete = /*[[#{staff-message-success-delete}]]*/ 'default';
+    const errorMessageOnDelete = /*[[#{staff-message-error-delete}]]*/ 'default';
+
+    const tableShow = [[#{table-show}]];
+    const tableShowing = [[#{table-showing}]];
+    const tableEntries = [[#{table-entries}]];
+    const tableOf = [[#{table-of}]];
+
+    const accountStatusActive = /*[[#{personal-accounts-label-status-active}]]*/ 'default';
+    const accountStatusNonActive = /*[[#{personal-accounts-label-status-nonactive}]]*/ 'default';
+    const chooseFloor = /*[[#{apartment-choose-floor}]]*/ 'default';
+    const chooseOwner = /*[[#{apartment-choose-owner}]]*/ 'default';
+    const chooseTariff = /*[[#{apartment-choose-tariff}]]*/ 'default';
+    const enterArea = /*[[#{apartment-enter-area}]]*/ 'default';
+    const chooseAccount = /*[[#{apartment-choose-account}]]*/ 'default';
+    const labelApartmentNumber = /*[[#{apartment-label-apartment-number}]]*/ 'default';
+    const emptyTableLabel = /*[[#{apartment-label-empty-table}]]*/ 'default';
+
+</script>
+</html>

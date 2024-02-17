@@ -14,8 +14,7 @@ import java.util.List;
                 HouseMapper.class,
                 SectionMapper.class,
                 FloorMapper.class,
-                TariffMapper.class,
-                PersonalAccountMapper.class})
+                TariffMapper.class})
 public interface ApartmentMapper {
     @Mapping(target = "owner.id", source = "ownerId")
     @Mapping(target = "house.id", source = "houseId")
@@ -28,7 +27,7 @@ public interface ApartmentMapper {
 
     List<ApartmentResponse> apartmentListToApartmentResponseList(List<Apartment> apartments);
 
-    ApartmentResponse apartmentToApartmentResponse(Apartment apartments);
+    ApartmentResponse apartmentToApartmentResponse(Apartment apartment);
 
     @Mapping(target = "tariff", source = "tariff")
     ApartmentExtendResponse apartmentToApartmentExtendResponse(Apartment apartment);
