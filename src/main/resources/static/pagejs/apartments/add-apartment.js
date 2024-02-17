@@ -292,6 +292,11 @@ function initInputAndSelect() {
 
         let formData = new FormData($('#apartmentForm')[0]);
 
+        let personalAccountNew = formData.get('personalAccountNew');
+        if (personalAccountNew) {
+            formData.set('personalAccountNew', personalAccountNew.replace(/\D/, ''));
+        }
+
         // for (const formDatum of formData.entries()) {
         //     console.log(formDatum)
         // }
