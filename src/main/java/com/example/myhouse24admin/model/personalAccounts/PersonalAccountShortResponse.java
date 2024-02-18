@@ -1,4 +1,4 @@
-package com.example.myhouse24admin.model.apartments.personaAccount;
+package com.example.myhouse24admin.model.personalAccounts;
 
 public class PersonalAccountShortResponse {
     private Long id;

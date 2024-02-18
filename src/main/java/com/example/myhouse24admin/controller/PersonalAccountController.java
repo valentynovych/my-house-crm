@@ -1,17 +1,16 @@
 package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.entity.PersonalAccountStatus;
-import com.example.myhouse24admin.model.apartments.personaAccount.PersonalAccountShortResponse;
+import com.example.myhouse24admin.model.personalAccounts.PersonalAccountShortResponse;
+import com.example.myhouse24admin.model.personalAccounts.PersonalAccountAddRequest;
 import com.example.myhouse24admin.model.personalAccounts.PersonalAccountTableResponse;
 import com.example.myhouse24admin.service.PersonalAccountService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public class PersonalAccountController {
     }
 
     @GetMapping("add")
-    public ModelAndView addNewPersonalAccount() {
+    public ModelAndView viewAddPersonalAccount() {
         return new ModelAndView("personalAccounts/add-personal-account");
     }
 
@@ -59,5 +58,11 @@ public class PersonalAccountController {
     public @ResponseBody ResponseEntity<?> getPersonalAccountStatuses() {
         List<PersonalAccountStatus> responses = personalAccountService.getPersonalAccountStatuses();
         return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    @PostMapping("add")
+    public ResponseEntity<?> addNewPersonalAccount(@ModelAttribute @Valid PersonalAccountAddRequest request) {
+        personalAccountService.addNewPersonalAccount(request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -13,8 +13,8 @@ public class PersonalAccount {
     private PersonalAccountStatus status;
     @Column(nullable = false)
     private boolean deleted;
-    @OneToOne
-    @JoinColumn(name = "apartment_id", referencedColumnName = "id", nullable = false)
+    @OneToOne(cascade = CascadeType.DETACH)
+    @JoinColumn(name = "apartment_id", referencedColumnName = "id")
     private Apartment apartment;
     @Column(nullable = false, unique = true)
     private Long accountNumber;
