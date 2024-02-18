@@ -257,21 +257,26 @@ function drawTable(result) {
                 : personalAccount.status === 'NONACTIVE'
                     ? `<span class="badge rounded-pill bg-danger">${status}</span>`
                     : `<span class="badge rounded-pill bg-dark">${status}</span>`;
-            const apartmentNumber = (personalAccount.apartment.apartmentNumber).toString().padStart(5, '00000');
-            const numberFormat = new Intl.NumberFormat('uk');
-            const balance = personalAccount.apartment.balance;
-            const balanceText = balance > 0
-                ? `<span class="text-success">${numberFormat.format(balance)}</span>`
-                : balance < 0
-                    ? `<span class="text-danger">${numberFormat.format(balance)}</span>` : `<span class="text-dark">${numberFormat.format(balance)}</span>`;
+            let apartmentNumber = '-'
+            let balanceText = '-';
+            const isHaveApartment = !!personalAccount.apartment;
+            if (isHaveApartment) {
+                apartmentNumber = (personalAccount.apartment.apartmentNumber).toString().padStart(5, '00000');
+                const numberFormat = new Intl.NumberFormat('uk');
+                const balance = personalAccount.apartment.balance;
+                balanceText = balance > 0
+                    ? `<span class="text-success">${numberFormat.format(balance)}</span>`
+                    : balance < 0
+                        ? `<span class="text-danger">${numberFormat.format(balance)}</span>` : `<span class="text-dark">${numberFormat.format(balance)}</span>`;
+            }
 
             $(`<tr data-href="personal-accounts/view-account/${personalAccount.id}" class="cursor-pointer">
             <td>${accountNumber}</td>
             <td class="text-center">${statusBadge}</td>
             <td>${apartmentNumber}</td>
-            <td>${personalAccount.apartment.house.name}</td>
-            <td>${personalAccount.apartment.section.name}</td>
-            <td>${personalAccount.apartment.owner.fullName}</td>
+            <td>${isHaveApartment ? personalAccount.apartment.house.name : '-'}</td>
+            <td>${isHaveApartment ? personalAccount.apartment.section.name : '-'}</td>
+            <td>${isHaveApartment ? personalAccount.apartment.owner.fullName : '-'}</td>
             <td class="text-center">${balanceText}</td>
             <td class="text-center">
               <div class="dropdown">
