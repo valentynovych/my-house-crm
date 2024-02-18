@@ -6,6 +6,8 @@ const $selectApartment = $('[name="apartmentId"]');
 const $selectHouse = $('[name="houseId"]');
 const $selectSection = $('[name="sectionId"]');
 const $selectStatus = $('[name="status"]');
+const $apartmentOwnerPhone = $('#owner-phone');
+const $apartmentOwnerText = $('#apartment-owner');
 
 function initInputAndSelect() {
 
@@ -72,9 +74,12 @@ function initInputAndSelect() {
         }
     });
 
+
     $selectHouse.on('change', function () {
         $selectSection.val('').trigger('change');
         $selectApartment.val('').trigger('change');
+        $apartmentOwnerText.html(labelNotSet);
+        $apartmentOwnerPhone.html(labelNotSet);
         const houseId = $(this).val();
         if (houseId > 0) {
             $selectSection.removeAttr('disabled');
@@ -123,47 +128,58 @@ function initInputAndSelect() {
                 }
             }
         });
+    }
 
-        $selectSection.on("select2:select", function () {
-            $selectApartment.val('').trigger('change');
-            const sectionId = $(this).val();
-            if (sectionId > 0) {
-                $selectApartment.removeAttr("disabled")
-                initSectionNestedSelect(sectionId);
+    $selectSection.on("select2:select", function () {
+        $selectApartment.val('').trigger('change');
+        const sectionId = $(this).val();
+        if (sectionId > 0) {
+            $selectApartment.removeAttr("disabled")
+            initSectionNestedSelect(sectionId);
+        }
+    });
+
+    function initSectionNestedSelect(sectionId) {
+        $selectApartment.select2({
+            placeholder: chooseSection,
+            dropdownParent: $selectApartment.parent(),
+            ajax: {
+                type: "GET",
+                url: '../apartments/get-apartments?section=' + sectionId,
+                data: function (params) {
+                    return {
+                        apartmentNumber: params.term,
+                        page: (params.page - 1) || 0,
+                        pageSize: 10
+                    };
+                },
+                processResults: function (response) {
+                    return {
+                        results: $.map(response.content, function (apartment) {
+                            return {
+                                id: apartment.id,
+                                text: (apartment.apartmentNumber).toString().padStart(5, '00000'),
+                                data_name: apartment.owner.fullName,
+                                data_phone: apartment.owner.phoneNumber,
+                            }
+                        }),
+                        pagination: {
+                            more: !response.last
+                        }
+                    };
+                }
             }
         });
-
-        function initSectionNestedSelect(sectionId) {
-            $selectApartment.select2({
-                placeholder: chooseSection,
-                dropdownParent: $selectApartment.parent(),
-                ajax: {
-                    type: "GET",
-                    url: '../apartments/get-apartments?section=' + sectionId,
-                    data: function (params) {
-                        return {
-                            apartmentNumber: params.term,
-                            page: (params.page - 1) || 0,
-                            pageSize: 10
-                        };
-                    },
-                    processResults: function (response) {
-                        return {
-                            results: $.map(response.content, function (apartment) {
-                                return {
-                                    id: apartment.id,
-                                    text: (apartment.apartmentNumber).toString().padStart(5, '00000')
-                                }
-                            }),
-                            pagination: {
-                                more: !response.last
-                            }
-                        };
-                    }
-                }
-            });
-        }
     }
+
+
+    $selectApartment.on('change', function () {
+        const select2Element = $selectApartment.select2('data')[0];
+        if (select2Element) {
+            $apartmentOwnerText.html(select2Element.data_name);
+            $apartmentOwnerPhone.html(select2Element.data_phone);
+        }
+    })
 
     function decorateAccountNumber(accountNumber) {
         let s = (accountNumber + '').padStart(10, '0000000000');
