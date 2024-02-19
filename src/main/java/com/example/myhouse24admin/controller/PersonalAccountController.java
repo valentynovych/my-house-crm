@@ -39,6 +39,11 @@ public class PersonalAccountController {
         return new ModelAndView("personalAccounts/edit-personal-account");
     }
 
+    @GetMapping("view-account/{accountId}")
+    public ModelAndView viewViewPersonalAccount(@PathVariable Long accountId) {
+        return new ModelAndView("personalAccounts/view-personal-account");
+    }
+
     @GetMapping("get-accounts-find-number")
     public @ResponseBody ResponseEntity<?> getAccountsFindByNumber(@RequestParam int page,
                                                                    @RequestParam int pageSize,
