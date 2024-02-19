@@ -2,6 +2,9 @@ package com.example.myhouse24admin.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "sections")
 public class Section {
@@ -17,6 +20,8 @@ public class Section {
     private House house;
     @Column(length = 8, nullable = false)
     private String rangeApartmentNumbers;
+    @OneToMany(mappedBy = "section")
+    private List<Apartment> apartments = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -56,5 +61,13 @@ public class Section {
 
     public void setRangeApartmentNumbers(String rangeApartmentNumbers) {
         this.rangeApartmentNumbers = rangeApartmentNumbers;
+    }
+
+    public List<Apartment> getApartments() {
+        return apartments;
+    }
+
+    public void setApartments(List<Apartment> apartments) {
+        this.apartments = apartments;
     }
 }

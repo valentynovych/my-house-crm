@@ -4,6 +4,7 @@ import com.example.myhouse24admin.entity.*;
 import com.example.myhouse24admin.model.apartments.ApartmentAddRequest;
 import com.example.myhouse24admin.model.apartments.ApartmentExtendResponse;
 import com.example.myhouse24admin.model.apartments.ApartmentResponse;
+import com.example.myhouse24admin.model.meterReadings.ApartmentNumberResponse;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -75,4 +76,6 @@ public interface ApartmentMapper {
         tariff.setId(tariffId);
         return tariff;
     }
+
+    List<ApartmentNumberResponse> apartmentListToApartmentNameResponse(List<Apartment> apartments);
 }

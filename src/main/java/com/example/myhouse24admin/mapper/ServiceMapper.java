@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.Service;
+import com.example.myhouse24admin.model.meterReadings.ServiceNameResponse;
 import com.example.myhouse24admin.model.services.ServiceDto;
 import com.example.myhouse24admin.model.services.ServiceResponse;
 import org.mapstruct.InjectionStrategy;
@@ -31,4 +32,5 @@ public interface ServiceMapper {
     List<ServiceResponse> serviceListToServiceResponseList(List<Service> services);
 
     List<Service> serviceResponseListToServiceList(List<ServiceResponse> services);
+    List<ServiceNameResponse> serviceListToServiceNameResponse(List<Service> services);
 }

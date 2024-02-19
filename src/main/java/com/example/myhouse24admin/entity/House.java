@@ -48,6 +48,8 @@ public class House {
                     CascadeType.DETACH,
                     CascadeType.REFRESH})
     private List<Floor> floors = new ArrayList<>();
+    @OneToMany(mappedBy = "house")
+    private List<Apartment> apartments = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -143,5 +145,13 @@ public class House {
 
     public void setFloors(List<Floor> floors) {
         this.floors = floors;
+    }
+
+    public List<Apartment> getApartments() {
+        return apartments;
+    }
+
+    public void setApartments(List<Apartment> apartments) {
+        this.apartments = apartments;
     }
 }

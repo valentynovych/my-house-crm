@@ -7,6 +7,8 @@ import com.example.myhouse24admin.mapper.ApartmentMapper;
 import com.example.myhouse24admin.model.apartments.ApartmentAddRequest;
 import com.example.myhouse24admin.model.apartments.ApartmentExtendResponse;
 import com.example.myhouse24admin.model.apartments.ApartmentResponse;
+import com.example.myhouse24admin.model.meterReadings.ApartmentNumberResponse;
+import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.repository.ApartmentRepo;
 import com.example.myhouse24admin.repository.PersonalAccountRepo;
 import com.example.myhouse24admin.service.ApartmentService;
@@ -18,11 +20,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.example.myhouse24admin.specification.ApartmentInterfaceSpecification.*;
 
 @Service
 public class ApartmentServiceImpl implements ApartmentService {
@@ -126,5 +131,25 @@ public class ApartmentServiceImpl implements ApartmentService {
             personalAccount.setAccountNumber(personalAccountRepo.getMaxAccountNumber());
         }
         apartment.setPersonalAccount(personalAccount);
+    }
+
+    @Override
+    public Page<ApartmentNumberResponse> getApartmentsForSelect(SelectSearchRequest selectSearchRequest, Long houseId, Long sectionId) {
+        logger.info("getApartmentsForSelect - Getting apartment name responses for select " + selectSearchRequest.toString());
+        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Page<Apartment> apartments = getFilteredApartmentsForSelect(selectSearchRequest, pageable, houseId, sectionId);
+        List<ApartmentNumberResponse> apartmentNumberRespons = apartmentMapper.apartmentListToApartmentNameResponse(apartments.getContent());
+        Page<ApartmentNumberResponse> apartmentNameResponsePage = new PageImpl<>(apartmentNumberRespons, pageable, apartments.getTotalElements());
+        logger.info("getApartmentsForSelect - Apartment name responses were got");
+        return apartmentNameResponsePage;
+    }
+
+    private Page<Apartment> getFilteredApartmentsForSelect(SelectSearchRequest selectSearchRequest, Pageable pageable, Long houseId, Long sectionId) {
+        Specification<Apartment> apartmentSpecification = Specification.where(byDeleted()
+                .and(byHouseId(houseId)).and(bySectionId(sectionId)));
+        if(!selectSearchRequest.search().isEmpty()){
+            apartmentSpecification = apartmentSpecification.and(byNumber(Integer.valueOf(selectSearchRequest.search())));
+        }
+        return apartmentRepo.findAll(apartmentSpecification, pageable);
     }
 }

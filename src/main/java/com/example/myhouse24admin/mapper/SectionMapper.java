@@ -4,6 +4,7 @@ import com.example.myhouse24admin.entity.House;
 import com.example.myhouse24admin.entity.Section;
 import com.example.myhouse24admin.model.houses.SectionRequest;
 import com.example.myhouse24admin.model.houses.SectionResponse;
+import com.example.myhouse24admin.model.meterReadings.SectionNameResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 
@@ -21,4 +22,5 @@ public interface SectionMapper {
     SectionResponse sectionToSectionResponse(Section section);
 
     List<SectionResponse> sectionListToSectionResponseList(List<Section> content);
+    List<SectionNameResponse> sectionListToSectionNameResponseList(List<Section> sections);
 }

@@ -13,6 +13,8 @@ public class MeterReading {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 10, nullable = false)
+    private String number;
     @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
     @Enumerated(EnumType.STRING)
@@ -37,6 +39,14 @@ public class MeterReading {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public Instant getCreationDate() {
