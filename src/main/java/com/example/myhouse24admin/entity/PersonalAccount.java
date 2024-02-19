@@ -13,7 +13,7 @@ public class PersonalAccount {
     private PersonalAccountStatus status;
     @Column(nullable = false)
     private boolean deleted;
-    @OneToOne(cascade = CascadeType.DETACH)
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "apartment_id", referencedColumnName = "id")
     private Apartment apartment;
     @Column(nullable = false, unique = true)

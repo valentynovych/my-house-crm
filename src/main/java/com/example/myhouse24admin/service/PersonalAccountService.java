@@ -1,9 +1,7 @@
 package com.example.myhouse24admin.service;
 
 import com.example.myhouse24admin.entity.PersonalAccountStatus;
-import com.example.myhouse24admin.model.personalAccounts.PersonalAccountAddRequest;
-import com.example.myhouse24admin.model.personalAccounts.PersonalAccountShortResponse;
-import com.example.myhouse24admin.model.personalAccounts.PersonalAccountTableResponse;
+import com.example.myhouse24admin.model.personalAccounts.*;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -17,4 +15,8 @@ public interface PersonalAccountService {
     List<PersonalAccountStatus> getPersonalAccountStatuses();
 
     void addNewPersonalAccount(PersonalAccountAddRequest request);
+
+    PersonalAccountResponse getPersonalAccountById(Long accountId);
+
+    void updatePersonalAccount(PersonalAccountUpdateRequest request);
 }

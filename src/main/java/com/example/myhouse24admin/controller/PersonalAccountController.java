@@ -1,9 +1,7 @@
 package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.entity.PersonalAccountStatus;
-import com.example.myhouse24admin.model.personalAccounts.PersonalAccountShortResponse;
-import com.example.myhouse24admin.model.personalAccounts.PersonalAccountAddRequest;
-import com.example.myhouse24admin.model.personalAccounts.PersonalAccountTableResponse;
+import com.example.myhouse24admin.model.personalAccounts.*;
 import com.example.myhouse24admin.service.PersonalAccountService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -36,6 +34,11 @@ public class PersonalAccountController {
         return new ModelAndView("personalAccounts/add-personal-account");
     }
 
+    @GetMapping("edit-account/{accountId}")
+    public ModelAndView viewEditPersonalAccount() {
+        return new ModelAndView("personalAccounts/edit-personal-account");
+    }
+
     @GetMapping("get-accounts-find-number")
     public @ResponseBody ResponseEntity<?> getAccountsFindByNumber(@RequestParam int page,
                                                                    @RequestParam int pageSize,
@@ -65,4 +68,18 @@ public class PersonalAccountController {
         personalAccountService.addNewPersonalAccount(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("get-account/{accountId}")
+    public @ResponseBody ResponseEntity<?> getPersonalAccount(@PathVariable Long accountId) {
+        PersonalAccountResponse response = personalAccountService.getPersonalAccountById(accountId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("edit-account/{accountId}")
+    public ResponseEntity<?> updatePersonalAccount(@PathVariable Long accountId,
+                                                   @ModelAttribute @Valid PersonalAccountUpdateRequest request) {
+        personalAccountService.updatePersonalAccount(request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

@@ -2,13 +2,8 @@ package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.PersonalAccount;
-import com.example.myhouse24admin.model.personalAccounts.PersonalAccountAddRequest;
-import com.example.myhouse24admin.model.personalAccounts.PersonalAccountShortResponse;
-import com.example.myhouse24admin.model.personalAccounts.PersonalAccountTableResponse;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import com.example.myhouse24admin.model.personalAccounts.*;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -40,4 +35,12 @@ public interface PersonalAccountMapper {
             return null;
         }
     }
+
+    @Mapping(target = "apartment", source = "apartment")
+    @Mapping(target = "apartment.owner.fullName", expression = "java(apartmentOwner.getLastName()+\" " +
+            "\"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
+    PersonalAccountResponse personalAccountToPersonalAccountResponse(PersonalAccount account);
+
+    @Mapping(target = "apartment", source = "apartmentId", qualifiedByName = "setApartment")
+    void updatePersonalAccountFromRequest(@MappingTarget PersonalAccount personalAccount, PersonalAccountUpdateRequest request);
 }
