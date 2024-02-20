@@ -3,6 +3,8 @@ package com.example.myhouse24admin.serviceImpl;
 import com.example.myhouse24admin.entity.House;
 import com.example.myhouse24admin.mapper.HouseMapper;
 import com.example.myhouse24admin.model.houses.*;
+import com.example.myhouse24admin.model.meterReadings.HouseNameResponse;
+import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.repository.HouseRepo;
 import com.example.myhouse24admin.service.HouseService;
 import com.example.myhouse24admin.specification.HouseSpecification;
@@ -11,12 +13,15 @@ import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.example.myhouse24admin.specification.HouseInterfaceSpecification.*;
 
 @Service
 public class HouseServiceImpl implements HouseService {
@@ -127,5 +132,23 @@ public class HouseServiceImpl implements HouseService {
         if (!images.get(2).isEmpty()) house.setImage3(fileUtil.saveFile(images.get(2)));
         if (!images.get(3).isEmpty()) house.setImage4(fileUtil.saveFile(images.get(3)));
         if (!images.get(4).isEmpty()) house.setImage5(fileUtil.saveFile(images.get(4)));
+    }
+
+    @Override
+    public Page<HouseNameResponse> getHousesForSelect(SelectSearchRequest selectSearchRequest) {
+        logger.info("getHousesForSelect - Getting house name responses for select " + selectSearchRequest.toString());
+        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Page<House> houses = getFilteredHousesForSelect(selectSearchRequest, pageable);
+        List<HouseNameResponse> houseNameResponses = houseMapper.houseListToHouseNameResponseList(houses.getContent());
+        Page<HouseNameResponse> houseNameResponsePage = new PageImpl<>(houseNameResponses, pageable, houses.getTotalElements());
+        logger.info("getHousesForSelect - House name responses were got");
+        return houseNameResponsePage;
+    }
+    private Page<House> getFilteredHousesForSelect(SelectSearchRequest selectSearchRequest, Pageable pageable){
+        Specification<House> houseSpecification = Specification.where(byDeleted());
+        if(!selectSearchRequest.search().isEmpty()){
+            houseSpecification = houseSpecification.and(byNameLike(selectSearchRequest.search()));
+        }
+        return houseRepo.findAll(houseSpecification, pageable);
     }
 }

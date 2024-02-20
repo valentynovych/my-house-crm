@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="#{menu-item-meters}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 id="pageTitle"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
+            <a th:href="@{/admin/meter-readings}" th:text="#{menu-item-meters} + ' / '"></a>
+            <span id="breadCrumb"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <form enctype="multipart/form-data" id="form" class="row g-3">
+            <div class="col-md-3">
+            <div class="input-group">
+                <span class="input-group-text">№</span>
+                <input type="text" class="form-control" id="number" disabled name="number"/>
+            </div>
+            </div>
+            <div class="col-md-1 d-flex justify-content-center align-items-center">від</div>
+            <div class="col-md-3">
+                <div class="input-group">
+                <input type="text" class="form-control" id="creationDate" name="creationDate">
+                    <span class="input-group-text"><i class="ti ti-calendar"></i></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label for="house" class="form-label" th:text="#{apartment-label-house}">Будинок</label>
+                <select class="form-select" id="house" name="house"></select>
+            </div>
+            <div class="col-md-6">
+                <label for="status" class="form-label" th:text="#{staff-label-status}">Статус</label>
+                <select class="form-select" id="status" name="status"></select>
+            </div>
+            <div class="col-md-6">
+                <label for="section" class="form-label" th:text="#{apartment-label-section}">Секція</label>
+                <select class="form-select" id="section" name="section" disabled></select>
+            </div>
+            <div class="col-md-6">
+                <label for="readings" class="form-label" th:text="#{meter-readings-reading}">Показання лічильника</label>
+                <input type="number" class="form-control" id="readings" name="readings" th:placeholder="#{meter-readings-reading}">
+            </div>
+            <div class="col-md-6">
+                <label for="apartmentId" class="form-label" th:text="#{apartments-label-apartment}">Квартира</label>
+                <select class="form-select" id="apartmentId" name="apartmentId" disabled></select>
+            </div>
+            <div class="col-md-6"></div>
+            <div class="col-md-6">
+                <label for="serviceId" class="form-label" th:text="#{service-label}">Послуга</label>
+                <select class="form-select" id="serviceId" name="serviceId"></select>
+            </div>
+            <div class="mt-5 d-flex justify-content-end gap-3">
+                <button type="button" class="btn btn-secondary" id="cancel-button" th:text="#{general-button-cancel}">Відмінити</button>
+                <button type="button" class="btn btn-primary" id="save-button" th:text="#{general-button-save}">Зберегти</button>
+                <button type="button" class="btn btn-primary" id="save-add-button" th:text="#{meter-readings-save-add}">Зберегти та додати нові показання</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/meter-readings/meter-reading.js}"></script>
+<script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const newStatus = [[#{meter-readings-status-new}]];
+    const includedStatus = [[#{meter-readings-status-included}]];
+    const includedPaidStatus = [[#{meter-readings-status-included-paid}]]
+    const zeroStatus = [[#{meter-readings-status-zero}]];
+    const houseLink = [[${houseLink}]];
+    const sectionLink = [[${sectionLink}]];
+    const apartmentLink = [[${apartmentLink}]];
+    const serviceLink = [[${serviceLink}]];
+    const statusLink = [[${statusLink}]];
+    const number = [[${number}]];
+</script>
+</html>

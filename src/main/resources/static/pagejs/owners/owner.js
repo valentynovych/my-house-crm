@@ -1,10 +1,10 @@
 let defaultOwner;
 $(document).ready(function () {
     console.log(statusLink);
-    console.log(defaultOwner === undefined);
     initializeInputMasks();
     autosize($("#aboutOwner"));
     initializeStatusSelect();
+    var d = new Date(new Date().getFullYear(), 0, 1);
     if(statusLink.includes("..")){
         getOwner();
         $("#breadCrumb").text(breadCrumbEdit);
@@ -14,7 +14,8 @@ $(document).ready(function () {
         $("#pageTitle").text(newOwner)
         $("#birthDate").flatpickr({
             locale: "uk",
-            dateFormat: "d.m.Y"
+            dateFormat: "d.m.Y",
+            maxDate: moment(d).subtract(17, 'years').format('DD.MM.YYYY')
         });
     }
 });
@@ -188,10 +189,12 @@ function setFields(response) {
     const myArray = currentUrl.split("/");
     let root = myArray[3];
     $("#avatar-img").attr("src",'/'+root+ '/uploads/'+response.image);
+    var d = new Date(new Date().getFullYear(), 0, 1);
     $("#birthDate").flatpickr({
         locale: "uk",
         defaultDate: response.birthDate,
-        dateFormat: "d.m.Y"
+        dateFormat: "d.m.Y",
+        maxDate: moment(d).subtract(17, 'years').format('DD.MM.YYYY')
     });
     var option = new Option(getStatus(response.status), response.status, true, true);
     $('#status').append(option).trigger('change');

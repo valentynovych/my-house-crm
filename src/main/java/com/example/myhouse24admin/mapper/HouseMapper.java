@@ -3,6 +3,7 @@ package com.example.myhouse24admin.mapper;
 import com.example.myhouse24admin.entity.House;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.houses.*;
+import com.example.myhouse24admin.model.meterReadings.HouseNameResponse;
 import org.mapstruct.*;
 
 import java.util.ArrayList;
@@ -39,4 +40,5 @@ public interface HouseMapper {
     HouseResponse houseToHouseResponse(House house);
 
     void updateHouseFromHouseRequest(@MappingTarget House house, HouseEditRequest houseEditRequest);
+    List<HouseNameResponse> houseListToHouseNameResponseList(List<House> houses);
 }
