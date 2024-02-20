@@ -10,6 +10,16 @@ const $apartmentOwnerPhone = $('#owner-phone');
 const $apartmentOwnerText = $('#apartment-owner');
 
 function initInputAndSelect() {
+    $.ajax({
+        url: '../personal-accounts/get-minimal-free-account-number',
+        type: 'get',
+        success: function (response) {
+            $inputAccountNumber.val(decorateAccountNumber(response));
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    })
 
     function getAccountStatusLabel(status) {
         switch (status) {

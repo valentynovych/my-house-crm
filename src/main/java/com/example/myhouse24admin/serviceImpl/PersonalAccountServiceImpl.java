@@ -103,6 +103,12 @@ public class PersonalAccountServiceImpl implements PersonalAccountService {
         logger.info("updatePersonalAccount() -> exit, success update PersonalAccount with id: {}", requestId);
     }
 
+    @Override
+    public Long getMinimalFreeAccountNumber() {
+        Long minimalFreeAccountNumber = accountRepo.findMinimalFreeAccountNumber();
+        return minimalFreeAccountNumber;
+    }
+
     private PersonalAccount findPersonalAccountById(Long personalAccountId) {
         logger.info("findPersonalAccountById() -> start with id: {}", personalAccountId);
         Optional<PersonalAccount> byId = accountRepo.findById(personalAccountId);

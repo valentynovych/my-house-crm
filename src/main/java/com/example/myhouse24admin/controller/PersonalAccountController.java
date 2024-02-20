@@ -87,4 +87,10 @@ public class PersonalAccountController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("get-minimal-free-account-number")
+    public ResponseEntity<?> getMinimalFreeAccountNumber() {
+        Long freeAccountNumber = personalAccountService.getMinimalFreeAccountNumber();
+        return new ResponseEntity<>(freeAccountNumber, HttpStatus.OK);
+    }
+
 }

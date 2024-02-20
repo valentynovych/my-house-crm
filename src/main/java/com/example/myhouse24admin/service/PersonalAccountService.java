@@ -19,4 +19,6 @@ public interface PersonalAccountService {
     PersonalAccountResponse getPersonalAccountById(Long accountId);
 
     void updatePersonalAccount(PersonalAccountUpdateRequest request);
+
+    Long getMinimalFreeAccountNumber();
 }
