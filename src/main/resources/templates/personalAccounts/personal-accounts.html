@@ -24,12 +24,79 @@
     </div>
 </div>
 <div layout:fragment="content">
-    <div class="card-body" >
-        <div class="mb-3 d-flex justify-content-end">
-            <a th:href="@{personal-accounts/add}" class="btn btn-primary me-2">
-                <span class="tf-icons ti-xs ti ti-plus me-1"></span>
-                <span th:text="#{personal-accounts-button-add}"></span>
-            </a>
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <div class="personal-account-statistic row col-md-10 gy-4">
+                <div class="col-sm-6 col-lg-4 mb-4">
+                    <div class="card card-border-shadow-primary">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2 pb-1">
+                                <div class="avatar me-2">
+                                    <span class="avatar-initial rounded bg-label-primary">
+                                        <i class="ti ti-building-bank ti-md"></i>
+                                    </span>
+                                </div>
+                                <h4 class="ms-1 mb-0">42</h4>
+                            </div>
+                            <p class="mb-1">On route vehicles</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 mb-4">
+                    <div class="card card-border-shadow-warning">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2 pb-1">
+                                <div class="avatar me-2">
+                                    <span class="avatar-initial rounded bg-label-success">
+                                        <i class="ti ti-report-money ti-md"></i>
+                                    </span>
+                                </div>
+                                <h4 class="ms-1 mb-0" id="accounts-balance"></h4>
+                            </div>
+                            <p class="mb-1" th:text="#{personal-accounts-card-accounts-balance}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 mb-4">
+                    <div class="card card-border-shadow-danger">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2 pb-1">
+                                <div class="avatar me-2">
+                                    <span class="avatar-initial rounded bg-label-danger">
+                                        <i class="ti ti-coin ti-md"></i>
+                                    </span>
+                                </div>
+                                <h4 class="ms-1 mb-0" id="accounts-balance-arrears"></h4>
+                            </div>
+                            <p class="mb-1" th:text="#{personal-accounts-card-accounts-balance-arrears}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-4 d-flex justify-content-end align-items-start">
+                <div class="btn-group" id="hover-dropdown-demo">
+                    <button type="button" class="btn btn-primary dropdown-toggle waves-effect waves-light"
+                            data-bs-toggle="dropdown" data-trigger="hover" aria-expanded="false"
+                            th:text="#{general-button-choose-action}">
+                    </button>
+                    <ul class="dropdown-menu" style="">
+                        <li><a th:href="@{personal-accounts/add}" class="dropdown-item">
+                            <span class="tf-icons ti-xs ti ti-plus me-1"></span>
+                            <span th:text="#{personal-accounts-button-add}"></span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="javascript:void(0)">
+                                <i class="ti-xs ti ti-download me-1"></i>
+                                <span th:text="#{personal-accounts-export-to-exel}"
+                                      id="export-to-exel"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="table-responsive" id="dropdownParent">
             <table class="table table-bordered table-hover">
@@ -139,6 +206,7 @@
     const chooseAccount = /*[[#{apartment-choose-account}]]*/ 'default';
     const labelApartmentNumber = /*[[#{apartment-label-apartment-number}]]*/ 'default';
     const emptyTableLabel = /*[[#{apartment-label-empty-table}]]*/ 'default';
+    const currency = /*[[#{general-currency}]]*/ 'default';
 
 </script>
 </html>

@@ -212,7 +212,30 @@ function delayBeforeSearch() {
 
 $(window).on("load", function () {
     getPersonalAccounts(currentPage);
+    getPersonalAccountsStatistic();
 })
+
+
+function getPersonalAccountsStatistic() {
+    $.ajax({
+        type: 'get',
+        url: 'statistic/get-accounts-statistic',
+        dataType: 'json',
+        success: function (result) {
+            console.log(result)
+            fillStatistic(result);
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
+
+function fillStatistic(stat) {
+    $('#accounts-balance').html(`${stat.accountsBalanceOverpayments} ${currency}.`)
+    $('#accounts-balance-arrears').html(`${stat.accountsBalanceArrears} ${currency}.`)
+
+}
 
 function getPersonalAccounts(page) {
 
