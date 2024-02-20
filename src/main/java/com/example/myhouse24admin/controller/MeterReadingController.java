@@ -37,6 +37,13 @@ public class MeterReadingController {
     public ModelAndView getMeterReadingsPage() {
         return new ModelAndView("meter-readings/meter-readings");
     }
+    @GetMapping("/get")
+    public @ResponseBody Page<TableMeterReadingResponse> getMeterReadings(@RequestParam(name = "page") int page,
+                                                                          @RequestParam(name = "pageSize") int pageSize,
+                                                                          FilterRequest filterRequest) {
+        return meterReadingService.getMeterReadingResponsesForTable(page, pageSize, filterRequest);
+    }
+
     @GetMapping("/add")
     public ModelAndView getMeterReadingPage() {
         ModelAndView modelAndView = new ModelAndView("meter-readings/meter-reading");
