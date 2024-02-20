@@ -32,7 +32,7 @@ public class PersonalAccountSpecification implements Specification<PersonalAccou
                         criteriaBuilder.equal(root.get("status"), PersonalAccountStatus.valueOf(value)));
                 case "apartmentNumber" -> {
                     Join<PersonalAccount, Apartment> apartmentJoin = root.join("apartment");
-                    predicates.add(criteriaBuilder.equal(apartmentJoin.get("apartmentNumber"), Long.valueOf(value)));
+                    predicates.add(criteriaBuilder.like(apartmentJoin.get("apartmentNumber"), "%" + value + "%"));
                 }
                 case "house" -> {
                     Join<PersonalAccount, Apartment> apartmentJoin = root.join("apartment");
@@ -59,6 +59,9 @@ public class PersonalAccountSpecification implements Specification<PersonalAccou
                     } else if (value.equals("overpayment")) {
                         predicates.add(criteriaBuilder.greaterThanOrEqualTo(apartmentJoin.get("balance"), BigDecimal.ZERO));
                     }
+                }
+                case "apartmentNull" -> {
+                    predicates.add(criteriaBuilder.isNull(root.get("apartment")));
                 }
             }
         });

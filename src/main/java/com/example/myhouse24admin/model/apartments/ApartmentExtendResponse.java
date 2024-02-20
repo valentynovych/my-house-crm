@@ -9,7 +9,7 @@ import com.example.myhouse24admin.model.tariffs.TariffShortResponse;
 
 public class ApartmentExtendResponse {
     private Long id;
-    private Integer apartmentNumber;
+    private String apartmentNumber;
     private HouseShortResponse house;
     private SectionResponse section;
     private FloorResponse floor;
@@ -26,11 +26,11 @@ public class ApartmentExtendResponse {
         this.id = id;
     }
 
-    public Integer getApartmentNumber() {
+    public String getApartmentNumber() {
         return apartmentNumber;
     }
 
-    public void setApartmentNumber(Integer apartmentNumber) {
+    public void setApartmentNumber(String apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
     }
 

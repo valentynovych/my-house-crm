@@ -103,40 +103,60 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     private void setPersonalAccountToApartment(Apartment apartment, ApartmentAddRequest apartmentAddRequest) {
-        PersonalAccount personalAccount;
-        if (apartmentAddRequest.getPersonalAccountId() != null) {
-            Long personalAccountId = apartmentAddRequest.getPersonalAccountId();
-            Optional<PersonalAccount> byId = personalAccountRepo.findById(personalAccountId);
-            personalAccount = byId.orElseThrow(() -> {
-                logger.error("Apartment with id: {} not found", personalAccountId);
-                return new EntityNotFoundException(String.format("Apartment with id: %s not found", personalAccountId));
-            });
-        } else if (apartmentAddRequest.getPersonalAccountNew() != null) {
-            Optional<PersonalAccount> personalAccountByApartment =
-                    personalAccountRepo.findPersonalAccountByApartment(apartment);
-            if (personalAccountByApartment.isPresent()) {
-                personalAccount = personalAccountByApartment.get();
-                personalAccount.setAccountNumber(apartmentAddRequest.getPersonalAccountNew());
-            } else {
-                personalAccount = new PersonalAccount();
-                personalAccount.setApartment(apartment);
-                personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
-                personalAccount.setAccountNumber(apartmentAddRequest.getPersonalAccountNew());
-            }
+        logger.info("setPersonalAccountToApartment() -> start");
+        PersonalAccount personalAccount = getPersonalAccount(apartmentAddRequest);
+        updateApartmentPersonalAccount(apartment, personalAccount);
+        logger.info("setPersonalAccountToApartment() -> success");
+    }
 
+    private PersonalAccount getPersonalAccount(ApartmentAddRequest apartmentAddRequest) {
+        if (apartmentAddRequest.getPersonalAccountId() != null) {
+            logger.info("Getting existing personal account for id: " + apartmentAddRequest.getPersonalAccountId());
+            return getExistingPersonalAccount(apartmentAddRequest.getPersonalAccountId());
+        } else if (apartmentAddRequest.getPersonalAccountNew() != null) {
+            logger.info("Creating new personal account");
+            return getOrCreateNewPersonalAccount(apartmentAddRequest.getPersonalAccountNew());
         } else {
-            personalAccount = new PersonalAccount();
-            personalAccount.setApartment(apartment);
-            personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
-            personalAccount.setAccountNumber(personalAccountRepo.getMaxAccountNumber());
+            logger.info("Creating new personal account with minimal free account number");
+            return getOrCreateNewPersonalAccount(personalAccountRepo.findMinimalFreeAccountNumber());
         }
+    }
+
+    private PersonalAccount getExistingPersonalAccount(Long personalAccountId) {
+        logger.info("Getting personal account with id: {}", personalAccountId);
+        return personalAccountRepo.findById(personalAccountId)
+                .orElseThrow(() -> {
+                    logger.error("Apartment with id: {} not found", personalAccountId);
+                    return new EntityNotFoundException(String.format("Apartment with id: %s not found", personalAccountId));
+                });
+    }
+
+    private PersonalAccount getOrCreateNewPersonalAccount(Long accountNumber) {
+        logger.info("Creating new personal account with account number: {}", accountNumber);
+        PersonalAccount personalAccount = new PersonalAccount();
+        personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
+        personalAccount.setAccountNumber(accountNumber);
+        logger.info("Created new personal account with id: {}", personalAccount.getId());
+        return personalAccount;
+    }
+
+    private void updateApartmentPersonalAccount(Apartment apartment, PersonalAccount personalAccount) {
+        if (apartment.getPersonalAccount() != null
+                && !apartment.getPersonalAccount().getId().equals(personalAccount.getId())) {
+            PersonalAccount toDeleteApartmentId = apartment.getPersonalAccount();
+            toDeleteApartmentId.setApartment(null);
+            personalAccountRepo.save(toDeleteApartmentId);
+            logger.info("Deleting personal account with id: {}", toDeleteApartmentId.getId());
+        }
+        personalAccount.setApartment(apartment);
         apartment.setPersonalAccount(personalAccount);
+        logger.info("Updated personal account for apartment: {}", apartment.getId());
     }
 
     @Override
     public Page<ApartmentNumberResponse> getApartmentsForSelect(SelectSearchRequest selectSearchRequest, Long houseId, Long sectionId) {
         logger.info("getApartmentsForSelect - Getting apartment name responses for select " + selectSearchRequest.toString());
-        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Pageable pageable = PageRequest.of(selectSearchRequest.page() - 1, 10);
         Page<Apartment> apartments = getFilteredApartmentsForSelect(selectSearchRequest, pageable, houseId, sectionId);
         List<ApartmentNumberResponse> apartmentNumberRespons = apartmentMapper.apartmentListToApartmentNameResponse(apartments.getContent());
         Page<ApartmentNumberResponse> apartmentNameResponsePage = new PageImpl<>(apartmentNumberRespons, pageable, apartments.getTotalElements());
@@ -145,9 +165,11 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     private Page<Apartment> getFilteredApartmentsForSelect(SelectSearchRequest selectSearchRequest, Pageable pageable, Long houseId, Long sectionId) {
+        logger.info("getFilteredApartmentsForSelect() -> Fetching filtered apartments for select");
         Specification<Apartment> apartmentSpecification = Specification.where(byDeleted()
                 .and(byHouseId(houseId)).and(bySectionId(sectionId)));
-        if(!selectSearchRequest.search().isEmpty()){
+        if (!selectSearchRequest.search().isEmpty()) {
+            logger.info("getFilteredApartmentsForSelect() -> Applying additional search criteria: {}", selectSearchRequest.search());
             apartmentSpecification = apartmentSpecification.and(byNumber(Integer.valueOf(selectSearchRequest.search())));
         }
         return apartmentRepo.findAll(apartmentSpecification, pageable);

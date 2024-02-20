@@ -37,7 +37,9 @@ public class PersonalAccountServiceImpl implements PersonalAccountService {
         logger.info("getAccountsFindByNumber() -> start, with parameters: page: {}, pageSize: {}, accountNumber: {}",
                 page, pageSize, accountNumber);
         Page<PersonalAccount> pagePersonalAccount =
-                findPagePersonalAccount(page, pageSize, Map.of("accountNumber", accountNumber));
+                findPagePersonalAccount(page, pageSize,
+                        Map.of("accountNumber", accountNumber,
+                                "apartmentNull", "null"));
         List<PersonalAccountShortResponse> responseList =
                 accountMapper.personalAccountListToPersonalAccountShortResponseList(pagePersonalAccount.getContent());
         Page<PersonalAccountShortResponse> responsePage =
@@ -65,6 +67,7 @@ public class PersonalAccountServiceImpl implements PersonalAccountService {
 
     @Override
     public List<PersonalAccountStatus> getPersonalAccountStatuses() {
+        logger.info("getPersonalAccountStatuses() -> start");
         return Arrays.stream(PersonalAccountStatus.values()).toList();
     }
 
@@ -79,7 +82,6 @@ public class PersonalAccountServiceImpl implements PersonalAccountService {
     @Override
     public PersonalAccountResponse getPersonalAccountById(Long accountId) {
         logger.info("getPersonalAccountById() -> start, with id: {}", accountId);
-        Optional<PersonalAccount> byId = accountRepo.findById(accountId);
         PersonalAccount account = findPersonalAccountById(accountId);
         PersonalAccountResponse response = accountMapper.personalAccountToPersonalAccountResponse(account);
         logger.info("getPersonalAccountById() -> exit, return PersonalAccountResponse()");
@@ -105,7 +107,9 @@ public class PersonalAccountServiceImpl implements PersonalAccountService {
 
     @Override
     public Long getMinimalFreeAccountNumber() {
+        logger.info("getMinimalFreeAccountNumber() -> start");
         Long minimalFreeAccountNumber = accountRepo.findMinimalFreeAccountNumber();
+        logger.info("getMinimalFreeAccountNumber() -> exit, return minimalFreeAccountNumber: {}", minimalFreeAccountNumber);
         return minimalFreeAccountNumber;
     }
 

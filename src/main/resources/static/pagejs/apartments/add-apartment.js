@@ -214,7 +214,7 @@ function initInputAndSelect() {
         allowClear: true,
         ajax: {
             type: "GET",
-            url: '../personal-accounts/get-accounts-find-number',
+            url: '../personal-accounts/get-free-accounts-find-number',
             data: function (params) {
                 return {
                     accountNumber: params.term || '',

@@ -19,7 +19,7 @@ public class ApartmentAddRequest {
     private Long tariffId;
     @NotNull(message = "{validation-field-required}")
     @Min(value = 1, message = "{validation-field-required}")
-    private Integer apartmentNumber;
+    private String apartmentNumber;
     @NotNull(message = "{validation-field-required}")
     private Double area;
     private Long personalAccountId;
@@ -73,11 +73,11 @@ public class ApartmentAddRequest {
         this.tariffId = tariffId;
     }
 
-    public Integer getApartmentNumber() {
+    public String getApartmentNumber() {
         return apartmentNumber;
     }
 
-    public void setApartmentNumber(Integer apartmentNumber) {
+    public void setApartmentNumber(String apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
     }
 

@@ -243,14 +243,21 @@ function drawTable(result) {
     let iter = 0;
     if (result.content && result.content.length > 0) {
         for (const apartment of result.content) {
-            const apartmentNumber = apartment.apartmentNumber.toString().padStart(5, '00000')
+            const apartmentNumber = apartment.apartmentNumber.padStart(5, '00000')
+            const numberFormat = new Intl.NumberFormat('uk');
+            const balance = apartment.balance;
+            const balanceText = balance > 0
+                ? `<span class="text-success">${numberFormat.format(balance)}</span>`
+                : balance < 0
+                    ? `<span class="text-danger">${numberFormat.format(balance)}</span>`
+                    : `<span class="text-dark">${numberFormat.format(balance)}</span>`;
             $(`<tr data-href="apartments/view-apartment/${apartment.id}" class="cursor-pointer">
             <td>${apartmentNumber}</td>
             <td>${apartment.house.name}</td>
             <td>${apartment.section.name}</td>
             <td>${apartment.floor.name}</td>
             <td>${apartment.owner.fullName}</td>
-            <td>${apartment.balance}</td>
+            <td class="text-center">${balanceText}</td>
             <td>
               <div class="dropdown">
                <button type="button" class="btn p-0 dropdown-toggle hide-arrow"

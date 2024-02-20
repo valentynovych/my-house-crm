@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 public class ApartmentResponse {
     private Long id;
-    private Integer apartmentNumber;
+    private String apartmentNumber;
     private HouseShortResponse house;
     private SectionResponse section;
     private FloorResponse floor;
@@ -24,11 +24,11 @@ public class ApartmentResponse {
         this.id = id;
     }
 
-    public Integer getApartmentNumber() {
+    public String getApartmentNumber() {
         return apartmentNumber;
     }
 
-    public void setApartmentNumber(Integer apartmentNumber) {
+    public void setApartmentNumber(String apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
     }
 

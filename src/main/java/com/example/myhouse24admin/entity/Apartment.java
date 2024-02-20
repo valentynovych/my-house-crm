@@ -10,8 +10,8 @@ public class Apartment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "apartment_number", nullable = false)
-    private Integer apartmentNumber;
+    @Column(name = "apartment_number", length = 5, nullable = false)
+    private String apartmentNumber;
     @Column(nullable = false)
     private double area;
     @Column(nullable = false)
@@ -44,11 +44,11 @@ public class Apartment {
         this.id = id;
     }
 
-    public Integer getApartmentNumber() {
+    public String getApartmentNumber() {
         return apartmentNumber;
     }
 
-    public void setApartmentNumber(Integer apartmentNumber) {
+    public void setApartmentNumber(String apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
     }
 

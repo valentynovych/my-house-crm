@@ -44,7 +44,7 @@ public class PersonalAccountController {
         return new ModelAndView("personalAccounts/view-personal-account");
     }
 
-    @GetMapping("get-accounts-find-number")
+    @GetMapping("get-free-accounts-find-number")
     public @ResponseBody ResponseEntity<?> getAccountsFindByNumber(@RequestParam int page,
                                                                    @RequestParam int pageSize,
                                                                    @RequestParam String accountNumber) {
