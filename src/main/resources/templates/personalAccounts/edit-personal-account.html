@@ -5,7 +5,7 @@
       xmlns:th="http://www.thymeleaf.org"
 >
 <head>
-    <title th:text="#{personal-accounts-label-new}"></title>
+    <title th:text="#{personal-accounts-label-edit}"></title>
     <style>
         .light-style div.account-select-wrap .select2-container--default .select2-selection--single {
             border-radius: 0 0 .375rem .375rem !important;
@@ -15,17 +15,17 @@
 <body>
 <div layout:fragment="breadcrumb">
     <div class="d-flex justify-content-between px-3 align-items-end">
-        <h3 th:text="#{personal-accounts-label-new}"></h3>
+        <h3 th:text="#{personal-accounts-label-edit}"></h3>
         <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
                 </li>
                 <li class="breadcrumb-item">
-                    <a th:href="@{../personal-accounts}" th:text="#{menu-item-personal-account}"></a>
+                    <a th:href="@{../}" th:text="#{menu-item-personal-account}"></a>
                 </li>
                 <li class="breadcrumb-item active">
-                    <span th:text="#{personal-accounts-label-new}"></span>
+                    <span th:text="#{personal-accounts-label-edit}"></span>
                 </li>
             </ol>
         </nav>
@@ -38,7 +38,8 @@
 
                 <div class="left-inputs col-md-6">
                     <div class="col-md-12 mb-2">
-                        <label for="accountNumber" class="form-label" th:text="#{personal-accounts-label-account-number}"></label>
+                        <label for="accountNumber" class="form-label"
+                               th:text="#{personal-accounts-label-account-number}"></label>
                         <div class="input-group">
                             <span class="input-group-text" id="basic-addon11"><i class="ti ti-number"></i></span>
                             <input class="form-control" type="text" id="accountNumber" name="accountNumber"
