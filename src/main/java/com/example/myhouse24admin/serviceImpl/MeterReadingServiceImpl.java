@@ -63,7 +63,7 @@ public class MeterReadingServiceImpl implements MeterReadingService {
         Integer numberPart = Integer.valueOf(lastNumber);
         numberPart += 1;
         String newNumber = "";
-        for (int i = 0; i < 5 - numberPart.toString().length(); i++) {
+        for (int i = 0; i < 10 - numberPart.toString().length(); i++) {
             newNumber += "0";
         }
         return newNumber + numberPart;

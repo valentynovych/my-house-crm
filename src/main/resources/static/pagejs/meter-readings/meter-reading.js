@@ -1,10 +1,11 @@
+let defaultReading;
 $(document).ready(function () {
     initializeSelects();
     if (statusLink.includes("..")) {
         getReading();
     } else {
         let d = new Date();
-        $("#number").val(getNumber());
+        setNumber();
         $("#creationDate").flatpickr({
             locale: "uk",
             dateFormat: "d.m.Y",
@@ -13,12 +14,13 @@ $(document).ready(function () {
     }
 });
 
-function getNumber() {
+function setNumber() {
     $.ajax({
         type: "GET",
         url: "get-number",
         success: function (response) {
-            return response;
+            console.log(response);
+            $("#number").val(response);
         },
         error: function () {
             toastr.error(errorMessage);
@@ -286,3 +288,13 @@ function sendData(formData) {
         }
     });
 }
+
+$("#cancel-button").on("click", function () {
+    blockBy("#form");
+    $("#form").find('input:text, #readings').val('');
+    $("#form").find('select').val(null).trigger('change');
+    if(defaultReading !== undefined){
+        setFields(defaultReading);
+    }
+    unblockBy("#form");
+})
