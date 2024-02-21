@@ -115,5 +115,20 @@ public class MeterReadingController {
     public @ResponseBody String getNumber() {
         return meterReadingService.createNumber();
     }
-
+    @GetMapping("/apartment/{apartmentId}")
+    public ModelAndView getApartmentReadingsPage() {
+        return new ModelAndView("meter-readings/apartment-meter-readings");
+    }
+    @GetMapping("/get-by-apartment/{apartmentId}")
+    public @ResponseBody Page<ApartmentMeterReadingResponse> getMeterReadingsForApartment(@PathVariable Long apartmentId,
+                                                                                          @RequestParam(name = "page") int page,
+                                                                                          @RequestParam(name = "pageSize") int pageSize,
+                                                                                          ApartmentFilterRequest apartmentFilterRequest) {
+        return meterReadingService.getApartmentMeterReadingResponses(apartmentId,page,pageSize, apartmentFilterRequest);
+    }
+    @GetMapping("/delete/{id}")
+    public @ResponseBody ResponseEntity<?> deleteReading(@PathVariable Long id) {
+        meterReadingService.deleteMeterReading(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

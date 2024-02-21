@@ -63,5 +63,16 @@ public interface MeterReadingMapper {
     @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "apartment", source = "apartment")
     @Mapping(target = "service", source = "service")
-    void updateMeterReading(@MappingTarget MeterReading meterReading, MeterReadingRequest meterReadingRequest, Apartment apartment, Service service);
+    void updateMeterReading(@MappingTarget MeterReading meterReading,
+                            MeterReadingRequest meterReadingRequest,
+                            Apartment apartment, Service service);
+    List<ApartmentMeterReadingResponse> meterReadingListToApartmentMeterReadingResponseList(List<MeterReading> meterReadings);
+    @Mapping(target = "id", source = "meterReading.id")
+    @Mapping(target = "houseName", source = "apartment.house.name")
+    @Mapping(target = "sectionName", source = "apartment.section.name")
+    @Mapping(target = "apartmentNumber", source = "apartment.apartmentNumber")
+    @Mapping(target = "serviceName", source = "service.name")
+    @Mapping(target = "measurementName", source = "service.unitOfMeasurement.name")
+    @Mapping(target = "creationDate", expression = "java(convertInstantToString(meterReading.getCreationDate()))")
+    ApartmentMeterReadingResponse meterReadingToApartmentMeterReadingResponse(MeterReading meterReading);
 }

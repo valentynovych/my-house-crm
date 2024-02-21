@@ -11,6 +11,22 @@ public interface MeterReadingSpecification {
         return (root, query, builder) ->
                 builder.equal(root.get("deleted"), false);
     }
+    static Specification<MeterReading> byNumber(String number){
+        return (root, query, builder) ->
+                builder.like(builder.upper(root.get("number")), "%"+number.toUpperCase()+"%");
+    }
+    static Specification<MeterReading> byCreationDate(Instant date){
+        return (root, query, builder) ->
+                builder.equal(root.get("creationDate"), date);
+    }
+//    static Specification<MeterReading> byCreationDateLessThan(Instant dateTo){
+//        return (root, query, builder) ->
+//                builder.lessThan(root.get("creationDate"), dateTo);
+//    }
+    static Specification<MeterReading> byStatus(MeterReadingStatus status){
+        return (root, query, builder) ->
+                builder.equal(root.get("status"), status);
+    }
     static Specification<MeterReading> byHouseId(Long houseId){
         return (root, query, builder) -> {
             Join<MeterReading, Apartment> apartmentJoin = root.join("apartment");
@@ -31,10 +47,16 @@ public interface MeterReadingSpecification {
             return builder.equal(serviceJoin.get("id"), serviceId);
         };
     }
-    static Specification<MeterReading> byApartmentNumber(Integer apartmentNumber){
+    static Specification<MeterReading> byApartmentNumber(String apartmentNumber){
         return (root, query, builder) -> {
             Join<MeterReading, Apartment> apartmentJoin = root.join("apartment");
-            return builder.equal(apartmentJoin.get("apartmentNumber"), apartmentNumber);
+            return builder.like(builder.upper(apartmentJoin.get("apartmentNumber")), "%"+apartmentNumber.toUpperCase()+"%");
+        };
+    }
+    static Specification<MeterReading> byApartmentId(Long apartmentId){
+        return (root, query, builder) -> {
+            Join<MeterReading, Apartment> apartmentJoin = root.join("apartment");
+            return builder.equal(apartmentJoin.get("id"), apartmentId);
         };
     }
     static Specification<MeterReading> byMaxCreationDate(){
