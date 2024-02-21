@@ -237,11 +237,29 @@ function fillStatistic(stat) {
 
 }
 
-function getPersonalAccounts(page) {
+$('#export-to-exel').on('click', function () {
+    let url = new URL('personal-accounts/export-to-excel', window.location.origin + window.location.pathname);
+    url = addParametersToUrl(url);
+    $.ajax({
+        type: 'get',
+        url: url,
+        success: function (result) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.click();
+        },
+        error: function () {
+            toastr.error(errorMessage)
+        }
+    })
+    // this.href = url;
+    // this.download = true;
+    // this.target = '_blank';
+})
 
-    blockCardDody();
-    let url = new URL('personal-accounts/get-personal-accounts', window.location.origin + window.location.pathname);
-    url.searchParams.append('page', page);
+function addParametersToUrl(url) {
+    url.searchParams.append('page', currentPage);
     url.searchParams.append('pageSize', tableLength);
     if (byNumber) url.searchParams.append('accountNumber', byNumber);
     if (byStatus) url.searchParams.append('status', byStatus);
@@ -250,6 +268,15 @@ function getPersonalAccounts(page) {
     if (bySection) url.searchParams.append('section', bySection);
     if (byOwner) url.searchParams.append('owner', byOwner);
     if (byBalance) url.searchParams.append('balance', byBalance);
+
+    return url
+}
+
+function getPersonalAccounts(page) {
+
+    blockCardDody();
+    let url = new URL('personal-accounts/get-personal-accounts', window.location.origin + window.location.pathname);
+    url = addParametersToUrl(url);
 
     $.ajax({
         type: 'get',

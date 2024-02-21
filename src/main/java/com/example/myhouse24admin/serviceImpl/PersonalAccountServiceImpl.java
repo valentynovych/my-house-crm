@@ -7,9 +7,11 @@ import com.example.myhouse24admin.model.personalAccounts.*;
 import com.example.myhouse24admin.repository.PersonalAccountRepo;
 import com.example.myhouse24admin.service.PersonalAccountService;
 import com.example.myhouse24admin.specification.PersonalAccountSpecification;
+import com.example.myhouse24admin.util.PersonalAccountExelGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -111,6 +113,17 @@ public class PersonalAccountServiceImpl implements PersonalAccountService {
         Long minimalFreeAccountNumber = accountRepo.findMinimalFreeAccountNumber();
         logger.info("getMinimalFreeAccountNumber() -> exit, return minimalFreeAccountNumber: {}", minimalFreeAccountNumber);
         return minimalFreeAccountNumber;
+    }
+
+    @Override
+    public List<PersonalAccountTableResponse> exportToExcel(int page, int pageSize, Map<String, String> searchParams) {
+        logger.info("exportToExcel() -> start, with parameters: page: {}, pageSize: {}, searchParams: {}",
+                page, pageSize, searchParams);
+        Page<PersonalAccount> pagePersonalAccount = findPagePersonalAccount(page, pageSize, searchParams);
+        List<PersonalAccountTableResponse> responseList =
+                accountMapper.personalAccountListToPersonalAccountTableResponseList(pagePersonalAccount.getContent());
+        logger.info("exportToExcel() -> exit, return List<PersonalAccountTableResponse> with size: {}", responseList.size());
+        return responseList;
     }
 
     private PersonalAccount findPersonalAccountById(Long personalAccountId) {

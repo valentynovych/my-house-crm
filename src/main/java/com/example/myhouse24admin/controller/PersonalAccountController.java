@@ -3,7 +3,11 @@ package com.example.myhouse24admin.controller;
 import com.example.myhouse24admin.entity.PersonalAccountStatus;
 import com.example.myhouse24admin.model.personalAccounts.*;
 import com.example.myhouse24admin.service.PersonalAccountService;
+import com.example.myhouse24admin.util.PersonalAccountExelGenerator;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,9 +27,11 @@ import java.util.Map;
 public class PersonalAccountController {
 
     private final PersonalAccountService personalAccountService;
+    private final MessageSource messageSource;
 
-    public PersonalAccountController(PersonalAccountService personalAccountService) {
+    public PersonalAccountController(PersonalAccountService personalAccountService, MessageSource messageSource) {
         this.personalAccountService = personalAccountService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping()
@@ -91,6 +101,33 @@ public class PersonalAccountController {
     public ResponseEntity<?> getMinimalFreeAccountNumber() {
         Long freeAccountNumber = personalAccountService.getMinimalFreeAccountNumber();
         return new ResponseEntity<>(freeAccountNumber, HttpStatus.OK);
+    }
+
+    @GetMapping("export-to-excel")
+    public ResponseEntity<?> exportToExcel(@RequestParam int page,
+                                           @RequestParam int pageSize,
+                                           @RequestParam Map<String, String> searchParams,
+                                           HttpServletResponse response) {
+        response.setContentType("application/octet-stream");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=PersonalAccounts_" + currentDateTime + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<PersonalAccountTableResponse> accountTableResponses =
+                personalAccountService.exportToExcel(page, pageSize, searchParams);
+        PersonalAccountExelGenerator generator =
+                new PersonalAccountExelGenerator(accountTableResponses, messageSource, LocaleContextHolder.getLocale());
+
+        try {
+            generator.generateExcelFile(response);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 }
