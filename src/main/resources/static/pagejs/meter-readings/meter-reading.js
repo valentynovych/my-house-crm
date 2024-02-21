@@ -4,6 +4,8 @@ $(document).ready(function () {
     if (statusLink.includes("..")) {
         getReading();
     } else {
+        $("#breadCrumb").text(newReading);
+        $("#pageTitle").text(newReading);
         let d = new Date();
         setNumber();
         $("#creationDate").flatpickr({
@@ -41,6 +43,7 @@ function initializeHouseSelect() {
         dropdownParent: $('#house').parent(),
         language: "uk",
         maximumInputLength: 100,
+        placeholder: chooseHouse,
         ajax: {
             type: "get",
             url: houseLink,
@@ -73,6 +76,7 @@ function initializeSectionSelect() {
         dropdownParent: $('#section').parent(),
         language: "uk",
         maximumInputLength: 100,
+        placeholder: chooseSection,
         ajax: {
             type: "get",
             url: sectionLink,
@@ -106,6 +110,7 @@ function initializeApartmentSelect() {
         dropdownParent: $('#apartmentId').parent(),
         language: "uk",
         maximumInputLength: 100,
+        placeholder: chooseApartment,
         ajax: {
             type: "get",
             url: apartmentLink,
@@ -140,6 +145,7 @@ function initializeServiceSelect() {
         dropdownParent: $('#serviceId').parent(),
         language: "uk",
         maximumInputLength: 100,
+        placeholder: chooseService,
         ajax: {
             type: "get",
             url: serviceLink,
@@ -172,6 +178,7 @@ function initializeStatusSelect() {
         language: "uk",
         dropdownParent: $("#status").parent(),
         minimumResultsForSearch: -1,
+        placeholder: chooseStatus,
         ajax: {
             type: "GET",
             url: statusLink,
@@ -208,6 +215,8 @@ function getReading() {
     });
 }
 function setFields(response) {
+    $("#breadCrumb").text(editReading);
+    $("#pageTitle").text(editReading);
     let d = new Date();
     $("#creationDate").flatpickr({
         locale: "uk",
