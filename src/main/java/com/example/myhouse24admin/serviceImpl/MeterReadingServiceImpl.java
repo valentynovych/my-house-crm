@@ -6,6 +6,7 @@ import com.example.myhouse24admin.entity.Service;
 import com.example.myhouse24admin.mapper.MeterReadingMapper;
 import com.example.myhouse24admin.model.meterReadings.FilterRequest;
 import com.example.myhouse24admin.model.meterReadings.MeterReadingRequest;
+import com.example.myhouse24admin.model.meterReadings.MeterReadingResponse;
 import com.example.myhouse24admin.model.meterReadings.TableMeterReadingResponse;
 import com.example.myhouse24admin.repository.ApartmentRepo;
 import com.example.myhouse24admin.repository.MeterReadingRepo;
@@ -94,5 +95,25 @@ public class MeterReadingServiceImpl implements MeterReadingService {
             meterReadingSpecification = meterReadingSpecification.and(byApartmentNumber(Integer.valueOf(filterRequest.apartment())));
         }
         return meterReadingRepo.findAll(meterReadingSpecification, pageable);
+    }
+
+    @Override
+    public MeterReadingResponse getMeterReadingResponse(Long id) {
+        logger.info("getMeterReadingResponse - Getting meter reading response");
+        MeterReading meterReading = meterReadingRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Meter reading was not found by id "+id));
+        MeterReadingResponse meterReadingResponse = meterReadingMapper.meterReadingToMeterReadingResponse(meterReading);
+        logger.info("getMeterReadingResponse - Meter reading response was got");
+        return meterReadingResponse;
+    }
+
+    @Override
+    public void updateMeterReading(Long id, MeterReadingRequest meterReadingRequest) {
+        logger.info("getMeterReadingResponse - Updating meter reading by id "+id+" "+meterReadingRequest.toString());
+        MeterReading meterReading = meterReadingRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Meter reading was not found by id "+id));
+        Apartment apartment = apartmentRepo.findById(meterReadingRequest.apartmentId()).orElseThrow(() -> new EntityNotFoundException("Apartment was not found by id "+meterReadingRequest.apartmentId()));
+        Service service = servicesRepo.findById(meterReadingRequest.serviceId()).orElseThrow(() -> new EntityNotFoundException("Service was not found by id "+meterReadingRequest.serviceId()));
+        meterReadingMapper.updateMeterReading(meterReading, meterReadingRequest, apartment, service);
+        meterReadingRepo.save(meterReading);
+        logger.info("updateMeterReading - Meter reading was updated");
     }
 }

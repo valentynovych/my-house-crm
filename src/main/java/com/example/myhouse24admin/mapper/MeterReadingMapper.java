@@ -1,13 +1,11 @@
 package com.example.myhouse24admin.mapper;
 
-import com.example.myhouse24admin.entity.Apartment;
-import com.example.myhouse24admin.entity.MeterReading;
-import com.example.myhouse24admin.entity.Service;
-import com.example.myhouse24admin.model.meterReadings.MeterReadingRequest;
-import com.example.myhouse24admin.model.meterReadings.TableMeterReadingResponse;
+import com.example.myhouse24admin.entity.*;
+import com.example.myhouse24admin.model.meterReadings.*;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -39,4 +37,31 @@ public interface MeterReadingMapper {
     @Mapping(target = "serviceName", source = "service.name")
     @Mapping(target = "measurementName", source = "service.unitOfMeasurement.name")
     TableMeterReadingResponse meterReadingToTableMeterReadingResponse(MeterReading meterReading);
+    @Mapping(target = "houseNameResponse", expression = "java(createHouseNameResponse(meterReading.getApartment().getHouse()))")
+    @Mapping(target = "sectionNameResponse", expression = "java(createSectionNameResponse(meterReading.getApartment().getSection()))")
+    @Mapping(target = "apartmentNumberResponse", expression = "java(createApartmentNumberResponse(meterReading.getApartment()))")
+    @Mapping(target = "serviceNameResponse", expression = "java(createServiceNameResponse(meterReading.getService()))")
+    @Mapping(target = "creationDate", expression = "java(convertInstantToString(meterReading.getCreationDate()))")
+    MeterReadingResponse meterReadingToMeterReadingResponse(MeterReading meterReading);
+    default String convertInstantToString(Instant date) {
+        LocalDate localDate = LocalDate.ofInstant(date, ZoneId.systemDefault());
+        return localDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+    default HouseNameResponse createHouseNameResponse(House house){
+        return new HouseNameResponse(house.getId(), house.getName());
+    }
+    default SectionNameResponse createSectionNameResponse(Section section){
+        return new SectionNameResponse(section.getId(), section.getName());
+    }
+    default ApartmentNumberResponse createApartmentNumberResponse(Apartment apartment){
+        return new ApartmentNumberResponse(apartment.getId(), apartment.getApartmentNumber());
+    }
+    default ServiceNameResponse createServiceNameResponse(Service service){
+        return new ServiceNameResponse(service.getId(), service.getName());
+    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "apartment", source = "apartment")
+    @Mapping(target = "service", source = "service")
+    void updateMeterReading(@MappingTarget MeterReading meterReading, MeterReadingRequest meterReadingRequest, Apartment apartment, Service service);
 }

@@ -45,14 +45,13 @@ public class MeterReadingController {
     }
 
     @GetMapping("/add")
-    public ModelAndView getMeterReadingPage() {
+    public ModelAndView getMeterReadingPageForCreate() {
         ModelAndView modelAndView = new ModelAndView("meter-readings/meter-reading");
         modelAndView.addObject("statusLink", "get-statuses");
         modelAndView.addObject("houseLink", "get-houses");
         modelAndView.addObject("sectionLink", "get-sections");
         modelAndView.addObject("apartmentLink", "get-apartments");
         modelAndView.addObject("serviceLink", "get-services");
-        modelAndView.addObject("number", meterReadingService.createNumber());
         return modelAndView;
     }
     @GetMapping("/get-statuses")
@@ -87,6 +86,34 @@ public class MeterReadingController {
         int index = url.lastIndexOf("/");
         String returnUrl = url.substring(0, index);
         return new ResponseEntity<>(returnUrl,HttpStatus.OK);
+    }
+    @GetMapping("/edit/{id}")
+    public ModelAndView getMeterReadingPageForEdit() {
+        ModelAndView modelAndView = new ModelAndView("meter-readings/meter-reading");
+        modelAndView.addObject("statusLink", "../get-statuses");
+        modelAndView.addObject("houseLink", "../get-houses");
+        modelAndView.addObject("sectionLink", "../get-sections");
+        modelAndView.addObject("apartmentLink", "../get-apartments");
+        modelAndView.addObject("serviceLink", "../get-services");
+        return modelAndView;
+    }
+    @GetMapping("/get-reading/{id}")
+    public @ResponseBody MeterReadingResponse getReading(@PathVariable Long id) {
+        return meterReadingService.getMeterReadingResponse(id);
+    }
+    @PostMapping("/edit/{id}")
+    public ResponseEntity<?> updateMeterReading(@PathVariable Long id,
+                                                MeterReadingRequest meterReadingRequest,
+                                                HttpServletRequest request) {
+        meterReadingService.updateMeterReading(id, meterReadingRequest);
+        String url = request.getRequestURL().toString();
+        int index = url.lastIndexOf("/");
+        url = url.substring(0, index - 5);
+        return new ResponseEntity<>(url, HttpStatus.OK);
+    }
+    @GetMapping("/get-number")
+    public @ResponseBody String getNumber() {
+        return meterReadingService.createNumber();
     }
 
 }

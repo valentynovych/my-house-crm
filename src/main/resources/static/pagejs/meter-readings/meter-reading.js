@@ -1,10 +1,10 @@
 $(document).ready(function () {
     initializeSelects();
     if (statusLink.includes("..")) {
-
+        getReading();
     } else {
         let d = new Date();
-        $("#number").val(number);
+        $("#number").val(getNumber());
         $("#creationDate").flatpickr({
             locale: "uk",
             dateFormat: "d.m.Y",
@@ -13,6 +13,18 @@ $(document).ready(function () {
     }
 });
 
+function getNumber() {
+    $.ajax({
+        type: "GET",
+        url: "get-number",
+        success: function (response) {
+            return response;
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
 
 function initializeSelects() {
     initializeHouseSelect();
@@ -33,7 +45,7 @@ function initializeHouseSelect() {
             data: function (params) {
                 return {
                     search: params.term,
-                    page: params.page || 1,
+                    page: params.page || 1
                 };
             },
             processResults: function (response) {
@@ -66,7 +78,7 @@ function initializeSectionSelect() {
                 return {
                     search: params.term,
                     page: params.page || 1,
-                    houseId: $("#house").val(),
+                    houseId: $("#house").val()
                 };
             },
             processResults: function (response) {
@@ -91,7 +103,6 @@ function initializeApartmentSelect() {
     $('#apartmentId').wrap('<div class="position-relative"></div>').select2({
         dropdownParent: $('#apartmentId').parent(),
         language: "uk",
-        allowClear: true,
         maximumInputLength: 100,
         ajax: {
             type: "get",
@@ -175,6 +186,45 @@ function initializeStatusSelect() {
 
         }
     });
+}
+
+function getReading() {
+    blockCardDody();
+    let url = window.location.pathname;
+    let id = url.substring(url.lastIndexOf('/') + 1);
+    $.ajax({
+        type: "GET",
+        url: "../get-reading/"+id,
+        success: function (response) {
+            console.log(response);
+            defaultReading = response;
+            setFields(response);
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
+function setFields(response) {
+    let d = new Date();
+    $("#creationDate").flatpickr({
+        locale: "uk",
+        defaultDate: response.creationDate,
+        dateFormat: "d.m.Y",
+        minDate: response.creationDate
+    });
+    let statusOption = new Option(getStatus(response.status), response.status, true, true);
+    $('#status').append(statusOption).trigger('change');
+    let serviceOption = new Option(response.serviceNameResponse.name, response.serviceNameResponse.id, true, true);
+    $('#serviceId').append(serviceOption).trigger('change');
+    let houseOption = new Option(response.houseNameResponse.name, response.houseNameResponse.id, true, true);
+    $('#house').append(houseOption).trigger('change');
+    let sectionOption = new Option(response.sectionNameResponse.name, response.sectionNameResponse.id, true, true);
+    $('#section').append(sectionOption).trigger('change');
+    let apartmentOption = new Option(response.apartmentNumberResponse.apartmentNumber, response.apartmentNumberResponse.id, true, true);
+    $('#apartmentId').append(apartmentOption).trigger('change');
+    $("#number").val(response.number);
+    $("#readings").val(response.readings);
 }
 
 function getStatus(status) {
