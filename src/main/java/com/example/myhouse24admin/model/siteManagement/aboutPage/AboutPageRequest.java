@@ -18,8 +18,10 @@ public class AboutPageRequest {
     private MultipartFile directorImage;
     private List<MultipartFile> newImages;
     private List<MultipartFile> additionalNewImages;
+    private List<MultipartFile> newDocuments;
     private List<Long> galleryIdsToDelete;
     private List<Long> additionalGalleryIdsToDelete;
+    private List<Long> documentIdsToDelete;
     private SeoRequest seoRequest;
 
     public String getTitle() {
@@ -100,5 +102,21 @@ public class AboutPageRequest {
 
     public void setAdditionalGalleryIdsToDelete(List<Long> additionalGalleryIdsToDelete) {
         this.additionalGalleryIdsToDelete = additionalGalleryIdsToDelete;
+    }
+
+    public List<Long> getDocumentIdsToDelete() {
+        return documentIdsToDelete;
+    }
+
+    public void setDocumentIdsToDelete(List<Long> documentIdsToDelete) {
+        this.documentIdsToDelete = documentIdsToDelete;
+    }
+
+    public List<MultipartFile> getNewDocuments() {
+        return newDocuments;
+    }
+
+    public void setNewDocuments(List<MultipartFile> newDocuments) {
+        this.newDocuments = newDocuments;
     }
 }

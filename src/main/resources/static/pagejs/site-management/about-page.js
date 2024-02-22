@@ -1,12 +1,16 @@
 let defaultAboutPage;
 let additionalGalleryIdsToDelete = [];
 let galleryIdsToDelete = [];
+let documentIdsToDelete = []
 let galleryUploadedFiles = []
 let additionalGalleryUploadedFiles = []
+let documentUploadedFiles = []
 let galleryFileIndex = 0;
 let additionalGalleryFileIndex = 0;
+let documentFileIndex = 0;
 let galleryShift = 0;
 let additionalGalleryShift = 0;
+let documentShift = 0;
 $(document).ready(function () {
     initializeAutosize();
     getAboutPage();
@@ -43,12 +47,9 @@ function setFields(response) {
     if(response.additionalText !== null) {
         additionalText.setText(response.additionalText);
     }
-    if(response.gallery !== null) {
-        setGallery(response.gallery, "gallery", "deleteGalleryImage");
-    }
-    if(response.additionalGallery !== null) {
-        setGallery(response.additionalGallery, "additionalGallery", "deleteAdditionalGalleryImage");
-    }
+    setGallery(response.gallery, "gallery", "deleteGalleryImage");
+    setGallery(response.additionalGallery, "additionalGallery", "deleteAdditionalGalleryImage");
+    setDocuments(response.documents);
 }
 function setGallery(gallery, galleryId, method) {
     for(let image of gallery){
@@ -60,6 +61,23 @@ function setGallery(gallery, galleryId, method) {
                          <button type="button" class="btn rounded-pill btn-icon btn-label-danger" onclick="${method+'(this)'}"  style="position: absolute; float:right; z-index: 1; top: -6%; right: -1%; height: 25px; width: 25px;">
                             <span class="ti ti-x"></span>
                         </button>
+                </div>`
+        );
+    }
+}
+function setDocuments(documents) {
+    for(let document of documents){
+        let index = document.name.indexOf("_");
+        let documentName = document.name.slice(index+1);
+        $("#documents").append(
+            `<div class="col-md-2" style="position: relative;" id="${document.id}">
+                    <img src="https://freeiconshop.com/wp-content/uploads/edd/documents-outline.png"
+                         style="width: 100%; height: auto;"
+                         class="d-block h-auto">
+                         <button type="button" class="btn rounded-pill btn-icon btn-label-danger" onclick="deleteDocument(this)"  style="position: absolute; float:right; z-index: 1; top: -6%; right: -1%; height: 25px; width: 25px;">
+                            <span class="ti ti-x"></span>
+                        </button>
+                        <p class="mt-1 text-center">${documentName}</p>
                 </div>`
         );
     }
@@ -105,6 +123,27 @@ $("#additional-gallery-input").on("change", function () {
         }
     }
 });
+$("#document-input").on("change", function () {
+    let files = $(this).prop("files");
+    for(let file of files){
+        if(validateDocumentFile(file.name)) {
+            documentUploadedFiles.push(file);
+            $("#documents").append(
+                `<div class="col-md-2" style="position: relative;">
+                    <img src="https://freeiconshop.com/wp-content/uploads/edd/documents-outline.png"
+                         style="width: 100%; height: auto;"
+                         class="d-block h-auto"
+                          id="${documentFileIndex}">
+                         <button type="button" class="btn rounded-pill btn-icon btn-label-danger" onclick="deleteDocument(this)"  style="position: absolute; float:right; z-index: 1; top: -6%; right: -1%; height: 25px; width: 25px;">
+                            <span class="ti ti-x"></span>
+                        </button>
+                        <p class="mt-1 text-center">${file.name}</p>
+                </div>`
+            );
+            documentFileIndex++;
+        }
+    }
+});
 function deleteGalleryImage(image) {
     if($(image).siblings("img").attr("id") !== undefined){
         let ind = $(image).siblings("img").attr("id");
@@ -128,6 +167,17 @@ function deleteAdditionalGalleryImage(image) {
     }
     $(image).parent().remove();
 }
+function deleteDocument(document) {
+    if($(document).siblings("img").attr("id") !== undefined){
+        let ind = $(document).siblings("img").attr("id");
+        let indShft = ind-documentShift;
+        documentUploadedFiles.splice(indShft, 1);
+        documentShift++;
+    } else {
+        documentIdsToDelete.push($(document).parent().attr("id"));
+    }
+    $(document).parent().remove();
+}
 $("#save-button").on("click", function () {
     blockCardDody();
     clearAllErrorMessage();
@@ -148,11 +198,17 @@ function collectData() {
     for(let id of additionalGalleryIdsToDelete){
         formData.append("additionalGalleryIdsToDelete[]", id);
     }
+    for(let id of documentIdsToDelete){
+        formData.append("documentIdsToDelete[]", id);
+    }
     for(let newImage of galleryUploadedFiles){
         formData.append("newImages[]", newImage);
     }
     for(let newImage of additionalGalleryUploadedFiles){
         formData.append("additionalNewImages[]", newImage);
+    }
+    for(let newDocument of documentUploadedFiles){
+        formData.append("newDocuments[]", newDocument);
     }
     let directorImage = $("#directorImage").prop("files")[0];
     if(directorImage === undefined) {
@@ -177,14 +233,19 @@ function sendData(formData) {
         success: function () {
             galleryIdsToDelete.length = 0;
             additionalGalleryIdsToDelete.length = 0;
+            documentIdsToDelete = 0;
             galleryUploadedFiles.length = 0;
             additionalGalleryUploadedFiles.length = 0;
+            documentUploadedFiles = 0;
             galleryShift = 0;
             additionalGalleryShift = 0;
+            documentShift = 0;
             galleryFileIndex = 0;
             additionalGalleryFileIndex = 0;
+            documentFileIndex = 0;
             $("#gallery").empty();
             $("#additionalGallery").empty();
+            $("#documents").empty();
             getAboutPage();
             toastr.success(successMessage);
         },
@@ -209,6 +270,15 @@ $("#directorImage").on("change", function () {
 function validateFile(value){
     var ext = value.substring(value.lastIndexOf('.') + 1).toLowerCase();
     if($.inArray(ext, ['png','jpg','jpeg']) == -1 && value != "") {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+function validateDocumentFile(fileName) {
+    var ext = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+    if($.inArray(ext, ['doc', 'pptx', 'ppsx', 'docx', 'txt', 'pdf']) == -1 && fileName != "") {
         return false;
     } else {
         return true;

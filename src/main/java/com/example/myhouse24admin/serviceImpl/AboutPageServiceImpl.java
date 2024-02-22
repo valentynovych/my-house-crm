@@ -6,6 +6,7 @@ import com.example.myhouse24admin.model.siteManagement.aboutPage.AboutPageReques
 import com.example.myhouse24admin.model.siteManagement.aboutPage.AboutPageResponse;
 import com.example.myhouse24admin.repository.AboutPageRepo;
 import com.example.myhouse24admin.repository.AdditionalGalleryRepo;
+import com.example.myhouse24admin.repository.DocumentRepo;
 import com.example.myhouse24admin.repository.GalleryRepo;
 import com.example.myhouse24admin.service.AboutPageService;
 import com.example.myhouse24admin.util.UploadFileUtil;
@@ -23,6 +24,7 @@ public class AboutPageServiceImpl implements AboutPageService {
     private final AboutPageMapper aboutPageMapper;
     private final GalleryRepo galleryRepo;
     private final AdditionalGalleryRepo additionalGalleryRepo;
+    private final DocumentRepo documentRepo;
     private final UploadFileUtil uploadFileUtil;
     private final Logger logger = LogManager.getLogger(AboutPageServiceImpl.class);
 
@@ -30,11 +32,13 @@ public class AboutPageServiceImpl implements AboutPageService {
                                 AboutPageMapper aboutPageMapper,
                                 GalleryRepo galleryRepo,
                                 AdditionalGalleryRepo additionalGalleryRepo,
+                                DocumentRepo documentRepo,
                                 UploadFileUtil uploadFileUtil) {
         this.aboutPageRepo = aboutPageRepo;
         this.aboutPageMapper = aboutPageMapper;
         this.galleryRepo = galleryRepo;
         this.additionalGalleryRepo = additionalGalleryRepo;
+        this.documentRepo = documentRepo;
         this.uploadFileUtil = uploadFileUtil;
     }
 
@@ -61,7 +65,8 @@ public class AboutPageServiceImpl implements AboutPageService {
         AboutPage aboutPage = aboutPageRepo.findById(1L).orElseThrow(() -> new EntityNotFoundException("About page was not found by id 1"));
         List<Gallery> gallery = galleryRepo.findAll();
         List<AdditionalGallery> additionalGallery = additionalGalleryRepo.findAll();
-        AboutPageResponse aboutPageResponse = aboutPageMapper.aboutPageToAboutPageResponse(aboutPage, gallery, additionalGallery);
+        List<Document> documents = documentRepo.findAll();
+        AboutPageResponse aboutPageResponse = aboutPageMapper.aboutPageToAboutPageResponse(aboutPage, gallery, additionalGallery, documents);
         logger.info("getAboutPageResponse - About page response was got");
         return aboutPageResponse;
     }
@@ -71,6 +76,8 @@ public class AboutPageServiceImpl implements AboutPageService {
         logger.info("updateAboutPage - Updating about page");
         deleteGalleryImages(aboutPageRequest.getGalleryIdsToDelete());
         deleteAdditionalGalleryImages(aboutPageRequest.getAdditionalGalleryIdsToDelete());
+        deleteDocuments(aboutPageRequest.getDocumentIdsToDelete());
+        saveDocuments(aboutPageRequest.getNewDocuments());
         saveGalleryImages(aboutPageRequest.getNewImages());
         saveAdditionalGalleryImages(aboutPageRequest.getAdditionalNewImages());
         AboutPage aboutPage = aboutPageRepo.findById(1L).orElseThrow(() -> new EntityNotFoundException("About page was not found by id 1"));
@@ -78,6 +85,16 @@ public class AboutPageServiceImpl implements AboutPageService {
         aboutPageMapper.updateAboutPage(aboutPage, aboutPageRequest, imageName);
         aboutPageRepo.save(aboutPage);
         logger.info("updateAboutPage - About page was updated");
+    }
+
+    private void deleteDocuments(List<Long> documentIdsToDelete) {
+        if(documentIdsToDelete != null){
+            List<Document> documents = documentRepo.findAllById(documentIdsToDelete);
+            for (Document document: documents){
+                uploadFileUtil.deleteFile(document.getName());
+            }
+            documentRepo.deleteAllById(documentIdsToDelete);
+        }
     }
 
     private void deleteAdditionalGalleryImages(List<Long> additionalGalleryIdsToDelete) {
@@ -97,6 +114,16 @@ public class AboutPageServiceImpl implements AboutPageService {
                 uploadFileUtil.deleteFile(image.getImage());
             }
             galleryRepo.deleteAllById(galleryIdsToDelete);
+        }
+    }
+    private void saveDocuments(List<MultipartFile> newDocuments) {
+        if(newDocuments != null){
+            for(MultipartFile newDocument: newDocuments){
+                String documentName = uploadFileUtil.saveFile(newDocument);
+                Document document = new Document();
+                document.setName(documentName);
+                documentRepo.save(document);
+            }
         }
     }
 

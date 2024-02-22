@@ -1,9 +1,6 @@
 package com.example.myhouse24admin.mapper;
 
-import com.example.myhouse24admin.entity.AboutPage;
-import com.example.myhouse24admin.entity.AdditionalGallery;
-import com.example.myhouse24admin.entity.Gallery;
-import com.example.myhouse24admin.entity.Seo;
+import com.example.myhouse24admin.entity.*;
 import com.example.myhouse24admin.model.siteManagement.aboutPage.AboutPageRequest;
 import com.example.myhouse24admin.model.siteManagement.aboutPage.AboutPageResponse;
 import org.mapstruct.InjectionStrategy;
@@ -24,7 +21,11 @@ public interface AboutPageMapper {
     @Mapping(target = "seoKeywords", source = "aboutPage.seo.keywords")
     @Mapping(target = "gallery", source = "gallery")
     @Mapping(target = "additionalGallery", source = "additionalGallery")
-    AboutPageResponse aboutPageToAboutPageResponse(AboutPage aboutPage, List<Gallery> gallery, List<AdditionalGallery> additionalGallery);
+    @Mapping(target = "documents", source = "documents")
+    AboutPageResponse aboutPageToAboutPageResponse(AboutPage aboutPage,
+                                                   List<Gallery> gallery,
+                                                   List<AdditionalGallery> additionalGallery,
+                                                   List<Document> documents);
     @Mapping(target = "seo.title", source = "aboutPageRequest.seoRequest.seoTitle")
     @Mapping(target = "seo.description", source = "aboutPageRequest.seoRequest.seoDescription")
     @Mapping(target = "seo.keywords", source = "aboutPageRequest.seoRequest.seoKeywords")
