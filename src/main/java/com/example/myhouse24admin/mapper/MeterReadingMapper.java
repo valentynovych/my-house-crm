@@ -30,6 +30,7 @@ public interface MeterReadingMapper {
     }
 
     List<TableMeterReadingResponse> meterReadingListToTableMeterReadingResponseList(List<MeterReading> meterReadings);
+    @Mapping(target = "id", source = "meterReading.id")
     @Mapping(target = "apartmentId", source = "apartment.id")
     @Mapping(target = "houseName", source = "apartment.house.name")
     @Mapping(target = "sectionName", source = "apartment.section.name")

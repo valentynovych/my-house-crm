@@ -162,8 +162,8 @@ function drawTable(response) {
                             <a class="dropdown-item" href="meter-readings/apartment/${reading.apartmentId}">
                                 <i class="ti ti-eye me-1"></i>${history}
                             </a>
-                            <a class="dropdown-item" href="meter-readings/add/${reading.apartmentId}">
-                                <i class="ti ti-circle-plus me-1"></i>${newReading}
+                            <a class="dropdown-item" href="meter-readings/edit/${reading.id}">
+                                <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                             </a>
                     </td> </tr>`);
         }
