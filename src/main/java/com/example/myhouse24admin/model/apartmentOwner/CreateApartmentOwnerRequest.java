@@ -15,8 +15,6 @@ import jakarta.validation.constraints.Size;
         confirmPassword = "confirmPassword"
 )
 public record CreateApartmentOwnerRequest(
-        @Size(max = 10, message = "{validation-size-max}")
-        String ownerId,
         @NotBlank(message = "{validation-not-empty}")
         @Size(max = 50, message = "{validation-size-max}")
         String firstName,

@@ -1,6 +1,5 @@
 let defaultOwner;
 $(document).ready(function () {
-    console.log(statusLink);
     initializeInputMasks();
     autosize($("#aboutOwner"));
     initializeStatusSelect();
@@ -136,10 +135,8 @@ $("#save-button").on("click", function () {
 
 function collectData() {
     let formData = new FormData();
-    $("#form").find('input:text, input:password, select, textarea').each(function (){
-        if($(this).attr("id").localeCompare('status') !== 0) {
-            formData.append($(this).attr("id"), $(this).val());
-        }
+    $("#form").find('input:text, input:password, textarea').each(function (){
+        formData.append($(this).attr("id"), $(this).val());
     });
     var status = $("#status").val() == null? '': $("#status").val();
     formData.append($("#status").attr("id"), status);

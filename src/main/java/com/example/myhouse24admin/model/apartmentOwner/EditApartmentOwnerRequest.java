@@ -17,8 +17,6 @@ import jakarta.validation.constraints.Size;
         message = "{validation-confirm-password-match}"
 )
 public record EditApartmentOwnerRequest(
-        @Size(max = 10, message = "{validation-size-max}")
-        String ownerId,
         @NotBlank(message = "{validation-not-empty}")
         @Size(max = 50, message = "{validation-size-max}")
         String firstName,
