@@ -27,6 +27,7 @@ function initializeStatusSelect() {
         language: "uk",
         dropdownParent: $('#dropdownParent'),
         minimumResultsForSearch: -1,
+        placeholder:"",
         allowClear: true,
         ajax: {
             type: "GET",
@@ -164,6 +165,8 @@ function drawTable(response) {
                             <button type="button" class="dropdown-item btn justify-content-start" onclick="openDeleteModal(${owner.id})">
                                 <i class="ti ti-trash me-1"></i>${buttonLabelDelete}
                             </button>
+                        </div>
+                    </div>
                     </td> </tr>`);
         }
         if (response.totalPages > 0) {
