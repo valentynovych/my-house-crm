@@ -6,20 +6,25 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
-@Table(name = "expense_sheets")
-public class ExpenseSheet {
+@Table(name = "cash_sheets")
+public class CashSheet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Enumerated(EnumType.STRING)
+    private CashSheetType sheetType;
     @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
-    @Column(nullable = false)
     private boolean isProcessed;
     @Column(nullable = false)
     private BigDecimal amount;
+    @Column(length = 1000)
     private String comment;
     @Column(nullable = false)
     private boolean deleted;
+    @ManyToOne
+    @JoinColumn(name = "personal_account_id", referencedColumnName = "id")
+    private PersonalAccount personalAccount;
     @ManyToOne
     @JoinColumn(name = "payment_item_id", referencedColumnName = "id", nullable = false)
     private PaymentItem paymentItem;
@@ -33,6 +38,14 @@ public class ExpenseSheet {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public CashSheetType getSheetType() {
+        return sheetType;
+    }
+
+    public void setSheetType(CashSheetType sheetType) {
+        this.sheetType = sheetType;
     }
 
     public Instant getCreationDate() {
@@ -73,6 +86,14 @@ public class ExpenseSheet {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public PersonalAccount getPersonalAccount() {
+        return personalAccount;
+    }
+
+    public void setPersonalAccount(PersonalAccount personalAccount) {
+        this.personalAccount = personalAccount;
     }
 
     public PaymentItem getPaymentItem() {
