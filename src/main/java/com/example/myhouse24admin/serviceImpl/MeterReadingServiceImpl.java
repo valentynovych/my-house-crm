@@ -4,10 +4,7 @@ import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.MeterReading;
 import com.example.myhouse24admin.entity.Service;
 import com.example.myhouse24admin.mapper.MeterReadingMapper;
-import com.example.myhouse24admin.model.meterReadings.FilterRequest;
-import com.example.myhouse24admin.model.meterReadings.MeterReadingRequest;
-import com.example.myhouse24admin.model.meterReadings.MeterReadingResponse;
-import com.example.myhouse24admin.model.meterReadings.TableMeterReadingResponse;
+import com.example.myhouse24admin.model.meterReadings.*;
 import com.example.myhouse24admin.repository.ApartmentRepo;
 import com.example.myhouse24admin.repository.MeterReadingRepo;
 import com.example.myhouse24admin.repository.ServicesRepo;
@@ -21,6 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,7 +92,7 @@ public class MeterReadingServiceImpl implements MeterReadingService {
             meterReadingSpecification = meterReadingSpecification.and(byServiceId(filterRequest.serviceId()));
         }
         if(!filterRequest.apartment().isEmpty()){
-            meterReadingSpecification = meterReadingSpecification.and(byApartmentNumber(Integer.valueOf(filterRequest.apartment())));
+            meterReadingSpecification = meterReadingSpecification.and(byApartmentNumber(filterRequest.apartment()));
         }
         return meterReadingRepo.findAll(meterReadingSpecification, pageable);
     }
@@ -115,5 +115,58 @@ public class MeterReadingServiceImpl implements MeterReadingService {
         meterReadingMapper.updateMeterReading(meterReading, meterReadingRequest, apartment, service);
         meterReadingRepo.save(meterReading);
         logger.info("updateMeterReading - Meter reading was updated");
+    }
+
+    @Override
+    public Page<ApartmentMeterReadingResponse> getApartmentMeterReadingResponses(Long apartmentId, int page, int pageSize, ApartmentFilterRequest apartmentFilterRequest) {
+        logger.info("getApartmentMeterReadingResponses - Getting apartment meter reading responses for apartment with id "+apartmentId+" "+apartmentFilterRequest.toString());
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<MeterReading> meterReadings = getFilteredReadingsForApartment(apartmentId,apartmentFilterRequest, pageable);
+        List<ApartmentMeterReadingResponse> meterReadingResponses = meterReadingMapper.meterReadingListToApartmentMeterReadingResponseList(meterReadings.getContent());
+        Page<ApartmentMeterReadingResponse> meterReadingResponsePage = new PageImpl<>(meterReadingResponses, pageable, meterReadings.getTotalElements());
+        logger.info("getApartmentMeterReadingResponses - Apartment meter reading responses were got");
+        return meterReadingResponsePage;
+    }
+
+    private Page<MeterReading> getFilteredReadingsForApartment(Long apartmentId,
+                                                               ApartmentFilterRequest apartmentFilterRequest,
+                                                               Pageable pageable) {
+        Specification<MeterReading> meterReadingSpecification = Specification.where(byDeleted().and(byApartmentId(apartmentId)));
+        if(!apartmentFilterRequest.number().isEmpty()){
+            meterReadingSpecification = meterReadingSpecification.and(byNumber(apartmentFilterRequest.number()));
+        }
+        if(apartmentFilterRequest.status() != null){
+            meterReadingSpecification = meterReadingSpecification.and(byStatus(apartmentFilterRequest.status()));
+        }
+        if(!apartmentFilterRequest.creationDate().isEmpty()){
+            LocalDateTime localDateTime = LocalDateTime.of(LocalDate.parse(apartmentFilterRequest.creationDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    LocalTime.MIDNIGHT);
+            ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+            Instant dateFrom = zonedDateTime.toInstant();
+            Instant dateTo = zonedDateTime.toInstant().plus(1, ChronoUnit.DAYS);
+            meterReadingSpecification = meterReadingSpecification.and(byCreationDateGreaterThen(dateFrom)).and(byCreationDateLessThan(dateTo));
+        }
+        if(apartmentFilterRequest.sectionId() != null){
+            meterReadingSpecification = meterReadingSpecification.and(bySectionId(apartmentFilterRequest.sectionId()));
+        }
+        if(apartmentFilterRequest.houseId() != null){
+            meterReadingSpecification = meterReadingSpecification.and(byHouseId(apartmentFilterRequest.houseId()));
+        }
+        if(apartmentFilterRequest.serviceId() != null){
+            meterReadingSpecification = meterReadingSpecification.and(byServiceId(apartmentFilterRequest.serviceId()));
+        }
+        if(!apartmentFilterRequest.apartment().isEmpty()){
+            meterReadingSpecification = meterReadingSpecification.and(byApartmentNumber(apartmentFilterRequest.apartment()));
+        }
+        return meterReadingRepo.findAll(meterReadingSpecification,pageable);
+    }
+
+    @Override
+    public void deleteMeterReading(Long id) {
+        logger.info("deleteMeterReading - Deleting meter reading by id "+id);
+        MeterReading meterReading = meterReadingRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Meter reading was not found by id "+id));
+        meterReading.setDeleted(true);
+        meterReadingRepo.save(meterReading);
+        logger.info("deleteMeterReading - Meter reading was deleted");
     }
 }

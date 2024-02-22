@@ -1,6 +1,5 @@
 let defaultOwner;
 $(document).ready(function () {
-    console.log(statusLink);
     initializeInputMasks();
     autosize($("#aboutOwner"));
     initializeStatusSelect();
@@ -42,6 +41,7 @@ function initializeStatusSelect (){
         language: "uk",
         dropdownParent: $('#status').parent(),
         minimumResultsForSearch: -1,
+        placeholder: chooseStatus,
         ajax: {
             type: "GET",
             url: statusLink,
@@ -135,10 +135,8 @@ $("#save-button").on("click", function () {
 
 function collectData() {
     let formData = new FormData();
-    $("#form").find('input:text, input:password, select, textarea').each(function (){
-        if($(this).attr("id").localeCompare('status') !== 0) {
-            formData.append($(this).attr("id"), $(this).val());
-        }
+    $("#form").find('input:text, input:password, textarea').each(function (){
+        formData.append($(this).attr("id"), $(this).val());
     });
     var status = $("#status").val() == null? '': $("#status").val();
     formData.append($("#status").attr("id"), status);
@@ -201,7 +199,8 @@ function setFields(response) {
 }
 $("#cancel-button").on("click", function () {
     blockBy("#form");
-    $("#form").find('input:text, input:password, input:file, select, textarea').val('');
+    $("#form").find('input:text, input:password, input:file, textarea').val('');
+    $("#form").find('select').val(null).trigger('change');
     if(defaultOwner === undefined){
         $("#avatar-img").attr("src", "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg");
     } else {

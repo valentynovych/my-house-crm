@@ -7,9 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -25,11 +23,14 @@ public interface MeterReadingMapper {
                                                    Apartment apartment, Service service,
                                                    String number);
     default Instant convertStringToInstant(String date) {
-        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        return localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        LocalDateTime localDateTime = LocalDateTime.of(LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                LocalTime.now());
+        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+        return zonedDateTime.toInstant();
     }
 
     List<TableMeterReadingResponse> meterReadingListToTableMeterReadingResponseList(List<MeterReading> meterReadings);
+    @Mapping(target = "id", source = "meterReading.id")
     @Mapping(target = "apartmentId", source = "apartment.id")
     @Mapping(target = "houseName", source = "apartment.house.name")
     @Mapping(target = "sectionName", source = "apartment.section.name")
@@ -63,5 +64,16 @@ public interface MeterReadingMapper {
     @Mapping(target = "deleted", ignore = true)
     @Mapping(target = "apartment", source = "apartment")
     @Mapping(target = "service", source = "service")
-    void updateMeterReading(@MappingTarget MeterReading meterReading, MeterReadingRequest meterReadingRequest, Apartment apartment, Service service);
+    void updateMeterReading(@MappingTarget MeterReading meterReading,
+                            MeterReadingRequest meterReadingRequest,
+                            Apartment apartment, Service service);
+    List<ApartmentMeterReadingResponse> meterReadingListToApartmentMeterReadingResponseList(List<MeterReading> meterReadings);
+    @Mapping(target = "id", source = "meterReading.id")
+    @Mapping(target = "houseName", source = "apartment.house.name")
+    @Mapping(target = "sectionName", source = "apartment.section.name")
+    @Mapping(target = "apartmentNumber", source = "apartment.apartmentNumber")
+    @Mapping(target = "serviceName", source = "service.name")
+    @Mapping(target = "measurementName", source = "service.unitOfMeasurement.name")
+    @Mapping(target = "creationDate", expression = "java(convertInstantToString(meterReading.getCreationDate()))")
+    ApartmentMeterReadingResponse meterReadingToApartmentMeterReadingResponse(MeterReading meterReading);
 }

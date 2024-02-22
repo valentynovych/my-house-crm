@@ -36,8 +36,8 @@
         <div class="col-md-6">
             <div>
                 <label for="ownerId" class="form-label">ID</label>
-                <input type="text" class="form-control" id="ownerId" name="ownerId" placeholder="00001"
-                       maxlength="10">
+                <input type="text" class="form-control" id="ownerId" name="ownerId"
+                       maxlength="10" disabled>
             </div>
             <div>
             <label for="status" class="form-label" th:text="#{staff-label-status}">Статус</label>
@@ -134,7 +134,7 @@
         <div class="col-md-6">
             <label for="email" class="form-label">Email</label>
             <input type="text" class="form-control inputPhone" id="email" name="email"
-                   placeholder="Email" maxlength="100">
+                   placeholder="email@gmail.com" maxlength="100">
         </div>
 
         <div class="mt-5 d-flex justify-content-end gap-3">
@@ -154,7 +154,8 @@
     var newStatus = [[#{staff-status-new}]];
     var activeStatus = [[#{staff-status-active}]];
     var disabledStatus = [[#{staff-status-disabled}]];
-    const newOwner = [[#{owners-new}]]
-    const editOwner = [[#{owners-edit}]]
+    const newOwner = [[#{owners-new}]];
+    const editOwner = [[#{owners-edit}]];
+    const chooseStatus = [[#{meter-readings-choose-status}]];
 </script>
 </html>

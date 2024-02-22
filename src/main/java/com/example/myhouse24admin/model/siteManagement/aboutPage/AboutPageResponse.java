@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.model.siteManagement.aboutPage;
 
 import com.example.myhouse24admin.entity.AdditionalGallery;
+import com.example.myhouse24admin.entity.Document;
 import com.example.myhouse24admin.entity.Gallery;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class AboutPageResponse{
     private String seoKeywords;
     private List<Gallery> gallery;
     private List<AdditionalGallery> additionalGallery;
+    private List<Document> documents;
 
     public String getTitle() {
         return title;
@@ -96,4 +98,13 @@ public class AboutPageResponse{
     public void setAdditionalGallery(List<AdditionalGallery> additionalGallery) {
         this.additionalGallery = additionalGallery;
     }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
+    }
 }
+

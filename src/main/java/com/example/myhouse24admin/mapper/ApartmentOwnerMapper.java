@@ -17,12 +17,16 @@ import java.util.List;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.FIELD)
 public interface ApartmentOwnerMapper {
     @Mapping(target = "password", source = "encodedPassword")
+    @Mapping(target = "ownerId", source = "newOwnerId")
     @Mapping(target = "creationDate", expression = "java(getToday())")
     @Mapping(target = "birthDate", expression = "java(convertDateToInstant(createApartmentOwnerRequest.birthDate()))")
     @Mapping(target = "language", expression = "java(getLanguage())")
     @Mapping(target = "deleted", expression = "java(false)")
     @Mapping(target = "avatar", source = "avatar")
-    ApartmentOwner apartmentOwnerRequestToApartmentOwner(CreateApartmentOwnerRequest createApartmentOwnerRequest, String encodedPassword, String avatar);
+    ApartmentOwner apartmentOwnerRequestToApartmentOwner(CreateApartmentOwnerRequest createApartmentOwnerRequest,
+                                                         String encodedPassword,
+                                                         String avatar,
+                                                         String newOwnerId);
 
     default Instant getToday() {
         return Instant.now();
@@ -37,10 +41,12 @@ public interface ApartmentOwnerMapper {
     ApartmentOwnerResponse apartmentOwnerToApartmentOwnerResponse(ApartmentOwner apartmentOwner);
 
     @Mapping(ignore = true, target = "password")
+    @Mapping(ignore = true, target = "ownerId")
     @Mapping(target = "birthDate", expression = "java(convertDateToInstant(editApartmentOwnerRequest.birthDate()))")
     void setApartmentOwnerWithoutPassword(@MappingTarget ApartmentOwner apartmentOwner, EditApartmentOwnerRequest editApartmentOwnerRequest);
 
     @Mapping(target = "password", source = "encodedPassword")
+    @Mapping(ignore = true, target = "ownerId")
     @Mapping(target = "birthDate", expression = "java(convertDateToInstant(editApartmentOwnerRequest.birthDate()))")
     void setApartmentOwnerWithPassword(@MappingTarget ApartmentOwner apartmentOwner, EditApartmentOwnerRequest editApartmentOwnerRequest, String encodedPassword);
 

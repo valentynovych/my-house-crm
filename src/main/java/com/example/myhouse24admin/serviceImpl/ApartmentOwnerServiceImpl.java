@@ -48,11 +48,10 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
     public void createApartmentOwner(CreateApartmentOwnerRequest createApartmentOwnerRequest, MultipartFile avatar) {
         logger.info("createApartmentOwner - Creating apartment owner");
         String savedImageName = saveImage(avatar);
-        ApartmentOwner apartmentOwner = apartmentOwnerMapper.apartmentOwnerRequestToApartmentOwner(createApartmentOwnerRequest, passwordEncoder.encode(createApartmentOwnerRequest.password()), savedImageName);
-        if (apartmentOwner.getOwnerId().isEmpty()) {
-            String newOwnerId = createOwnerId();
-            apartmentOwner.setOwnerId(newOwnerId);
-        }
+        String newOwnerId = createOwnerId();
+        ApartmentOwner apartmentOwner = apartmentOwnerMapper.apartmentOwnerRequestToApartmentOwner(createApartmentOwnerRequest,
+                passwordEncoder.encode(createApartmentOwnerRequest.password()),
+                savedImageName, newOwnerId);
         apartmentOwnerRepo.save(apartmentOwner);
         logger.info("createApartmentOwner - Apartment owner was created");
     }

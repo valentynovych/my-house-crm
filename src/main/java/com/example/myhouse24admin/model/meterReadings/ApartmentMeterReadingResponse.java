@@ -1,13 +1,17 @@
 package com.example.myhouse24admin.model.meterReadings;
 
+import com.example.myhouse24admin.entity.MeterReadingStatus;
+
 import java.math.BigDecimal;
 
-public record TableMeterReadingResponse(
+public record ApartmentMeterReadingResponse(
         Long id,
-        Long apartmentId,
+        String number,
+        MeterReadingStatus status,
+        String creationDate,
         String houseName,
         String sectionName,
-        String apartmentName,
+        String apartmentNumber,
         String serviceName,
         BigDecimal readings,
         String measurementName

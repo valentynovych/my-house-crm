@@ -79,12 +79,16 @@ public class MeterReadingController {
         return servicesService.getServicesForSelect(selectSearchRequest);
     }
     @PostMapping("/add")
-    public ResponseEntity<?> createMeterReading(@ModelAttribute @Valid MeterReadingRequest meterReadingRequest,
+    public ResponseEntity<?> createMeterReading(@RequestParam(name="notReturn", required = false) boolean notReturn,
+                                                @ModelAttribute @Valid MeterReadingRequest meterReadingRequest,
                                                 HttpServletRequest request) {
         meterReadingService.createMeterReading(meterReadingRequest);
         String url = request.getRequestURL().toString();
         int index = url.lastIndexOf("/");
         String returnUrl = url.substring(0, index);
+        if(notReturn) {
+            returnUrl += "/add";
+        }
         return new ResponseEntity<>(returnUrl,HttpStatus.OK);
     }
     @GetMapping("/edit/{id}")
@@ -103,17 +107,36 @@ public class MeterReadingController {
     }
     @PostMapping("/edit/{id}")
     public ResponseEntity<?> updateMeterReading(@PathVariable Long id,
+                                                @RequestParam(name="notReturn", required = false) boolean notReturn,
                                                 MeterReadingRequest meterReadingRequest,
                                                 HttpServletRequest request) {
         meterReadingService.updateMeterReading(id, meterReadingRequest);
         String url = request.getRequestURL().toString();
         int index = url.lastIndexOf("/");
-        url = url.substring(0, index - 5);
-        return new ResponseEntity<>(url, HttpStatus.OK);
+        String returnUrl = url.substring(0, index - 5);
+        if(notReturn) {
+            returnUrl += "/add";
+        }
+        return new ResponseEntity<>(returnUrl, HttpStatus.OK);
     }
     @GetMapping("/get-number")
     public @ResponseBody String getNumber() {
         return meterReadingService.createNumber();
     }
-
+    @GetMapping("/apartment/{apartmentId}")
+    public ModelAndView getApartmentReadingsPage() {
+        return new ModelAndView("meter-readings/apartment-meter-readings");
+    }
+    @GetMapping("/get-by-apartment/{apartmentId}")
+    public @ResponseBody Page<ApartmentMeterReadingResponse> getMeterReadingsForApartment(@PathVariable Long apartmentId,
+                                                                                          @RequestParam(name = "page") int page,
+                                                                                          @RequestParam(name = "pageSize") int pageSize,
+                                                                                          ApartmentFilterRequest apartmentFilterRequest) {
+        return meterReadingService.getApartmentMeterReadingResponses(apartmentId,page,pageSize, apartmentFilterRequest);
+    }
+    @GetMapping("/delete/{id}")
+    public @ResponseBody ResponseEntity<?> deleteReading(@PathVariable Long id) {
+        meterReadingService.deleteMeterReading(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -1,9 +1,6 @@
 package com.example.myhouse24admin.service;
 
-import com.example.myhouse24admin.model.meterReadings.FilterRequest;
-import com.example.myhouse24admin.model.meterReadings.MeterReadingRequest;
-import com.example.myhouse24admin.model.meterReadings.MeterReadingResponse;
-import com.example.myhouse24admin.model.meterReadings.TableMeterReadingResponse;
+import com.example.myhouse24admin.model.meterReadings.*;
 import org.springframework.data.domain.Page;
 
 public interface MeterReadingService {
@@ -13,4 +10,8 @@ public interface MeterReadingService {
                                                                      FilterRequest filterRequest);
     MeterReadingResponse getMeterReadingResponse(Long id);
     void updateMeterReading(Long id, MeterReadingRequest meterReadingRequest);
+    Page<ApartmentMeterReadingResponse> getApartmentMeterReadingResponses(Long apartmentId,
+                                                                          int page, int pageSize,
+                                                                          ApartmentFilterRequest apartmentFilterRequest);
+    void deleteMeterReading(Long id);
 }
