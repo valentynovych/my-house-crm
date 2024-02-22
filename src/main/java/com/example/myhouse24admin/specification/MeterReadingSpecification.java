@@ -15,14 +15,14 @@ public interface MeterReadingSpecification {
         return (root, query, builder) ->
                 builder.like(builder.upper(root.get("number")), "%"+number.toUpperCase()+"%");
     }
-    static Specification<MeterReading> byCreationDate(Instant date){
+    static Specification<MeterReading> byCreationDateGreaterThen(Instant dateFrom){
         return (root, query, builder) ->
-                builder.equal(root.get("creationDate"), date);
+                builder.greaterThanOrEqualTo(root.get("creationDate"), dateFrom);
     }
-//    static Specification<MeterReading> byCreationDateLessThan(Instant dateTo){
-//        return (root, query, builder) ->
-//                builder.lessThan(root.get("creationDate"), dateTo);
-//    }
+    static Specification<MeterReading> byCreationDateLessThan(Instant dateTo){
+        return (root, query, builder) ->
+                builder.lessThan(root.get("creationDate"), dateTo);
+    }
     static Specification<MeterReading> byStatus(MeterReadingStatus status){
         return (root, query, builder) ->
                 builder.equal(root.get("status"), status);

@@ -7,9 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -25,8 +23,10 @@ public interface MeterReadingMapper {
                                                    Apartment apartment, Service service,
                                                    String number);
     default Instant convertStringToInstant(String date) {
-        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        return localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        LocalDateTime localDateTime = LocalDateTime.of(LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                LocalTime.now());
+        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+        return zonedDateTime.toInstant();
     }
 
     List<TableMeterReadingResponse> meterReadingListToTableMeterReadingResponseList(List<MeterReading> meterReadings);

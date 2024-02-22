@@ -20,6 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -141,8 +142,9 @@ public class MeterReadingServiceImpl implements MeterReadingService {
             LocalDateTime localDateTime = LocalDateTime.of(LocalDate.parse(apartmentFilterRequest.creationDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
                     LocalTime.MIDNIGHT);
             ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-            Instant date = zonedDateTime.toInstant();
-            meterReadingSpecification = meterReadingSpecification.and(byCreationDate(date));
+            Instant dateFrom = zonedDateTime.toInstant();
+            Instant dateTo = zonedDateTime.toInstant().plus(1, ChronoUnit.DAYS);
+            meterReadingSpecification = meterReadingSpecification.and(byCreationDateGreaterThen(dateFrom)).and(byCreationDateLessThan(dateTo));
         }
         if(apartmentFilterRequest.sectionId() != null){
             meterReadingSpecification = meterReadingSpecification.and(bySectionId(apartmentFilterRequest.sectionId()));
