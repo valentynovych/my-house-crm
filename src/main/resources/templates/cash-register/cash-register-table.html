@@ -1,10 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="#{menu-item-cash-register}"></title>
+    <style>
+        .select2-width {
+            width: 300px !important;
+        }
+    </style>
 </head>
 <body>
+<div layout:fragment="content">
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <div class="personal-account-statistic row col-md-10 gy-4">
+                <div class="col-sm-6 col-lg-4 mb-4">
+                    <div class="card card-border-shadow-primary">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2 pb-1">
+                                <div class="avatar me-2">
+                                    <span class="avatar-initial rounded bg-label-primary">
+                                        <i class="ti ti-building-bank ti-md"></i>
+                                    </span>
+                                </div>
+                                <h4 class="ms-1 mb-0">42</h4>
+                            </div>
+                            <p class="mb-1" th:text="#{personal-accounts-card-current-cash-register}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 mb-4">
+                    <div class="card card-border-shadow-warning">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2 pb-1">
+                                <div class="avatar me-2">
+                                    <span class="avatar-initial rounded bg-label-success">
+                                        <i class="ti ti-report-money ti-md"></i>
+                                    </span>
+                                </div>
+                                <h4 class="ms-1 mb-0" id="accounts-balance"></h4>
+                            </div>
+                            <p class="mb-1" th:text="#{personal-accounts-card-accounts-balance}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-4 mb-4">
+                    <div class="card card-border-shadow-danger">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-2 pb-1">
+                                <div class="avatar me-2">
+                                    <span class="avatar-initial rounded bg-label-danger">
+                                        <i class="ti ti-coin ti-md"></i>
+                                    </span>
+                                </div>
+                                <h4 class="ms-1 mb-0" id="accounts-balance-arrears"></h4>
+                            </div>
+                            <p class="mb-1" th:text="#{personal-accounts-card-accounts-balance-arrears}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-4 d-flex justify-content-end align-items-start">
+                <div class="btn-group" id="hover-dropdown-demo">
+                    <button type="button" class="btn btn-primary dropdown-toggle waves-effect waves-light"
+                            data-bs-toggle="dropdown" data-trigger="hover" aria-expanded="false" data-bs-offset="10,0"
+                            th:text="#{general-button-choose-action}">
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{cash-register/add-income-sheet}"
+                               th:text="#{cash-register-create-income-sheet}"></a></li>
+                        <li>
+                            <hr class="dropdown-divider"/>
+                        </li>
+                        <li><a class="dropdown-item" th:href="@{cash-register/add-expense-sheet}"
+                               th:text="#{cash-register-create-expense-sheet}">Створити витрати</a></li>
+                        <li>
+                            <hr class="dropdown-divider"/>
+                        </li>
+                        <li><a class="dropdown-item" href="javascript:void(0);" id="export-to-exel"
+                               th:text="#{general-button-export-to-excel}"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
+
+        <div class="table-responsive" id="dropdownParent">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th colspan="9" class="p-1">
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary clear-filters"
+                                    th:text="#{general-button-clear-table}">Clear
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="table-primary text-center">
+                    <th th:text="#{cash-register-label-account-number}"></th>
+                    <th th:text="#{cash-register-label-date-of-create}"></th>
+                    <th th:text="#{cash-register-label-status}"></th>
+                    <th th:text="#{cash-register-label-payment-item-name}"></th>
+                    <th th:text="#{cash-register-label-owner}"></th>
+                    <th th:text="#{cash-register-label-personal-account}"></th>
+                    <th th:text="#{cash-register-label-payment-type}"></th>
+                    <th th:text="#{cash-register-label-amount}"></th>
+                    <th th:text="#{general-table-action}"></th>
+                </tr>
+                <tr>
+                    <td style="min-width: 9rem"><input type="text" class="form-control" id="filter-by-number"></td>
+                    <td style="min-width: 11rem"><input type="text" class="form-control" id="filter-by-date"></td>
+                    <td style="min-width: 11rem">
+                        <div id="filter-by-status-wrap">
+                            <select class="form-select select2" id="filter-by-status"></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 11rem">
+                        <div id="filter-by-payment-item-name-wrap">
+                            <select class="form-select select2" id="filter-by-payment-item-name"></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 13rem">
+                        <div id="filter-by-owner-wrap">
+                            <select class="form-select select2" id="filter-by-owner"></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 13rem">
+                        <div id="filter-by-personal-account-wrap">
+                            <select class="form-select select2" id="filter-by-personal-account"></select>
+                        </div>
+                    </td>
+                    <td style="min-width: 13rem">
+                        <div id="filter-by-payment-type-wrap">
+                            <select class="form-select select2" id="filter-by-payment-type">
+                                <option value="INCOME" th:text="#{payment-item-label-type-income}"></option>
+                                <option value="EXPENSE" th:text="#{payment-item-label-type-expense}"></option>
+                            </select>
+                        </div>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{cash-register-modal-delete-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete"
+                            th:text="#{general-button-delete}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+<script layout:fragment="script" th:src="@{/pagejs/cash-register/cash-register-table.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    const buttonLabelEdit = /*[[#{general-button-edit}]]*/ 'default';
+    const buttonLabelDelete = /*[[#{general-button-delete}]]*/ 'default';
+    const cashSheetStatusConfirmed = /*[[#{cash-register-label-sheet-status-confirmed}]]*/ 'default';
+    const cashSheetStatusNotConfirmed = /*[[#{cash-register-label-sheet-status-not-confirmed}]]*/ 'default';
+
+    const tableShow = [[#{table-show}]];
+    const tableShowing = [[#{table-showing}]];
+    const tableEntries = [[#{table-entries}]];
+    const tableOf = [[#{table-of}]];
+    const emptyTableLabel = /*[[#{general-label-empty-table}]]*/ 'default';
+
+    const currency = /*[[#{general-currency}]]*/ 'default';
+
+</script>
 </html>
