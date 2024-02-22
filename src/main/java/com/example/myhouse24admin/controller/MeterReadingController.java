@@ -79,12 +79,16 @@ public class MeterReadingController {
         return servicesService.getServicesForSelect(selectSearchRequest);
     }
     @PostMapping("/add")
-    public ResponseEntity<?> createMeterReading(@ModelAttribute @Valid MeterReadingRequest meterReadingRequest,
+    public ResponseEntity<?> createMeterReading(@RequestParam(name="notReturn", required = false) boolean notReturn,
+                                                @ModelAttribute @Valid MeterReadingRequest meterReadingRequest,
                                                 HttpServletRequest request) {
         meterReadingService.createMeterReading(meterReadingRequest);
         String url = request.getRequestURL().toString();
         int index = url.lastIndexOf("/");
         String returnUrl = url.substring(0, index);
+        if(notReturn) {
+            returnUrl += "/add";
+        }
         return new ResponseEntity<>(returnUrl,HttpStatus.OK);
     }
     @GetMapping("/edit/{id}")
@@ -103,13 +107,17 @@ public class MeterReadingController {
     }
     @PostMapping("/edit/{id}")
     public ResponseEntity<?> updateMeterReading(@PathVariable Long id,
+                                                @RequestParam(name="notReturn", required = false) boolean notReturn,
                                                 MeterReadingRequest meterReadingRequest,
                                                 HttpServletRequest request) {
         meterReadingService.updateMeterReading(id, meterReadingRequest);
         String url = request.getRequestURL().toString();
         int index = url.lastIndexOf("/");
-        url = url.substring(0, index - 5);
-        return new ResponseEntity<>(url, HttpStatus.OK);
+        String returnUrl = url.substring(0, index - 5);
+        if(notReturn) {
+            returnUrl += "/add";
+        }
+        return new ResponseEntity<>(returnUrl, HttpStatus.OK);
     }
     @GetMapping("/get-number")
     public @ResponseBody String getNumber() {

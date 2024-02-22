@@ -290,6 +290,7 @@ function sendData(formData) {
         contentType: false,
         processData: false,
         success: function (response) {
+            toastr.success(successMessage);
             window.location.href = response;
         },
         error: function (error) {
@@ -300,10 +301,24 @@ function sendData(formData) {
 
 $("#cancel-button").on("click", function () {
     blockBy("#form");
-    $("#form").find('input:text, #readings').val('');
-    $("#form").find('select').val(null).trigger('change');
+    clearFields();
     if(defaultReading !== undefined){
         setFields(defaultReading);
     }
     unblockBy("#form");
-})
+});
+function clearFields() {
+    $("#form").find('input:text, #readings').val('');
+    $("#form").find('select').val(null).trigger('change');
+}
+
+$("#save-add-button").on("click", function () {
+    blockCardDody();
+    clearAllErrorMessage();
+    let formData = collectData();
+    formData.append("notReturn",true);
+    sendData(formData);
+});
+
+
+
