@@ -6,7 +6,7 @@
     <title th:text="#{menu-item-cash-register}"></title>
     <style>
         .select2-width {
-            width: 300px !important;
+            width: fit-content !important;
         }
     </style>
 </head>
@@ -114,7 +114,11 @@
                     <td style="min-width: 11rem"><input type="text" class="form-control" id="filter-by-date"></td>
                     <td style="min-width: 11rem">
                         <div id="filter-by-status-wrap">
-                            <select class="form-select select2" id="filter-by-status"></select>
+                            <select class="form-select select2" id="filter-by-status">
+                                <option value=""></option>
+                                <option value="true" th:text="#{cash-register-label-sheet-status-confirmed}"></option>
+                                <option value="false" th:text="#{cash-register-label-sheet-status-not-confirmed}"></option>
+                            </select>
                         </div>
                     </td>
                     <td style="min-width: 11rem">
