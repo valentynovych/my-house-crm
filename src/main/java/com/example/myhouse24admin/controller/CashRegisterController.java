@@ -1,9 +1,6 @@
 package com.example.myhouse24admin.controller;
 
-import com.example.myhouse24admin.model.cashRegister.CashSheetIncomeAddRequest;
-import com.example.myhouse24admin.model.cashRegister.CashSheetIncomeUpdateRequest;
-import com.example.myhouse24admin.model.cashRegister.CashSheetResponse;
-import com.example.myhouse24admin.model.cashRegister.CashSheetTableResponse;
+import com.example.myhouse24admin.model.cashRegister.*;
 import com.example.myhouse24admin.service.CashRegisterService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -43,7 +40,12 @@ public class CashRegisterController {
 
     @GetMapping("add-expense-sheet")
     public ModelAndView viewAddExpenseSheet() {
-        return new ModelAndView("cash-register/add-income-sheet");
+        return new ModelAndView("cash-register/add-expense-sheet");
+    }
+
+    @GetMapping("edit-expense-sheet/{sheetId}")
+    public ModelAndView viewEditExpenseSheet(@PathVariable Long sheetId) {
+        return new ModelAndView("cash-register/edit-expense-sheet");
     }
 
     @GetMapping("get-sheets")
@@ -73,10 +75,22 @@ public class CashRegisterController {
     }
 
     @PostMapping("edit-income-sheet/{sheetId}")
-    public ResponseEntity<?> updateSheetById(@PathVariable Long sheetId,
-                                             @ModelAttribute @Valid CashSheetIncomeUpdateRequest updateRequest) {
+    public ResponseEntity<?> updateIncomeSheetById(@PathVariable Long sheetId,
+                                                   @ModelAttribute @Valid CashSheetIncomeUpdateRequest updateRequest) {
         cashRegisterService.updateSheetById(sheetId, updateRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("add-expense-sheet")
+    public ResponseEntity<?> addNewExpenseSheet(@ModelAttribute @Valid CashSheetExpenseAddRequest addRequest) {
+        cashRegisterService.addNewExpenseSheet(addRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("edit-expense-sheet/{sheetId}")
+    public ResponseEntity<?> updateExpenseSheetById(@PathVariable Long sheetId,
+                                                    @ModelAttribute @Valid CashSheetExpenseUpdateRequest updateRequest) {
+        cashRegisterService.updateSheetById(sheetId, updateRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

@@ -2,10 +2,7 @@ package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.entity.CashSheet;
 import com.example.myhouse24admin.mapper.CashSheetMapper;
-import com.example.myhouse24admin.model.cashRegister.CashSheetIncomeAddRequest;
-import com.example.myhouse24admin.model.cashRegister.CashSheetIncomeUpdateRequest;
-import com.example.myhouse24admin.model.cashRegister.CashSheetResponse;
-import com.example.myhouse24admin.model.cashRegister.CashSheetTableResponse;
+import com.example.myhouse24admin.model.cashRegister.*;
 import com.example.myhouse24admin.repository.CashSheetRepo;
 import com.example.myhouse24admin.service.CashRegisterService;
 import com.example.myhouse24admin.specification.CashSheetSpecification;
@@ -72,6 +69,21 @@ public class CashRegisterServiceImpl implements CashRegisterService {
     public void updateSheetById(Long sheetId, CashSheetIncomeUpdateRequest updateRequest) {
         CashSheet cashSheetById = findCashSheetById(sheetId);
         cashSheetMapper.updateCashSheetFromCashSheetIncomeUpdateRequest(cashSheetById, updateRequest);
+        cashSheetRepo.save(cashSheetById);
+    }
+
+    @Override
+    public void addNewExpenseSheet(CashSheetExpenseAddRequest addRequest) {
+        logger.info("addNewExpenseSheet() -> start");
+        CashSheet cashSheet = cashSheetMapper.cashSheetExpenseAddRequestToCashSheet(addRequest);
+        CashSheet save = cashSheetRepo.save(cashSheet);
+        logger.info("addNewExpenseSheet() -> end, save new Expense Sheet with id: {}", save.getId());
+    }
+
+    @Override
+    public void updateSheetById(Long sheetId, CashSheetExpenseUpdateRequest updateRequest) {
+        CashSheet cashSheetById = findCashSheetById(sheetId);
+        cashSheetMapper.updateCashSheetFromCashSheetExpenseUpdateRequest(cashSheetById, updateRequest);
         cashSheetRepo.save(cashSheetById);
     }
 

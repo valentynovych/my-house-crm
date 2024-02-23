@@ -1,9 +1,6 @@
 package com.example.myhouse24admin.service;
 
-import com.example.myhouse24admin.model.cashRegister.CashSheetIncomeAddRequest;
-import com.example.myhouse24admin.model.cashRegister.CashSheetIncomeUpdateRequest;
-import com.example.myhouse24admin.model.cashRegister.CashSheetResponse;
-import com.example.myhouse24admin.model.cashRegister.CashSheetTableResponse;
+import com.example.myhouse24admin.model.cashRegister.*;
 import org.springframework.data.domain.Page;
 
 import java.util.Map;
@@ -19,4 +16,8 @@ public interface CashRegisterService {
     CashSheetResponse getSheetById(Long sheetId);
 
     void updateSheetById(Long sheetId, CashSheetIncomeUpdateRequest updateRequest);
+
+    void addNewExpenseSheet(CashSheetExpenseAddRequest addRequest);
+
+    void updateSheetById(Long sheetId, CashSheetExpenseUpdateRequest updateRequest);
 }
