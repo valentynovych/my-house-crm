@@ -41,8 +41,9 @@ public class PaymentItemController {
     @GetMapping("get-items")
     @ResponseBody
     public ResponseEntity<?> getAllItems(@RequestParam int page,
-                                         @RequestParam int pageSize) {
-        Page<PaymentItemDto> paymentItems = paymentItemService.getPaymentItems(page, pageSize);
+                                         @RequestParam int pageSize,
+                                         @RequestParam Map<String, String> searchParams) {
+        Page<PaymentItemDto> paymentItems = paymentItemService.getPaymentItems(page, pageSize, searchParams);
         return new ResponseEntity<>(paymentItems, HttpStatus.OK);
     }
 

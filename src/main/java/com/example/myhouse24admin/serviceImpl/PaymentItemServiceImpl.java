@@ -6,6 +6,7 @@ import com.example.myhouse24admin.mapper.PaymentItemMapper;
 import com.example.myhouse24admin.model.paymentItem.PaymentItemDto;
 import com.example.myhouse24admin.repository.PaymentItemRepo;
 import com.example.myhouse24admin.service.PaymentItemService;
+import com.example.myhouse24admin.specification.PaymentItemSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,10 +31,11 @@ public class PaymentItemServiceImpl implements PaymentItemService {
     }
 
     @Override
-    public Page<PaymentItemDto> getPaymentItems(int page, int pageSize) {
+    public Page<PaymentItemDto> getPaymentItems(int page, int pageSize, Map<String, String> searchParams) {
         log.info("getPaymentItems() -> start");
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<PaymentItem> paymentItemPage = paymentItemRepo.findAll(pageable);
+        PaymentItemSpecification specification = new PaymentItemSpecification(searchParams);
+        Page<PaymentItem> paymentItemPage = paymentItemRepo.findAll(specification, pageable);
         List<PaymentItemDto> paymentItemDtos =
                 mapper.paymentItemListToPaymentItemDtoList(paymentItemPage.getContent());
         Page<PaymentItemDto> paymentItemDtoPage =
