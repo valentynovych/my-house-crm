@@ -10,12 +10,13 @@ import java.time.Instant;
 @Table(name = "cash_sheets")
 public class CashSheet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "cashSheetsSeq")
+    @SequenceGenerator(name = "cashSheetsSeq",
+            sequenceName = "cashSheetsSeq",
+            allocationSize = 1,
+            schema = "cash_sheets_seq")
     private Long id;
-    @GeneratedValue(generator = "sheetNumberGenerator")
-    @GenericGenerator(name = "sheetNumberGenerator",
-            strategy = "com.example.myhouse24admin.entity.generators.SheetNumberGenerator")
-    @Column(length = 10)
+    @Column(length = 10, nullable = false, unique = true)
     private String sheetNumber;
     @Enumerated(EnumType.STRING)
     private CashSheetType sheetType;
