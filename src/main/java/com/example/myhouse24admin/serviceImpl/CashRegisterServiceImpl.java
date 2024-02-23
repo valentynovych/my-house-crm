@@ -60,16 +60,20 @@ public class CashRegisterServiceImpl implements CashRegisterService {
 
     @Override
     public CashSheetResponse getSheetById(Long sheetId) {
+        logger.info("getSheetById() -> start, with id: {}", sheetId);
         CashSheet cashSheetById = findCashSheetById(sheetId);
         CashSheetResponse sheetResponse = cashSheetMapper.cashSheetToCashSheetWithOwnerResponse(cashSheetById);
+        logger.info("getSheetById() -> end, return CashSheetResponse");
         return sheetResponse;
     }
 
     @Override
     public void updateSheetById(Long sheetId, CashSheetIncomeUpdateRequest updateRequest) {
+        logger.info("updateSheetById() -> start, with id: {}", sheetId);
         CashSheet cashSheetById = findCashSheetById(sheetId);
         cashSheetMapper.updateCashSheetFromCashSheetIncomeUpdateRequest(cashSheetById, updateRequest);
-        cashSheetRepo.save(cashSheetById);
+        CashSheet save = cashSheetRepo.save(cashSheetById);
+        logger.info("updateSheetById() -> end, success update CashSheet with id: {}", save.getId());
     }
 
     @Override
@@ -82,19 +86,21 @@ public class CashRegisterServiceImpl implements CashRegisterService {
 
     @Override
     public void updateSheetById(Long sheetId, CashSheetExpenseUpdateRequest updateRequest) {
+        logger.info("updateSheetById() -> start, with id: {}", sheetId);
         CashSheet cashSheetById = findCashSheetById(sheetId);
         cashSheetMapper.updateCashSheetFromCashSheetExpenseUpdateRequest(cashSheetById, updateRequest);
-        cashSheetRepo.save(cashSheetById);
+        CashSheet save = cashSheetRepo.save(cashSheetById);
+        logger.info("updateSheetById() -> end, success update CashSheet with id: {}", save.getId());
     }
 
     private CashSheet findCashSheetById(Long cashSheetId) {
-        logger.info("");
+        logger.info("findCashSheetById() -> start, with id: {}", cashSheetId);
         Optional<CashSheet> byId = cashSheetRepo.findById(cashSheetId);
         CashSheet cashSheet = byId.orElseThrow(() -> {
             logger.error("findCashSheetById() -> CashSheet with id: {} not found", cashSheetId);
             return new EntityNotFoundException(String.format("CashSheet with id: %s not found", cashSheetId));
         });
-        logger.info("");
+        logger.info("findCashSheetById() -> CashSheet isPresent, return CashSheet");
         return cashSheet;
     }
 
