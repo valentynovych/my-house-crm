@@ -2,6 +2,7 @@ package com.example.myhouse24admin.model.cashRegister;
 
 import com.example.myhouse24admin.entity.CashSheetType;
 import com.example.myhouse24admin.model.apartmentOwner.ApartmentOwnerShortResponse;
+import com.example.myhouse24admin.model.apartments.ApartmentResponse;
 import com.example.myhouse24admin.model.paymentItem.PaymentItemDto;
 import com.example.myhouse24admin.model.personalAccounts.PersonalAccountShortResponse;
 import jakarta.persistence.EnumType;

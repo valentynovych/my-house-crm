@@ -20,16 +20,27 @@ const $filterByPaymentType = $('#filter-by-payment-type');
 
 function getSheetStatusLabel(status) {
     switch (status) {
-        case 'CONFIRMED':
+        case true:
             return cashSheetStatusConfirmed;
-        case 'NOT_CONFIRMED' :
+        case false:
             return cashSheetStatusNotConfirmed;
         default:
             return '- - - -'
     }
 }
 
-$filterByDate.flatpickr();
+function getSheetsTypeLabel(sheetType) {
+    switch (sheetType) {
+        case "INCOME":
+            return cashSheetTypeIncome;
+        case "EXPENSE":
+            return cashSheetTypeExpense;
+        default:
+            return '- - - -'
+    }
+}
+
+$filterByDate.flatpickr({dateFormat: "d.m.Y"});
 
 $filterByStatus.select2({
     dropdownParent: $('#filter-by-status-wrap'),
@@ -248,12 +259,12 @@ function addParametersToUrl(url) {
     url.searchParams.append('page', currentPage);
     url.searchParams.append('pageSize', tableLength);
     if (byNumber) url.searchParams.append('sheetNumber', byNumber);
-    if (byDate) url.searchParams.append('date', byStatus);
-    if (byStatus) url.searchParams.append('status', byApartment);
-    if (byPaymentItemName) url.searchParams.append('paymentItemName', byHouse);
-    if (byOwner) url.searchParams.append('owner', bySection);
-    if (byPersonalAccount) url.searchParams.append('personalAccount', byOwner);
-    if (byPaymentType) url.searchParams.append('paymentType', byBalance);
+    if (byDate) url.searchParams.append('date', byDate);
+    if (byStatus) url.searchParams.append('status', byStatus);
+    if (byPaymentItemName) url.searchParams.append('paymentItem', byPaymentItemName);
+    if (byOwner) url.searchParams.append('owner', byOwner);
+    if (byPersonalAccount) url.searchParams.append('personalAccount', byPersonalAccount);
+    if (byPaymentType) url.searchParams.append('paymentType', byPaymentType);
 
     return url
 }
@@ -285,35 +296,32 @@ function drawTable(result) {
     if (result.content && result.content.length > 0) {
         console.log('drawTable1')
         let iter = 0;
-        for (const personalAccount of result.content) {
-            let accountNumber = personalAccount.accountNumber.toString().padStart(10, '0000000000');
-            accountNumber = accountNumber.substring(0, 5) + '-' + accountNumber.substring(5, 10);
-            const status = getSheetStatusLabel(personalAccount.status);
-            const statusBadge = personalAccount.status === 'ACTIVE'
-                ? `<span class="badge rounded-pill bg-success">${status}</span>`
-                : personalAccount.status === 'NONACTIVE'
-                    ? `<span class="badge rounded-pill bg-danger">${status}</span>`
-                    : `<span class="badge rounded-pill bg-dark">${status}</span>`;
+        for (const sheet of result.content) {
+            const status = getSheetStatusLabel(sheet.processed);
+            const statusBadge = sheet.processed ? `<span class="badge rounded-pill bg-success">${status}</span>`
+                : `<span class="badge rounded-pill bg-dark">${status}</span>`;
             let apartmentNumber = '-'
-            let balanceText = '-';
-            const isHaveApartment = !!personalAccount.apartment;
-            if (isHaveApartment) {
-                apartmentNumber = (personalAccount.apartment.apartmentNumber).toString().padStart(5, '00000');
-                const numberFormat = new Intl.NumberFormat('uk');
-                const balance = personalAccount.apartment.balance;
-                balanceText = balance > 0
-                    ? `<span class="text-success">${numberFormat.format(balance)}</span>`
-                    : balance < 0
-                        ? `<span class="text-danger">${numberFormat.format(balance)}</span>` : `<span class="text-dark">${numberFormat.format(balance)}</span>`;
-            }
+            const sheetType = getSheetsTypeLabel(sheet.sheetType);
+            const isIncomeSheet = sheet.sheetType === "INCOME";
+            const sheetTypeBadge = isIncomeSheet ? `<span class="badge rounded-pill bg-success">${sheetType}</span>`
+                : `<span class="badge rounded-pill bg-dark">${sheetType}</span>`;
+            const isHavePersonalAccount = !!sheet.personalAccount;
+            const isHaveApartmentOwner = !!sheet.apartmentOwner;
+            const numberFormat = new Intl.NumberFormat('uk');
+            const balance = sheet.amount;
+            const balanceText = isIncomeSheet
+                ? `<span class="text-success">${numberFormat.format(balance)}</span>`
+                : `<span class="text-danger">-${numberFormat.format(balance)}</span>`;
 
-            $(`<tr data-href="personal-accounts/view-account/${personalAccount.id}" class="cursor-pointer">
-            <td>${accountNumber}</td>
-            <td class="text-center">${statusBadge}</td>
-            <td>${apartmentNumber}</td>
-            <td>${isHaveApartment ? personalAccount.apartment.house.name : '-'}</td>
-            <td>${isHaveApartment ? personalAccount.apartment.section.name : '-'}</td>
-            <td>${isHaveApartment ? personalAccount.apartment.owner.fullName : '-'}</td>
+            const date = new Date(sheet.creationDate * 1000).toLocaleDateString();
+            $(`<tr data-href="personal-accounts/view-account/${sheet.id}" class="cursor-pointer">
+            <td>${sheet.sheetNumber}</td>
+            <td class="text-center">${date}</td>
+            <td>${statusBadge}</td>
+            <td>${sheet.paymentItem.name}</td>
+            <td>${isHaveApartmentOwner ? sheet.apartmentOwner.fullName : '-'}</td>
+            <td>${isHavePersonalAccount ? decorateAccountNumber(sheet.personalAccount.accountNumber) : '-'}</td>
+            <td class="text-center">${sheetTypeBadge}</td>
             <td class="text-center">${balanceText}</td>
             <td class="text-center">
               <div class="dropdown">
@@ -322,11 +330,11 @@ function drawTable(result) {
                 <i class="ti ti-dots-vertical"></i>
                </button>
                  <div class="dropdown-menu">
-                   <a class="dropdown-item" href="personal-accounts/edit-account/${personalAccount.id}">
+                   <a class="dropdown-item" href="cash-register/${isIncomeSheet ? 'edit-income-sheet' : 'edit-expense-sheet'}/${sheet.id}">
                        <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                    </a>
                    <button type="button" class="dropdown-item btn justify-content-start" 
-                        data-bs-toggle="modal" data-bs-target="#modalToDelete" onclick="addDeleteEvent(${personalAccount.id})">
+                        data-bs-toggle="modal" data-bs-target="#modalToDelete" onclick="addDeleteEvent(${sheet.id})">
                        <i class="ti ti-trash me-1"></i>${buttonLabelDelete}</button>
                  </div>
               </div>
