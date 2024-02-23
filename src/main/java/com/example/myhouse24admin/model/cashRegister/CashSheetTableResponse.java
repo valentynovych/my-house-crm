@@ -1,42 +1,29 @@
-package com.example.myhouse24admin.entity;
+package com.example.myhouse24admin.model.cashRegister;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
+import com.example.myhouse24admin.entity.CashSheetType;
+import com.example.myhouse24admin.model.apartmentOwner.ApartmentOwnerShortResponse;
+import com.example.myhouse24admin.model.paymentItem.PaymentItemDto;
+import com.example.myhouse24admin.model.personalAccounts.PersonalAccountShortResponse;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
-@Entity
-@Table(name = "cash_sheets")
-public class CashSheet {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class CashSheetTableResponse {
+
     private Long id;
-    @GeneratedValue(generator = "sheetNumberGenerator")
-    @GenericGenerator(name = "sheetNumberGenerator",
-            strategy = "com.example.myhouse24admin.entity.generators.SheetNumberGenerator")
-    @Column(length = 10)
     private String sheetNumber;
     @Enumerated(EnumType.STRING)
     private CashSheetType sheetType;
-    @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
     private boolean isProcessed;
-    @Column(nullable = false)
     private BigDecimal amount;
-    @Column(length = 1000)
     private String comment;
-    @Column(nullable = false)
     private boolean deleted;
-    @ManyToOne
-    @JoinColumn(name = "personal_account_id", referencedColumnName = "id")
-    private PersonalAccount personalAccount;
-    @ManyToOne
-    @JoinColumn(name = "payment_item_id", referencedColumnName = "id", nullable = false)
-    private PaymentItem paymentItem;
-    @ManyToOne
-    @JoinColumn(name = "staff_id", referencedColumnName = "id", nullable = false)
-    private Staff staff;
+    private PersonalAccountShortResponse personalAccount;
+    private ApartmentOwnerShortResponse apartmentOwner;
+    private PaymentItemDto paymentItem;
 
     public Long getId() {
         return id;
@@ -94,28 +81,28 @@ public class CashSheet {
         this.deleted = deleted;
     }
 
-    public PersonalAccount getPersonalAccount() {
+    public PersonalAccountShortResponse getPersonalAccount() {
         return personalAccount;
     }
 
-    public void setPersonalAccount(PersonalAccount personalAccount) {
+    public void setPersonalAccount(PersonalAccountShortResponse personalAccount) {
         this.personalAccount = personalAccount;
     }
 
-    public PaymentItem getPaymentItem() {
+    public ApartmentOwnerShortResponse getApartmentOwner() {
+        return apartmentOwner;
+    }
+
+    public void setApartmentOwner(ApartmentOwnerShortResponse apartmentOwner) {
+        this.apartmentOwner = apartmentOwner;
+    }
+
+    public PaymentItemDto getPaymentItem() {
         return paymentItem;
     }
 
-    public void setPaymentItem(PaymentItem paymentItem) {
+    public void setPaymentItem(PaymentItemDto paymentItem) {
         this.paymentItem = paymentItem;
-    }
-
-    public Staff getStaff() {
-        return staff;
-    }
-
-    public void setStaff(Staff staff) {
-        this.staff = staff;
     }
 
     public String getSheetNumber() {

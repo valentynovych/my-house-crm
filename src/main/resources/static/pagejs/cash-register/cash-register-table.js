@@ -36,28 +36,14 @@ $filterByStatus.select2({
     placeholder: '',
     allowClear: true,
     minimumResultsForSearch: -1,
-    dropdownCssClass: 'select2-width',
-    ajax: {
-        type: "GET",
-        url: 'cash-register/get-statuses',
-        processResults: function (response) {
-            return {
-                results: $.map(response, function (status) {
-                    return {
-                        id: status,
-                        text: getSheetStatusLabel(status)
-                    }
-                }),
-            };
-        }
-    }
+    dropdownCssClass: 'select2-width'
 });
 
 $filterByPaymentItemName.select2({
     dropdownParent: $('#filter-by-payment-item-name-wrap'),
     placeholder: '',
     allowClear: true,
-    width: 'resolve',
+    dropdownCssClass: 'select2-width',
     ajax: {
         type: "GET",
         url: 'system-settings/payment-items/get-items',
@@ -88,6 +74,7 @@ $filterByOwner.select2({
     dropdownParent: $('#filter-by-owner-wrap'),
     placeholder: '',
     allowClear: true,
+    dropdownCssClass: 'select2-width',
     ajax: {
         type: "GET",
         url: 'owners/get-owners',
@@ -119,6 +106,7 @@ $filterByPersonalAccount.select2({
     dropdownParent: $('#filter-by-personal-account-wrap'),
     placeholder: '',
     allowClear: true,
+    dropdownCssClass: 'select2-width',
     ajax: {
         type: "GET",
         url: 'personal-accounts/get-personal-accounts',
@@ -151,7 +139,8 @@ $filterByPaymentType.select2({
     dropdownParent: $('#filter-by-payment-type-wrap'),
     minimumResultsForSearch: -1,
     placeholder: '',
-    allowClear: true
+    allowClear: true,
+    dropdownCssClass: 'select2-width',
 });
 $filterByPaymentType.val('').trigger('change');
 
@@ -286,14 +275,13 @@ function getSheets(page) {
             drawTable(result);
         },
         error: function () {
-            //toastr.error(errorMessage);
+            toastr.error(errorMessage);
         }
     });
 }
 
 function drawTable(result) {
-    console.log('drawTable')
-    // const page = result.pageable.pageNumber;
+    const page = result.pageable.pageNumber;
     if (result.content && result.content.length > 0) {
         console.log('drawTable1')
         let iter = 0;

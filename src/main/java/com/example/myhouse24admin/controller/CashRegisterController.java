@@ -1,7 +1,8 @@
 package com.example.myhouse24admin.controller;
 
-import com.example.myhouse24admin.entity.CashSheetType;
+import com.example.myhouse24admin.model.cashRegister.CashSheetTableResponse;
 import com.example.myhouse24admin.service.CashRegisterService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -38,8 +38,8 @@ public class CashRegisterController {
     public @ResponseBody ResponseEntity<?> getSheets(@RequestParam int page,
                                                      @RequestParam int pageSize,
                                                      @RequestParam Map<String, String> searchParams) {
-         //cashRegisterService.getSheets(page, page, searchParams);
-        return new ResponseEntity<>("ds",HttpStatus.OK);
+        Page<CashSheetTableResponse> responses = cashRegisterService.getSheets(page, pageSize, searchParams);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
 }
