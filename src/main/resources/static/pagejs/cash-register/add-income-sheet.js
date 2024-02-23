@@ -184,7 +184,7 @@ function initInputAndSelect() {
         blockCardDody();
 
         let formData = new FormData($('#income-sheet-form')[0]);
-        formData.set("isProcessed", $checkboxIsProcessed.prop('checked'));
+        formData.set("processed", $checkboxIsProcessed.prop('checked'));
         formData.set("sheetNumber", $inputSheetNumber.val())
         //
         for (const formDatum of formData.entries()) {
