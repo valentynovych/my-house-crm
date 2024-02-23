@@ -7,7 +7,7 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = ApartmentOwnerMapper.class)
 public interface PersonalAccountMapper {
 
     PersonalAccountShortResponse personalAccountToPersonalAccountShortResponse(PersonalAccount personalAccount);
@@ -43,4 +43,7 @@ public interface PersonalAccountMapper {
 
     @Mapping(target = "apartment", source = "apartmentId", qualifiedByName = "setApartment")
     void updatePersonalAccountFromRequest(@MappingTarget PersonalAccount personalAccount, PersonalAccountUpdateRequest request);
+
+    @Mapping(target = "apartmentOwner", source = "apartment.owner")
+    PersonalAccountWithApartmentOwnerResponse personalAccountToPersonalAccountWithApartmentOwnerResponse(PersonalAccount personalAccount);
 }

@@ -3,10 +3,13 @@ package com.example.myhouse24admin.serviceImpl;
 import com.example.myhouse24admin.entity.CashSheet;
 import com.example.myhouse24admin.mapper.CashSheetMapper;
 import com.example.myhouse24admin.model.cashRegister.CashSheetIncomeAddRequest;
+import com.example.myhouse24admin.model.cashRegister.CashSheetIncomeUpdateRequest;
+import com.example.myhouse24admin.model.cashRegister.CashSheetResponse;
 import com.example.myhouse24admin.model.cashRegister.CashSheetTableResponse;
 import com.example.myhouse24admin.repository.CashSheetRepo;
 import com.example.myhouse24admin.service.CashRegisterService;
 import com.example.myhouse24admin.specification.CashSheetSpecification;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class CashRegisterServiceImpl implements CashRegisterService {
@@ -55,6 +59,31 @@ public class CashRegisterServiceImpl implements CashRegisterService {
         String nextSheetNumber = StringUtils.leftPad(String.valueOf(maxId), 10, "0000000000");
         logger.info("getNextSheetNumber() -> end, with result: {}", nextSheetNumber);
         return nextSheetNumber;
+    }
+
+    @Override
+    public CashSheetResponse getSheetById(Long sheetId) {
+        CashSheet cashSheetById = findCashSheetById(sheetId);
+        CashSheetResponse sheetResponse = cashSheetMapper.cashSheetToCashSheetWithOwnerResponse(cashSheetById);
+        return sheetResponse;
+    }
+
+    @Override
+    public void updateSheetById(Long sheetId, CashSheetIncomeUpdateRequest updateRequest) {
+        CashSheet cashSheetById = findCashSheetById(sheetId);
+        cashSheetMapper.updateCashSheetFromCashSheetIncomeUpdateRequest(cashSheetById, updateRequest);
+        cashSheetRepo.save(cashSheetById);
+    }
+
+    private CashSheet findCashSheetById(Long cashSheetId) {
+        logger.info("");
+        Optional<CashSheet> byId = cashSheetRepo.findById(cashSheetId);
+        CashSheet cashSheet = byId.orElseThrow(() -> {
+            logger.error("findCashSheetById() -> CashSheet with id: {} not found", cashSheetId);
+            return new EntityNotFoundException(String.format("CashSheet with id: %s not found", cashSheetId));
+        });
+        logger.info("");
+        return cashSheet;
     }
 
     private Page<CashSheet> findCashSheetsBySearchParams(int page, int pageSize, Map<String, String> searchParams) {

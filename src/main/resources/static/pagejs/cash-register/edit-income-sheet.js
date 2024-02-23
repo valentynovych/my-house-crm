@@ -1,6 +1,4 @@
-$(document).ready(function () {
-    initInputAndSelect();
-})
+const sheetId = window.location.pathname.match(/\d+/);
 const $inputSheetNumber = $('[name="sheetNumber"]');
 const $inputCreationDate = $('[name="creationDate"]');
 const $selectOwner = $('[name="ownerId"]');
@@ -10,33 +8,45 @@ const $inputAmount = $('[name="amount"]');
 const $inputComment = $('[name="comment"]');
 const $checkboxIsProcessed = $('[name="isProcessed"]');
 const $selectStaff = $('[name="staffId"]');
+let sheetToRestore;
 
-function initInputAndSelect() {
-
+$(document).ready(function () {
+    blockCardDody();
     $.ajax({
-        url: '../cash-register/get-next-sheet-number',
+        url: '../get-sheet/' + sheetId,
         type: 'get',
         success: function (response) {
-            $inputSheetNumber.val(response);
+            console.log(response);
+            sheetToRestore = response;
+            fillInputs(response);
         },
         error: function (error) {
             console.log(error);
         }
     })
+})
 
-    $inputCreationDate.flatpickr({
+function fillInputs(sheet) {
+    $inputSheetNumber.val(sheet.sheetNumber);
+
+    const flatpickrDate = flatpickr($inputCreationDate, {
         dateFormat: "d.m.Y",
-        defaultDate: new Date()
-    })
+    });
+    flatpickrDate.setDate(new Date(sheet.creationDate * 1000));
 
+    const personalAccount = sheet.personalAccount;
     $selectOwner.select2({
         debug: true,
         dropdownParent: $('.ownerId-select-wrap'),
         maximumInputLength: 50,
         placeholder: chooseOwner,
+        data: [{
+            id: personalAccount.apartmentOwner.id,
+            text: personalAccount.apartmentOwner.fullName
+        }],
         ajax: {
             type: "GET",
-            url: '../owners/get-owners',
+            url: '../../owners/get-owners',
             data: function (params) {
                 return {
                     fullName: params.term,
@@ -60,27 +70,28 @@ function initInputAndSelect() {
         }
     });
     let ownerId;
-    initSelectPersonalAccount(ownerId, true);
+    initSelectPersonalAccount(ownerId, false, personalAccount);
 
     $selectOwner.on('change', function () {
         ownerId = this.value;
-        console.log(ownerId);
+        $selectPersonalAccount.val('').trigger("change");
         if (ownerId) {
-            initSelectPersonalAccount(ownerId, false);
+            initSelectPersonalAccount(ownerId, false, '');
         } else {
-            initSelectPersonalAccount(false, true);
+            initSelectPersonalAccount(false, true, '');
         }
     })
 
-    function initSelectPersonalAccount(ownerId, isDisabled) {
+    function initSelectPersonalAccount(ownerId, isDisabled, personalAccount) {
         $selectPersonalAccount.select2({
             dropdownParent: $('.personalAccountId-select-wrap'),
             maximumInputLength: 50,
             placeholder: choosePersonalAccount,
             disabled: isDisabled,
+
             ajax: {
                 type: "GET",
-                url: `../personal-accounts/get-personal-accounts${ownerId ? '?owner=' + ownerId : ''}`,
+                url: `../../personal-accounts/get-personal-accounts${ownerId ? '?owner=' + ownerId : ''}`,
                 data: function (params) {
                     return {
                         accountNumber: params.term,
@@ -104,6 +115,14 @@ function initInputAndSelect() {
                 }
             }
         });
+        if (personalAccount) {
+            $selectPersonalAccount.select2({
+                data: [{
+                    id: personalAccount.id,
+                    text: decorateAccountNumber(personalAccount.accountNumber)
+                }]
+            })
+        }
     }
 
 
@@ -111,9 +130,13 @@ function initInputAndSelect() {
         dropdownParent: $('.paymentItemId-select-wrap'),
         maximumInputLength: 50,
         placeholder: choosePaymentItem,
+        data: [{
+            id: sheet.paymentItem.id,
+            text: sheet.paymentItem.name
+        }],
         ajax: {
             type: "GET",
-            url: '../system-settings/payment-items/get-items',
+            url: '../../system-settings/payment-items/get-items',
             data: function (params) {
                 return {
                     paymentType: "INCOME",
@@ -138,13 +161,25 @@ function initInputAndSelect() {
         }
     });
 
+    const $inputAmountCleave = new Cleave($inputAmount, {
+        numeral: true,
+        numeralThousandsGroupStyle: "thousand"
+    });
+
+    $inputAmountCleave.setRawValue(sheet.amount);
+    $checkboxIsProcessed.prop('checked', sheet.processed)
+
     $selectStaff.select2({
         dropdownParent: $('.staffId-select-wrap'),
         placeholder: chooseStaff,
         maximumInputLength: 50,
+        data: [{
+            id: sheet.staff.id,
+            text: `${sheet.staff.firstName} ${sheet.staff.lastName}`,
+        }],
         ajax: {
             type: "GET",
-            url: '../system-settings/staff/get-staff',
+            url: '../../system-settings/staff/get-staff',
             data: function (params) {
                 return {
                     name: params.term,
@@ -169,10 +204,8 @@ function initInputAndSelect() {
         }
     });
 
-    new Cleave($inputAmount, {
-        numeral: true,
-        numeralThousandsGroupStyle: "thousand"
-    });
+    autosize($inputComment);
+    $inputComment.val(sheet.comment);
 
     function decorateAccountNumber(accountNumber) {
         let s = (accountNumber + '').padStart(10, '0000000000');
@@ -186,7 +219,9 @@ function initInputAndSelect() {
         let formData = new FormData($('#income-sheet-form')[0]);
         formData.set("isProcessed", $checkboxIsProcessed.prop('checked'));
         formData.set("sheetNumber", $inputSheetNumber.val())
-        //
+        formData.set("id", sheetId)
+        formData.set("amount", $inputAmountCleave.getRawValue())
+
         for (const formDatum of formData.entries()) {
             console.log(formDatum)
         }
@@ -207,5 +242,5 @@ function initInputAndSelect() {
         });
     });
 
-    $('.button-cancel').on('click', () => window.history.back())
+    $('.button-cancel').on('click', () => fillInputs(sheetToRestore));
 }

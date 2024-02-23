@@ -1,9 +1,12 @@
 package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.model.cashRegister.CashSheetIncomeAddRequest;
+import com.example.myhouse24admin.model.cashRegister.CashSheetIncomeUpdateRequest;
+import com.example.myhouse24admin.model.cashRegister.CashSheetResponse;
 import com.example.myhouse24admin.model.cashRegister.CashSheetTableResponse;
 import com.example.myhouse24admin.service.CashRegisterService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +36,11 @@ public class CashRegisterController {
         return new ModelAndView("cash-register/add-income-sheet");
     }
 
+    @GetMapping("edit-income-sheet/{sheetId}")
+    public ModelAndView viewEditIncomeSheet(@PathVariable Long sheetId) {
+        return new ModelAndView("cash-register/edit-income-sheet");
+    }
+
     @GetMapping("add-expense-sheet")
     public ModelAndView viewAddExpenseSheet() {
         return new ModelAndView("cash-register/add-income-sheet");
@@ -56,6 +64,19 @@ public class CashRegisterController {
     public ResponseEntity<String> getNextSheetNumber() {
         String nextSheetNumber = cashRegisterService.getNextSheetNumber();
         return new ResponseEntity<>(nextSheetNumber, HttpStatus.OK);
+    }
+
+    @GetMapping("get-sheet/{sheetId}")
+    public @ResponseBody ResponseEntity<?> getSheetById(@PathVariable @Min(1) Long sheetId) {
+        CashSheetResponse sheetResponse = cashRegisterService.getSheetById(sheetId);
+        return new ResponseEntity<>(sheetResponse, HttpStatus.OK);
+    }
+
+    @PostMapping("edit-income-sheet/{sheetId}")
+    public ResponseEntity<?> updateSheetById(@PathVariable Long sheetId,
+                                             @ModelAttribute @Valid CashSheetIncomeUpdateRequest updateRequest) {
+        cashRegisterService.updateSheetById(sheetId, updateRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
