@@ -296,9 +296,7 @@ function getPersonalAccounts(page) {
 }
 
 function drawTable(result) {
-    const page = result.pageable.pageNumber;
     if (result.content && result.content.length > 0) {
-        let iter = 0;
         for (const personalAccount of result.content) {
             let accountNumber = personalAccount.accountNumber.toString().padStart(10, '0000000000');
             accountNumber = accountNumber.substring(0, 5) + '-' + accountNumber.substring(5, 10);
@@ -356,8 +354,7 @@ function drawTable(result) {
     }
 
     drawPaginationElements(result, 'getPersonalAccounts')
-    drawPagination(result.totalPages, page, 'getPersonalAccounts');
-
+    drawPagination(result.totalPages, currentPage, 'getPersonalAccounts');
 }
 
 function addListenerToRow() {
