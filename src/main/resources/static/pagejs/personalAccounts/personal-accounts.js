@@ -193,13 +193,14 @@ $filterByBalance.on('change', function () {
 });
 
 $('.clear-filters').on('click', function () {
-    $($filterByHouse, $filterBySection)
-        .val(null).trigger('change');
-    $($filterByStatus).select2('enable', false);
+    $filterByNumber.val('').trigger('input');
+    $filterByStatus.val('').trigger('change')
+    $filterByApartment.val('').trigger('input');
+    $filterByHouse.val('').trigger('change');
+    $filterBySection.val('').trigger('change');
+    $($filterBySection).select2('enable', false);
     $filterByOwner.val('').trigger('change');
     $filterByBalance.val('').trigger('change');
-    $filterByNumber.val('').trigger('input');
-    $filterByApartment.val('').trigger('input');
 })
 
 function delayBeforeSearch() {
