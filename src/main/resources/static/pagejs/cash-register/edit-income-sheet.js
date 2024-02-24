@@ -233,7 +233,7 @@ function fillInputs(sheet) {
             contentType: false,
             data: formData,
             success: function (response) {
-                // window.history.back();
+                window.history.back();
             },
             error: function (error) {
                 printErrorMessageToField(error);

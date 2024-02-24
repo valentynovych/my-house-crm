@@ -89,7 +89,7 @@ function initInputAndSelect() {
         }
     });
 
-    new Cleave($inputAmount, {
+    const $inputAmountCleave = new Cleave($inputAmount, {
         numeral: true,
         numeralThousandsGroupStyle: "thousand"
     });
@@ -102,7 +102,8 @@ function initInputAndSelect() {
 
         let formData = new FormData($('#expense-sheet-form')[0]);
         formData.set("processed", $checkboxIsProcessed.prop('checked'));
-        formData.set("sheetNumber", $inputSheetNumber.val())
+        formData.set("sheetNumber", $inputSheetNumber.val());
+        formData.set("amount", $inputAmountCleave.getRawValue())
 
         for (const formDatum of formData.entries()) {
             console.log(formDatum)
