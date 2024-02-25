@@ -9,6 +9,8 @@ let byOwner = '';
 let byPersonalAccount = '';
 let byPaymentType = '';
 let timer;
+let processedIncomeAmount;
+let processedExpenseAmount;
 
 const $filterByNumber = $('#filter-by-number');
 const $filterByDate = $('#filter-by-date');
@@ -40,7 +42,7 @@ function getSheetsTypeLabel(sheetType) {
     }
 }
 
-$filterByDate.flatpickr({dateFormat: "d.m.Y"});
+$flatpickrDate = flatpickr($filterByDate, {dateFormat: "d.m.Y"})
 
 $filterByStatus.select2({
     dropdownParent: $('#filter-by-status-wrap'),
@@ -151,7 +153,6 @@ $filterByPaymentType.select2({
     minimumResultsForSearch: -1,
     placeholder: '',
     allowClear: true,
-    dropdownCssClass: 'select2-width',
 });
 $filterByPaymentType.val('').trigger('change');
 
@@ -167,12 +168,10 @@ $filterByStatus.on('change', function () {
     byStatus = this.value;
     delayBeforeSearch();
 });
-
 $filterByPaymentItemName.on('change', function () {
     byPaymentItemName = this.value;
     delayBeforeSearch();
 });
-
 $filterByOwner.on('change', function () {
     byOwner = this.value;
     delayBeforeSearch();
@@ -188,7 +187,7 @@ $filterByPaymentType.on('change', function () {
 
 $('.clear-filters').on('click', function () {
     $filterByNumber.val('').trigger('input');
-    $filterByDate.val('').trigger('change');
+    $flatpickrDate.clear();
     $filterByStatus.val('').trigger('change');
     $filterByPaymentItemName.val('').trigger('change');
     $filterByOwner.val('').trigger('change');
@@ -231,7 +230,6 @@ function getPersonalAccountsStatistic() {
 function fillStatistic(stat) {
     $('#accounts-balance').html(`${stat.accountsBalanceOverpayments} ${currency}.`)
     $('#accounts-balance-arrears').html(`${stat.accountsBalanceArrears} ${currency}.`)
-
 }
 
 $('#export-to-exel').on('click', function () {
@@ -270,7 +268,10 @@ function addParametersToUrl(url) {
 }
 
 function getSheets(page) {
-    console.log('getSheets')
+    currentPage = page;
+    processedExpenseAmount = 0;
+    processedIncomeAmount = 0;
+
     blockCardDody();
     let url = new URL('cash-register/get-sheets', window.location.origin + window.location.pathname);
     url = addParametersToUrl(url);
@@ -280,7 +281,6 @@ function getSheets(page) {
         dataType: 'json',
         success: function (result) {
             console.log(result)
-            currentPage = page;
             clearTableLine();
             $(".card-footer").children().remove();
             drawTable(result);
@@ -292,10 +292,7 @@ function getSheets(page) {
 }
 
 function drawTable(result) {
-    const page = result.pageable.pageNumber;
     if (result.content && result.content.length > 0) {
-        console.log('drawTable1')
-        let iter = 0;
         for (const sheet of result.content) {
             const status = getSheetStatusLabel(sheet.processed);
             const statusBadge = sheet.processed ? `<span class="badge rounded-pill bg-success">${status}</span>`
@@ -314,7 +311,7 @@ function drawTable(result) {
                 : `<span class="text-danger">-${numberFormat.format(balance)}</span>`;
 
             const date = new Date(sheet.creationDate * 1000).toLocaleDateString();
-            $(`<tr data-href="personal-accounts/view-account/${sheet.id}" class="cursor-pointer">
+            $(`<tr data-href="cash-register/view-sheet/${sheet.id}" class="cursor-pointer">
             <td>${sheet.sheetNumber}</td>
             <td class="text-center">${date}</td>
             <td>${statusBadge}</td>
@@ -342,6 +339,12 @@ function drawTable(result) {
             </tr>`
             ).appendTo("tbody");
             addListenerToRow();
+
+            if (sheet.sheetType === "INCOME" && sheet.processed) {
+                processedIncomeAmount += sheet.amount;
+            } else if (sheet.sheetType === "EXPENSE" && sheet.processed) {
+                processedExpenseAmount += sheet.amount;
+            }
         }
     } else {
         $(`<tr>
@@ -349,9 +352,11 @@ function drawTable(result) {
            </tr>`).appendTo('tbody');
     }
 
-    drawPaginationElements(result, 'getSheets')
-    drawPagination(result.totalPages, page, 'getSheets');
+    $('#processed-income-amount').html(`${processedIncomeAmount} ${currency}`);
+    $('#processed-expense-amount').html(`${processedExpenseAmount} ${currency}`);
 
+    drawPaginationElements(result, 'getSheets')
+    drawPagination(result.totalPages, currentPage, 'getSheets');
 }
 
 function addListenerToRow() {

@@ -8,7 +8,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,10 +37,7 @@ public class CashSheetSpecification implements Specification<CashSheet> {
                 case BY_DATE -> {
                     LocalDate date = LocalDate.parse(value, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
                     Instant instant = date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
-                    predicates.add(criteriaBuilder.and(
-                            criteriaBuilder.greaterThanOrEqualTo(root.get("creationDate"), instant),
-                            criteriaBuilder.lessThanOrEqualTo(root.get("creationDate"), instant.plus(1, ChronoUnit.DAYS)))
-                    );
+                    predicates.add(criteriaBuilder.equal(root.get("creationDate"), instant));
                 }
                 case BY_STATUS ->
                         predicates.add(criteriaBuilder.equal(root.get("isProcessed"), Boolean.valueOf(value)));
