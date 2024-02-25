@@ -12,13 +12,13 @@ public class NotRequiredApartmentInPersonalAccountValidator
         boolean isValid = true;
         if (request.getHouseId() != null) {
             context.disableDefaultConstraintViolation();
-            if (request.getSectionId() == null) {
-                context.buildConstraintViolationWithTemplate("{validation-field-required}")
-                        .addPropertyNode("sectionId")
-                        .addBeanNode()
-                        .addConstraintViolation();
-                isValid = false;
-            }
+//            if (request.getSectionId() == null) {
+//                context.buildConstraintViolationWithTemplate("{validation-field-required}")
+//                        .addPropertyNode("sectionId")
+//                        .addBeanNode()
+//                        .addConstraintViolation();
+//                isValid = false;
+//            }
             if (request.getApartmentId() == null) {
                 context.buildConstraintViolationWithTemplate("{validation-field-required}")
                         .addPropertyNode("apartmentId")

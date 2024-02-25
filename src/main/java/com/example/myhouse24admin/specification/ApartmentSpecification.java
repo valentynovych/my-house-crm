@@ -33,9 +33,11 @@ public class ApartmentSpecification implements Specification<Apartment> {
                     predicates.add(criteriaBuilder.equal(root.get("house"), house));
                 }
                 case "section" -> {
-                    Section section = new Section();
-                    section.setId(Long.valueOf(value));
-                    predicates.add(criteriaBuilder.equal(root.get("section"), section));
+                    if (!value.isEmpty()) {
+                        Section section = new Section();
+                        section.setId(Long.valueOf(value));
+                        predicates.add(criteriaBuilder.equal(root.get("section"), section));
+                    }
                 }
                 case "floor" -> {
                     Floor floor = new Floor();
