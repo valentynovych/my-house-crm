@@ -2,8 +2,12 @@ package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.model.cashRegister.*;
 import com.example.myhouse24admin.service.CashRegisterService;
+import com.example.myhouse24admin.util.CashSheetViewExelGenerator;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -18,9 +26,11 @@ import java.util.Map;
 public class CashRegisterController {
 
     private final CashRegisterService cashRegisterService;
+    private final MessageSource messageSource;
 
-    public CashRegisterController(CashRegisterService cashRegisterService) {
+    public CashRegisterController(CashRegisterService cashRegisterService, MessageSource messageSource) {
         this.cashRegisterService = cashRegisterService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping
@@ -46,6 +56,11 @@ public class CashRegisterController {
     @GetMapping("edit-expense-sheet/{sheetId}")
     public ModelAndView viewEditExpenseSheet(@PathVariable Long sheetId) {
         return new ModelAndView("cash-register/edit-expense-sheet");
+    }
+
+    @GetMapping("view-sheet/{sheetId}")
+    public ModelAndView viewSheet(@PathVariable Long sheetId) {
+        return new ModelAndView("cash-register/view-cash-sheet");
     }
 
     @GetMapping("get-sheets")
@@ -92,5 +107,27 @@ public class CashRegisterController {
                                                     @ModelAttribute @Valid CashSheetExpenseUpdateRequest updateRequest) {
         cashRegisterService.updateSheetById(sheetId, updateRequest);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("export-view-to-exel/{sheetId}")
+    public ResponseEntity<?> exportToExcel(@PathVariable @Min(1) Long sheetId,
+                                           HttpServletResponse response) {
+        response.setContentType("application/octet-stream");
+        CashSheetResponse sheetResponse = cashRegisterService.getSheetById(sheetId);
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=CashSheet_" + sheetResponse.getSheetNumber() + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+
+        CashSheetViewExelGenerator generator =
+                new CashSheetViewExelGenerator(sheetResponse, messageSource, LocaleContextHolder.getLocale());
+        try {
+            generator.generateExcelFile(response);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }
