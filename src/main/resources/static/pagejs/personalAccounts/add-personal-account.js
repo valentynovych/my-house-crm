@@ -84,15 +84,16 @@ function initInputAndSelect() {
         }
     });
 
-
+    let houseId;
     $selectHouse.on('change', function () {
         $selectSection.val('').trigger('change');
         $selectApartment.val('').trigger('change');
         $apartmentOwnerText.html(labelNotSet);
         $apartmentOwnerPhone.html(labelNotSet);
-        const houseId = $(this).val();
+        houseId = $(this).val();
         if (houseId > 0) {
             $selectSection.removeAttr('disabled');
+            $selectApartment.removeAttr("disabled")
             initHouseNestedSSelects(houseId);
         }
     });
@@ -108,7 +109,6 @@ function initInputAndSelect() {
     });
 
     function initHouseNestedSSelects(houseId) {
-        let mapIdRangeNumber = new Map();
         $selectSection.select2({
             placeholder: chooseSection,
             dropdownParent: $selectSection.parent(),
@@ -125,10 +125,10 @@ function initInputAndSelect() {
                 processResults: function (response) {
                     return {
                         results: $.map(response.content, function (section) {
-                            mapIdRangeNumber.set(section.id, section.rangeApartmentNumbers);
                             return {
                                 id: section.id,
-                                text: section.name
+                                text: section.name,
+                                range: section.rangeApartmentNumbers
                             }
                         }),
                         pagination: {
@@ -138,30 +138,29 @@ function initInputAndSelect() {
                 }
             }
         });
+        initSectionNestedSelect(null, houseId);
     }
 
-    $selectSection.on("select2:select", function () {
-        $selectApartment.val('').trigger('change');
-        const sectionId = $(this).val();
-        if (sectionId > 0) {
-            $selectApartment.removeAttr("disabled")
-            initSectionNestedSelect(sectionId);
-        }
-    });
-
-    function initSectionNestedSelect(sectionId) {
+    function initSectionNestedSelect(sectionId, houseId) {
         $selectApartment.select2({
             placeholder: chooseSection,
             dropdownParent: $selectApartment.parent(),
             ajax: {
                 type: "GET",
-                url: '../apartments/get-apartments?section=' + sectionId,
+                url: '../apartments/get-apartments',
                 data: function (params) {
-                    return {
+                    let parameters = {
                         apartmentNumber: params.term,
+                        house: houseId,
                         page: (params.page - 1) || 0,
                         pageSize: 10
-                    };
+                    }
+                    if (sectionId) {
+                        parameters.section = sectionId;
+                        console.log(parameters);
+
+                    }
+                    return parameters;
                 },
                 processResults: function (response) {
                     return {
@@ -181,6 +180,13 @@ function initInputAndSelect() {
             }
         });
     }
+
+    $selectSection.on('change', function () {
+        const value = $(this).val();
+        if (value > 0) {
+            initSectionNestedSelect(value, houseId);
+        }
+    })
 
 
     $selectApartment.on('change', function () {

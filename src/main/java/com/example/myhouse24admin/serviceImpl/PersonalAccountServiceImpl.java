@@ -7,11 +7,9 @@ import com.example.myhouse24admin.model.personalAccounts.*;
 import com.example.myhouse24admin.repository.PersonalAccountRepo;
 import com.example.myhouse24admin.service.PersonalAccountService;
 import com.example.myhouse24admin.specification.PersonalAccountSpecification;
-import com.example.myhouse24admin.util.PersonalAccountExelGenerator;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -76,6 +74,12 @@ public class PersonalAccountServiceImpl implements PersonalAccountService {
     @Override
     public void addNewPersonalAccount(PersonalAccountAddRequest request) {
         logger.info("addNewPersonalAccount() -> start");
+        if (request.getApartmentId() != null && accountRepo.existsPersonalAccountByApartment_Id(request.getApartmentId())) {
+            Long apartmentId = request.getApartmentId();
+            logger.info("addNewPersonalAccount() -> Apartment with id: {} has different PersonalAccount, " +
+                    "start deleting Apartment in that Account", apartmentId);
+            deleteApartmentOnPersonalAccount(apartmentId);
+        }
         PersonalAccount personalAccount = accountMapper.personalAccountAddRequestToPersonalAccount(request);
         PersonalAccount save = accountRepo.save(personalAccount);
         logger.info("addNewPersonalAccount() -> exit, success saving new PersonalAccount with id: {}", save.getId());

@@ -274,6 +274,7 @@ function addParametersToUrl(url) {
 }
 
 function getPersonalAccounts(page) {
+    currentPage = page;
 
     blockCardDody();
     let url = new URL('personal-accounts/get-personal-accounts', window.location.origin + window.location.pathname);

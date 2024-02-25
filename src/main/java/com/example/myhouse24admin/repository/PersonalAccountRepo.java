@@ -17,6 +17,8 @@ public interface PersonalAccountRepo extends JpaRepository<PersonalAccount, Long
 
     boolean existsPersonalAccountByApartment_IdAndIdIsNot(Long apartmentId, Long personalAccountId);
 
+    boolean existsPersonalAccountByApartment_Id(Long apartmentId);
+
     Optional<PersonalAccount> findPersonalAccountByAccountNumber(Long accountNumber);
 
     @Query(value = "SELECT max(accountNumber) FROM PersonalAccount")
