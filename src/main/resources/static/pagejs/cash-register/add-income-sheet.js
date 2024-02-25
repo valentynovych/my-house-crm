@@ -11,6 +11,11 @@ const $inputComment = $('[name="comment"]');
 const $checkboxIsProcessed = $('[name="isProcessed"]');
 const $selectStaff = $('[name="staffId"]');
 
+const $inputAmountCleave = new Cleave($inputAmount, {
+    numeral: true,
+    numeralThousandsGroupStyle: "thousand"
+});
+
 function initInputAndSelect() {
 
     $.ajax({
@@ -169,44 +174,89 @@ function initInputAndSelect() {
         }
     });
 
-    const $inputAmountCleave = new Cleave($inputAmount, {
-        numeral: true,
-        numeralThousandsGroupStyle: "thousand"
-    });
+    fillFromCopy();
+}
 
-    function decorateAccountNumber(accountNumber) {
-        let s = (accountNumber + '').padStart(10, '0000000000');
-        return s.substring(0, 5) + '-' + s.substring(5, 10);
+function decorateAccountNumber(accountNumber) {
+    let s = (accountNumber + '').padStart(10, '0000000000');
+    return s.substring(0, 5) + '-' + s.substring(5, 10);
+}
+
+$('.button-save').on('click', function () {
+    clearAllErrorMessage();
+    blockCardDody();
+
+    let formData = new FormData($('#income-sheet-form')[0]);
+    formData.set("processed", $checkboxIsProcessed.prop('checked'));
+    formData.set("sheetNumber", $inputSheetNumber.val())
+    formData.set("amount", $inputAmountCleave.getRawValue())
+    //
+    for (const formDatum of formData.entries()) {
+        console.log(formDatum)
     }
 
-    $('.button-save').on('click', function () {
-        clearAllErrorMessage();
-        blockCardDody();
-
-        let formData = new FormData($('#income-sheet-form')[0]);
-        formData.set("processed", $checkboxIsProcessed.prop('checked'));
-        formData.set("sheetNumber", $inputSheetNumber.val())
-        formData.set("amount", $inputAmountCleave.getRawValue())
-        //
-        for (const formDatum of formData.entries()) {
-            console.log(formDatum)
+    $.ajax({
+        type: 'post',
+        url: '',
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function (response) {
+            window.history.back();
+        },
+        error: function (error) {
+            printErrorMessageToField(error);
+            toastr.error(errorMessage)
         }
+    });
+});
+
+$('.button-cancel').on('click', () => window.history.back())
+
+function fillFromCopy() {
+    const url = window.location.search;
+    if (url.search(/copyFrom=/)) {
+        blockBy('#income-sheet-form');
+        let sheetId = url.replace(/\?copyFrom=\d+/,
+            (substring) => substring.match(/\d+/));
 
         $.ajax({
-            type: 'post',
-            url: '',
-            processData: false,
-            contentType: false,
-            data: formData,
+            url: 'get-sheet/' + sheetId,
+            type: 'get',
             success: function (response) {
-                window.history.back();
+                fillInputFromCopy(response);
+
             },
             error: function (error) {
-                printErrorMessageToField(error);
-                toastr.error(errorMessage)
+                console.log(error);
+                toastr.error(errorMessage);
             }
-        });
-    });
+        })
+    }
 
-    $('.button-cancel').on('click', () => window.history.back())
+    function fillInputFromCopy(copySheet) {
+        const apartmentOwnerOption = new Option(
+            copySheet.personalAccount.apartmentOwner.fullName,
+            copySheet.personalAccount.apartmentOwner.id,
+            true, true);
+        $selectOwner.append(apartmentOwnerOption).trigger('change');
+
+        const personalAccountOption = new Option(
+            decorateAccountNumber(copySheet.personalAccount.accountNumber),
+            copySheet.personalAccount.id,
+            true, true);
+        $selectPersonalAccount.append(personalAccountOption).trigger('change');
+
+        const paymentItemOption = new Option(copySheet.paymentItem.name, copySheet.paymentItem.id, true, true);
+        $selectPaymentItem.append(paymentItemOption).trigger('change');
+
+        $inputAmountCleave.setRawValue(copySheet.amount);
+        $inputComment.val(copySheet.comment);
+        $checkboxIsProcessed.prop('checked', copySheet.processed);
+
+        const staffOption = new Option(`${copySheet.staff.firstName} ${copySheet.staff.lastName}`, copySheet.staff.id, true, true);
+        $selectStaff.append(staffOption).trigger('change');
+
+        unblockBy('#income-sheet-form');
+    }
 }

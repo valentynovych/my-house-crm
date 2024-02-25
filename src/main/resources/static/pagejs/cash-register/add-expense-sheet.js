@@ -9,6 +9,11 @@ const $inputComment = $('[name="comment"]');
 const $checkboxIsProcessed = $('[name="isProcessed"]');
 const $selectStaff = $('[name="staffId"]');
 
+const $inputAmountCleave = new Cleave($inputAmount, {
+    numeral: true,
+    numeralThousandsGroupStyle: "thousand"
+});
+
 function initInputAndSelect() {
 
     $.ajax({
@@ -89,41 +94,72 @@ function initInputAndSelect() {
         }
     });
 
-    const $inputAmountCleave = new Cleave($inputAmount, {
-        numeral: true,
-        numeralThousandsGroupStyle: "thousand"
-    });
 
     autosize($inputComment);
+    fillFromCopy();
+}
 
-    $('.button-save').on('click', function () {
-        clearAllErrorMessage();
-        blockCardDody();
-
-        let formData = new FormData($('#expense-sheet-form')[0]);
-        formData.set("processed", $checkboxIsProcessed.prop('checked'));
-        formData.set("sheetNumber", $inputSheetNumber.val());
-        formData.set("amount", $inputAmountCleave.getRawValue())
-
-        for (const formDatum of formData.entries()) {
-            console.log(formDatum)
-        }
+function fillFromCopy() {
+    const url = window.location.search;
+    if (url.search(/copyFrom=/)) {
+        let sheetId = url.replace(/\?copyFrom=\d+/,
+            (substring) => substring.match(/\d+/));
 
         $.ajax({
-            type: 'post',
-            url: '',
-            processData: false,
-            contentType: false,
-            data: formData,
+            url: 'get-sheet/' + sheetId,
+            type: 'get',
             success: function (response) {
-                window.history.back();
+                fillInputFromCopy(response);
+
             },
             error: function (error) {
-                printErrorMessageToField(error);
-                toastr.error(errorMessage)
+                console.log(error);
+                toastr.error(errorMessage);
             }
-        });
-    });
+        })
+    }
 
-    $('.button-cancel').on('click', () => window.history.back())
+    function fillInputFromCopy(copySheet) {
+
+        const paymentItemOption = new Option(copySheet.paymentItem.name, copySheet.paymentItem.id, true, true);
+        $selectPaymentItem.append(paymentItemOption).trigger('change');
+
+        $inputAmountCleave.setRawValue(copySheet.amount);
+        $inputComment.val(copySheet.comment);
+        $checkboxIsProcessed.prop('checked', copySheet.processed);
+
+        const staffOption = new Option(`${copySheet.staff.firstName} ${copySheet.staff.lastName}`, copySheet.staff.id, true, true);
+        $selectStaff.append(staffOption).trigger('change');
+    }
 }
+
+$('.button-save').on('click', function () {
+    clearAllErrorMessage();
+    blockCardDody();
+
+    let formData = new FormData($('#expense-sheet-form')[0]);
+    formData.set("processed", $checkboxIsProcessed.prop('checked'));
+    formData.set("sheetNumber", $inputSheetNumber.val());
+    formData.set("amount", $inputAmountCleave.getRawValue())
+
+    for (const formDatum of formData.entries()) {
+        console.log(formDatum)
+    }
+
+    $.ajax({
+        type: 'post',
+        url: '',
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function (response) {
+            window.history.back();
+        },
+        error: function (error) {
+            printErrorMessageToField(error);
+            toastr.error(errorMessage)
+        }
+    });
+});
+
+$('.button-cancel').on('click', () => window.history.back())

@@ -1,4 +1,5 @@
 const sheetId = window.location.pathname.match(/\d+/);
+let sheetType;
 
 blockCardDody();
 $(document).ready(function () {
@@ -16,14 +17,14 @@ $(document).ready(function () {
 });
 
 function fillInputs(sheet) {
-
+    sheetType = sheet.sheetType;
     const $breadcrumb = $('.breadcrumb-item.active');
     const $edit = $('#edit-link');
 
     $breadcrumb.addClass('d-flex flex-wrap gap-2');
     $breadcrumb.html($breadcrumb.html() + `<span>№${sheet.sheetNumber}</span>`);
     $edit.attr('href',
-        $edit.attr('href') + (sheet.sheetType === 'INCOME'
+        $edit.attr('href') + (sheetType === 'INCOME'
             ? 'edit-income-sheet/'
             : 'edit-expense-sheet/') + sheetId);
 
@@ -31,7 +32,6 @@ function fillInputs(sheet) {
     $('#creationDate').val(new Date(sheet.creationDate * 1000).toLocaleDateString())
 
     const personalAccount = sheet.personalAccount;
-    console.log(personalAccount)
     $('#owner').html(personalAccount ? personalAccount.apartmentOwner.fullName : '-');
     $('#personalAccount').html(personalAccount ? `<a href="../../personal-accounts/view-account/${personalAccount.id}">${decorateAccountNumber(personalAccount.accountNumber)}</a>` : '-');
     $('#paymentItem').html(sheet.paymentItem.name);
@@ -68,6 +68,12 @@ $('#export-to-excel').on('click', function () {
         }
     })
 
+})
+
+$('#copy-sheet').on('click', function () {
+    window.location = (sheetType === 'INCOME'
+        ? '../add-income-sheet'
+        : '../add-expense-sheet') + '?copyFrom=' + sheetId;
 })
 
 function decorateAccountNumber(accountNumber) {

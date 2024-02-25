@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -39,7 +36,7 @@ public class CashRegisterController {
     }
 
     @GetMapping("add-income-sheet")
-    public ModelAndView viewAddIncomeSheet() {
+    public ModelAndView viewAddIncomeSheet(@RequestParam(required = false) String copyFrom) {
         return new ModelAndView("cash-register/add-income-sheet");
     }
 
@@ -49,7 +46,7 @@ public class CashRegisterController {
     }
 
     @GetMapping("add-expense-sheet")
-    public ModelAndView viewAddExpenseSheet() {
+    public ModelAndView viewAddExpenseSheet(@RequestParam(required = false) String copyFrom) {
         return new ModelAndView("cash-register/add-expense-sheet");
     }
 
