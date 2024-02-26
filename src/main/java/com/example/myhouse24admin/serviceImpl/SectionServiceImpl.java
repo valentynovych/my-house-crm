@@ -42,21 +42,28 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public Page<SectionNameResponse> getSectionForSelect(SelectSearchRequest selectSearchRequest, Long houseId) {
-        logger.info("getSectionForSelect - Getting section name responses for select " + selectSearchRequest.toString());
-        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
-        Page<Section> sections = getFilteredSectionsForSelect(selectSearchRequest, pageable, houseId);
+    public Page<SectionNameResponse> getSectionForSelect(Map<String, String> requestMap) {
+        logger.info("getSectionForSelect - Getting section name responses for select " + requestMap.toString());
+        Pageable pageable = PageRequest.of(Integer.valueOf(requestMap.get("page"))-1, 10);
+        Page<Section> sections = getFilteredSectionsForSelect(requestMap, pageable);
         List<SectionNameResponse> sectionNameResponses = sectionMapper.sectionListToSectionNameResponseList(sections.getContent());
         Page<SectionNameResponse> sectionNameResponsePage = new PageImpl<>(sectionNameResponses, pageable, sections.getTotalElements());
         logger.info("getSectionForSelect - Section name responses were got");
         return sectionNameResponsePage;
     }
 
-    private Page<Section> getFilteredSectionsForSelect(SelectSearchRequest selectSearchRequest, Pageable pageable, Long houseId) {
-        Specification<Section> sectionSpecification = Specification.where(byDeleted().and(byHouseId(houseId)));
-        if(!selectSearchRequest.search().isEmpty()){
-            sectionSpecification = sectionSpecification.and(byNameLike(selectSearchRequest.search()));
+    private Page<Section> getFilteredSectionsForSelect(Map<String, String> requestMap, Pageable pageable) {
+        Specification<Section> sectionSpecification = Specification.where(byDeleted().and(byHouseId(Long.valueOf(requestMap.get("houseId")))));
+        if(!requestMap.get("search").isEmpty()){
+            sectionSpecification = sectionSpecification.and(byNameLike(requestMap.get("search")));
+        }
+        if(requestMap.containsKey("apartmentId") && !requestMap.get("apartmentId").isEmpty()){
+            sectionSpecification = sectionSpecification.and(byApartmentId(Long.valueOf(requestMap.get("apartmentId"))));
+        }
+        if(requestMap.containsKey("apartmentNumber") && !requestMap.get("apartmentNumber").isEmpty()){
+            sectionSpecification = sectionSpecification.and(byApartmentNumberLike(requestMap.get("apartmentNumber")));
         }
         return sectionRepo.findAll(sectionSpecification, pageable);
     }
+
 }

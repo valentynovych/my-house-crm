@@ -65,7 +65,8 @@ function initializeSectionSelect() {
                 return {
                     search: params.term,
                     page: params.page || 1,
-                    houseId: $("#filter-by-house").val()
+                    houseId: $("#filter-by-house").val(),
+                    apartmentNumber: $("#filter-by-apartment").val()
                 };
             },
             processResults: function (response) {
@@ -180,7 +181,7 @@ $('#filter-by-house').on("change", function () {
     $('#filter-by-section').val(null).trigger('change');
     $('#filter-by-section').prop('disabled', false);
     $('#filter-by-apartment').val("");
-    $('#filter-by-apartment').prop('disabled', true);
+    $('#filter-by-apartment').prop('disabled', false);
     searchAfterDelay();
 });
 $('#filter-by-section').on("change", function () {
@@ -210,4 +211,6 @@ $('.clear-filters').on('click', function () {
         .val('').trigger('change');
     $('#filter-by-apartment')
         .val('').trigger('input');
+    $('#filter-by-apartment').prop('disabled', true);
+    $('#filter-by-section').prop('disabled', true);
 })

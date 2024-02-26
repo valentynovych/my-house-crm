@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.example.myhouse24admin.specification.ApartmentInterfaceSpecification.*;
+import static com.example.myhouse24admin.specification.MeterReadingSpecification.byNumber;
 
 @Service
 public class ApartmentServiceImpl implements ApartmentService {
@@ -164,13 +165,18 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartmentNameResponsePage;
     }
 
-    private Page<Apartment> getFilteredApartmentsForSelect(SelectSearchRequest selectSearchRequest, Pageable pageable, Long houseId, Long sectionId) {
+    private Page<Apartment> getFilteredApartmentsForSelect(SelectSearchRequest selectSearchRequest,
+                                                           Pageable pageable,
+                                                           Long houseId, Long sectionId) {
         logger.info("getFilteredApartmentsForSelect() -> Fetching filtered apartments for select");
         Specification<Apartment> apartmentSpecification = Specification.where(byDeleted()
-                .and(byHouseId(houseId)).and(bySectionId(sectionId)));
+                .and(byHouseId(houseId)));
         if (!selectSearchRequest.search().isEmpty()) {
             logger.info("getFilteredApartmentsForSelect() -> Applying additional search criteria: {}", selectSearchRequest.search());
-            apartmentSpecification = apartmentSpecification.and(byNumber(Integer.valueOf(selectSearchRequest.search())));
+            apartmentSpecification = apartmentSpecification.and(byNumberLike(selectSearchRequest.search()));
+        }
+        if(sectionId != null){
+            apartmentSpecification = apartmentSpecification.and(bySectionId(sectionId));
         }
         return apartmentRepo.findAll(apartmentSpecification, pageable);
     }

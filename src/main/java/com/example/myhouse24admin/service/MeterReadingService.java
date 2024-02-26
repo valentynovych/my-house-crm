@@ -8,6 +8,8 @@ public interface MeterReadingService {
     String createNumber();
     Page<TableMeterReadingResponse> getMeterReadingResponsesForTable(int page, int pageSize,
                                                                      FilterRequest filterRequest);
+    Page<ApartmentMeterReadingResponse> getMeterReadingResponsesForTableInInvoice(int page, int pageSize,
+                                                                              Long apartmentId);
     MeterReadingResponse getMeterReadingResponse(Long id);
     void updateMeterReading(Long id, MeterReadingRequest meterReadingRequest);
     Page<ApartmentMeterReadingResponse> getApartmentMeterReadingResponses(Long apartmentId,

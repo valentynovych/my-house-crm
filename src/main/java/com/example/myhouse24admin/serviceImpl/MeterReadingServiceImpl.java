@@ -12,10 +12,7 @@ import com.example.myhouse24admin.service.MeterReadingService;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.*;
@@ -168,5 +165,24 @@ public class MeterReadingServiceImpl implements MeterReadingService {
         meterReading.setDeleted(true);
         meterReadingRepo.save(meterReading);
         logger.info("deleteMeterReading - Meter reading was deleted");
+    }
+
+    @Override
+    public Page<ApartmentMeterReadingResponse> getMeterReadingResponsesForTableInInvoice(int page, int pageSize, Long apartmentId) {
+        logger.info("getMeterReadingResponsesForTableInInvoice - Getting meter reading responses for table in invoice, page: "+page+" pageSize: "+pageSize+" apartmentId: "+apartmentId);
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by("creationDate").descending());
+        Page<MeterReading> meterReadings = getFilteredReadingsForTableInInvoice(apartmentId,pageable);
+        List<ApartmentMeterReadingResponse> meterReadingResponses = meterReadingMapper.meterReadingListToApartmentMeterReadingResponseList(meterReadings.getContent());
+        Page<ApartmentMeterReadingResponse> meterReadingResponsePage = new PageImpl<>(meterReadingResponses, pageable, meterReadings.getTotalElements());
+        logger.info("getMeterReadingResponsesForTableInInvoice - Meter reading responses were got");
+        return meterReadingResponsePage;
+    }
+
+    private Page<MeterReading> getFilteredReadingsForTableInInvoice(Long apartmentId, Pageable pageable) {
+        Specification<MeterReading> meterReadingSpecification = Specification.where(byDeleted());
+        if(apartmentId != null){
+            meterReadingSpecification = meterReadingSpecification.and(byApartmentId(apartmentId));
+        }
+        return meterReadingRepo.findAll(meterReadingSpecification, pageable);
     }
 }

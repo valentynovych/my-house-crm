@@ -84,7 +84,8 @@ function initializeSectionSelect() {
                 return {
                     search: params.term,
                     page: params.page || 1,
-                    houseId: $("#house").val()
+                    houseId: $("#house").val(),
+                    apartmentId: $('#apartmentId').val()
                 };
             },
             processResults: function (response) {
@@ -255,7 +256,7 @@ $("#house").on("change", function () {
     $('#section').val(null).trigger('change');
     $('#section').prop('disabled', false);
     $('#apartmentId').val(null).trigger('change');
-    $('#apartmentId').prop('disabled', true);
+    $('#apartmentId').prop('disabled', false);
 });
 $("#section").on("change", function () {
     $('#apartmentId').val(null).trigger('change');
@@ -305,6 +306,8 @@ $("#cancel-button").on("click", function () {
     if(defaultReading !== undefined){
         setFields(defaultReading);
     }
+    $('#apartmentId').prop('disabled', true);
+    $('#section').prop('disabled', true);
     unblockBy("#form");
 });
 function clearFields() {

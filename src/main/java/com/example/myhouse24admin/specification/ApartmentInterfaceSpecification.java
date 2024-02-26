@@ -11,9 +11,9 @@ public interface ApartmentInterfaceSpecification {
         return (root, query, builder) ->
                 builder.equal(root.get("deleted"), false);
     }
-    static Specification<Apartment> byNumber(Integer number){
+    static Specification<Apartment> byNumberLike(String number){
         return (root, query, builder) ->
-                builder.equal(root.get("apartmentNumber"), number);
+                builder.like(builder.upper(root.get("apartmentNumber")), "%"+number.toUpperCase()+"%");
     }
     static Specification<Apartment> bySectionId(Long sectionId){
         return (root, query, builder) -> {
