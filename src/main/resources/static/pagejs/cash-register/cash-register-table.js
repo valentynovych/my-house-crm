@@ -83,7 +83,6 @@ $filterByPaymentItemName.select2({
 });
 
 $filterByOwner.select2({
-    debug: true,
     dropdownParent: $('#filter-by-owner-wrap'),
     placeholder: '',
     allowClear: true,
@@ -115,7 +114,6 @@ $filterByOwner.select2({
 });
 
 $filterByPersonalAccount.select2({
-    debug: true,
     dropdownParent: $('#filter-by-personal-account-wrap'),
     placeholder: '',
     allowClear: true,
@@ -148,7 +146,6 @@ $filterByPersonalAccount.select2({
 });
 
 $filterByPaymentType.select2({
-    debug: true,
     dropdownParent: $('#filter-by-payment-type-wrap'),
     minimumResultsForSearch: -1,
     placeholder: '',
@@ -204,8 +201,11 @@ function delayBeforeSearch() {
 }
 
 $(window).on("load", function () {
-    getSheets(currentPage);
-    getPersonalAccountsStatistic();
+    $.when(applySearchParameters()).done(function () {
+        delayBeforeSearch();
+        getPersonalAccountsStatistic();
+    })
+
 })
 
 function decorateAccountNumber(accountNumber) {
@@ -233,6 +233,7 @@ function fillStatistic(stat) {
 }
 
 $('#export-to-exel').on('click', function () {
+    blockBy('#export-to-exel');
     let url = new URL('personal-accounts/export-to-excel', window.location.origin + window.location.pathname);
     url = addParametersToUrl(url);
     $.ajax({
@@ -243,14 +244,13 @@ $('#export-to-exel').on('click', function () {
             a.href = url;
             a.target = '_blank';
             a.click();
+            unblockBy('#export-to-exel');
         },
         error: function () {
-            //toastr.error(errorMessage)
+            toastr.error(errorMessage)
+            unblockBy('#export-to-exel');
         }
     })
-    // this.href = url;
-    // this.download = true;
-    // this.target = '_blank';
 })
 
 function addParametersToUrl(url) {
@@ -292,6 +292,7 @@ function getSheets(page) {
 }
 
 function drawTable(result) {
+
     if (result.content && result.content.length > 0) {
         for (const sheet of result.content) {
             const status = getSheetStatusLabel(sheet.processed);
@@ -387,6 +388,55 @@ function addDeleteEvent(sheetId) {
     });
 }
 
+function applySearchParameters() {
+
+    applyPaymentType();
+    applyPersonalAccount();
+
+    function applyPaymentType() {
+        const paymentType = findGetParameter('sheetType');
+        if (paymentType) {
+            byPaymentType = paymentType;
+            $filterByPaymentType.val(byPaymentType).trigger('change');
+        }
+    }
+
+    function applyPersonalAccount() {
+        const personalAccountId = findGetParameter('personalAccount');
+        if (personalAccountId) {
+            byPersonalAccount = personalAccountId;
+            $.ajax({
+                url: 'personal-accounts/get-account/' + personalAccountId,
+                type: 'get',
+                success: function (response) {
+                    const personalAccountData = {
+                        id: response.id,
+                        text: decorateAccountNumber(response.accountNumber)
+                    };
+                    const newOption = new Option(personalAccountData.text, personalAccountData.id, true, true);
+                    $filterByPersonalAccount.append(newOption);
+
+                },
+                error: function (error) {
+                    toastr.error(errorMessage);
+                },
+            })
+        }
+    }
+}
+
+function findGetParameter(parameterName) {
+    let result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+            tmp = item.split("=");
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
+}
 
 function clearTableLine() {
     $("tbody").find("tr").each(function () {
