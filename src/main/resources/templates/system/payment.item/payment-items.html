@@ -40,6 +40,25 @@
         </div>
     </div>
     <div class="card-footer d-flex justify-content-between"></div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{payment-item-delete-model-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete"
+                            th:text="#{general-button-delete}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>
@@ -50,5 +69,8 @@
     const tableEntries = [[#{table-entries}]];
     const tableOf = [[#{table-of}]];
     const dataNotFound = [[#{table-data-not-found}]];
+
+    const successMessageOnDelete = [[#{payment-item-message-success-delete}]];
+    const errorMessageOnDelete= [[#{payment-item-message-error-delete}]];
 </script>
 </html>

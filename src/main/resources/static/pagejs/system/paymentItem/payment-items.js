@@ -47,7 +47,7 @@ function drawTable(result) {
                 '     <a class="dropdown-item" href="payment-items/edit-item/' + data.id + '">\n' +
                 '     <i class="ti ti-pencil me-1"></i>Редагувати\n' +
                 '     </a>\n' +
-                '     <button type="button" class="dropdown-item btn justify-content-start" data-bs-toggle="modal" data-bs-target="#modalCenter"' +
+                '     <button type="button" class="dropdown-item btn justify-content-start" data-bs-toggle="modal" data-bs-target="#modalToDelete"' +
                 '     onclick="addDeleteEvent(' + data.id + ')">\n' +
                 '     <i class="ti ti-trash me-1"></i>Видалити\n' +
                 '     </button>\n' +
@@ -65,6 +65,28 @@ function drawTable(result) {
            </tr>`).appendTo('tbody');
     }
 
+}
+
+function addDeleteEvent(paymentItemId) {
+    $('.submit-delete').on('click', function () {
+        if (paymentItemId && paymentItemId > 0) {
+
+            $.ajax({
+                type: 'delete',
+                url: 'payment-items/delete/' + paymentItemId,
+                success: function () {
+                    $('.close-modal').click()
+                    toastr.success(successMessageOnDelete)
+                    setTimeout(() => getPaymentItems(currentPage), 400);
+                },
+                error: function () {
+                    $('.close-modal').click()
+                    toastr.error(errorMessageOnDelete);
+
+                }
+            })
+        }
+    })
 }
 
 function clearTableLine() {

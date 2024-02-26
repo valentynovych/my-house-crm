@@ -37,6 +37,8 @@ public class PaymentItemSpecification implements Specification<PaymentItem> {
             }
         });
 
+        predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
+
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 }

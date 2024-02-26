@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -75,5 +74,14 @@ public class PaymentItemController {
     public ResponseEntity<?> getAllItemTypes() {
         Map<String, String> itemTypes = paymentItemService.getItemTypes();
         return new ResponseEntity<>(itemTypes, HttpStatus.OK);
+    }
+
+    @DeleteMapping("delete/{paymentItemId}")
+    public ResponseEntity<?> deletePaymentItem(@PathVariable Long paymentItemId) {
+        boolean isDeleted = paymentItemService.deleteItemById(paymentItemId);
+        if (isDeleted) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

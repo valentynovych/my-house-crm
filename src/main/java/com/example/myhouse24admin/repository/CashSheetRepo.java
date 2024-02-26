@@ -12,4 +12,6 @@ public interface CashSheetRepo extends JpaRepository<CashSheet, Long>, JpaSpecif
     Long getMaxId();
 
     Optional<CashSheet> findCashSheetByIdAndDeletedIsFalse(Long cashSheetId);
+
+    boolean existsCashSheetByPaymentItem_Id(Long paymentItemId);
 }
