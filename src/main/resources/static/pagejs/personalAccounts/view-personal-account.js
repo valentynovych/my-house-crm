@@ -91,6 +91,10 @@ function fillInputs(account) {
     $(`<a href="../../invoices?apartment=${account.id}">${labelLinkViewInvoices}</a>`).appendTo($cardFooter);
 }
 
+$('#accept-payment').on('click', function () {
+    window.location = '../../cash-register/add-income-sheet?forAccount=' + apartmentId;
+})
+
 function decorateAccountNumber(accountNumber) {
     let s = (accountNumber + '').padStart(10, '0000000000');
     return s.substring(0, 5) + '-' + s.substring(5, 10);

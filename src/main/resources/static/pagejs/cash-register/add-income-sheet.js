@@ -173,8 +173,7 @@ function initInputAndSelect() {
             }
         }
     });
-
-    fillFromCopy();
+    applyRequestParameters();
 }
 
 function decorateAccountNumber(accountNumber) {
@@ -213,50 +212,98 @@ $('.button-save').on('click', function () {
 
 $('.button-cancel').on('click', () => window.history.back())
 
-function fillFromCopy() {
-    const url = window.location.search;
-    if (url.search(/copyFrom=/)) {
-        blockBy('#income-sheet-form');
-        let sheetId = url.replace(/\?copyFrom=\d+/,
-            (substring) => substring.match(/\d+/));
-
-        $.ajax({
-            url: 'get-sheet/' + sheetId,
-            type: 'get',
-            success: function (response) {
-                fillInputFromCopy(response);
-
-            },
-            error: function (error) {
-                console.log(error);
-                toastr.error(errorMessage);
-            }
-        })
+function applyRequestParameters() {
+    let sheetId = findGetParameter('copyFrom');
+    if (sheetId) {
+        copySheetFrom(sheetId);
+    }
+    let personalAccountId = findGetParameter('forAccount');
+    if (personalAccountId) {
+        createSheetForAccount(personalAccountId);
     }
 
-    function fillInputFromCopy(copySheet) {
-        const apartmentOwnerOption = new Option(
-            copySheet.personalAccount.apartmentOwner.fullName,
-            copySheet.personalAccount.apartmentOwner.id,
-            true, true);
-        $selectOwner.append(apartmentOwnerOption).trigger('change');
+}
 
-        const personalAccountOption = new Option(
-            decorateAccountNumber(copySheet.personalAccount.accountNumber),
-            copySheet.personalAccount.id,
-            true, true);
-        $selectPersonalAccount.append(personalAccountOption).trigger('change');
+function copySheetFrom(sheetId) {
 
-        const paymentItemOption = new Option(copySheet.paymentItem.name, copySheet.paymentItem.id, true, true);
-        $selectPaymentItem.append(paymentItemOption).trigger('change');
+    blockBy('#income-sheet-form');
 
-        $inputAmountCleave.setRawValue(copySheet.amount);
-        $inputComment.val(copySheet.comment);
-        $checkboxIsProcessed.prop('checked', copySheet.processed);
+    $.ajax({
+        url: 'get-sheet/' + sheetId,
+        type: 'get',
+        success: function (response) {
+            fillInputFromCopy(response);
+        },
+        error: function (error) {
+            console.log(error);
+            toastr.error(errorMessage);
+        }
+    })
+}
 
-        const staffOption = new Option(`${copySheet.staff.firstName} ${copySheet.staff.lastName}`, copySheet.staff.id, true, true);
-        $selectStaff.append(staffOption).trigger('change');
+function fillInputFromCopy(copySheet) {
+    const apartmentOwnerOption = new Option(
+        copySheet.personalAccount.apartmentOwner.fullName,
+        copySheet.personalAccount.apartmentOwner.id,
+        true, true);
+    $selectOwner.append(apartmentOwnerOption).trigger('change');
 
-        unblockBy('#income-sheet-form');
-    }
+    const personalAccountOption = new Option(
+        decorateAccountNumber(copySheet.personalAccount.accountNumber),
+        copySheet.personalAccount.id,
+        true, true);
+    $selectPersonalAccount.append(personalAccountOption).trigger('change');
+
+    const paymentItemOption = new Option(copySheet.paymentItem.name, copySheet.paymentItem.id, true, true);
+    $selectPaymentItem.append(paymentItemOption).trigger('change');
+
+    $inputAmountCleave.setRawValue(copySheet.amount);
+    $inputComment.val(copySheet.comment);
+    $checkboxIsProcessed.prop('checked', copySheet.processed);
+
+    const staffOption = new Option(`${copySheet.staff.firstName} ${copySheet.staff.lastName}`, copySheet.staff.id, true, true);
+    $selectStaff.append(staffOption).trigger('change');
+
+    unblockBy('#income-sheet-form');
+}
+
+function findGetParameter(parameterName) {
+    let result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+            tmp = item.split("=");
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
+}
+
+function createSheetForAccount(personalAccountId) {
+    blockBy("#income-sheet-form");
+    $.ajax({
+        url: '../personal-accounts/get-account/' + personalAccountId,
+        type: 'get',
+        success: function (response) {
+            fillNestedAccountFields(response);
+        },
+        error: function (error) {
+            console.log(error);
+            toastr.error(errorMessage);
+        }
+    })
+}
+
+function fillNestedAccountFields(personalAccount) {
+    console.log(personalAccount);
+    const apartmentOwner = personalAccount.apartment.owner;
+    const apartmentOwnerOption = new Option(apartmentOwner.fullName, apartmentOwner.id, true, true);
+    $selectOwner.append(apartmentOwnerOption).trigger('change');
+
+    const personalAccountOption =
+        new Option(decorateAccountNumber(personalAccount.accountNumber), personalAccount.id, true, true);
+    $selectPersonalAccount.append(personalAccountOption).trigger('change');
+
+    unblockBy("#income-sheet-form");
 }
