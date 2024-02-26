@@ -42,10 +42,14 @@ function fillInputs(apartment) {
 
     const $cardFooter = $('.card-footer');
     $cardFooter.addClass('d-flex flex-column gap-2')
-    $(`<a href="../../meter-readings/readings-apartment/${apartment.id}">${labelLinkViewMeters}</a>`).appendTo($cardFooter);
+    $(`<a href="../../meter-readings/apartment/${apartment.id}">${labelLinkViewMeters}</a>`).appendTo($cardFooter);
     $(`<a href="../../cash-register?personalAccount=${apartment.personalAccount.id}&sheetType=INCOME">${labelLinkViewIncomes}</a>`).appendTo($cardFooter);
     $(`<a href="../../invoices?apartment=${apartment.id}">${labelLinkViewInvoices}</a>`).appendTo($cardFooter);
 }
+
+$('#accept-payment').on('click', function () {
+    window.location = '../../cash-register/add-income-sheet?forAccount=' + apartmentToRestore.personalAccount.id;
+});
 
 function decorateAccountNumber(accountNumber) {
     let s = (accountNumber + '').padStart(10, '0000000000');

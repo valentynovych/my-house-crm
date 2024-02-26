@@ -7,7 +7,7 @@
 <head>
     <title th:text="#{apartments-label-apartment}"></title>
     <style>
-        .light-style  div.account-select-wrap .select2-container--default .select2-selection--single {
+        .light-style div.account-select-wrap .select2-container--default .select2-selection--single {
             border-radius: 0 0 .375rem .375rem !important;
         }
     </style>
@@ -34,7 +34,8 @@
 <div layout:fragment="content">
     <div class="card-body">
         <div class="mb-4 d-flex justify-content-end gap-3">
-            <button class="btn btn-outline-secondary" type="button" th:text="#{apartment-accept-payment}"></button>
+            <button class="btn btn-outline-secondary" type="button" th:text="#{apartment-accept-payment}"
+                    id="accept-payment"></button>
             <button class="btn btn-outline-secondary" type="button" th:text="#{apartment-create-invoice}"></button>
             <a th:href="@{../../apartments/edit-apartment/}" id="edit-link" class="btn btn-primary"
                th:text="#{apartment-edit-button}"></a>
@@ -43,7 +44,7 @@
             <div class="table-left">
                 <div class="col-md-12">
                     <table class="table table-bordered">
-                        <tr >
+                        <tr>
                             <td class="fw-bold w-25" th:text="#{apartment-label-personal-account}"></td>
                             <td id="personal-account"></td>
                         </tr>
