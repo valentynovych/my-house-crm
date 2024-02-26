@@ -365,27 +365,28 @@ function addListenerToRow() {
     })
 }
 
-function addDeleteEvent(accountId) {
+function addDeleteEvent(sheetId) {
     $('.submit-delete').on('click', function () {
-        if (accountId && accountId > 0) {
-
-            $.ajax({
-                type: 'delete',
-                url: 'personal-accounts/delete/' + accountId,
-                success: function () {
-                    $('.close-modal').click();
-                    toastr.success(successMessageOnDelete)
-                    setTimeout(() => getSheets(currentPage), 400);
-                },
-                error: function () {
-                    $('.close-modal').click()
+        $.ajax({
+            url: 'cash-register/delete-sheet/' + sheetId,
+            type: 'delete',
+            success: function (response) {
+                $('.close-modal').click();
+                toastr.success(successMessageOnDelete);
+                setTimeout(() => getSheets(currentPage), 500);
+            }, error: function (error) {
+                console.log(error);
+                $('.close-modal').click();
+                if (error.status === 423) {
                     toastr.error(errorMessageOnDelete);
-
+                } else {
+                    toastr.error(errorMessage);
                 }
-            })
-        }
-    })
+            }
+        });
+    });
 }
+
 
 function clearTableLine() {
     $("tbody").find("tr").each(function () {

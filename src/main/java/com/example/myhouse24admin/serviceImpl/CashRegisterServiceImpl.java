@@ -93,9 +93,22 @@ public class CashRegisterServiceImpl implements CashRegisterService {
         logger.info("updateSheetById() -> end, success update CashSheet with id: {}", save.getId());
     }
 
+    @Override
+    public String deleteCashSheetById(Long sheetId) {
+        logger.info("deleteCashSheetById() -> start, with id: {}", sheetId);
+        CashSheet cashSheet = findCashSheetById(sheetId);
+        if (cashSheet.isProcessed()) {
+            return "Error";
+        }
+        cashSheet.setDeleted(true);
+        cashSheetRepo.save(cashSheet);
+        logger.info("deleteCashSheetById() -> end, success mark CashSheet with id: {} as isDeleted ", sheetId);
+        return "Success";
+    }
+
     private CashSheet findCashSheetById(Long cashSheetId) {
         logger.info("findCashSheetById() -> start, with id: {}", cashSheetId);
-        Optional<CashSheet> byId = cashSheetRepo.findById(cashSheetId);
+        Optional<CashSheet> byId = cashSheetRepo.findCashSheetByIdAndDeletedIsFalse(cashSheetId);
         CashSheet cashSheet = byId.orElseThrow(() -> {
             logger.error("findCashSheetById() -> CashSheet with id: {} not found", cashSheetId);
             return new EntityNotFoundException(String.format("CashSheet with id: %s not found", cashSheetId));

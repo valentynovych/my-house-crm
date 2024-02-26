@@ -55,7 +55,8 @@
             <button class="btn btn-outline-secondary" type="button"
                     th:text="#{general-button-copy}" id="copy-sheet"></button>
             <button class="btn btn-outline-secondary" type="button"
-                    th:text="#{general-button-delete}" id="delete-sheet"></button>
+                    th:text="#{general-button-delete}" data-bs-toggle="modal"
+                    data-bs-target="#modalToDelete"></button>
             <a th:href="@{../}" id="edit-link" class="btn btn-primary"
                th:text="#{cash-register-button-edit}"></a>
             <button class="btn btn-outline-secondary" type="button"
@@ -99,11 +100,31 @@
         </div>
     </div>
     <div class="card-footer"></div>
+
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{cash-register-modal-delete-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete"
+                            th:text="#{general-button-delete}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>
 <script layout:fragment="script" th:src="@{/pagejs/cash-register/view-cash-sheet.js}"></script>
 <script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const successMessageOnDelete = /*[[#{cash-register-message-delete-success}]]*/ 'default'
+    const errorMessageOnDelete = /*[[#{cash-register-message-delete-error}]]*/ 'default'
 
 </script>
 

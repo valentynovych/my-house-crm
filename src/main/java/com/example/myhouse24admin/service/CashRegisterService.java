@@ -20,4 +20,6 @@ public interface CashRegisterService {
     void addNewExpenseSheet(CashSheetExpenseAddRequest addRequest);
 
     void updateSheetById(Long sheetId, CashSheetExpenseUpdateRequest updateRequest);
+
+    String deleteCashSheetById(Long sheetId);
 }

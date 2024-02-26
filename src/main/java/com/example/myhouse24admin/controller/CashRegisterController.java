@@ -125,6 +125,15 @@ public class CashRegisterController {
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
+    @DeleteMapping("delete-sheet/{sheetId}")
+    public @ResponseBody ResponseEntity<?> deleteCashSheet(@PathVariable @Min(value = 1) Long sheetId) {
+        String deletedStatus = cashRegisterService.deleteCashSheetById(sheetId);
+        if (deletedStatus.equals("Success")) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.LOCKED);
+        }
     }
 }

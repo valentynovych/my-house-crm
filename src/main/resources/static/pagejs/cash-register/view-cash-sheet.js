@@ -74,7 +74,26 @@ $('#copy-sheet').on('click', function () {
     window.location = (sheetType === 'INCOME'
         ? '../add-income-sheet'
         : '../add-expense-sheet') + '?copyFrom=' + sheetId;
-})
+});
+
+$('.submit-delete').on('click', function () {
+    $.ajax({
+        url: '../delete-sheet/' + sheetId,
+        type: 'delete',
+        success: function (response) {
+            toastr.success(successMessageOnDelete);
+            setTimeout(() => window.history.back(), 500);
+        }, error: function (error) {
+            console.log(error);
+            $('.close-modal').click();
+            if (error.status === 423) {
+                toastr.error(errorMessageOnDelete);
+            } else {
+                toastr.error(errorMessage);
+            }
+        }
+    });
+});
 
 function decorateAccountNumber(accountNumber) {
     let s = (accountNumber + '').padStart(10, '0000000000');
