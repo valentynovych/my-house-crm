@@ -86,7 +86,7 @@ function fillInputs(account) {
 
     const $cardFooter = $('.card-footer');
     $cardFooter.addClass('d-flex flex-column gap-2')
-    $(`<a href="../../meter-readings/readings-apartment/${account.id}">${labelLinkViewMeters}</a>`).appendTo($cardFooter);
+    $(`<a href="../../meter-readings/apartment/${account.id}">${labelLinkViewMeters}</a>`).appendTo($cardFooter);
     $(`<a href="../../cash-register?personalAccount=${account.id}&sheetType=INCOME">${labelLinkViewIncomes}</a>`).appendTo($cardFooter);
     $(`<a href="../../invoices?apartment=${account.id}">${labelLinkViewInvoices}</a>`).appendTo($cardFooter);
 }
