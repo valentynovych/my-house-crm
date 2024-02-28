@@ -10,7 +10,7 @@ public class MasterRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "creation_date", nullable = false)
+    @Column(name = "creation_date", nullable = false, updatable = false)
     private Instant creationDate;
     @Column(name = "visit_date", nullable = false)
     private Instant visitDate;

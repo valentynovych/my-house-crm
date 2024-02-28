@@ -33,6 +33,12 @@ public class StaffSpecification implements Specification<Staff> {
                     Join<Role, Staff> roleStaffJoin = root.join("role");
                     predicates.add(criteriaBuilder.equal(roleStaffJoin.get("id"), Long.valueOf(value)));
                 }
+                case "roleName" -> {
+                    if (!value.isEmpty()) {
+                        Join<Role, Staff> roleStaffJoin = root.join("role");
+                        predicates.add(criteriaBuilder.equal(roleStaffJoin.get("name"), value));
+                    }
+                }
             }
         });
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
