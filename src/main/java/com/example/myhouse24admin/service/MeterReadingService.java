@@ -3,6 +3,9 @@ package com.example.myhouse24admin.service;
 import com.example.myhouse24admin.model.meterReadings.*;
 import org.springframework.data.domain.Page;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 public interface MeterReadingService {
     void createMeterReading(MeterReadingRequest meterReadingRequest);
     String createNumber();
@@ -16,4 +19,5 @@ public interface MeterReadingService {
                                                                           int page, int pageSize,
                                                                           ApartmentFilterRequest apartmentFilterRequest);
     void deleteMeterReading(Long id);
+    List<BigDecimal> getAmountOfConsumptions(Long[] serviceIds, Long apartmentId);
 }

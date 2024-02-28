@@ -1,8 +1,10 @@
 package com.example.myhouse24admin.mapper;
 
+import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.ApartmentOwner;
 import com.example.myhouse24admin.entity.Language;
 import com.example.myhouse24admin.model.apartmentOwner.*;
+import com.example.myhouse24admin.model.invoices.OwnerResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -72,4 +74,10 @@ public interface ApartmentOwnerMapper {
     List<ApartmentOwnerShortResponse> apartmentOwnerListToTApartmentOwnerShortResponseList(List<ApartmentOwner> apartmentOwners);
     @Mapping(target = "fullName", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
     ApartmentOwnerShortResponse apartmentOwnerToTApartmentOwnerShortResponse(ApartmentOwner apartmentOwner);
+    @Mapping(target = "ownerFullName", expression = "java(apartment.getOwner().getLastName()+\" \"+apartment.getOwner().getMiddleName()+\" \"+apartment.getOwner().getFirstName())")
+    @Mapping(target = "ownerPhoneNumber", source = "apartment.owner.phoneNumber")
+    @Mapping(target = "accountNumber", source = "apartment.personalAccount.accountNumber")
+    @Mapping(target = "tariffId", source = "apartment.tariff.id")
+    @Mapping(target = "tariffName", source = "apartment.tariff.name")
+    OwnerResponse apartmentToOwnerResponse(Apartment apartment);
 }

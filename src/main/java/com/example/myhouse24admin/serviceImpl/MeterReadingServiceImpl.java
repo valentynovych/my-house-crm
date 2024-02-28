@@ -12,12 +12,15 @@ import com.example.myhouse24admin.service.MeterReadingService;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.query.Order;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -184,5 +187,27 @@ public class MeterReadingServiceImpl implements MeterReadingService {
             meterReadingSpecification = meterReadingSpecification.and(byApartmentId(apartmentId));
         }
         return meterReadingRepo.findAll(meterReadingSpecification, pageable);
+    }
+
+    @Override
+    public List<BigDecimal> getAmountOfConsumptions(Long[] serviceIds, Long apartmentId) {
+        logger.info("getAmountOfConsumptions - Getting amount of consumptions for service ids "+serviceIds.toString());
+        List<BigDecimal> amounts = new ArrayList<>();
+        Pageable pageable = PageRequest.of(0, 2, Sort.by(Sort.Direction.DESC, "creationDate"));
+        for(Long serviceId: serviceIds){
+            Page<MeterReading> meterReadings = meterReadingRepo.findAll(byServiceId(serviceId).
+                            and(byApartmentId(apartmentId)).and(byDeleted()), pageable);
+            List<MeterReading> content = meterReadings.getContent();
+            if(content.size() == 2) {
+                BigDecimal amount = content.get(0).getReadings().subtract(content.get(1).getReadings());
+                amounts.add(amount);
+            } else if(content.size() == 1){
+                amounts.add(content.get(0).getReadings());
+            } else {
+                amounts.add(BigDecimal.valueOf(0));
+            }
+        }
+        logger.info("getAmountOfConsumptions - Amount of consumptions were got");
+        return amounts;
     }
 }

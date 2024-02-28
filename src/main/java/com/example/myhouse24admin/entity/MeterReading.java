@@ -30,8 +30,6 @@ public class MeterReading {
     @ManyToOne
     @JoinColumn(name = "service_id", referencedColumnName = "id", nullable = false)
     private Service service;
-    @ManyToMany(mappedBy = "meterReadings")
-    private List<Invoice> invoices = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -97,11 +95,4 @@ public class MeterReading {
         this.service = service;
     }
 
-    public List<Invoice> getInvoices() {
-        return invoices;
-    }
-
-    public void setInvoices(List<Invoice> invoices) {
-        this.invoices = invoices;
-    }
 }

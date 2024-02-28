@@ -2,6 +2,7 @@ package com.example.myhouse24admin.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,8 @@ public class Invoice {
     private Long id;
     @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
+    @Column(nullable = false, length = 10)
+    private String number;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private InvoiceStatus status;
@@ -21,17 +24,14 @@ public class Invoice {
     private boolean isProcessed;
     @Column(nullable = false)
     private boolean deleted;
+    @Column(nullable = false)
+    private BigDecimal paid;
     @ManyToOne
     @JoinColumn(name = "personal_account_id", referencedColumnName = "id", nullable = false)
     private PersonalAccount personalAccount;
-    @ManyToMany
-    @JoinTable(
-            name = "invoices_readings",
-            joinColumns = { @JoinColumn(name = "invoice_id") },
-            inverseJoinColumns = { @JoinColumn(name = "reading_id") }
-    )
-    private List<MeterReading> meterReadings = new ArrayList<>();
-
+    @ManyToOne
+    @JoinColumn(name = "tariff_id", referencedColumnName = "id")
+    private Tariff tariff;
     public Long getId() {
         return id;
     }
@@ -46,6 +46,14 @@ public class Invoice {
 
     public void setCreationDate(Instant creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 
     public InvoiceStatus getStatus() {
@@ -72,6 +80,14 @@ public class Invoice {
         this.deleted = deleted;
     }
 
+    public BigDecimal getPaid() {
+        return paid;
+    }
+
+    public void setPaid(BigDecimal paid) {
+        this.paid = paid;
+    }
+
     public PersonalAccount getPersonalAccount() {
         return personalAccount;
     }
@@ -80,11 +96,11 @@ public class Invoice {
         this.personalAccount = personalAccount;
     }
 
-    public List<MeterReading> getMeterReadings() {
-        return meterReadings;
+    public Tariff getTariff() {
+        return tariff;
     }
 
-    public void setMeterReadings(List<MeterReading> meterReadings) {
-        this.meterReadings = meterReadings;
+    public void setTariff(Tariff tariff) {
+        this.tariff = tariff;
     }
 }
