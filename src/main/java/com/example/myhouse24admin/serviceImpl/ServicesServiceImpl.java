@@ -2,6 +2,7 @@ package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.entity.Service;
 import com.example.myhouse24admin.mapper.ServiceMapper;
+import com.example.myhouse24admin.model.invoices.UnitNameResponse;
 import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.model.meterReadings.ServiceNameResponse;
 import com.example.myhouse24admin.model.services.ServiceDtoListWrap;
@@ -101,5 +102,14 @@ public class ServicesServiceImpl implements ServicesService {
             serviceSpecification = serviceSpecification.and(byNameLike(search));
         }
         return servicesRepo.findAll(serviceSpecification, pageable);
+    }
+
+    @Override
+    public UnitNameResponse getUnitOfMeasurementNameByServiceId(Long serviceId) {
+        logger.info("getUnitOfMeasurementNameByServiceId - Getting unit of measurement name by service id " + serviceId);
+        Service service = servicesRepo.findById(serviceId).orElseThrow(() -> new EntityNotFoundException("Service was not found by id "+serviceId));
+        String unitOfMeasurementName = service.getUnitOfMeasurement().getName();
+        logger.info("getUnitOfMeasurementNameByServiceId - Unit of measurement name was got");
+        return new UnitNameResponse(unitOfMeasurementName);
     }
 }

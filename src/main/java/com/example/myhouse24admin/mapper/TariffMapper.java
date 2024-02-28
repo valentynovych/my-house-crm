@@ -1,6 +1,9 @@
 package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.Tariff;
+import com.example.myhouse24admin.entity.TariffItem;
+import com.example.myhouse24admin.model.invoices.TariffItemResponse;
+import com.example.myhouse24admin.model.invoices.TariffNameResponse;
 import com.example.myhouse24admin.model.tariffs.TariffRequest;
 import com.example.myhouse24admin.model.tariffs.TariffResponse;
 import com.example.myhouse24admin.model.tariffs.TariffShortResponse;
@@ -27,4 +30,10 @@ public interface TariffMapper {
     void updateTariffFromTariffRequest(@MappingTarget Tariff tariff, TariffRequest tariffRequest);
 
     TariffShortResponse tariffToTariffShortResponse(Tariff tariff);
+    List<TariffNameResponse> tariffListToTariffNameResponseList(List<Tariff> tariffs);
+    List<TariffItemResponse> tariffItemListToTariffItemResponse(List<TariffItem> tariffItems);
+    @Mapping(target = "serviceId", source = "service.id")
+    @Mapping(target = "serviceName", source = "service.name")
+    @Mapping(target = "unitOfMeasurement", source = "service.unitOfMeasurement.name")
+    TariffItemResponse tariffItemToTariffItemResponse(TariffItem tariffItem);
 }

@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/admin/meter-readings")
 public class MeterReadingController {
@@ -63,14 +65,14 @@ public class MeterReadingController {
         return houseService.getHousesForSelect(selectSearchRequest);
     }
     @GetMapping("/get-sections")
-    public @ResponseBody Page<SectionNameResponse> getSections(SelectSearchRequest selectSearchRequest,
-                                                               @RequestParam("houseId")Long houseId) {
-        return sectionService.getSectionForSelect(selectSearchRequest, houseId);
+    public @ResponseBody Page<SectionNameResponse> getSections(@RequestParam Map<String, String> requestMap) {
+        System.out.println(requestMap.toString());
+        return sectionService.getSectionForSelect(requestMap);
     }
     @GetMapping("/get-apartments")
     public @ResponseBody Page<ApartmentNumberResponse> getApartments(SelectSearchRequest selectSearchRequest,
                                                                      @RequestParam("houseId")Long houseId,
-                                                                     @RequestParam("sectionId")Long sectionId) {
+                                                                     @RequestParam(name = "sectionId", required = false)Long sectionId) {
         return apartmentService.getApartmentsForSelect(selectSearchRequest, houseId, sectionId);
     }
 
