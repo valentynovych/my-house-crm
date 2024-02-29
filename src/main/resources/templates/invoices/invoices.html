@@ -113,34 +113,34 @@
                     <th th:text="#{personal-accounts-label-apartment}"></th>
                     <th th:text="#{personal-accounts-label-apartment-owner}"></th>
                     <th th:text="#{invoice-processed}"></th>
-                    <th class="text-nowrap" th:text="#{cash-register-label-amount}"></th>
+                    <th th:text="#{invoices-paid}"></th>
+                    <th th:text="#{cash-register-label-amount}"></th>
                     <th th:text="#{general-table-action}"></th>
                 </tr>
                 <tr>
                     <td></td>
                     <td style="min-width: 9rem"><input type="text" id="filter-by-number" class="form-control"></td>
-                    <td style="min-width: 11rem">
+                    <td style="min-width: 13rem">
                         <select class="form-select select2" id="filter-by-status"></select>
                     </td>
-                    <td style="width: 9rem"><input type="text" id="filter-by-date" class="form-control"></td>
-                    <td style="min-width: 13rem">
+                    <td style="min-width: 10rem"><input type="text" id="filter-by-date" class="form-control"></td>
+                    <td style="min-width: 10rem">
                         <input type="text" id="filter-by-month" class="form-control">
                     </td>
                     <td style="min-width: 13rem">
                         <input type="text" id="filter-by-apartment" class="form-control">
                     </td>
                     <td style="min-width: 13rem">
-                        <div id="filter-by-owner-wrap">
-                            <select class="form-select select2" id="filter-by-owner"></select>
-                        </div>
+                        <select class="form-select select2" id="filter-by-owner"></select>
                     </td>
                     <td style="min-width: 12rem">
-                        <select class="form-select select2" id="filter-by-processed">
-                            <option></option>
-                            <option value="arrears" th:text="#{invoice-processed}"></option>
-                            <option value="overpayment" th:text="#{invoice-not-processed}"></option>
+                        <select class="form-select" id="filter-by-processed">
+                            <option value=""></option>
+                            <option value="true" th:text="#{invoice-processed}"></option>
+                            <option value="false" th:text="#{invoice-not-processed}"></option>
                         </select>
                     </td>
+                    <td></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -153,6 +153,21 @@
     </div>
     <div class="card-footer d-flex justify-content-between"></div>
 </div>
-
 </body>
+<script layout:fragment="script" th:src="@{/pagejs/invoices/invoices.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const dataNotFound = [[#{table-data-not-found}]];
+    const tableShow = [[#{table-show}]];
+    const tableShowing = [[#{table-showing}]];
+    const tableEntries = [[#{table-entries}]];
+    const tableOf = [[#{table-of}]];
+    const buttonLabelEdit = [[#{general-button-edit}]];
+    const buttonLabelDelete = [[#{general-button-delete}]];
+    const dateLocale = [[#{meter-readings-date-locale}]];
+    const processed = [[#{invoice-processed}]];
+    const notProcessed = [[#{invoice-not-processed}]];
+    const paidStatus = [[#{invoices-status-paid}]];
+    const unpaidStatus = [[#{invoices-status-unpaid}]];
+    const partlyPaidStatus = [[#{invoices-status-partly-paid}]];
+</script>
 </html>

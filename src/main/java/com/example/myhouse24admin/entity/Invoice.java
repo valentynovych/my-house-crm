@@ -27,11 +27,8 @@ public class Invoice {
     @Column(nullable = false)
     private BigDecimal paid;
     @ManyToOne
-    @JoinColumn(name = "personal_account_id", referencedColumnName = "id", nullable = false)
-    private PersonalAccount personalAccount;
-    @ManyToOne
-    @JoinColumn(name = "tariff_id", referencedColumnName = "id")
-    private Tariff tariff;
+    @JoinColumn(name = "apartment_id", referencedColumnName = "id", nullable = false)
+    private Apartment apartment;
     public Long getId() {
         return id;
     }
@@ -88,19 +85,12 @@ public class Invoice {
         this.paid = paid;
     }
 
-    public PersonalAccount getPersonalAccount() {
-        return personalAccount;
+    public Apartment getApartment() {
+        return apartment;
     }
 
-    public void setPersonalAccount(PersonalAccount personalAccount) {
-        this.personalAccount = personalAccount;
+    public void setApartment(Apartment apartment) {
+        this.apartment = apartment;
     }
 
-    public Tariff getTariff() {
-        return tariff;
-    }
-
-    public void setTariff(Tariff tariff) {
-        this.tariff = tariff;
-    }
 }

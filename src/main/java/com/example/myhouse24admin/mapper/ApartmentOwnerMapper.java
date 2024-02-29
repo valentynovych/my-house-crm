@@ -4,6 +4,7 @@ import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.ApartmentOwner;
 import com.example.myhouse24admin.entity.Language;
 import com.example.myhouse24admin.model.apartmentOwner.*;
+import com.example.myhouse24admin.model.invoices.OwnerNameResponse;
 import com.example.myhouse24admin.model.invoices.OwnerResponse;
 import com.example.myhouse24admin.util.DateConverter;
 import org.mapstruct.InjectionStrategy;
@@ -79,4 +80,8 @@ public interface ApartmentOwnerMapper {
     @Mapping(target = "tariffId", source = "apartment.tariff.id")
     @Mapping(target = "tariffName", source = "apartment.tariff.name")
     OwnerResponse apartmentToOwnerResponse(Apartment apartment);
+    List<OwnerNameResponse> apartmentOwnerListToOwnerNameResponseList(List<ApartmentOwner> apartmentOwners);
+    @Mapping(target = "id", source = "apartmentOwner.id")
+    @Mapping(target = "name", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
+    OwnerNameResponse apartmentOwnerToOwnerNameResponse(ApartmentOwner apartmentOwner);
 }

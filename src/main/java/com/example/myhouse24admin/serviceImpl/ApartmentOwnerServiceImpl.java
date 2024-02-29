@@ -3,6 +3,8 @@ package com.example.myhouse24admin.serviceImpl;
 import com.example.myhouse24admin.entity.ApartmentOwner;
 import com.example.myhouse24admin.mapper.ApartmentOwnerMapper;
 import com.example.myhouse24admin.model.apartmentOwner.*;
+import com.example.myhouse24admin.model.invoices.OwnerNameResponse;
+import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.repository.ApartmentOwnerRepo;
 import com.example.myhouse24admin.service.ApartmentOwnerService;
 import com.example.myhouse24admin.service.MailService;
@@ -196,4 +198,17 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         return responsePage;
     }
 
+    @Override
+    public Page<OwnerNameResponse> getOwnerNameResponses(SelectSearchRequest selectSearchRequest) {
+        logger.info("getOwnerNameResponses - Getting owner name responses for select " + selectSearchRequest.toString());
+        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Page<ApartmentOwner> apartmentOwnerPage = apartmentOwnerRepo.findAll(byDeleted()
+                .and(byFirstName(selectSearchRequest.search())
+                        .or(byMiddleName(selectSearchRequest.search()))
+                        .or(byLastName(selectSearchRequest.search()))),pageable);
+        List<OwnerNameResponse> ownerNameResponses = apartmentOwnerMapper.apartmentOwnerListToOwnerNameResponseList(apartmentOwnerPage.getContent());
+        Page<OwnerNameResponse> ownerNameResponsePage = new PageImpl<>(ownerNameResponses, pageable, apartmentOwnerPage.getTotalElements());
+        logger.info("getOwnerNameResponses - Owner name responses were got");
+        return ownerNameResponsePage;
+    }
 }

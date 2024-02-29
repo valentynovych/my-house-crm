@@ -24,6 +24,7 @@ public class InvoiceController {
     private final InvoiceService invoiceService;
     private final ServicesService servicesService;
     private final MeterReadingService meterReadingService;
+    private final ApartmentOwnerService apartmentOwnerService;
 
     public InvoiceController(HouseService houseService,
                              SectionService sectionService,
@@ -31,7 +32,8 @@ public class InvoiceController {
                              TariffService tariffService,
                              InvoiceService invoiceService,
                              ServicesService servicesService,
-                             MeterReadingService meterReadingService) {
+                             MeterReadingService meterReadingService,
+                             ApartmentOwnerService apartmentOwnerService) {
         this.houseService = houseService;
         this.sectionService = sectionService;
         this.apartmentService = apartmentService;
@@ -39,11 +41,16 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
         this.servicesService = servicesService;
         this.meterReadingService = meterReadingService;
+        this.apartmentOwnerService = apartmentOwnerService;
     }
 
     @GetMapping()
     public ModelAndView getInvoicesPage() {
         return new ModelAndView("invoices/invoices");
+    }
+    @GetMapping("/get")
+    public @ResponseBody Page<TableInvoiceResponse> getInvoices(@RequestParam Map<String, String> requestMap) {
+        return invoiceService.getInvoiceResponsesForTable(requestMap);
     }
     @GetMapping("/add")
     public ModelAndView getInvoicePage() {
@@ -109,5 +116,8 @@ public class InvoiceController {
                                                                   @RequestParam(name = "apartmentId") Long apartmentId) {
         return meterReadingService.getAmountOfConsumptions(serviceIds, apartmentId);
     }
-
+    @GetMapping("/get-owners")
+    public @ResponseBody Page<OwnerNameResponse> getOwners(SelectSearchRequest selectSearchRequest) {
+        return apartmentOwnerService.getOwnerNameResponses(selectSearchRequest);
+    }
 }
