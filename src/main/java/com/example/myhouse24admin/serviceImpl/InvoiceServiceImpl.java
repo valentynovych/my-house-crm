@@ -7,10 +7,7 @@ import com.example.myhouse24admin.entity.InvoiceStatus;
 import com.example.myhouse24admin.mapper.ApartmentOwnerMapper;
 import com.example.myhouse24admin.mapper.InvoiceItemMapper;
 import com.example.myhouse24admin.mapper.InvoiceMapper;
-import com.example.myhouse24admin.model.invoices.InvoiceItemRequest;
-import com.example.myhouse24admin.model.invoices.InvoiceRequest;
-import com.example.myhouse24admin.model.invoices.OwnerResponse;
-import com.example.myhouse24admin.model.invoices.TableInvoiceResponse;
+import com.example.myhouse24admin.model.invoices.*;
 import com.example.myhouse24admin.repository.ApartmentRepo;
 import com.example.myhouse24admin.repository.InvoiceItemRepo;
 import com.example.myhouse24admin.repository.InvoiceRepo;
@@ -35,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.example.myhouse24admin.specification.InvoiceItemSpecification.byInvoiceId;
 import static com.example.myhouse24admin.specification.InvoiceSpecification.*;
 
 @Service
@@ -104,14 +102,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         logger.info("createInvoice - Invoice was created");
     }
 
-    private void saveInvoiceItems(List<InvoiceItemRequest> itemRequests, Invoice invoice) {
-        for(InvoiceItemRequest itemRequest: itemRequests){
-            com.example.myhouse24admin.entity.Service service = servicesRepo.findById(itemRequest.getServiceId()).orElseThrow(()-> new EntityNotFoundException("Service was not found by id "+itemRequest.getServiceId()));
-            InvoiceItem invoiceItem = invoiceItemMapper.invoiceItemRequestToInvoiceItem(itemRequest, service, invoice);
-            invoiceItemRepo.save(invoiceItem);
-        }
-    }
-
     @Override
     public Page<TableInvoiceResponse> getInvoiceResponsesForTable(Map<String, String> requestMap) {
         logger.info("getInvoiceResponsesForTable - Getting invoice responses for table "+requestMap.toString());
@@ -158,5 +148,35 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoiceSpecification = invoiceSpecification.and(byMonth(localDate.getMonthValue()));
         }
         return invoiceRepo.findAll(invoiceSpecification, pageable);
+    }
+
+    @Override
+    public InvoiceResponse getInvoiceResponse(Long id) {
+        logger.info("getInvoiceResponse - Getting invoice response by id "+id);
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
+        BigDecimal totalPrice = invoiceItemRepo.getItemsSumByInvoiceId(id);
+        List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
+        List<InvoiceItemResponse> itemResponses = invoiceItemMapper.invoiceItemListToInvoiceItemResponseList(invoiceItems);
+        InvoiceResponse invoiceResponse = invoiceMapper.invoiceToInvoiceResponse(invoice,totalPrice, itemResponses);
+        logger.info("getInvoiceResponse - Invoice response was got");
+        return invoiceResponse;
+    }
+
+    @Override
+    public void updateInvoice(Long id, InvoiceRequest invoiceRequest) {
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
+        Apartment apartment = apartmentRepo.findById(invoiceRequest.getApartmentId()).orElseThrow(()-> new EntityNotFoundException("Apartment was not found by id "+invoiceRequest.getApartmentId()));
+        invoiceMapper.updateInvoice(invoice, invoiceRequest, apartment);
+        List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
+        invoiceItemRepo.deleteAll(invoiceItems);
+        Invoice savedInvoice = invoiceRepo.save(invoice);
+        saveInvoiceItems(invoiceRequest.getItemRequests(), savedInvoice);
+    }
+    private void saveInvoiceItems(List<InvoiceItemRequest> itemRequests, Invoice invoice) {
+        for(InvoiceItemRequest itemRequest: itemRequests){
+            com.example.myhouse24admin.entity.Service service = servicesRepo.findById(itemRequest.getServiceId()).orElseThrow(()-> new EntityNotFoundException("Service was not found by id "+itemRequest.getServiceId()));
+            InvoiceItem invoiceItem = invoiceItemMapper.invoiceItemRequestToInvoiceItem(itemRequest, service, invoice);
+            invoiceItemRepo.save(invoiceItem);
+        }
     }
 }

@@ -47,7 +47,7 @@ function drawTable(response) {
             $("tbody")
                 .append(
                     `<tr class="tr text-nowrap">
-                    <th><input class="form-check-input" type="checkbox"></th>
+                    <td><input class="form-check-input" type="checkbox"></td>
                     <td>${invoice.number}</td>
                     <td>${getStatusSpan(invoice.status)}</td>
                     <td>${invoice.creationDate}</td>
@@ -66,7 +66,7 @@ function drawTable(response) {
                             <a class="dropdown-item" href="../edit/${invoice.id}">
                                 <i class="ti ti-file me-1"></i>
                             </a>
-                            <a class="dropdown-item" href="../edit/${invoice.id}">
+                            <a class="dropdown-item" href="invoices/edit/${invoice.id}">
                                 <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                             </a>
                             <button type="button" class="dropdown-item btn justify-content-start" onclick="openDeleteModal(${invoice.id})">
