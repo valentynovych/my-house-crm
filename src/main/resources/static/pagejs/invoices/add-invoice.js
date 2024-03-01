@@ -3,8 +3,6 @@ let tableLength = 5;
 let meterReadings;
 let tariffServices;
 $(document).ready(function () {
-    $("#breadCrumb").text(newInvoice);
-    $("#pageTitle").text(newInvoice);
     initializeSelects();
     setNumber();
     $("#creationDate").flatpickr({
@@ -12,7 +10,6 @@ $(document).ready(function () {
         dateFormat: "d.m.Y",
         defaultDate: new Date()
     });
-    initializePeriodPicker();
     getReadings(0);
 });
 
@@ -27,14 +24,6 @@ function setNumber() {
         error: function () {
             toastr.error(errorMessage);
         }
-    });
-}
-
-function initializePeriodPicker() {
-    $("#period").flatpickr({
-        locale: "uk",
-        dateFormat: "d.m.Y",
-        mode: 'range'
     });
 }
 
@@ -53,7 +42,7 @@ function initializeHouseSelect() {
         placeholder: chooseHouse,
         ajax: {
             type: "get",
-            url: houseLink,
+            url: "get-houses",
             data: function (params) {
                 return {
                     search: params.term,
@@ -86,7 +75,7 @@ function initializeSectionSelect() {
         placeholder: chooseSection,
         ajax: {
             type: "get",
-            url: sectionLink,
+            url: "get-sections",
             data: function (params) {
                 return {
                     search: params.term,
@@ -121,7 +110,7 @@ function initializeApartmentSelect() {
         placeholder: chooseApartment,
         ajax: {
             type: "get",
-            url: apartmentLink,
+            url: "get-apartments",
             data: function (params) {
                 return {
                     search: params.term,
@@ -156,7 +145,7 @@ function initializeStatusSelect() {
         placeholder: chooseStatus,
         ajax: {
             type: "GET",
-            url: statusLink,
+            url: "get-statuses",
             processResults: function (response) {
                 return {
                     results: $.map(response, function (item) {
@@ -238,6 +227,7 @@ $("#add-service").on("click", function () {
         $("#service-table tr:last").remove();
         setRowInServiceTable();
         initializeServiceSelects();
+        addListenerToSelects();
         appendTotal();
         calculateTotal();
         i++;
@@ -247,37 +237,44 @@ $("#add-service").on("click", function () {
 function setRowInServiceTable() {
     $("#service-table").append(
         `<tr>
+            <td><input class="form-check-input" name="checks" type="checkbox"></td>
             <td class="px-2" style="min-width: 13rem">
                 <select class="form-select select2" id="service${i}" 
-                onchange="setNeighbourFields(this)" name="itemRequests[${i}].serviceId"
+                name="itemRequests[${i}].serviceId"
             </td>
             <td class="px-2">
-                <input type="text" class="form-control quantity" 
-                oninput="calculateCost(this)" placeholder="0.00" name="itemRequests[${i}].amount">
+                <input type="text" class="form-control quantity"
+                oninput="calculateCost(this)" placeholder="0.00" 
+                name="itemRequests[${i}].amount">
             </td>
             <td class="px-2">
-                <input type="text" class="form-control unit" disabled>
+                <input type="text" class="form-control unit"  disabled>
             </td>
             <td class="px-2">
                 <input type="text" class="form-control per-unit" 
-                oninput="calculateCost(this)" placeholder="0.00" name="itemRequests[${i}].pricePerUnit">
+                oninput="calculateCost(this)" 
+                placeholder="0.00" 
+                name="itemRequests[${i}].pricePerUnit">
             </td>
             <td class="px-2">
                 <input type="text" class="form-control cost" disabled 
                 oninput="calculateTotal(this)" name="itemRequests[${i}].cost">
             </td>
             <td class="px-2">
-                <button type="button" class="btn btn-icon btn-label-danger" onclick="openDeleteModal(this)">
+                <button type="button" class="btn btn-icon btn-label-danger" 
+                onclick="openDeleteModal(this)">
                     <span class="ti ti-trash"></span>
                 </button>
             </td>
         </tr>`
     );
 }
-
-function setNeighbourFields(select) {
-    setUnit(select);
-    setPricePerUnit(select);
+function addListenerToSelects() {
+    $(".select2").on("change", function () {
+        $(this).parent().parent().find(".quantity").val("").trigger("input");
+        setUnit(this);
+        setPricePerUnit(this);
+    });
 }
 function setUnit(select) {
     $.ajax({
@@ -302,6 +299,7 @@ function setPricePerUnit(select) {
         if ($(select).val() == tariffService.serviceId) {
             let perUnitInput = $(select).parent().parent().find(".per-unit");
             perUnitInput.val(tariffService.servicePrice);
+            perUnitInput.trigger("input");
             perUnitInput.prop('disabled', true);
             count++;
         }
@@ -309,6 +307,7 @@ function setPricePerUnit(select) {
     if (count === 0) {
         let perUnitInput = $(select).parent().parent().find(".per-unit");
         perUnitInput.val("");
+        perUnitInput.trigger("input");
         perUnitInput.prop('disabled', false);
     }
 }
@@ -317,7 +316,7 @@ function calculateCost(input) {
     let perUnitInput = $(input).parent().parent().find(".per-unit");
     let quantityInput = $(input).parent().parent().find(".quantity");
     let costInput = $(input).parent().parent().find(".cost");
-    costInput.val(perUnitInput.val() * quantityInput.val());
+    costInput.val((perUnitInput.val() * quantityInput.val()).toFixed(2));
     costInput.trigger("input");
 }
 function calculateTotal() {
@@ -327,7 +326,6 @@ function calculateTotal() {
     });
     $("#total").text(total+": ");
     $("#totalPrice").text(sum).trigger("change");
-
 }
 let deleteButton;
 function openDeleteModal(button) {
@@ -373,7 +371,7 @@ function initializeServiceSelects() {
         maximumInputLength: 100,
         ajax: {
             type: "get",
-            url: serviceLink,
+            url: "get-services",
             data: function (params) {
                 return {
                     search: params.term,
@@ -413,42 +411,60 @@ $("#tariff").on("change", function () {
             tariffId: $("#tariff").val()
         },
         success: function (response) {
-            $("#service-table").children().remove();
             console.log(response)
             tariffServices = response;
-            drawServiceTable(response);
-
+            setPrices();
+            calculateTotal();
+            unblockBy("#service-div");
         },
         error: function () {
             toastr.error(errorMessage);
         }
     });
 });
+function setPrices() {
+    $("#service-table").find("tr").each(function () {
+        let select = $(this).find("select");
+        setPricePerUnit(select);
+    });
+}
 
+$("#set-for-tariffs").on("click", function () {
+    blockBy("#service-div");
+    drawServiceTable(tariffServices);
+});
 function drawServiceTable(response) {
-    let serviceIds = [];
-    if (response.length === 0) {
-        $("#service-table").append(
-            `<tr>
-                <td colspan="6" class="text-center">${dataNotFound}</td>
-            </tr>
-            `
-        );
+    if (response === undefined || response.length === 0) {
+        toastr.warning(chooseApartment);
         unblockBy("#service-div");
     } else {
+        $("#service-table").children().remove();
         for (let service of response) {
             setRowInServiceTable();
             initializeServiceSelects(service);
+            addListenerToSelects();
             let serviceOption = new Option(service.serviceName, service.serviceId, true, true);
             $("#service" + i).append(serviceOption).trigger('change');
-            $("#service" + i).prop('disabled', true);
             i++;
-            serviceIds.push(service.serviceId);
         }
         appendTotal();
-        getAmountOfConsumption(serviceIds);
+        calculateTotal();
+        unblockBy("#service-div");
     }
 }
+$("#set-amount").on("click", function () {
+    if($("input[name=checks]:checked").length !== 0) {
+        blockBy("#service-div");
+        let serviceIds = [];
+        $("input[name=checks]:checked").each(function () {
+            let serviceId = $(this).parent().parent().find("select").val();
+            serviceIds.push(serviceId);
+        });
+        getAmountOfConsumption(serviceIds);
+    } else {
+        toastr.warning(chooseService);
+    }
+});
 
 function getAmountOfConsumption(serviceIds) {
     $.ajax({
@@ -471,10 +487,9 @@ function getAmountOfConsumption(serviceIds) {
 
 function setAmounts(response) {
     let j = 0;
-    $("#service-table").find("tr").each(function () {
-        let quantityInput = $(this).children().children(".quantity");
+    $("input[name=checks]:checked").each(function () {
+        let quantityInput = $(this).parent().parent().find(".quantity");
         quantityInput.val(response[j]).trigger("input");
-        quantityInput.prop('disabled', true);
         j++;
     });
 }
@@ -482,7 +497,7 @@ function setAmounts(response) {
 function appendTotal() {
     $("#service-table").append(
         `<tr>
-            <td colspan="4"></td>
+            <td colspan="5"></td>
             <td colspan="2"><span id="total"></span><span id="totalPrice" onchange="changePaid()"></span></td>
         </tr>`
     );
@@ -621,7 +636,6 @@ function appendInvoiceFields(formData) {
     let status = $("#status").val() == null? '': $("#status").val();
     formData.append("status",status);
     formData.append("paid",$("#paid").val());
-    formData.append("totalPrice",$("#totalPrice").text());
     let house = $("#house").val() == null? '': $("#house").val();
     formData.append("house",house);
     formData.append("isProcessed",$("#processed").is(':checked'));
@@ -635,8 +649,9 @@ function sendData(formData) {
         data: formData,
         contentType: false,
         processData: false,
-        success: function () {
+        success: function (response) {
             toastr.success(successMessage);
+            window.location.href = response;
         },
         error: function (error) {
             printErrorMessageToField(error);

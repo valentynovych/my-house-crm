@@ -7,11 +7,11 @@
 <body>
 <div layout:fragment="breadcrumb">
     <div class="d-flex justify-content-between px-3 align-items-end">
-        <h3 id="pageTitle"></h3>
+        <h3 th:text="#{invoices-new}"></h3>
         <h6>
             <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
             <a th:href="@{/admin/invoices}" th:text="#{menu-item-invoices} + ' / '"></a>
-            <span id="breadCrumb"></span>
+            <span th:text="#{invoices-new}"></span>
         </h6>
     </div>
 </div>
@@ -81,6 +81,7 @@
                     <table class="table table-bordered table-hover" name="itemRequests">
                         <thead>
                         <tr class="table-primary text-center">
+                            <td></td>
                             <th th:text="#{services-page-service}"></th>
                             <th th:text="#{invoices-amount-of-consumption}"></th>
                             <th th:text="#{tariff-item-unit-of-measurement-label}"></th>
@@ -91,15 +92,23 @@
                         </thead>
                         <tbody class="table-border-bottom-0" id="service-table">
                         <tr>
-                            <td colspan="6" class="text-center" th:text="#{invoices-no-data}"></td>
+                            <td colspan="7" class="text-center" th:text="#{invoices-no-data}"></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-3">
+                <div class="ms-0 mt-3 row">
                     <button type="button" class="btn btn-label-primary col-auto" id="add-service"
                             th:text="#{invoices-add-service}">
                         Додати послугу
+                    </button>
+                    <button type="button" class="btn btn-label-primary col-auto ms-3" id="set-amount"
+                            th:text="#{invoices-set-amount}">
+                        Встановити кількість споживання
+                    </button>
+                    <button type="button" class="btn btn-label-primary col-auto ms-3" id="set-for-tariffs"
+                            th:text="#{invoices-set-for-tariffs}">
+                        Встановити сервіси відповідно до тарифу
                     </button>
                 </div>
                 <div class="mt-5 d-flex justify-content-end gap-3">
@@ -144,18 +153,13 @@
 </div>
 
 </body>
-<script layout:fragment="script" th:src="@{/pagejs/invoices/invoice.js}"></script>
+<script layout:fragment="script" th:src="@{/pagejs/invoices/add-invoice.js}"></script>
 <script layout:fragment="initThymeleafVarianle" th:inline="javascript">
     const chooseHouse = [[#{apartment-choose-house}]];
     const chooseSection = [[#{apartment-choose-section}]];
     const chooseTariff = [[#{apartment-choose-tariff}]];
     const chooseApartment = [[#{personal-accounts-choose-apartment}]];
     const chooseStatus = [[#{meter-readings-choose-status}]];
-    const houseLink = [[${houseLink}]];
-    const sectionLink = [[${sectionLink}]];
-    const apartmentLink = [[${apartmentLink}]];
-    const statusLink = [[${statusLink}]];
-    const serviceLink = [[${serviceLink}]];
     const paidStatus = [[#{invoices-status-paid}]];
     const unpaidStatus = [[#{invoices-status-unpaid}]];
     const partlyPaidStatus = [[#{invoices-status-partly-paid}]];
@@ -174,6 +178,6 @@
     const modalDeleteButton = [[#{general-button-delete}]];
     const modalCloseButton = [[#{general-button-close}]];
     const successMessage = [[#{role-success-message}]];
-    const newInvoice = [[#{invoices-new}]];
+    const chooseService = [[#{meter-readings-choose-service}]];
 </script>
 </html>
