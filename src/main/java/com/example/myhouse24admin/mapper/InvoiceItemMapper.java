@@ -4,9 +4,13 @@ import com.example.myhouse24admin.entity.Invoice;
 import com.example.myhouse24admin.entity.InvoiceItem;
 import com.example.myhouse24admin.entity.Service;
 import com.example.myhouse24admin.model.invoices.InvoiceItemRequest;
+import com.example.myhouse24admin.model.invoices.InvoiceItemResponse;
+import com.example.myhouse24admin.model.invoices.InvoiceResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface InvoiceItemMapper {
@@ -15,4 +19,9 @@ public interface InvoiceItemMapper {
     @Mapping(target = "invoice", source = "invoice")
     InvoiceItem invoiceItemRequestToInvoiceItem(InvoiceItemRequest invoiceItemRequest,
                                                 Service service, Invoice invoice);
+    List<InvoiceItemResponse> invoiceItemListToInvoiceItemResponseList(List<InvoiceItem> invoiceItems);
+    @Mapping(target = "serviceId", source = "service.id")
+    @Mapping(target = "serviceName", source = "service.name")
+    @Mapping(target = "unitName", source = "service.unitOfMeasurement.name")
+    InvoiceItemResponse invoiceItemToInvoiceItemResponse(InvoiceItem invoiceItem);
 }

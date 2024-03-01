@@ -4,8 +4,11 @@ import com.example.myhouse24admin.entity.InvoiceStatus;
 import com.example.myhouse24admin.model.invoices.*;
 import com.example.myhouse24admin.model.meterReadings.*;
 import com.example.myhouse24admin.service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +27,7 @@ public class InvoiceController {
     private final InvoiceService invoiceService;
     private final ServicesService servicesService;
     private final MeterReadingService meterReadingService;
+    private final ApartmentOwnerService apartmentOwnerService;
 
     public InvoiceController(HouseService houseService,
                              SectionService sectionService,
@@ -31,7 +35,8 @@ public class InvoiceController {
                              TariffService tariffService,
                              InvoiceService invoiceService,
                              ServicesService servicesService,
-                             MeterReadingService meterReadingService) {
+                             MeterReadingService meterReadingService,
+                             ApartmentOwnerService apartmentOwnerService) {
         this.houseService = houseService;
         this.sectionService = sectionService;
         this.apartmentService = apartmentService;
@@ -39,26 +44,29 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
         this.servicesService = servicesService;
         this.meterReadingService = meterReadingService;
+        this.apartmentOwnerService = apartmentOwnerService;
     }
 
     @GetMapping()
     public ModelAndView getInvoicesPage() {
         return new ModelAndView("invoices/invoices");
     }
+    @GetMapping("/get")
+    public @ResponseBody Page<TableInvoiceResponse> getInvoices(@RequestParam Map<String, String> requestMap) {
+        return invoiceService.getInvoiceResponsesForTable(requestMap);
+    }
     @GetMapping("/add")
     public ModelAndView getInvoicePage() {
-        ModelAndView modelAndView = new ModelAndView("invoices/invoice");
-        modelAndView.addObject("statusLink", "get-statuses");
-        modelAndView.addObject("houseLink", "get-houses");
-        modelAndView.addObject("sectionLink", "get-sections");
-        modelAndView.addObject("apartmentLink", "get-apartments");
-        modelAndView.addObject("serviceLink", "get-services");
-        return modelAndView;
+        return new ModelAndView("invoices/add-invoice");
     }
     @PostMapping("/add")
-    public @ResponseBody String createInvoice(@ModelAttribute @Valid InvoiceRequest invoiceRequest) {
+    public @ResponseBody ResponseEntity<?> createInvoice(@ModelAttribute @Valid InvoiceRequest invoiceRequest,
+                                              HttpServletRequest request) {
         invoiceService.createInvoice(invoiceRequest);
-        return "modelAndView";
+        String url = request.getRequestURL().toString();
+        int index = url.lastIndexOf("/");
+        String returnUrl = url.substring(0, index);
+        return new ResponseEntity<>(returnUrl, HttpStatus.OK);
     }
     @GetMapping("/get-statuses")
     public @ResponseBody InvoiceStatus[] getStatuses() {
@@ -109,5 +117,25 @@ public class InvoiceController {
                                                                   @RequestParam(name = "apartmentId") Long apartmentId) {
         return meterReadingService.getAmountOfConsumptions(serviceIds, apartmentId);
     }
-
+    @GetMapping("/get-owners")
+    public @ResponseBody Page<OwnerNameResponse> getOwners(SelectSearchRequest selectSearchRequest) {
+        return apartmentOwnerService.getOwnerNameResponses(selectSearchRequest);
+    }
+    @GetMapping("/edit/{id}")
+    public ModelAndView getEditInvoicePage() {
+        return new ModelAndView("invoices/edit-invoice");
+    }
+    @GetMapping("/get-invoice/{id}")
+    public @ResponseBody InvoiceResponse getInvoice(@PathVariable Long id) {
+        return invoiceService.getInvoiceResponse(id);
+    }
+    @PostMapping("/edit/{id}")
+    public @ResponseBody ResponseEntity<?>updateInvoice(@PathVariable Long id, HttpServletRequest request,
+                                              @ModelAttribute @Valid InvoiceRequest invoiceRequest) {
+        invoiceService.updateInvoice(id, invoiceRequest);
+        String url = request.getRequestURL().toString();
+        int index = url.lastIndexOf("/");
+        url = url.substring(0, index - 5);
+        return new ResponseEntity<>(url, HttpStatus.OK);
+    }
 }

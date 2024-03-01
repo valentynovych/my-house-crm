@@ -2,6 +2,7 @@ package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.*;
 import com.example.myhouse24admin.model.meterReadings.*;
+import com.example.myhouse24admin.util.DateConverter;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,10 +24,7 @@ public interface MeterReadingMapper {
                                                    Apartment apartment, Service service,
                                                    String number);
     default Instant convertStringToInstant(String date) {
-        LocalDateTime localDateTime = LocalDateTime.of(LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy")),
-                LocalTime.now());
-        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-        return zonedDateTime.toInstant();
+        return DateConverter.stringToInstant(date);
     }
 
     List<TableMeterReadingResponse> meterReadingListToTableMeterReadingResponseList(List<MeterReading> meterReadings);
@@ -45,8 +43,7 @@ public interface MeterReadingMapper {
     @Mapping(target = "creationDate", expression = "java(convertInstantToString(meterReading.getCreationDate()))")
     MeterReadingResponse meterReadingToMeterReadingResponse(MeterReading meterReading);
     default String convertInstantToString(Instant date) {
-        LocalDate localDate = LocalDate.ofInstant(date, ZoneId.systemDefault());
-        return localDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        return DateConverter.instantToString(date);
     }
     default HouseNameResponse createHouseNameResponse(House house){
         return new HouseNameResponse(house.getId(), house.getName());

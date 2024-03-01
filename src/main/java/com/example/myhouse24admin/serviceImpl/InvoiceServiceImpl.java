@@ -3,12 +3,11 @@ package com.example.myhouse24admin.serviceImpl;
 import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.Invoice;
 import com.example.myhouse24admin.entity.InvoiceItem;
+import com.example.myhouse24admin.entity.InvoiceStatus;
 import com.example.myhouse24admin.mapper.ApartmentOwnerMapper;
 import com.example.myhouse24admin.mapper.InvoiceItemMapper;
 import com.example.myhouse24admin.mapper.InvoiceMapper;
-import com.example.myhouse24admin.model.invoices.InvoiceItemRequest;
-import com.example.myhouse24admin.model.invoices.InvoiceRequest;
-import com.example.myhouse24admin.model.invoices.OwnerResponse;
+import com.example.myhouse24admin.model.invoices.*;
 import com.example.myhouse24admin.repository.ApartmentRepo;
 import com.example.myhouse24admin.repository.InvoiceItemRepo;
 import com.example.myhouse24admin.repository.InvoiceRepo;
@@ -17,10 +16,24 @@ import com.example.myhouse24admin.service.InvoiceService;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import static com.example.myhouse24admin.specification.InvoiceItemSpecification.byInvoiceId;
+import static com.example.myhouse24admin.specification.InvoiceSpecification.*;
 
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
@@ -73,20 +86,92 @@ public class InvoiceServiceImpl implements InvoiceService {
         logger.info("getOwnerResponse - Getting owner response by apartment id "+apartmentId);
         Apartment apartment = apartmentRepo.findById(apartmentId).orElseThrow(() -> new EntityNotFoundException("Apartment was not found by id "+apartmentId));
         OwnerResponse ownerResponse = apartmentOwnerMapper.apartmentToOwnerResponse(apartment);
-        logger.info("getOwnerResponse - Owner response was created");
+        logger.info("getOwnerResponse - Owner response was got");
         return ownerResponse;
     }
 
     @Override
     public void createInvoice(InvoiceRequest invoiceRequest) {
+        logger.info("createInvoice - Creating new invoice "+invoiceRequest.toString());
         Apartment apartment = apartmentRepo.findById(invoiceRequest.getApartmentId()).orElseThrow(()-> new EntityNotFoundException("Apartment was not found by id "+invoiceRequest.getApartmentId()));
         String number = createNumber();
         Invoice invoice = invoiceMapper.invoiceRequestToInvoice(invoiceRequest,
-                apartment.getPersonalAccount(), apartment.getTariff(), number);
+                apartment, number);
+        Invoice savedInvoice = invoiceRepo.save(invoice);
+        saveInvoiceItems(invoiceRequest.getItemRequests(), savedInvoice);
+        logger.info("createInvoice - Invoice was created");
+    }
+
+    @Override
+    public Page<TableInvoiceResponse> getInvoiceResponsesForTable(Map<String, String> requestMap) {
+        logger.info("getInvoiceResponsesForTable - Getting invoice responses for table "+requestMap.toString());
+        Pageable pageable = PageRequest.of(Integer.valueOf(requestMap.get("page")), Integer.valueOf(requestMap.get("pageSize")));
+        Page<Invoice> invoicePage = getFilteredInvoices(requestMap, pageable);
+        List<TableInvoiceResponse> tableInvoiceResponses = new ArrayList<>();
+        for(Invoice invoice: invoicePage.getContent()){
+            BigDecimal totalPrice = invoiceItemRepo.getItemsSumByInvoiceId(invoice.getId());
+            TableInvoiceResponse tableInvoiceResponse = invoiceMapper.invoiceToTableInvoiceResponse(invoice, totalPrice);
+            tableInvoiceResponses.add(tableInvoiceResponse);
+        }
+        Page<TableInvoiceResponse> tableInvoiceResponsePage = new PageImpl<>(tableInvoiceResponses, pageable, invoicePage.getTotalElements());
+        logger.info("getInvoiceResponsesForTable - Invoice responses were got");
+        return tableInvoiceResponsePage;
+    }
+
+    private Page<Invoice> getFilteredInvoices(Map<String, String> requestMap, Pageable pageable) {
+        Specification<Invoice> invoiceSpecification = Specification.where(byDeleted());
+        if(!requestMap.get("number").isEmpty()){
+            invoiceSpecification = invoiceSpecification.and(byNumberLike(requestMap.get("number")));
+        }
+        if(!requestMap.get("status").isEmpty()){
+            invoiceSpecification = invoiceSpecification.and(byStatus(InvoiceStatus.valueOf(requestMap.get("status"))));
+        }
+        if (!requestMap.get("apartmentNumber").isEmpty()){
+            invoiceSpecification = invoiceSpecification.and(byApartmentNumberLike(requestMap.get("apartmentNumber")));
+        }
+        if (!requestMap.get("ownerId").isEmpty()){
+            invoiceSpecification = invoiceSpecification.and(byOwnerId(Long.valueOf(requestMap.get("ownerId"))));
+        }
+        if (!requestMap.get("processed").isEmpty()){
+            invoiceSpecification = invoiceSpecification.and(byProcessed(Boolean.parseBoolean(requestMap.get("processed"))));
+        }
+        if (!requestMap.get("creationDate").isEmpty()){
+            LocalDateTime localDateTime = LocalDateTime.of(LocalDate.parse(requestMap.get("creationDate"), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    LocalTime.MIDNIGHT);
+            ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+            Instant dateFrom = zonedDateTime.toInstant();
+            Instant dateTo = zonedDateTime.toInstant().plus(1, ChronoUnit.DAYS);
+            invoiceSpecification = invoiceSpecification.and(byCreationDateGreaterThan(dateFrom)).and(byCreationDateLessThan(dateTo));
+        }
+        if (!requestMap.get("monthDate").isEmpty()){
+            LocalDate localDate = LocalDate.parse(requestMap.get("monthDate"),DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            invoiceSpecification = invoiceSpecification.and(byMonth(localDate.getMonthValue()));
+        }
+        return invoiceRepo.findAll(invoiceSpecification, pageable);
+    }
+
+    @Override
+    public InvoiceResponse getInvoiceResponse(Long id) {
+        logger.info("getInvoiceResponse - Getting invoice response by id "+id);
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
+        BigDecimal totalPrice = invoiceItemRepo.getItemsSumByInvoiceId(id);
+        List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
+        List<InvoiceItemResponse> itemResponses = invoiceItemMapper.invoiceItemListToInvoiceItemResponseList(invoiceItems);
+        InvoiceResponse invoiceResponse = invoiceMapper.invoiceToInvoiceResponse(invoice,totalPrice, itemResponses);
+        logger.info("getInvoiceResponse - Invoice response was got");
+        return invoiceResponse;
+    }
+
+    @Override
+    public void updateInvoice(Long id, InvoiceRequest invoiceRequest) {
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
+        Apartment apartment = apartmentRepo.findById(invoiceRequest.getApartmentId()).orElseThrow(()-> new EntityNotFoundException("Apartment was not found by id "+invoiceRequest.getApartmentId()));
+        invoiceMapper.updateInvoice(invoice, invoiceRequest, apartment);
+        List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
+        invoiceItemRepo.deleteAll(invoiceItems);
         Invoice savedInvoice = invoiceRepo.save(invoice);
         saveInvoiceItems(invoiceRequest.getItemRequests(), savedInvoice);
     }
-
     private void saveInvoiceItems(List<InvoiceItemRequest> itemRequests, Invoice invoice) {
         for(InvoiceItemRequest itemRequest: itemRequests){
             com.example.myhouse24admin.entity.Service service = servicesRepo.findById(itemRequest.getServiceId()).orElseThrow(()-> new EntityNotFoundException("Service was not found by id "+itemRequest.getServiceId()));

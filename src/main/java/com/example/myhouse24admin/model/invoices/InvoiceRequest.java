@@ -19,11 +19,10 @@ public class InvoiceRequest {
     private InvoiceStatus status;
     @NotNull(message = "{validation-not-empty}")
     private BigDecimal paid;
-    private BigDecimal totalPrice;
     private boolean isProcessed;
     @Valid
     @NotNull(message = "{validation-necessary-service}")
-    List<InvoiceItemRequest> itemRequests;
+    private List<InvoiceItemRequest> itemRequests;
 
     public String getCreationDate() {
         return creationDate;
@@ -63,14 +62,6 @@ public class InvoiceRequest {
 
     public void setPaid(BigDecimal paid) {
         this.paid = paid;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public boolean isProcessed() {
