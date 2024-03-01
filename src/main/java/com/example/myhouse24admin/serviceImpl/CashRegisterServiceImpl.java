@@ -119,7 +119,7 @@ public class CashRegisterServiceImpl implements CashRegisterService {
 
     private Page<CashSheet> findCashSheetsBySearchParams(int page, int pageSize, Map<String, String> searchParams) {
         logger.info("findCashSheetsBySearchParams() -> start, with parameters: {}", searchParams);
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.ASC, "creationDate"));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "creationDate"));
         CashSheetSpecification specification = new CashSheetSpecification(searchParams);
         Page<CashSheet> all = cashSheetRepo.findAll(specification, pageable);
         logger.info("findCashSheetsBySearchParams() -> end, with result elements: {}", all.getNumberOfElements());
