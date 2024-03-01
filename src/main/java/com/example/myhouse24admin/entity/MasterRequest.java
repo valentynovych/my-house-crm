@@ -16,7 +16,7 @@ public class MasterRequest {
     private Instant visitDate;
     @Column(nullable = false)
     private boolean deleted;
-    @Column(name = "apartment_owner_phone",length = 13, nullable = false)
+    @Column(name = "apartment_owner_phone", length = 13, nullable = false)
     private String apartmentOwnerPhone;
     @Enumerated(EnumType.STRING)
     private MasterRequestStatus status;
@@ -26,6 +26,10 @@ public class MasterRequest {
     @ManyToOne
     @JoinColumn(name = "staff_id", referencedColumnName = "id", nullable = false)
     private Staff staff;
+    @Column(length = 500, nullable = false)
+    private String description;
+    @Column(length = 1000)
+    private String comment;
 
     public Long getId() {
         return id;
@@ -89,5 +93,21 @@ public class MasterRequest {
 
     public void setStaff(Staff staff) {
         this.staff = staff;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

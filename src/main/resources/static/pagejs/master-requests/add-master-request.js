@@ -23,7 +23,6 @@ const $flatpickrDate = flatpickr($inputVisitDate, {
     defaultDate: date
 });
 
-
 const $flatpickrTime = flatpickr($inputVisitTime, {
     enableTime: true,
     noCalendar: true,
@@ -31,12 +30,11 @@ const $flatpickrTime = flatpickr($inputVisitTime, {
     time_24hr: true,
     minTime: '9:30',
     maxTime: '21:30',
-    disable: ['21:00-10:00'],
-    defaultDate: date,
+    // defaultDate: date,
 });
+$flatpickrTime.setDate(date);
 
 function initInputAndSelect() {
-
 
     $selectApartmentOwner.select2({
         dropdownParent: $('#apartmentOwnerId-wrap'),

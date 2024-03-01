@@ -4,12 +4,18 @@ import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.MasterRequest;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.masterRequest.MasterRequestAddRequest;
+import com.example.myhouse24admin.model.masterRequest.MasterRequestTableResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+import java.util.List;
+
+@Mapper(componentModel = "spring",
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        uses = {ApartmentMapper.class,
+                StaffMapper.class})
 public interface MasterRequestMapper {
 
 
@@ -37,4 +43,10 @@ public interface MasterRequestMapper {
         }
         return staff;
     }
+
+    List<MasterRequestTableResponse> masterRequestListToMasterRequestTableResponseList(List<MasterRequest> masterRequests);
+
+    @Mapping(target = "master", source = "staff")
+    @Mapping(target = "apartmentOwnerPhone", source = "apartment.owner.phoneNumber")
+    MasterRequestTableResponse masterRequestToMasterRequestTableResponse(MasterRequest masterRequest);
 }
