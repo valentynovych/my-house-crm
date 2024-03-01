@@ -40,6 +40,11 @@ public class MasterRequestsController {
         return new ModelAndView("master-requests/edit-master-request");
     }
 
+    @GetMapping("view-request/{masterRequestId}")
+    public ModelAndView viewMasterRequest(@PathVariable Long masterRequestId) {
+        return new ModelAndView("master-requests/view-master-request");
+    }
+
     @PostMapping("add-request")
     public ResponseEntity<?> addNewRequest(@ModelAttribute @Valid MasterRequestAddRequest request) {
         masterRequestService.addNewMasterRequest(request);

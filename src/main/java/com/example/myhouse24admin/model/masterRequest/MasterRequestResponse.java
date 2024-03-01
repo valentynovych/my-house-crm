@@ -13,5 +13,6 @@ public record MasterRequestResponse(
         ApartmentResponse apartment,
         String apartmentOwnerPhone,
         StaffShortResponse master,
-        MasterRequestStatus status) {
+        MasterRequestStatus status,
+        Instant creationDate) {
 }
