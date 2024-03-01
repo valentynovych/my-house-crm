@@ -2,6 +2,7 @@ package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.model.cashRegister.*;
 import com.example.myhouse24admin.service.CashRegisterService;
+import com.example.myhouse24admin.util.CashSheetTableExelGenerator;
 import com.example.myhouse24admin.util.CashSheetViewExelGenerator;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -16,6 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -116,9 +121,32 @@ public class CashRegisterController {
         String headerValue = "attachment; filename=CashSheet_" + sheetResponse.getSheetNumber() + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
-
         CashSheetViewExelGenerator generator =
                 new CashSheetViewExelGenerator(sheetResponse, messageSource, LocaleContextHolder.getLocale());
+        try {
+            generator.generateExcelFile(response);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("export-table-to-exel")
+    public ResponseEntity<?> exportTableToExcel(@RequestParam int page,
+                                                @RequestParam int pageSize,
+                                                @RequestParam Map<String, String> searchParams,
+                                                HttpServletResponse response) {
+        response.setContentType("application/octet-stream");
+        LocalDateTime dateTime = LocalDateTime.now();
+        String date = dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+        List<CashSheetTableResponse> responseList = cashRegisterService.getSheets(page, pageSize, searchParams).getContent();
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=CashSheets_" + date + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        CashSheetTableExelGenerator generator =
+                new CashSheetTableExelGenerator(responseList, messageSource, LocaleContextHolder.getLocale());
         try {
             generator.generateExcelFile(response);
             return new ResponseEntity<>(HttpStatus.OK);

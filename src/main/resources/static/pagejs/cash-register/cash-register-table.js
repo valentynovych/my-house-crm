@@ -234,7 +234,7 @@ function fillStatistic(stat) {
 
 $('#export-to-exel').on('click', function () {
     blockBy('#export-to-exel');
-    let url = new URL('personal-accounts/export-to-excel', window.location.origin + window.location.pathname);
+    let url = new URL('cash-register/export-table-to-exel', window.location.origin + window.location.pathname);
     url = addParametersToUrl(url);
     $.ajax({
         type: 'get',
