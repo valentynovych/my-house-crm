@@ -4,11 +4,10 @@ import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.MasterRequest;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.masterRequest.MasterRequestAddRequest;
+import com.example.myhouse24admin.model.masterRequest.MasterRequestEditRequest;
+import com.example.myhouse24admin.model.masterRequest.MasterRequestResponse;
 import com.example.myhouse24admin.model.masterRequest.MasterRequestTableResponse;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -23,6 +22,23 @@ public interface MasterRequestMapper {
     @Mapping(target = "apartment", source = "apartmentId", qualifiedByName = "setApartment")
     @Mapping(target = "staff", source = "masterId", qualifiedByName = "setStaff")
     MasterRequest masterRequestAddRequestToMasterRequest(MasterRequestAddRequest request);
+
+    List<MasterRequestTableResponse> masterRequestListToMasterRequestTableResponseList(List<MasterRequest> masterRequests);
+
+    @Mapping(target = "master", source = "staff")
+    @Mapping(target = "apartmentOwnerPhone", source = "apartment.owner.phoneNumber")
+    MasterRequestTableResponse masterRequestToMasterRequestTableResponse(MasterRequest masterRequest);
+
+    @Mapping(target = "master", source = "staff")
+    @Mapping(target = "apartmentOwnerPhone", source = "apartment.owner.phoneNumber")
+    MasterRequestResponse masterRequestToMasterRequestResponse(MasterRequest masterRequestById);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "creationDate", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "apartment", source = "apartmentId", qualifiedByName = "setApartment")
+    @Mapping(target = "staff", source = "masterId", qualifiedByName = "setStaff")
+    void updateMasterRequestFromMasterRequestEditRequest(@MappingTarget MasterRequest masterRequestById, MasterRequestEditRequest request);
 
     @Named(value = "setApartment")
     static Apartment setApartment(Long apartmentId) {
@@ -43,10 +59,4 @@ public interface MasterRequestMapper {
         }
         return staff;
     }
-
-    List<MasterRequestTableResponse> masterRequestListToMasterRequestTableResponseList(List<MasterRequest> masterRequests);
-
-    @Mapping(target = "master", source = "staff")
-    @Mapping(target = "apartmentOwnerPhone", source = "apartment.owner.phoneNumber")
-    MasterRequestTableResponse masterRequestToMasterRequestTableResponse(MasterRequest masterRequest);
 }

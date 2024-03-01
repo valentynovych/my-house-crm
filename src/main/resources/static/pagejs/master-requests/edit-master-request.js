@@ -1,6 +1,6 @@
-$(document).ready(function () {
-    initInputAndSelect();
-})
+const masterRequestId = window.location.pathname.match(/\d+/);
+let masterRequestToRestore;
+
 const $inputVisitDate = $('[name="visitDate"]');
 const $inputVisitTime = $('[name="visitTime"]');
 const $selectApartmentOwner = $('[name="apartmentOwnerId"]');
@@ -10,39 +10,56 @@ const $selectMasterType = $('[name="masterType"]');
 const $selectStatus = $('[name="status"]');
 const $selectStaff = $('[name="masterId"]');
 const $inputComment = $('[name="comment"]');
-Date.prototype.addMinutes = function (minutes) {
-    this.setMinutes((Math.round(this.getMinutes() / 10) * 10) + minutes)
-}
 
-const date = new Date();
-date.addMinutes(40);
+$(document).ready(function () {
+    blockCardDody();
+    $.ajax({
+        url: '../get-request/' + masterRequestId,
+        type: 'get',
+        success: function (response) {
+            console.log(response);
+            masterRequestToRestore = response;
+            fillInputs(response);
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    })
+})
 
-const $flatpickrDate = flatpickr($inputVisitDate, {
-    dateFormat: "d.m.Y",
-    minDate: 'today',
-    defaultDate: date
-});
+let $flatpickrDate;
+let $flatpickrTime;
 
-const $flatpickrTime = flatpickr($inputVisitTime, {
-    enableTime: true,
-    noCalendar: true,
-    minuteIncrement: 10,
-    time_24hr: true,
-    minTime: '9:30',
-    maxTime: '21:30',
-    // defaultDate: date,
-});
-$flatpickrTime.setDate(date);
+function fillInputs(request) {
+    const date = new Date(request.visitDate * 1000);
+    $flatpickrDate = flatpickr($inputVisitDate, {
+        dateFormat: "d.m.Y",
+    });
+    $flatpickrTime = flatpickr($inputVisitTime, {
+        enableTime: true,
+        noCalendar: true,
+        minuteIncrement: 10,
+        time_24hr: true,
+        minTime: '9:30',
+        maxTime: '21:30',
+    });
+    const apartment = request.apartment;
 
-function initInputAndSelect() {
+    $flatpickrDate.setDate(date);
+    $flatpickrTime.setDate(date);
 
     $selectApartmentOwner.select2({
         dropdownParent: $('#apartmentOwnerId-wrap'),
         maximumInputLength: 50,
         placeholder: chooseApartmentOwner,
+        data: [{
+            id: apartment.owner.id,
+            text: apartment.owner.fullName,
+            phoneNumber: apartment.owner.phoneNumber
+        }],
         ajax: {
             type: "GET",
-            url: '../owners/get-owners',
+            url: '../../owners/get-owners',
             data: function (params) {
                 return {
                     fullName: params.term,
@@ -70,9 +87,9 @@ function initInputAndSelect() {
     $selectApartmentOwner.on('change', function () {
         let ownerData = $selectApartmentOwner.select2('data')[0];
         $('#apartment-owner-phone').html(ownerData.phoneNumber);
-
         initSelectApartment(ownerData.id, false);
     })
+    $selectApartmentOwner.trigger('change');
 
     function initSelectApartment(ownerId, isDisabled) {
         $selectApartment.select2({
@@ -80,9 +97,16 @@ function initInputAndSelect() {
             maximumInputLength: 50,
             placeholder: chooseApartment,
             disabled: isDisabled,
+            data: [{
+                id: apartment.id,
+                text: (apartment.apartmentNumber).padStart(5, '00000'),
+                house: apartment.house,
+                section: apartment.section,
+                floor: apartment.floor
+            }],
             ajax: {
                 type: "GET",
-                url: `../apartments/get-apartments`,
+                url: `../../apartments/get-apartments`,
                 data: function (params) {
                     return {
                         apartmentNumber: params.term,
@@ -92,7 +116,6 @@ function initInputAndSelect() {
                     };
                 },
                 processResults: function (response) {
-                    console.log(response)
                     return {
                         results: $.map(response.content, function (apartment) {
                             return {
@@ -116,12 +139,13 @@ function initInputAndSelect() {
         const apartmentData = $selectApartment.select2('data')[0];
 
         const house = apartmentData.house;
-        const houseLink = `<a href="../houses/view-house/${house.id}">${house.name}</a>`
+        const houseLink = `<a href="../../houses/view-house/${house.id}">${house.name}</a>`
         $('#house').html(houseLink);
 
         $('#section').html(apartmentData.section.name);
         $('#floor').html(apartmentData.floor.name);
     })
+    $selectApartment.trigger('change');
 
 
     $selectMasterType.select2({
@@ -137,6 +161,13 @@ function initInputAndSelect() {
     $selectMasterType.append(emptyOption);
     $selectMasterType.append(electricianOption);
     $selectMasterType.append(plumberOption);
+
+    $selectMasterType.on('change', function () {
+        const status = $selectMasterType.select2('data')[0];
+        initSelectStaff(status, false);
+    })
+
+    $selectMasterType.val(request.master.role.name).trigger('change');
 
     $selectStatus.select2({
         dropdownParent: $('#status-wrap'),
@@ -155,10 +186,7 @@ function initInputAndSelect() {
     $selectStatus.append(doneOption);
     $selectStatus.append(canceledOption);
 
-    $selectMasterType.on('change', function () {
-        const status = $selectMasterType.select2('data')[0];
-        initSelectStaff(status, false);
-    })
+    $selectStatus.val(request.status).trigger('change');
 
     function initSelectStaff(status, isDisabled) {
 
@@ -167,9 +195,13 @@ function initInputAndSelect() {
             maximumInputLength: 50,
             placeholder: chooseMaster,
             disabled: isDisabled,
+            data: [{
+                id: request.master.id,
+                text: `${request.master.firstName} ${request.master.lastName}`
+            }],
             ajax: {
                 type: "GET",
-                url: '../system-settings/staff/get-staff',
+                url: '../../system-settings/staff/get-staff',
                 data: function (params) {
                     return {
                         name: params.term,
@@ -179,7 +211,6 @@ function initInputAndSelect() {
                     };
                 },
                 processResults: function (response) {
-                    console.log(response)
                     return {
                         results: $.map(response.content, function (staff) {
                             return {
@@ -198,6 +229,9 @@ function initInputAndSelect() {
 
     autosize($inputComment);
     autosize($inputDescription);
+
+    $inputComment.val(request.comment);
+    $inputDescription.val(request.description);
 }
 
 function getRoleLabel(role) {
@@ -231,9 +265,6 @@ function getStatusLabel(role) {
 $('.button-save').on('click', function () {
     clearAllErrorMessage();
     blockCardDody();
-    const dateString = `${$inputVisitDate.val()}T${$inputVisitTime.val()}:00`;
-    console.log($flatpickrDate.selectedDates)
-    console.log(dateString)
     const val = $inputVisitTime.val().split(':');
     const visitDate = new Date(Date.parse($flatpickrDate.selectedDates));
     visitDate.setHours(val[0]);
@@ -241,7 +272,8 @@ $('.button-save').on('click', function () {
 
     let formData = new FormData($('#master-request-form')[0]);
     formData.set('apartmentOwnerPhone', $('#apartment-owner-phone').html());
-    formData.set('visitDate', visitDate.getTime())
+    formData.set('visitDate', visitDate.getTime());
+    formData.set('id', masterRequestId);
     //
     for (const formDatum of formData.entries()) {
         console.log(formDatum)
@@ -263,4 +295,22 @@ $('.button-save').on('click', function () {
     });
 });
 
-$('.button-cancel').on('click', () => window.history.back())
+$('.button-cancel').on('click', function () {
+    restoreInputs(masterRequestToRestore);
+});
+
+function restoreInputs(request) {
+    const date = new Date(request.visitDate * 1000);
+    const apartment = request.apartment;
+
+    $flatpickrDate.setDate(date);
+    $flatpickrTime.setDate(date);
+    $selectApartmentOwner.val(apartment.owner.id).trigger('change');
+    $selectApartment.val(apartment.id).trigger('change');
+    $selectMasterType.val(request.master.role.name).trigger('change');
+    $selectStatus.val(request.status).trigger('change');
+    $selectStaff.val(request.master.id).trigger('change');
+
+    $inputComment.val(request.comment).trigger('change');
+    $inputDescription.val(request.description).trigger('change');
+}

@@ -4,6 +4,8 @@ import com.example.myhouse24admin.entity.MasterRequest;
 import com.example.myhouse24admin.entity.MasterRequestStatus;
 import com.example.myhouse24admin.mapper.MasterRequestMapper;
 import com.example.myhouse24admin.model.masterRequest.MasterRequestAddRequest;
+import com.example.myhouse24admin.model.masterRequest.MasterRequestEditRequest;
+import com.example.myhouse24admin.model.masterRequest.MasterRequestResponse;
 import com.example.myhouse24admin.model.masterRequest.MasterRequestTableResponse;
 import com.example.myhouse24admin.repository.MasterRequestRepo;
 import com.example.myhouse24admin.service.MasterRequestService;
@@ -65,6 +67,24 @@ public class MasterRequestServiceImpl implements MasterRequestService {
         masterRequestRepo.delete(masterRequest);
         logger.info("deleteMasterRequestById() -> end, success deleting with id: {}", masterRequestId);
         return true;
+    }
+
+    @Override
+    public MasterRequestResponse getMasterRequestById(Long masterRequestId) {
+        logger.info("getMasterRequestById() -> start, with id: {}", masterRequestId);
+        MasterRequest masterRequestById = findMasterRequestById(masterRequestId);
+        MasterRequestResponse response = masterRequestMapper.masterRequestToMasterRequestResponse(masterRequestById);
+        logger.info("getMasterRequestById() -> end, return MasterRequestResponse");
+        return response;
+    }
+
+    @Override
+    public void updateMasterRequest(Long masterRequestId, MasterRequestEditRequest request) {
+        logger.info("updateMasterRequest() -> start, with id: {}", masterRequestId);
+        MasterRequest masterRequestById = findMasterRequestById(masterRequestId);
+        masterRequestMapper.updateMasterRequestFromMasterRequestEditRequest(masterRequestById, request);
+        masterRequestRepo.save(masterRequestById);
+        logger.info("updateMasterRequest() -> end, success update MasterRequest with id: {}", masterRequestId);
     }
 
     private MasterRequest findMasterRequestById(Long masterRequestId) {

@@ -1,6 +1,8 @@
 package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.model.masterRequest.MasterRequestAddRequest;
+import com.example.myhouse24admin.model.masterRequest.MasterRequestEditRequest;
+import com.example.myhouse24admin.model.masterRequest.MasterRequestResponse;
 import com.example.myhouse24admin.model.masterRequest.MasterRequestTableResponse;
 import com.example.myhouse24admin.service.MasterRequestService;
 import jakarta.validation.Valid;
@@ -33,6 +35,10 @@ public class MasterRequestsController {
         return new ModelAndView("master-requests/master-requests");
     }
 
+    @GetMapping("edit-request/{masterRequestId}")
+    public ModelAndView viewEditMasterRequest(@PathVariable Long masterRequestId) {
+        return new ModelAndView("master-requests/edit-master-request");
+    }
 
     @PostMapping("add-request")
     public ResponseEntity<?> addNewRequest(@ModelAttribute @Valid MasterRequestAddRequest request) {
@@ -46,6 +52,19 @@ public class MasterRequestsController {
                                                              @RequestParam Map<String, String> searchParams) {
         Page<MasterRequestTableResponse> tableResponse = masterRequestService.getMasterRequests(page, pageSize, searchParams);
         return new ResponseEntity<>(tableResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("get-request/{masterRequestId}")
+    public @ResponseBody ResponseEntity<?> getMasterRequests(@PathVariable Long masterRequestId) {
+        MasterRequestResponse response = masterRequestService.getMasterRequestById(masterRequestId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("edit-request/{masterRequestId}")
+    public ResponseEntity<?> updateRequest(@PathVariable Long masterRequestId,
+                                           @ModelAttribute @Valid MasterRequestEditRequest request) {
+        masterRequestService.updateMasterRequest(masterRequestId, request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("delete/{masterRequestId}")
