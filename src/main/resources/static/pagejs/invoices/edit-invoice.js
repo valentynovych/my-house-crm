@@ -661,7 +661,11 @@ function deleteRow() {
     calculateTotal();
     $('#deleteModal').modal('hide');
 }
-
+$("#cancel-button").on("click", function () {
+    blockBy(".card-body");
+    setFields(defaultInvoice);
+    unblockBy(".card-body");
+});
 function getReadings(currentPage) {
     blockBy("#dropdownParent1");
     $.ajax({
