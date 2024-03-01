@@ -4,6 +4,11 @@ import com.example.myhouse24admin.entity.*;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +38,12 @@ public class MasterRequestSpecification implements Specification<MasterRequest> 
             switch (param) {
                 case BY_NUMBER -> predicates.add(criteriaBuilder.equal(root.get("id"), Long.valueOf(value)));
                 case BY_DATE -> {
+                    LocalDate localDate = LocalDate.parse(value, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                    Instant dateFrom = localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
+                    predicates.add(criteriaBuilder.and(
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("visitDate"), dateFrom),
+                            criteriaBuilder.lessThanOrEqualTo(root.get("visitDate"), dateFrom.plus(1, ChronoUnit.DAYS)))
+                    );
                 }
                 case BY_MASTER_TYPE -> {
                     Join<MasterRequest, Staff> staffJoin = root.join("staff", JoinType.LEFT);
