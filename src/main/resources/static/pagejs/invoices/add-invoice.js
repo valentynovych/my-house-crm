@@ -535,7 +535,7 @@ function getReadings(currentPage) {
 
 function drawReadingsTable(response) {
     if (response.numberOfElements == 0) {
-        $("#reading-table").append(`<tr class="tr"><td colspan="6" class="text-center">${dataNotFound}</td>></tr>`);
+        $("#reading-table").append(`<tr class="tr"><td colspan="10" class="text-center">${dataNotFound}</td>></tr>`);
     } else {
         for (const reading of response.content) {
             var parts = reading.creationDate.split('.');
@@ -657,4 +657,24 @@ function sendData(formData) {
             printErrorMessageToField(error);
         }
     });
+}
+
+$("#cancel-button").on("click", function () {
+    blockBy(".card-body");
+    clearFields();
+    $('#apartmentId').prop('disabled', true);
+    $('#section').prop('disabled', true);
+    unblockBy(".card-body");
+});
+
+function clearFields() {
+    $("#personalAccount, #paid").val('');
+    $("#owner, #phone-number").text('');
+    $("#form").find('select').val(null).trigger('change');
+    $("#service-table").children().remove();
+    $("#service-table").append(
+        `<tr>
+            <td colSpan="7" class="text-center">${noData}</td>
+        </tr>`
+    );
 }
