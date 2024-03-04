@@ -46,7 +46,7 @@ function drawTable(response) {
             let date = new Date(parts[2],parts[1]-1,parts[0]).toLocaleString(dateLocale,{month:'long', year:'numeric'});
             $("tbody")
                 .append(
-                    `<tr class="tr text-nowrap">
+                    `<tr class="tr text-nowrap" data-href="invoices/view-invoice/${invoice.id}">
                     <td><input class="form-check-input" type="checkbox"></td>
                     <td>${invoice.number}</td>
                     <td>${getStatusSpan(invoice.status)}</td>

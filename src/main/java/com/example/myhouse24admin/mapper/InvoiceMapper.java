@@ -4,10 +4,7 @@ import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.Invoice;
 import com.example.myhouse24admin.entity.PersonalAccount;
 import com.example.myhouse24admin.entity.Tariff;
-import com.example.myhouse24admin.model.invoices.InvoiceItemResponse;
-import com.example.myhouse24admin.model.invoices.InvoiceRequest;
-import com.example.myhouse24admin.model.invoices.InvoiceResponse;
-import com.example.myhouse24admin.model.invoices.TableInvoiceResponse;
+import com.example.myhouse24admin.model.invoices.*;
 import com.example.myhouse24admin.util.DateConverter;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -53,6 +50,7 @@ public interface InvoiceMapper {
     @Mapping(target = "ownerResponse.tariffName", source = "invoice.apartment.tariff.name")
     @Mapping(target = "itemResponses", source = "itemResponses")
     @Mapping(target = "number", source = "invoice.number")
+    @Mapping(target = "processed", expression = "java(invoice.isProcessed())")
     InvoiceResponse invoiceToInvoiceResponse(Invoice invoice, BigDecimal totalPrice, List<InvoiceItemResponse> itemResponses);
     default String convertInstantToString(Instant date){
         return DateConverter.instantToString(date);
@@ -63,4 +61,18 @@ public interface InvoiceMapper {
     @Mapping(ignore = true, target = "id")
     void updateInvoice(@MappingTarget Invoice invoice, InvoiceRequest invoiceRequest,
                        Apartment apartment);
+    @Mapping(target = "number", source = "invoice.number")
+    @Mapping(target = "creationDate", expression = "java(convertInstantToString(invoice.getCreationDate()))")
+    @Mapping(target = "processed", expression = "java(invoice.isProcessed())")
+    @Mapping(target = "invoiceStatus", source = "invoice.status")
+    @Mapping(target = "owner", expression = "java(invoice.getApartment().getOwner().getLastName()+\" \"+invoice.getApartment().getOwner().getMiddleName()+\" \"+invoice.getApartment().getOwner().getFirstName())")
+    @Mapping(target = "accountNumber", source = "invoice.apartment.personalAccount.accountNumber")
+    @Mapping(target = "phoneNumber", source = "invoice.apartment.owner.phoneNumber")
+    @Mapping(target = "house", source = "invoice.apartment.house.name")
+    @Mapping(target = "apartment", source = "invoice.apartment.apartmentNumber")
+    @Mapping(target = "section", source = "invoice.apartment.section.name")
+    @Mapping(target = "tariff", source = "invoice.apartment.tariff.name")
+    @Mapping(target = "totalPrice", source = "totalPrice")
+    @Mapping(target = "itemResponses", source = "itemResponses")
+    ViewInvoiceResponse invoiceToViewInvoiceResponse(Invoice invoice, List<InvoiceItemResponse> itemResponses, BigDecimal totalPrice);
 }

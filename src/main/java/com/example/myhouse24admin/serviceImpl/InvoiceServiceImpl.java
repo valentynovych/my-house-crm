@@ -164,6 +164,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public void updateInvoice(Long id, InvoiceRequest invoiceRequest) {
+        logger.info("updateInvoice - Updating invoice with id "+id+" "+invoiceRequest.toString());
         Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
         Apartment apartment = apartmentRepo.findById(invoiceRequest.getApartmentId()).orElseThrow(()-> new EntityNotFoundException("Apartment was not found by id "+invoiceRequest.getApartmentId()));
         invoiceMapper.updateInvoice(invoice, invoiceRequest, apartment);
@@ -171,6 +172,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceItemRepo.deleteAll(invoiceItems);
         Invoice savedInvoice = invoiceRepo.save(invoice);
         saveInvoiceItems(invoiceRequest.getItemRequests(), savedInvoice);
+        logger.info("updateInvoice - Invoice was updated");
     }
     private void saveInvoiceItems(List<InvoiceItemRequest> itemRequests, Invoice invoice) {
         for(InvoiceItemRequest itemRequest: itemRequests){
@@ -178,5 +180,18 @@ public class InvoiceServiceImpl implements InvoiceService {
             InvoiceItem invoiceItem = invoiceItemMapper.invoiceItemRequestToInvoiceItem(itemRequest, service, invoice);
             invoiceItemRepo.save(invoiceItem);
         }
+    }
+
+    @Override
+    public ViewInvoiceResponse getInvoiceResponseForView(Long id) {
+        logger.info("getInvoiceResponseForView - Getting invoice response for view by id "+id);
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
+        System.out.println(invoice.getApartment().getPersonalAccount().getAccountNumber());
+        BigDecimal totalPrice = invoiceItemRepo.getItemsSumByInvoiceId(id);
+        List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
+        List<InvoiceItemResponse> itemResponses = invoiceItemMapper.invoiceItemListToInvoiceItemResponseList(invoiceItems);
+        ViewInvoiceResponse viewInvoiceResponse = invoiceMapper.invoiceToViewInvoiceResponse(invoice, itemResponses, totalPrice);
+        logger.info("getInvoiceResponseForView - Invoice response was got");
+        return viewInvoiceResponse;
     }
 }

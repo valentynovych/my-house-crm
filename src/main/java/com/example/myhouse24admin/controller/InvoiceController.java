@@ -138,4 +138,12 @@ public class InvoiceController {
         url = url.substring(0, index - 5);
         return new ResponseEntity<>(url, HttpStatus.OK);
     }
+    @GetMapping("/view-invoice/{id}")
+    public ModelAndView getViewInvoicePage() {
+        return new ModelAndView("invoices/view-invoice");
+    }
+    @GetMapping("/view-invoice/get/{id}")
+    public @ResponseBody ViewInvoiceResponse getInvoiceForView(@PathVariable Long id) {
+        return invoiceService.getInvoiceResponseForView(id);
+    }
 }
