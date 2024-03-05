@@ -12,19 +12,52 @@ let request = {
     apartment: "",
     creationDate: "",
     status: "",
-    debt: true
+    hasDebt: ""
 };
 
 
 $(document).ready(function () {
     getOwners(0);
+    initializeHouseSelect();
     initializeStatusSelect();
     initializeDebtSelect();
     initializeFlatPickr();
 });
+
+function initializeHouseSelect() {
+    $('#filter-by-house').select2({
+        dropdownParent: $('#dropdownParent'),
+        maximumInputLength: 100,
+        placeholder:"",
+        allowClear: true,
+        ajax: {
+            type: "get",
+            url: "owners/get-houses",
+            data: function (params) {
+                return {
+                    search: params.term,
+                    page: params.page || 1
+                };
+            },
+            processResults: function (response) {
+                return {
+                    results: $.map(response.content, function (item) {
+                        return {
+                            text: item.name,
+                            id: item.id
+                        }
+                    }),
+                    pagination: {
+                        more: (response.pageable.pageNumber + 1) < response.totalPages
+                    }
+                };
+            }
+
+        }
+    });
+}
 function initializeStatusSelect() {
     $('#filter-by-status').select2({
-        language: "uk",
         dropdownParent: $('#dropdownParent'),
         minimumResultsForSearch: -1,
         placeholder:"",
@@ -101,7 +134,7 @@ $("#filter-by-creation-date").on("change", function () {
     searchAfterDelay();
 });
 $("#filter-by-debt").on("change", function () {
-    request.debt = $(this).val();
+    request.hasDebt = $(this).val();
     searchAfterDelay();
 });
 $("#filter-by-status").on("change", function () {
@@ -148,11 +181,11 @@ function drawTable(response) {
                     <td>${owner.fullName}</td>
                     <td>${owner.phoneNumber}</td>
                     <td>${owner.email}</td>
-                    <td>${owner.house}</td>
-                    <td>${owner.apartment}</td>
+                    <td>${getHousesP(owner.houseApartmentResponses)}</td>
+                    <td>${getApartmentsP(owner.houseApartmentResponses)}</td>
                     <td>${owner.creationDate}</td>
                     <td>${getStatusSpan(owner.status)}</td>
-                    <td>${owner.hasDebt}</td>
+                    <td>${getHasDebt(owner.hasDebt)}</td>
                     <td>
                     <div class="dropdown">
                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -176,6 +209,23 @@ function drawTable(response) {
         }
         addListenerToRow();
     }
+}
+function getHousesP(houseApartments) {
+    let houses = "";
+    for(let house of houseApartments){
+        houses += "<p>"+house.house+"</p>"
+    }
+    return houses;
+}
+function getApartmentsP(houseApartments) {
+    let apartments = "";
+    for(let apartment of houseApartments){
+        apartments += "<p>"+apartment.apartment+"</p>"
+    }
+    return apartments;
+}
+function getHasDebt(hasDebt) {
+    return hasDebt? haveDebt: notHaveDebt;
 }
 function getStatusSpan(status){
     switch (status) {
@@ -234,9 +284,13 @@ function deleteEntry() {
             toastr.success(deleteSuccessful);
             getOwners(0)
         },
-        error: function () {
+        error: function (errorResponse) {
             $('#deleteModal').modal('hide');
-            toastr.error(errorMessage);
+            if (errorResponse.status === 409) {
+                toastr.warning(deleteErrorMessage);
+            } else {
+                toastr.error(errorMessage);
+            }
         }
     });
 }

@@ -11,7 +11,7 @@ public interface ApartmentOwnerService {
     ApartmentOwnerResponse getApartmentOwnerResponse(Long id);
     void updateApartmentOwner(EditApartmentOwnerRequest editApartmentOwnerRequest, Long id, MultipartFile multipartFile);
     Page<TableApartmentOwnerResponse> getApartmentOwnerResponsesForTable(int page, int pageSize, FilterRequest filterRequest);
-    void deleteOwnerById(Long id);
+    boolean deleteOwnerById(Long id);
     ViewApartmentOwnerResponse getApartmentOwnerResponseForView(Long id);
 
     Page<ApartmentOwnerShortResponse> getShortResponseOwners(int page, int pageSize, String fullName);

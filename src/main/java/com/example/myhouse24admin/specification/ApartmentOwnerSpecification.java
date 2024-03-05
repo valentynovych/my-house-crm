@@ -1,7 +1,10 @@
 package com.example.myhouse24admin.specification;
 
+import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.ApartmentOwner;
+import com.example.myhouse24admin.entity.House;
 import com.example.myhouse24admin.entity.OwnerStatus;
+import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.Instant;
@@ -48,6 +51,29 @@ public interface ApartmentOwnerSpecification {
         return (root, query, builder) ->
                 builder.equal(root.get("status"), status);
     }
-
-
+    static Specification<ApartmentOwner> byApartmentNumber(String apartmentNumber){
+        return (root, query, builder) -> {
+            Join<ApartmentOwner, Apartment> apartmentJoin = root.join("apartments");
+            return builder.like(builder.upper(apartmentJoin.get("apartmentNumber")), "%"+apartmentNumber.toUpperCase()+"%");
+        };
+    }
+    static Specification<ApartmentOwner> byHouseId(Long houseId){
+        return (root, query, builder) -> {
+            Join<ApartmentOwner, Apartment> apartmentJoin = root.join("apartments");
+            Join<Apartment, House> houseJoin = apartmentJoin.join("house");
+            return builder.equal(houseJoin.get("id"), houseId);
+        };
+    }
+    static Specification<ApartmentOwner> byApartmentBalanceLessThanZero(){
+        return (root, query, builder) -> {
+            Join<ApartmentOwner, Apartment> apartmentJoin = root.join("apartments");
+            return builder.lessThan(apartmentJoin.get("balance"),0);
+        };
+    }
+    static Specification<ApartmentOwner> byApartmentBalanceGreaterThanZero(){
+        return (root, query, builder) -> {
+            Join<ApartmentOwner, Apartment> apartmentJoin = root.join("apartments");
+            return builder.greaterThanOrEqualTo(apartmentJoin.get("balance"),0);
+        };
+    }
 }

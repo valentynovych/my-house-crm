@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.specification;
 
 import com.example.myhouse24admin.entity.Apartment;
+import com.example.myhouse24admin.entity.ApartmentOwner;
 import com.example.myhouse24admin.entity.House;
 import com.example.myhouse24admin.entity.Section;
 import jakarta.persistence.criteria.Join;
@@ -23,8 +24,18 @@ public interface ApartmentInterfaceSpecification {
     }
     static Specification<Apartment> byHouseId(Long houseId){
         return (root, query, builder) -> {
-            Join<Apartment, House> sectionJoin = root.join("house");
-            return builder.equal(sectionJoin.get("id"), houseId);
+            Join<Apartment, House> houseJoin = root.join("house");
+            return builder.equal(houseJoin.get("id"), houseId);
         };
+    }
+    static Specification<Apartment> byOwnerId(Long id){
+        return (root, query, builder) -> {
+            Join<Apartment, ApartmentOwner> ownerJoin = root.join("owner");
+            return builder.equal(ownerJoin.get("id"), id);
+        };
+    }
+    static Specification<Apartment> byApartmentBalanceLessThanZero(){
+        return (root, query, builder) ->
+                builder.lessThan(root.get("balance"), 0);
     }
 }

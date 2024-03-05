@@ -52,6 +52,8 @@ public class ApartmentOwner {
             inverseJoinColumns = { @JoinColumn(name = "message_id") }
     )
     private List<Message> messages = new ArrayList<>();
+    @OneToMany(mappedBy = "owner")
+    private List<Apartment> apartments = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -195,5 +197,13 @@ public class ApartmentOwner {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public List<Apartment> getApartments() {
+        return apartments;
+    }
+
+    public void setApartments(List<Apartment> apartments) {
+        this.apartments = apartments;
     }
 }
