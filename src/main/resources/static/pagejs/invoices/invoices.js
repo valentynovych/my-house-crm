@@ -13,10 +13,30 @@ let request = {
 };
 
 $(document).ready(function () {
+    getPersonalAccountsStatistic();
     getInvoices(0);
     initializeSelects();
     initializeFlatPickr();
 });
+function getPersonalAccountsStatistic() {
+    $.ajax({
+        type: 'get',
+        url: 'statistic/get-accounts-statistic',
+        dataType: 'json',
+        success: function (result) {
+            fillStatistic(result);
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
+
+function fillStatistic(stat) {
+    $('#accounts-balance').html(`${stat.accountsBalanceOverpayments} ${currency}.`)
+    $('#accounts-balance-arrears').html(`${stat.accountsBalanceArrears} ${currency}.`)
+}
+
 function getInvoices(currentPage) {
     blockCardDody();
     request.page = currentPage;
@@ -47,7 +67,7 @@ function drawTable(response) {
             $("tbody")
                 .append(
                     `<tr class="tr text-nowrap" data-href="invoices/view-invoice/${invoice.id}">
-                    <td><input class="form-check-input" type="checkbox"></td>
+                    <td><input class="form-check-input checks" name="checks" type="checkbox" id="${invoice.id}"></td>
                     <td>${invoice.number}</td>
                     <td>${getStatusSpan(invoice.status)}</td>
                     <td>${invoice.creationDate}</td>
@@ -83,7 +103,7 @@ function drawTable(response) {
     }
 }
 function addListenerToRow() {
-    $('tr[data-href] td:not(:last-child)').on('click', function () {
+    $('tr[data-href] td:not(:last-child) td:not(:first-child)').on('click', function () {
         window.location = $(this).parent().attr('data-href');
     })
 }
@@ -276,11 +296,50 @@ function deleteEntry() {
         error: function (errorResponse) {
             $('#deleteModal').modal('hide');
             if (errorResponse.status === 409) {
-                toastr.warning(deleteErrorMessage);
+                toastr.error(deleteErrorMessage);
             } else {
                 toastr.error(errorMessage);
             }
         }
     });
     $("#delete-button").prop('disabled', false);
+}
+
+$("#mainCheck").on("change", function () {
+    $(".checks").each(function () {
+        $(this).prop("checked", !$(this).is(":checked"));
+    });
+});
+
+$("#delete-invoices").on("click", function () {
+    let invoiceIds = [];
+    $("input[name=checks]:checked").each(function () {
+        invoiceIds.push($(this).attr("id"));
+    });
+    deleteInvoices(invoiceIds);
+});
+function deleteInvoices(invoiceIds) {
+    if(invoiceIds.length != 0) {
+        blockCardDody();
+        $.ajax({
+            type: "GET",
+            url: "invoices/delete-invoices",
+            data: {
+                invoiceIds: invoiceIds
+            },
+            success: function () {
+                toastr.success(deleteSuccessful);
+                getInvoices(0)
+            },
+            error: function (errorResponse) {
+                if (errorResponse.status === 409) {
+                    toastr.error(deleteErrorMessage);
+                } else {
+                    toastr.error(errorMessage);
+                }
+            }
+        });
+    } else{
+        toastr.warning(chooseInvoice);
+    }
 }

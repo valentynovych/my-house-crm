@@ -27,10 +27,7 @@ import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.example.myhouse24admin.specification.InvoiceItemSpecification.byInvoiceId;
 import static com.example.myhouse24admin.specification.InvoiceSpecification.*;
@@ -216,5 +213,22 @@ public class InvoiceServiceImpl implements InvoiceService {
             logger.info("deleteInvoice - Invoice was deleted");
             return true;
         }
+    }
+
+    @Override
+    public boolean deleteInvoices(Long[] invoiceIds) {
+        logger.info("deleteInvoices - Deleting invoices by ids %s".formatted(Arrays.toString(invoiceIds)));
+        List<Invoice> invoices = invoiceRepo.findAllById(List.of(invoiceIds));
+        for(Invoice invoice: invoices){
+            if(invoice.getPaid().compareTo(BigDecimal.valueOf(0)) != 0){
+                logger.info("deleteInvoices - Invoice has paid");
+                return false;
+            } else {
+                invoice.setDeleted(true);
+                invoiceRepo.save(invoice);
+            }
+        }
+        logger.info("deleteInvoices - Invoices were deleted");
+        return true;
     }
 }

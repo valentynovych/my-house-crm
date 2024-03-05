@@ -155,4 +155,14 @@ public class InvoiceController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+    @GetMapping("/delete-invoices")
+    public @ResponseBody ResponseEntity<?> deleteInvoices(@RequestParam(name = "invoiceIds[]", required = false) Long[] invoiceIds) {
+        boolean deleted = invoiceService.deleteInvoices(invoiceIds);
+        if(deleted) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
 }

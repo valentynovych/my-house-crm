@@ -87,7 +87,7 @@
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <a class="dropdown-item" href="javascript:void(0)" id="export-to-exel">
+                            <a class="dropdown-item" href="javascript:void(0)" id="delete-invoices">
                                 <span th:text="#{general-button-delete}"></span>
                             </a>
                         </li>
@@ -105,7 +105,7 @@
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr class="table-primary text-center">
-                    <th><input class="form-check-input" type="checkbox" value="" id="delete"></th>
+                    <th><input class="form-check-input" type="checkbox" value="" id="mainCheck"></th>
                     <th th:text="#{personal-accounts-label-account-number}"></th>
                     <th th:text="#{personal-accounts-label-status}"></th>
                     <th th:text="#{meter-readings-date}"></th>
@@ -174,5 +174,7 @@
     const modalCloseButton = [[#{general-button-close}]];
     const deleteSuccessful = [[#{toastr-delete-message}]];
     const deleteErrorMessage = [[#{invoices-delete-error-message}]];
+    const currency = [[#{general-currency}]];
+    const chooseInvoice = [[#{invoices-choose-invoice}]];
 </script>
 </html>
