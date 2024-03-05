@@ -101,12 +101,7 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public StaffResponse getStaffById(Long staffId) {
         logger.info("getStaffById() -> Start with id: " + staffId);
-        Optional<Staff> byId = staffRepo.findById(staffId);
-        Staff staff = byId.orElseThrow(() -> {
-            logger.error(String.format("Staff with id: %s not found", staffId));
-            return new EntityNotFoundException(String.format("Staff with id: %s not found", staffId));
-        });
-
+        Staff staff = findStaffById(staffId);
         StaffResponse staffResponse = staffMapper.staffToStaffResponse(staff);
         logger.info("getStaffById() -> Exit, return staff with id: " + staffResponse.id());
         return staffResponse;
@@ -115,47 +110,54 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public void updateStaffById(Long staffId, StaffEditRequest staffEditRequest) {
         logger.info("updateStaffById() -> start, with id: " + staffId);
-        Optional<Staff> byId = staffRepo.findById(staffId);
-        if (byId.isEmpty()) {
-            logger.error(String.format("updateStaffById() -> Staff with id: %s not found", staffId));
-            throw new EntityNotFoundException(String.format("Staff with id: %s not found", staffId));
+        Staff staff = findStaffById(staffId);
+        if (staffEditRequest.password() != null) {
+            logger.info("updateStaffById() -> Start update entity with new password");
+            staffMapper.updateWithPassword(staff, staffEditRequest);
+            staff.setPassword(passwordEncoder.encode(staffEditRequest.password()));
+            // todo send notification to staff email
         } else {
-            logger.info(String.format("updateStaffById() -> Staff with id: %s is present", staffId));
-            Staff staff = byId.get();
-            if (staffEditRequest.password() != null) {
-                logger.info("updateStaffById() -> Start update entity with new password");
-                staffMapper.updateWithPassword(staff, staffEditRequest);
-                staff.setPassword(passwordEncoder.encode(staffEditRequest.password()));
-                // todo send notification to staff email
-            } else {
-                logger.info("updateStaffById() -> Start update entity without password");
-                staffMapper.updateWithoutPassword(staff, staffEditRequest);
-            }
-            staffRepo.save(staff);
-            logger.info("updateStaffById() -> exit, success update Staff with id: " + staffId);
+            logger.info("updateStaffById() -> Start update entity without password");
+            staffMapper.updateWithoutPassword(staff, staffEditRequest);
         }
+        staffRepo.save(staff);
+        logger.info("updateStaffById() -> exit, success update Staff with id: " + staffId);
     }
 
     @Override
     public boolean deleteStaffById(Long staffId) {
-        Optional<Staff> byId = staffRepo.findById(staffId);
-        if (byId.isPresent()) {
-            Staff staff = byId.get();
-            if (!staff.getRole().getName().equals("DIRECTOR")) {
-                staff.setStatus(StaffStatus.DISABLED);
-                staff.setDeleted(true);
-                staffRepo.save(staff);
-                return true;
-            }
+        logger.info("deleteStaffById() -> Start with id: " + staffId);
+        Staff staff = findStaffById(staffId);
+        if (!staff.getRole().getName().equals("DIRECTOR")) {
+            staff.setStatus(StaffStatus.DISABLED);
+            staff.setDeleted(true);
+            staffRepo.save(staff);
+            logger.info("deleteStaffById() -> Exit, success delete staff with id: " + staffId);
+            return true;
         }
+        logger.info("deleteStaffById() -> Exit, failed delete staff with id: " + staffId);
         return false;
     }
 
     @Override
     public Staff getCurrentStaff() {
+        logger.info("getCurrentStaff() -> Start");
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Staff> byEmail = staffRepo.findByEmail(name);
-        return byEmail.orElseThrow(() -> new EntityNotFoundException(String.format("Staff by email: %s, not found", name)));
+        Staff staff = byEmail.orElseThrow(() -> new EntityNotFoundException(String.format("Staff by email: %s, not found", name)));
+        logger.info("getCurrentStaff() -> Exit, return staff with email: " + name);
+        return staff;
+    }
+
+    private Staff findStaffById(Long staffId) {
+        logger.info("findStaffById() -> Start with id: " + staffId);
+        Optional<Staff> byId = staffRepo.findById(staffId);
+        Staff staff = byId.orElseThrow(() -> {
+            logger.error(String.format("Staff with id: %s not found", staffId));
+            return new EntityNotFoundException(String.format("Staff with id: %s not found", staffId));
+        });
+        logger.info("findStaffById() -> Exit, return staff with id: " + staffId);
+        return staff;
     }
 
     private boolean isTableEmpty() {
