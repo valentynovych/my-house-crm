@@ -293,6 +293,7 @@ function deleteEntry() {
             }
         }
     });
+    $("#delete-button").prop('disabled', true);
 }
 function addListenerToRow() {
     $('tr[data-href] td:not(:last-child)').on('click', function () {

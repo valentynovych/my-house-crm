@@ -146,4 +146,13 @@ public class InvoiceController {
     public @ResponseBody ViewInvoiceResponse getInvoiceForView(@PathVariable Long id) {
         return invoiceService.getInvoiceResponseForView(id);
     }
+    @GetMapping("/delete/{id}")
+    public @ResponseBody ResponseEntity<?> deleteInvoice(@PathVariable Long id) {
+        boolean deleted = invoiceService.deleteInvoice(id);
+        if(deleted) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
 }

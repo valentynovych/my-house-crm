@@ -202,4 +202,19 @@ public class InvoiceServiceImpl implements InvoiceService {
         logger.info("getInvoiceResponseForView - Invoice response was got");
         return viewInvoiceResponse;
     }
+
+    @Override
+    public boolean deleteInvoice(Long id) {
+        logger.info("deleteInvoice - Deleting invoice by id "+id);
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
+        if(invoice.getPaid().compareTo(BigDecimal.valueOf(0)) != 0){
+            logger.info("deleteInvoice - Invoice has paid");
+            return false;
+        } else {
+            invoice.setDeleted(true);
+            invoiceRepo.save(invoice);
+            logger.info("deleteInvoice - Invoice was deleted");
+            return true;
+        }
+    }
 }
