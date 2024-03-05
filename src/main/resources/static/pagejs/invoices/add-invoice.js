@@ -639,6 +639,7 @@ function appendInvoiceFields(formData) {
     let house = $("#house").val() == null? '': $("#house").val();
     formData.append("house",house);
     formData.append("isProcessed",$("#processed").is(':checked'));
+    formData.append("totalPrice",$("#totalPrice").text());
 }
 function sendData(formData) {
     blockCardDody();

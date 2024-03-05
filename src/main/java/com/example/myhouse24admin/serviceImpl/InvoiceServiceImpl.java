@@ -94,12 +94,19 @@ public class InvoiceServiceImpl implements InvoiceService {
     public void createInvoice(InvoiceRequest invoiceRequest) {
         logger.info("createInvoice - Creating new invoice "+invoiceRequest.toString());
         Apartment apartment = apartmentRepo.findById(invoiceRequest.getApartmentId()).orElseThrow(()-> new EntityNotFoundException("Apartment was not found by id "+invoiceRequest.getApartmentId()));
+        setNewApartmentBalance(apartment, invoiceRequest);
         String number = createNumber();
         Invoice invoice = invoiceMapper.invoiceRequestToInvoice(invoiceRequest,
                 apartment, number);
         Invoice savedInvoice = invoiceRepo.save(invoice);
         saveInvoiceItems(invoiceRequest.getItemRequests(), savedInvoice);
         logger.info("createInvoice - Invoice was created");
+    }
+
+    private void setNewApartmentBalance(Apartment apartment, InvoiceRequest invoiceRequest) {
+        BigDecimal remainder = invoiceRequest.getPaid().subtract(invoiceRequest.getTotalPrice());
+        BigDecimal newBalance = apartment.getBalance().add(remainder);
+        apartment.setBalance(newBalance);
     }
 
     @Override
@@ -167,6 +174,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         logger.info("updateInvoice - Updating invoice with id "+id+" "+invoiceRequest.toString());
         Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
         Apartment apartment = apartmentRepo.findById(invoiceRequest.getApartmentId()).orElseThrow(()-> new EntityNotFoundException("Apartment was not found by id "+invoiceRequest.getApartmentId()));
+        setNewApartmentBalance(apartment, invoiceRequest);
         invoiceMapper.updateInvoice(invoice, invoiceRequest, apartment);
         List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
         invoiceItemRepo.deleteAll(invoiceItems);
