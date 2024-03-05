@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.service;
 
+import com.example.myhouse24admin.model.messages.MessageResponse;
 import com.example.myhouse24admin.model.messages.MessageSendRequest;
 import com.example.myhouse24admin.model.messages.MessageTableResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,4 +14,6 @@ public interface MessageService {
     Page<MessageTableResponse> getMessages(int page, int pageSize, Map<String, String> searchParams);
 
     void deleteMessages(Long[] messagesToDelete);
+
+    MessageResponse getMessageById(Long messageId);
 }

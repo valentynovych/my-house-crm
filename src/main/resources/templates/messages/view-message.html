@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{messages-label-message}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{messages-label-message}"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{../../messages}" th:text="#{menu-item-messages}"></a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{messages-label-message}"></span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <div class="message-header d-flex justify-content-between">
+            <div class="subject-sender">
+                <h4 id="subject"></h4>
+                <div class="message-sender">
+                    <span class="fw-bold" th:text="#{messages-label-divader-from}"></span>
+                    <span id="staff"></span>
+                </div>
+            </div>
+            <div class="sendDate align-content-end">
+                <span id="sendDate"></span>
+            </div>
+        </div>
+        <hr>
+        <div class="message-text">
+
+        </div>
+        <hr>
+        <div class="d-flex">
+            <button type="button" class="btn btn-outline-danger" th:text="#{general-button-delete}"
+                    data-bs-toggle="modal" data-bs-target="#modalToDelete"></button>
+        </div>
+
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{messages-modal-delete-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete"
+                            th:text="#{general-button-delete}" data-bs-dismiss="modal"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/messages/view-message.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    const successMessageOnDelete = /*[[#{messages-message-delete-success}]]*/ 'default'
+    const messagesNotSelectedItem = /*[[#{messages-message-not-selected}]]*/ 'default'
+
+</script>
+</html>

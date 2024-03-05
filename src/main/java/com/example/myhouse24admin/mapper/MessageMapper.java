@@ -3,6 +3,7 @@ package com.example.myhouse24admin.mapper;
 import com.example.myhouse24admin.entity.ApartmentOwner;
 import com.example.myhouse24admin.entity.Message;
 import com.example.myhouse24admin.entity.Staff;
+import com.example.myhouse24admin.model.messages.MessageResponse;
 import com.example.myhouse24admin.model.messages.MessageSendRequest;
 import com.example.myhouse24admin.model.messages.MessageTableResponse;
 import org.mapstruct.InjectionStrategy;
@@ -13,7 +14,8 @@ import java.util.List;
 
 @Mapper(componentModel = "spring",
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-        uses = ApartmentOwnerMapper.class)
+        uses = {ApartmentOwnerMapper.class,
+                StaffMapper.class})
 public interface MessageMapper {
 
     @Mapping(target = "id", ignore = true)
@@ -26,4 +28,6 @@ public interface MessageMapper {
     List<MessageTableResponse> messageListToMessageResponseTableList(List<Message> messages);
 
     MessageTableResponse messageToMessageResponseTable(Message message);
+
+    MessageResponse messageToMessageResponse(Message message);
 }

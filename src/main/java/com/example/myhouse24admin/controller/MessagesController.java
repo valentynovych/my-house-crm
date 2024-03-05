@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.controller;
 
+import com.example.myhouse24admin.model.messages.MessageResponse;
 import com.example.myhouse24admin.model.messages.MessageSendRequest;
 import com.example.myhouse24admin.model.messages.MessageTableResponse;
 import com.example.myhouse24admin.service.MessageService;
@@ -34,6 +35,11 @@ public class MessagesController {
         return new ModelAndView("messages/new-message");
     }
 
+    @GetMapping("view-message/{messageId}")
+    public ModelAndView viewNewMessages(@PathVariable Long messageId) {
+        return new ModelAndView("messages/view-message");
+    }
+
     @PostMapping("new-message")
     public ResponseEntity<?> sendNewMessage(@ModelAttribute @Valid MessageSendRequest messageSendRequest, HttpServletRequest request) {
         messageService.sendNewMessage(messageSendRequest, request);
@@ -45,6 +51,12 @@ public class MessagesController {
                                                        @RequestParam int pageSize,
                                                        @RequestParam Map<String, String> searchParams) {
         Page<MessageTableResponse> responsePage = messageService.getMessages(page, pageSize, searchParams);
+        return new ResponseEntity<>(responsePage, HttpStatus.OK);
+    }
+
+    @GetMapping("get-message/{messageId}")
+    public @ResponseBody ResponseEntity<?> getMessage(@PathVariable Long messageId) {
+        MessageResponse responsePage = messageService.getMessageById(messageId);
         return new ResponseEntity<>(responsePage, HttpStatus.OK);
     }
 

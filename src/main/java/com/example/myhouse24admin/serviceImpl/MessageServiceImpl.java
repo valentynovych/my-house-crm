@@ -5,6 +5,7 @@ import com.example.myhouse24admin.entity.ApartmentOwner;
 import com.example.myhouse24admin.entity.Message;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.mapper.MessageMapper;
+import com.example.myhouse24admin.model.messages.MessageResponse;
 import com.example.myhouse24admin.model.messages.MessageSendRequest;
 import com.example.myhouse24admin.model.messages.MessageTableResponse;
 import com.example.myhouse24admin.repository.ApartmentOwnerRepo;
@@ -15,7 +16,10 @@ import com.example.myhouse24admin.service.MessageService;
 import com.example.myhouse24admin.service.StaffService;
 import com.example.myhouse24admin.specification.ApartmentSpecification;
 import com.example.myhouse24admin.specification.MessageSpecification;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +34,7 @@ public class MessageServiceImpl implements MessageService {
     private final MessageMapper messageMapper;
     private final MailService mailService;
     private final ApartmentOwnerRepo apartmentOwnerRepo;
+    private final Logger logger = LogManager.getLogger(MessageServiceImpl.class);
 
     public MessageServiceImpl(MessageRepo messageRepo,
                               StaffService staffService,
@@ -74,6 +79,22 @@ public class MessageServiceImpl implements MessageService {
         ownersByMessagesIn.forEach(apartmentOwner -> apartmentOwner.getMessages().removeAll(allById));
         apartmentOwnerRepo.saveAll(ownersByMessagesIn);
         messageRepo.deleteAllById(ids);
+    }
+
+    @Override
+    public MessageResponse getMessageById(Long messageId) {
+        Message message = findMessageById(messageId);
+        MessageResponse messageResponse = messageMapper.messageToMessageResponse(message);
+        return messageResponse;
+    }
+
+    private Message findMessageById(Long messageId) {
+        Optional<Message> byId = messageRepo.findById(messageId);
+        Message message = byId.orElseThrow(() -> {
+            logger.error("findMessageById() -> Message with id: {} not found", messageId);
+            return new EntityNotFoundException(String.format("Message with id: %s not found", messageId));
+        });
+        return message;
     }
 
     private Page<Message> findMessagesBy(int page, int pageSize, Map<String, String> searchParams) {
