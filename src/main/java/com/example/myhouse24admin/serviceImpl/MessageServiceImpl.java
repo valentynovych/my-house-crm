@@ -6,6 +6,7 @@ import com.example.myhouse24admin.entity.Message;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.mapper.MessageMapper;
 import com.example.myhouse24admin.model.messages.MessageSendRequest;
+import com.example.myhouse24admin.model.messages.MessageTableResponse;
 import com.example.myhouse24admin.repository.ApartmentOwnerRepo;
 import com.example.myhouse24admin.repository.MessageRepo;
 import com.example.myhouse24admin.service.ApartmentService;
@@ -13,14 +14,12 @@ import com.example.myhouse24admin.service.MailService;
 import com.example.myhouse24admin.service.MessageService;
 import com.example.myhouse24admin.service.StaffService;
 import com.example.myhouse24admin.specification.ApartmentSpecification;
+import com.example.myhouse24admin.specification.MessageSpecification;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class MessageServiceImpl implements MessageService {
@@ -54,6 +53,34 @@ public class MessageServiceImpl implements MessageService {
             mailService.sendMessage(owner.getEmail(), messageSendRequest.getSubject(), messageSendRequest.getText(), currentStaff, request);
         }
         apartmentOwnerRepo.saveAll(apartmentOwnerForSendMessage);
+    }
+
+    @Override
+    public Page<MessageTableResponse> getMessages(int page, int pageSize, Map<String, String> searchParams) {
+        Page<Message> messagesBy = findMessagesBy(page, pageSize, searchParams);
+        List<MessageTableResponse> responseList = messageMapper.messageListToMessageResponseTableList(messagesBy.getContent());
+        Page<MessageTableResponse> responsePage = new PageImpl<>(responseList, messagesBy.getPageable(), messagesBy.getTotalElements());
+        return responsePage;
+    }
+
+    @Override
+    public void deleteMessages(Long[] messagesToDelete) {
+        List<Long> ids = Arrays.stream(messagesToDelete).toList();
+        List<Message> allById = messageRepo.findAllById(ids);
+        if (ids.size() != allById.size()) {
+            throw new IllegalArgumentException("Input array size not equals to find Messages array");
+        }
+        List<ApartmentOwner> ownersByMessagesIn = apartmentOwnerRepo.findApartmentOwnersByMessagesIn(ids);
+        ownersByMessagesIn.forEach(apartmentOwner -> apartmentOwner.getMessages().removeAll(allById));
+        apartmentOwnerRepo.saveAll(ownersByMessagesIn);
+        messageRepo.deleteAllById(ids);
+    }
+
+    private Page<Message> findMessagesBy(int page, int pageSize, Map<String, String> searchParams) {
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "sendDate"));
+        MessageSpecification specification = new MessageSpecification(searchParams);
+        Page<Message> all = messageRepo.findAll(specification, pageable);
+        return all;
     }
 
     private List<ApartmentOwner> findApartmentOwnerForSendMessage(MessageSendRequest messageSendRequest) {

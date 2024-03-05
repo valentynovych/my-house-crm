@@ -23,7 +23,7 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "staff_id", referencedColumnName = "id", nullable = false)
     private Staff staff;
-    @ManyToMany(mappedBy = "messages")
+    @ManyToMany(mappedBy = "messages", cascade = {CascadeType.DETACH, CascadeType.REFRESH})
     private List<ApartmentOwner> apartmentOwners = new ArrayList<>();
 
     public Long getId() {
