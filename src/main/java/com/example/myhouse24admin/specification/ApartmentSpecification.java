@@ -25,6 +25,7 @@ public class ApartmentSpecification implements Specification<Apartment> {
         List<Predicate> predicates = new ArrayList<>();
         searchParams.forEach((key, value) -> {
             switch (key) {
+                case "apartment" -> predicates.add(criteriaBuilder.equal(root.get("id"), Long.valueOf(value)));
                 case "apartmentNumber" ->
                         predicates.add(criteriaBuilder.like(root.get("apartmentNumber"), "%" + value + "%"));
                 case "house" -> {
@@ -57,6 +58,7 @@ public class ApartmentSpecification implements Specification<Apartment> {
                     }
                 }
             }
+            predicates.add(criteriaBuilder.isFalse(root.get("deleted")));
         });
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }

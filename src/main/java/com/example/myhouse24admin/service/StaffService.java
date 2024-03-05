@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.service;
 
 import com.example.myhouse24admin.entity.Role;
+import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.staff.StaffEditRequest;
 import com.example.myhouse24admin.model.staff.StaffResponse;
 import org.springframework.data.domain.Page;
@@ -24,4 +25,6 @@ public interface StaffService {
     void updateStaffById(Long staffId, StaffEditRequest staffEditRequest);
 
     boolean deleteStaffById(Long staffId);
+
+    Staff getCurrentStaff();
 }

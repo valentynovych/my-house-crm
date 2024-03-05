@@ -45,7 +45,7 @@ public class ApartmentOwner {
     private boolean deleted;
     @Enumerated(EnumType.STRING)
     private Language language;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "owners_messages",
             joinColumns = { @JoinColumn(name = "owner_id") },

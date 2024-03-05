@@ -16,7 +16,7 @@ public class Message {
     private Instant sendDate;
     @Column(length = 100, nullable = false)
     private String subject;
-    @Column(length = 500, nullable = false)
+    @Column(length = 3000, nullable = false)
     private String text;
     @Column(nullable = false)
     private boolean deleted;
