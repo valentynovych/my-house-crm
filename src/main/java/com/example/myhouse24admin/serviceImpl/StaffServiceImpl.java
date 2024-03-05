@@ -14,12 +14,12 @@ import com.example.myhouse24admin.specification.StaffSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -149,6 +149,13 @@ public class StaffServiceImpl implements StaffService {
             }
         }
         return false;
+    }
+
+    @Override
+    public Staff getCurrentStaff() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<Staff> byEmail = staffRepo.findByEmail(name);
+        return byEmail.orElseThrow(() -> new EntityNotFoundException(String.format("Staff by email: %s, not found", name)));
     }
 
     private boolean isTableEmpty() {

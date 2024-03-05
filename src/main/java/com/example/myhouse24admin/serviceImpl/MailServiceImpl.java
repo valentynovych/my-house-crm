@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.serviceImpl;
 
+import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.authentication.EmailRequest;
 import com.example.myhouse24admin.service.MailService;
 import com.sendgrid.Method;
@@ -35,63 +36,95 @@ public class MailServiceImpl implements MailService {
     }
 
     @Async
-
     @Override
     public void sendToken(String token, EmailRequest emailRequest, HttpServletRequest httpRequest) {
-        logger.info("sendToken() - Sending token "+token+" to email "+emailRequest.email());
-        Email from = new Email(sender);
+        logger.info("sendToken() - Sending token " + token + " to email " + emailRequest.email());
         String subject = "Встановлення нового паролю";
-        Email toEmail = new Email(emailRequest.email());
-        Content content = new Content("text/html", buildContent(token,httpRequest));
-        Mail mail = new Mail(from, subject, toEmail, content);
-        Request request = new Request();
+        Content content = new Content("text/html", buildContent(token, httpRequest));
+        sendMail(subject, emailRequest.email(), content);
+        logger.info("sendToken() - Token was sent");
+    }
+
+    @Override
+    public void sendNewPassword(String to, String newPassword) {
+        logger.info("sendToken() - Sending password " + newPassword + " to email " + to);
+        String subject = "Новий пароль";
+        Content content = new Content("text/html", buildPasswordContent(newPassword));
+        sendMail(subject, to, content);
+        logger.info("sendToken() - Success send new password to email {}", to);
+    }
+
+    @Override
+    public void sendMessage(String to, String subject, String messageHtml, Staff staff, HttpServletRequest request) {
+        logger.info("sendMessage() - start send message to: {}", to);
+        Content content = new Content("text/html", buildMessageContent(messageHtml, subject, staff, request));
+        sendMail(subject, to, content);
+        logger.info("sendMessage() -> message to: {}, has been send", to);
+    }
+
+    private void sendMail(String subject, String to, Content content) {
+        logger.info("sendMail() - start");
+        Mail mail = new Mail(getEmailFromAddress(sender), subject, getEmailFromAddress(to), content);
+
         try {
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
+            Request request = buildRequest(mail);
+            logger.info("sendMail() - start sending mail to: {}", to);
             sendGrid.api(request);
-            logger.info("sendToken() - Token was sent");
+            logger.info("sendMail() - Mail has been send");
         } catch (IOException ex) {
             logger.error(ex.getMessage());
         }
     }
+
+    private Request buildRequest(Mail mail) throws IOException {
+        logger.info("buildRequest() -> Start");
+        Request request = new Request();
+        request.setMethod(Method.POST);
+        request.setEndpoint("mail/send");
+        request.setBody(mail.build());
+        logger.info("buildRequest() -> End, success build");
+        return request;
+    }
+
+    private Email getEmailFromAddress(String address) {
+        return new Email(address);
+    }
+
     private String buildContent(String token, HttpServletRequest httpRequest) {
         String link = formLink(token, httpRequest);
         Context context = new Context();
         context.setVariable("link", link);
         return templateEngine.process("email/passwordResetTokenEmailTemplate", context);
     }
-    private String formLink(String token, HttpServletRequest httpRequest){
+
+    private String formLink(String token, HttpServletRequest httpRequest) {
         String fullUrl = ServletUriComponentsBuilder.fromRequestUri(httpRequest).build().toUriString();
         int index = fullUrl.lastIndexOf("/");
         String baseUrl = fullUrl.substring(0, index);
-        String link = baseUrl +"/changePassword?token="+token;
+        String link = baseUrl + "/changePassword?token=" + token;
         return link;
-    }
-
-    @Override
-    public void sendNewPassword(String to, String newPassword) {
-        logger.info("sendToken() - Sending password "+newPassword+" to email "+to);
-        Email from = new Email(sender);
-        String subject = "Новий пароль";
-        Email toEmail = new Email(to);
-        Content content = new Content("text/html", buildPasswordContent(newPassword));
-        Mail mail = new Mail(from, subject, toEmail, content);
-        Request request = new Request();
-        try {
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
-            sendGrid.api(request);
-            logger.info("sendToken() - New password was sent");
-        } catch (IOException ex) {
-            logger.error(ex.getMessage());
-        }
     }
 
     private String buildPasswordContent(String newPassword) {
         Context context = new Context();
         context.setVariable("password", newPassword);
         return templateEngine.process("email/newPasswordTemplate", context);
+    }
+
+    private String buildMessageContent(String messageContent, String subject, Staff staff, HttpServletRequest request) {
+        Context context = new Context();
+        request.getRequestURI();
+        context.setVariable("messageContent", messageContent);
+        context.setVariable("subject", subject);
+        context.setVariable("staff", staff);
+        context.setVariable("link", getLinkToUserMessages(request));
+        return templateEngine.process("email/sendMessageTemplate", context);
+    }
+
+    private String getLinkToUserMessages(HttpServletRequest request) {
+        StringBuffer requestURL = request.getRequestURL();
+        String link = requestURL.substring(0, requestURL.lastIndexOf("admin"));
+        link += "user/messages";
+        return link;
     }
 }

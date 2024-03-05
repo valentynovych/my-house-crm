@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{menu-item-messages}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{messages-label-new-message}"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{../messages}" th:text="#{menu-item-messages}"></a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{messages-label-new-message}"></span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <div class="form-wrap">
+            <form id="message-form">
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label" th:text="#{messages-label-message-theme}" for="subject"></label>
+                        <input type="text" class="form-control" id="subject" name="subject"
+                               th:placeholder="#{messages-label-message-theme}">
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label class="form-label" th:text="#{messages-label-message-text}" for="text-message"></label>
+                        <div id="text-message"></div>
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <span class="h5" th:text="#{messages-label-how-to-send}"></span>
+                            </div>
+                            <div class="form-check px-1 mb-2">
+                                <input class="form-check-input checked-all m-auto" checked="" type="checkbox"
+                                       id="forArrears" name="forArrears">
+                                <label class="form-check-label ms-2"
+                                       for="forArrears" th:text="#{messages-label-owner-with-arrears}">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-2 house-wrap">
+                            <label class="form-label" for="house" th:text="#{messages-label-house}"></label>
+                            <select class="select2 form-select" id="house" name="house">
+                                <option value="0" th:text="#{messages-label-send-to-all}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 mb-2 section-wrap">
+                            <label class="form-label" for="section" th:text="#{messages-label-section}"></label>
+                            <select class="select2 form-select" id="section" name="section" disabled>
+                                <option value="0" th:text="#{messages-label-send-to-all}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 mb-2 floor-wrap">
+                            <label class="form-label" for="floor" th:text="#{messages-label-floor}"></label>
+                            <select class="select2 form-select" id="floor" name="floor" disabled>
+                                <option value="0" th:text="#{messages-label-send-to-all}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 mb-2 apartment-wrap">
+                            <label class="form-label" for="apartment" th:text="#{messages-label-apartment}"></label>
+                            <select class="select2 form-select" id="apartment" name="apartment" disabled>
+                                <option value="0" th:text="#{messages-label-send-to-all}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary button-send"
+                                th:text="#{messages-button-send-message}"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/messages/new-message.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    const labelTextMessage = [[#{messages-label-message-text}]];
+
+    const tableShow = [[#{table-show}]];
+    const tableShowing = [[#{table-showing}]];
+    const tableEntries = [[#{table-entries}]];
+    const tableOf = [[#{table-of}]];
+    const emptyTableLabel = /*[[#{general-label-empty-table}]]*/ 'default';
+
+    const successMessageOnDelete = /*[[#{cash-register-message-delete-success}]]*/ 'default'
+    const errorMessageOnDelete = /*[[#{cash-register-message-delete-error}]]*/ 'default'
+
+</script>
+</html>
