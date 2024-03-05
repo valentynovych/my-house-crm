@@ -78,7 +78,7 @@ public class MeterReadingController {
 
     @GetMapping("/get-services")
     public @ResponseBody Page<ServiceNameResponse> getServices(SelectSearchRequest selectSearchRequest) {
-        return servicesService.getServicesForSelect(selectSearchRequest);
+        return servicesService.getServicesForMeterReadingSelect(selectSearchRequest);
     }
     @PostMapping("/add")
     public ResponseEntity<?> createMeterReading(@RequestParam(name="notReturn", required = false) boolean notReturn,

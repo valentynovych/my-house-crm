@@ -12,5 +12,8 @@ public interface ServiceSpecification {
         return (root, query, builder) ->
                 builder.like(builder.upper(root.get("name")), "%"+name.toUpperCase()+"%");
     }
-
+    static Specification<Service> byShowInMeter(){
+        return (root, query, builder) ->
+                builder.equal(root.get("showInMeter"), true);
+    }
 }

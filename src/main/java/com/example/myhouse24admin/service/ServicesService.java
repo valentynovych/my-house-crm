@@ -18,5 +18,7 @@ public interface ServicesService {
 
     ServiceResponse getServiceById(Long serviceId);
     Page<ServiceNameResponse> getServicesForSelect(SelectSearchRequest selectSearchRequest);
+    Page<ServiceNameResponse> getServicesForMeterReadingSelect(SelectSearchRequest selectSearchRequest);
+
     UnitNameResponse getUnitOfMeasurementNameByServiceId(Long serviceId);
 }

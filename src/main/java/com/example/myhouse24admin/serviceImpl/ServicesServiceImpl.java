@@ -22,8 +22,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.myhouse24admin.specification.ServiceSpecification.byDeleted;
-import static com.example.myhouse24admin.specification.ServiceSpecification.byNameLike;
+import static com.example.myhouse24admin.specification.ServiceSpecification.*;
 
 @Component
 public class ServicesServiceImpl implements ServicesService {
@@ -89,19 +88,31 @@ public class ServicesServiceImpl implements ServicesService {
     public Page<ServiceNameResponse> getServicesForSelect(SelectSearchRequest selectSearchRequest) {
         logger.info("getServicesForSelect - Getting services name responses for select, " + selectSearchRequest.toString());
         Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
-        Page<Service> services = getFilteredServicesForSelect(selectSearchRequest.search(), pageable);
+        Page<Service> services = servicesRepo.findAll(getServicesSpecification(selectSearchRequest.search()), pageable);
         List<ServiceNameResponse> serviceNameResponses = mapper.serviceListToServiceNameResponse(services.getContent());
         Page<ServiceNameResponse> serviceNameResponsePage = new PageImpl<>(serviceNameResponses, pageable, services.getTotalElements());
         logger.info("getServicesForSelect - Services name responses were got");
         return serviceNameResponsePage;
     }
 
-    private Page<Service> getFilteredServicesForSelect(String search, Pageable pageable) {
+    @Override
+    public Page<ServiceNameResponse> getServicesForMeterReadingSelect(SelectSearchRequest selectSearchRequest) {
+        logger.info("getServicesForMeterSelect - Getting services name responses for meter reading select, " + selectSearchRequest.toString());
+        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Page<Service> services = servicesRepo.findAll(getServicesSpecification(selectSearchRequest.search())
+                .and(byShowInMeter()), pageable);
+        List<ServiceNameResponse> serviceNameResponses = mapper.serviceListToServiceNameResponse(services.getContent());
+        Page<ServiceNameResponse> serviceNameResponsePage = new PageImpl<>(serviceNameResponses, pageable, services.getTotalElements());
+        logger.info("getServicesForMeterSelect - Services name responses were got");
+        return serviceNameResponsePage;
+    }
+
+    private Specification<Service> getServicesSpecification(String search) {
         Specification<Service> serviceSpecification = Specification.where(byDeleted());
         if(!search.isEmpty()){
             serviceSpecification = serviceSpecification.and(byNameLike(search));
         }
-        return servicesRepo.findAll(serviceSpecification, pageable);
+        return serviceSpecification;
     }
 
     @Override
