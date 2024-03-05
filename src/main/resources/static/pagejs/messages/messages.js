@@ -10,7 +10,7 @@ const topCheckbox = document.querySelector("#checked-all-top");
 const bottomCheckbox = document.querySelector("#checked-all-bottom");
 const $filterByText = $('#filter-by-text');
 
-$filterByText.on('change', function () {
+$filterByText.on('input', function () {
     byText = this.value;
     delayBeforeSearch();
 })
@@ -57,8 +57,7 @@ function getMessages(page) {
         type: 'get',
         success: function (response) {
             clearTableLine();
-            $(".card-footer").children().remove();
-            console.log(response);
+            $(".card-footer").empty();
             drawTable(response);
         },
         error: function (error) {
@@ -79,47 +78,30 @@ function checkAllChecked() {
 }
 
 function drawTable(result) {
-    function getRecipients(apartmentOwners) {
-        let recipientsLinks = '';
-        for (const owner of apartmentOwners) {
-            recipientsLinks += `<a href="owners/view-owner/${owner.id}">${owner.fullName}</a>, \n`;
-        }
-        return recipientsLinks.substring(0, recipientsLinks.length - 3);
-    }
-
-    function buildTextMessage(subject, text) {
-        let messageText = '';
-        messageText += `<span class="fw-bold subject">${subject}</span> - `
-        let lineText = text
-            .split(/<[^>]*>/)
-            .filter(value => !!value)
-            .join(' ');
-        messageText += `${lineText}`;
-        return messageText;
-    }
-
     if (result.content && result.content.length > 0) {
         for (const message of result.content) {
             const sendDate = new Date(message.sendDate * 1000).toLocaleString()
+            const recipientsLinks = message.apartmentOwners
+                .map(owner => `<a href="owners/view-owner/${owner.id}">${owner.fullName}</a>`)
+                .join(', ');
+            const lineText = message.text.replace(/<[^>]*>/g, ' ');
             $(`<tr data-href="messages/view-message/${message.id}" >
                 <td>
                     <input class="form-check-input m-auto" type="checkbox" 
                     id="to-delete-${message.id}" data-id="${message.id}">
                 </td>
-                <td>${getRecipients(message.apartmentOwners)}</td>
-                <td class="text-message cursor-pointer">${buildTextMessage(message.subject, message.text)}</td>
+                <td>${recipientsLinks}</td>
+                <td class="text-message cursor-pointer"><span class="fw-bold">${message.subject}</span> - ${lineText}</td>
                 <td class="cursor-pointer">${sendDate}</td>
                </tr>`
             ).appendTo("tbody");
             rowCount++;
         }
         addListenerToRow();
-
         $('input:checkbox[data-id]').on('change', function () {
             this.checked ? checkedInputs++ : checkedInputs--;
             checkAllChecked();
         });
-
     } else {
         $(`<tr>
             <td colspan="4" class="text-center fw-bold h4">${emptyTableLabel}</td>

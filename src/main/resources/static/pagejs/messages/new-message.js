@@ -210,13 +210,12 @@ $('.button-send').on('click', function () {
     blockCardDody();
 
     let formData = new FormData($('#message-form')[0]);
-    console.log($editorTextMessage.getContents());
     formData.set('text', $('.ql-editor').html());
     formData.set('textLength', $editorTextMessage.getLength());
 
-    for (const formDatum of formData.entries()) {
-        console.log(formDatum)
-    }
+    // for (const formDatum of formData.entries()) {
+    //     console.log(formDatum)
+    // }
 
     $.ajax({
         url: '',
@@ -225,7 +224,8 @@ $('.button-send').on('click', function () {
         contentType: false,
         data: formData,
         success: function (response) {
-            console.log(response)
+            toastr.success(successMessageOnSend);
+            setTimeout(() =>window.history.back(), 1000);
         },
         error: function (error) {
             printErrorMessageToField(error);

@@ -6,7 +6,6 @@ $(document).ready(function () {
         url: '../get-message/' + messageId,
         type: 'get',
         success: function (response) {
-            console.log(response);
             fill(response);
         },
         error: function (error) {
