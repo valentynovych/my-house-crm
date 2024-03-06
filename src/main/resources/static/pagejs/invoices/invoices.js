@@ -103,7 +103,7 @@ function drawTable(response) {
     }
 }
 function addListenerToRow() {
-    $('tr[data-href] td:not(:last-child) td:not(:first-child)').on('click', function () {
+    $('tr[data-href]').find('td').not(":last-child").not(':first-child').on('click', function () {
         window.location = $(this).parent().attr('data-href');
     })
 }
@@ -343,5 +343,52 @@ function deleteInvoices(invoiceIds) {
         });
     } else{
         toastr.warning(chooseInvoice);
+    }
+}
+
+$("#export-to-excel").on("click", function () {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    let name = "invoices-"+dd+"-"+mm+"-"+yyyy+".xlsx";
+    let table = getTable();
+    var workbook = XLSX.utils.book_new();
+    var worksheet = XLSX.utils.aoa_to_sheet(table);
+    styleTable(worksheet);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Invoices Data Table");
+    XLSX.writeFile(workbook, name, {bookType: 'xlsx', type: 'base64'});
+
+});
+
+function getTable() {
+    let table = [];
+    let head = [];
+    $('#myTHead tr').find('th').not(':first-child').not(':last-child').each(function () {
+        head.push($(this).text());
+    });
+    table.push(head);
+    $('tr[data-href]').each(function () {
+        let row = []
+        $(this).find('td').not(":last-child").not(':first-child').each(function () {
+            row.push($(this).text());
+        });
+        table.push(row);
+    });
+    return table;
+}
+
+function styleTable(worksheet) {
+    let DEF_ColW = 20;
+    worksheet['!cols'] = [{ width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }];
+    const colNames = ['A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', "I1"];
+    for (const itm of colNames) {
+        if (worksheet[itm]) {
+            worksheet[itm].s = {
+                font: {
+                    bold: true
+                }
+            };
+        }
     }
 }

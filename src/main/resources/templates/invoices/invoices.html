@@ -91,6 +91,14 @@
                                 <span th:text="#{general-button-delete}"></span>
                             </a>
                         </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="javascript:void(0)" id="export-to-excel">
+                                <span th:text="#{general-button-export-to-excel}"></span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -103,7 +111,7 @@
         </div>
         <div class="table-responsive" id="dropdownParent">
             <table class="table table-bordered table-hover">
-                <thead>
+                <thead id="myTHead">
                 <tr class="table-primary text-center">
                     <th><input class="form-check-input" type="checkbox" value="" id="mainCheck"></th>
                     <th th:text="#{personal-accounts-label-account-number}"></th>
@@ -145,7 +153,7 @@
                     <td></td>
                 </tr>
                 </thead>
-                <tbody class="table-border-bottom-0">
+                <tbody class="table-border-bottom-0" id="myTBody">
                 </tbody>
             </table>
         </div>
