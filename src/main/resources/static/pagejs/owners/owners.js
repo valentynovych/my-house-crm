@@ -81,7 +81,6 @@ function initializeStatusSelect() {
 }
 function initializeDebtSelect() {
     $('#filter-by-debt').select2({
-        language: "uk",
         minimumResultsForSearch: -1,
         dropdownParent: $('#dropdownParent'),
         placeholder: " ",
@@ -100,7 +99,6 @@ function getStatus(status) {
 }
 function initializeFlatPickr() {
     $("#filter-by-creation-date").flatpickr({
-        locale: "uk",
         dateFormat: "d.m.Y"
     });
 }

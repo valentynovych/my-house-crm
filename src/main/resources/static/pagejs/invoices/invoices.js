@@ -134,7 +134,6 @@ function initializeSelects() {
 
 function initializeStatusSelect() {
     $("#filter-by-status").select2({
-        language: "uk",
         dropdownParent: $("#dropdownParent"),
         minimumResultsForSearch: -1,
         placeholder: " ",
@@ -169,7 +168,6 @@ function getStatus(status) {
 function initializeOwnerSelect() {
     $('#filter-by-owner').select2({
         dropdownParent: $('#dropdownParent'),
-        language: "uk",
         placeholder:"",
         allowClear: true,
         maximumInputLength: 100,
@@ -201,11 +199,9 @@ function initializeOwnerSelect() {
 }
 function initializeFlatPickr() {
     $("#filter-by-date").flatpickr({
-        locale: "uk",
         dateFormat: "d.m.Y"
     });
     $("#filter-by-month").flatpickr({
-        locale: "uk",
         dateFormat: "d.m.Y"
     });
 }

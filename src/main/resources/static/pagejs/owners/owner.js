@@ -12,7 +12,6 @@ $(document).ready(function () {
         $("#breadCrumb").text(breadCrumbAdd);
         $("#pageTitle").text(newOwner)
         $("#birthDate").flatpickr({
-            locale: "uk",
             dateFormat: "d.m.Y",
             maxDate: moment(d).subtract(17, 'years').format('DD.MM.YYYY')
         });
@@ -38,7 +37,6 @@ function initializeInputMasks(){
 
 function initializeStatusSelect (){
     $('#status').wrap('<div class="position-relative"></div>').select2({
-        language: "uk",
         dropdownParent: $('#status').parent(),
         minimumResultsForSearch: -1,
         placeholder: chooseStatus,
@@ -189,7 +187,6 @@ function setFields(response) {
     $("#avatar-img").attr("src",'/'+root+ '/uploads/'+response.image);
     var d = new Date(new Date().getFullYear(), 0, 1);
     $("#birthDate").flatpickr({
-        locale: "uk",
         defaultDate: response.birthDate,
         dateFormat: "d.m.Y",
         maxDate: moment(d).subtract(17, 'years').format('DD.MM.YYYY')

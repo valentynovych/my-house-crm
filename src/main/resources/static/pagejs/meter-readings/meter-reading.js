@@ -41,7 +41,6 @@ function initializeSelects() {
 function initializeHouseSelect() {
     $('#house').wrap('<div class="position-relative"></div>').select2({
         dropdownParent: $('#house').parent(),
-        language: "uk",
         maximumInputLength: 100,
         placeholder: chooseHouse,
         ajax: {
@@ -74,7 +73,6 @@ function initializeHouseSelect() {
 function initializeSectionSelect() {
     $('#section').wrap('<div class="position-relative"></div>').select2({
         dropdownParent: $('#section').parent(),
-        language: "uk",
         maximumInputLength: 100,
         placeholder: chooseSection,
         ajax: {
@@ -109,7 +107,6 @@ function initializeSectionSelect() {
 function initializeApartmentSelect() {
     $('#apartmentId').wrap('<div class="position-relative"></div>').select2({
         dropdownParent: $('#apartmentId').parent(),
-        language: "uk",
         maximumInputLength: 100,
         placeholder: chooseApartment,
         ajax: {
@@ -144,7 +141,6 @@ function initializeApartmentSelect() {
 function initializeServiceSelect() {
     $('#serviceId').wrap('<div class="position-relative"></div>').select2({
         dropdownParent: $('#serviceId').parent(),
-        language: "uk",
         maximumInputLength: 100,
         placeholder: chooseService,
         ajax: {
@@ -176,7 +172,6 @@ function initializeServiceSelect() {
 
 function initializeStatusSelect() {
     $("#status").wrap('<div class="position-relative"></div>').select2({
-        language: "uk",
         dropdownParent: $("#status").parent(),
         minimumResultsForSearch: -1,
         placeholder: chooseStatus,
@@ -220,7 +215,6 @@ function setFields(response) {
     $("#pageTitle").text(editReading);
     let d = new Date();
     $("#creationDate").flatpickr({
-        locale: "uk",
         defaultDate: response.creationDate,
         dateFormat: "d.m.Y",
         minDate: response.creationDate

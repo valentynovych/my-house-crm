@@ -19,7 +19,6 @@ $(document).ready(function () {
 });
 function initializeFlatPickr() {
     $("#filter-by-creationDate").flatpickr({
-        locale: "uk",
         dateFormat: "d.m.Y"
     });
 }
@@ -33,7 +32,6 @@ function initializeSelects() {
 function initializeHouseSelect() {
     $('#filter-by-house').select2({
         dropdownParent: $('#dropdownParent'),
-        language: "uk",
         placeholder:"",
         allowClear: true,
         maximumInputLength: 100,
@@ -66,7 +64,6 @@ function initializeHouseSelect() {
 function initializeSectionSelect() {
     $('#filter-by-section').select2({
         dropdownParent: $('#dropdownParent'),
-        language: "uk",
         placeholder:"",
         allowClear: true,
         maximumInputLength: 100,
@@ -101,7 +98,6 @@ function initializeSectionSelect() {
 function initializeServiceSelect() {
     $('#filter-by-service').select2({
         dropdownParent: $('#dropdownParent'),
-        language: "uk",
         placeholder:"",
         allowClear: true,
         maximumInputLength: 100,
@@ -134,7 +130,6 @@ function initializeServiceSelect() {
 
 function initializeStatusSelect() {
     $("#filter-by-status").select2({
-        language: "uk",
         dropdownParent: $("#dropdownParent"),
         minimumResultsForSearch: -1,
         ajax: {
