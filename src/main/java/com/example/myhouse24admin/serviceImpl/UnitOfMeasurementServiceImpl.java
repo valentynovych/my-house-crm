@@ -58,7 +58,7 @@ public class UnitOfMeasurementServiceImpl implements UnitOfMeasurementService {
             logger.info("updateMeasurementUnist() -> To have unitsToDelete: " + unitsToDelete.toString());
             List<UnitOfMeasurement> allById = unitOfMeasurementRepo.findAllById(unitsToDelete);
             allById.forEach(unitOfMeasurement -> unitOfMeasurement.setDeleted(true));
-            unitOfMeasurementRepo.saveAll(allById);
+            unitOfMeasurementRepo.deleteAll(allById);
             logger.info("updateMeasurementUnist() -> Success deleting MeasurementUnist ");
         }
     }
