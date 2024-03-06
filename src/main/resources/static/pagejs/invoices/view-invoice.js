@@ -1,5 +1,9 @@
 let url = window.location.pathname;
 let id = url.substring(url.lastIndexOf('/') + 1);
+const BORDER_ALL = { top: { style: 'thin', color: { rgb: '000000' } },
+        right: { style: 'thin', color: { rgb: '000000' } },
+        bottom: { style: 'thin', color: { rgb: '000000' } },
+        left: { style: 'thin', color: { rgb: '000000' } } };
 $(document).ready(function () {
     $("#edit-invoice-link").attr("href", "../edit/" + id);
     getInvoice();
@@ -66,24 +70,12 @@ function setServiceTable(itemResponses, totalPrice) {
     for (let item of itemResponses) {
         $("#service-table").append(
             `<tr>
-            <td class="px-2">
-                ${i}
-            </td>
-            <td class="px-2">
-                ${item.serviceName}
-            </td>
-            <td class="px-2">
-                ${item.amount}
-            </td>
-            <td class="px-2">
-                ${item.unitName}
-            </td>
-            <td class="px-2">
-                ${item.pricePerUnit}
-            </td>
-            <td class="px-2">
-                ${item.cost}
-            </td>
+            <td class="px-2">${i}</td>
+            <td class="px-2">${item.serviceName}</td>
+            <td class="px-2">${item.amount}</td>
+            <td class="px-2">${item.unitName}</td>
+            <td class="px-2">${item.pricePerUnit}</td>
+            <td class="px-2">${item.cost}</td>
         </tr>`
         );
         i++;
@@ -94,4 +86,91 @@ function setServiceTable(itemResponses, totalPrice) {
             <td colspan="1" class="text-nowrap"><span>${total + ": "}</span><span>${totalPrice}</span></td>
         </tr>`
     );
+}
+
+$("#print-button").on("click", function () {
+    let name = createFileName();
+    let table = getViewTable();
+    table.push([]);
+    getServiceTable(table);
+    console.log(table);
+    var workbook = XLSX.utils.book_new();
+    var worksheet = XLSX.utils.aoa_to_sheet(table);
+    styleWorkSheet(worksheet);
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Invoice");
+    XLSX.writeFile(workbook, name, {bookType: 'xlsx', type: 'base64'});
+});
+function createFileName() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    return "invoice-"+dd+"-"+mm+"-"+yyyy+".xlsx";
+}
+
+function getViewTable() {
+    let table = [];
+    let i = 0;
+    $('#view-table tr').each(function () {
+        let row = []
+        $(this).find('td').each(function () {
+            let text = $(this).text();
+            if( i%2 !== 0) {
+                row.push({
+                    v: text,
+                    t: "s",
+                    s: {border: BORDER_ALL, alignment: {horizontal: 'center'}}
+                });
+            } else {
+                row.push({
+                    v: text,
+                    t: "s",
+                    s: {font: { bold: true }, border: BORDER_ALL, alignment: {horizontal: 'center'}}
+                });
+            }
+            i++;
+        });
+        table.push(row);
+    });
+    return table;
+}
+function getServiceTable(table) {
+    let head = [];
+    $('thead').find('th').each(function () {
+        let text = $(this).text();
+        head.push({ v: text,
+            t: "s",
+            s: {font: { bold: true }, border: BORDER_ALL, alignment: { horizontal: 'center'}}
+        });
+    });
+    table.push(head);
+    $('#service-table tr').not(":last-child").each(function () {
+        let row = []
+        $(this).find('td').each(function () {
+            let text = $(this).text();
+            row.push({ v: text,
+                t: "s",
+                s: {border: BORDER_ALL, alignment: { horizontal: 'center'}}
+            });
+        });
+        table.push(row);
+    });
+    let lastRow = [];
+    for(let i = 0; i < 5; i++) {
+        lastRow.push({ v: "",
+            t: "s",
+            s: {border: BORDER_ALL, alignment: { horizontal: 'center'}}
+        });
+    }
+    let total =  $('#service-table').find("tr:last-child").find("td:last-child").text();
+    lastRow.push({ v: total,
+        t: "s",
+        s: {border: BORDER_ALL, alignment: { horizontal: 'center'}}
+    });
+    table.push(lastRow);
+}
+
+function styleWorkSheet(worksheet) {
+    let DEF_ColW = 20;
+    worksheet['!cols'] = [{ width: 20 }, { width: DEF_ColW }, { width: 25 }, { width: DEF_ColW }, { width: 25 }, { width: DEF_ColW }];
 }

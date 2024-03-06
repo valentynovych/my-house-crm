@@ -36,11 +36,11 @@
              style="border-style: solid; border-width: thin; border-color: #dbdade #dbdade white #dbdade">
             <div id="invoice"></div>
             <div class="row me-0">
-                <button type="button" class="btn btn-secondary me-2 col-auto" id="send-button"
-                        th:text="#{general-button-cancel}">Відмінити
-                </button>
                 <button type="button" class="btn btn-secondary me-2 col-auto" id="print-button"
-                        th:text="#{general-button-cancel}">Відмінити
+                        th:text="#{invoices-print}">Друкувати
+                </button>
+                <button type="button" class="btn btn-secondary me-2 col-auto" id="send-button"
+                        th:text="#{invoices-send-to-email}">Відправити на email
                 </button>
                 <a href="" class="btn btn-primary me-2 col-auto" id="edit-invoice-link">
                     <span th:text="#{invoices-edit-invoice}"></span>
@@ -48,8 +48,8 @@
             </div>
         </div>
             <table class="table table-bordered">
-                <tbody class="table-border-bottom-0">
-                <tr >
+                <tbody class="table-border-bottom-0" id="view-table">
+                <tr>
                     <td class="fw-bold w-25" th:text="#{invoice-processed}"></td>
                     <td id="isProcessed"></td>
                 </tr>
@@ -92,13 +92,17 @@
                 </tbody>
             </table>
         <table class="table table-bordered mt-5">
-            <tbody class="table-border-bottom-0" id="service-table">
+            <thead>
+            <tr class="text-center">
                 <th class="fw-bold w-25">#</th>
                 <th class="fw-bold w-25" th:text="#{services-page-service}"></th>
                 <th class="fw-bold w-25" th:text="#{invoices-amount-of-consumption}"></th>
                 <th class="fw-bold w-25" th:text="#{tariff-item-unit-of-measurement-label}"></th>
                 <th class="fw-bold w-25" th:text="#{invoices-price-per-unit}"></th>
                 <th class="fw-bold w-25" th:text="#{invoices-cost}"></th>
+            </tr>
+            </thead>
+            <tbody class="table-border-bottom-0" id="service-table">
             </tbody>
         </table>
     </div>
