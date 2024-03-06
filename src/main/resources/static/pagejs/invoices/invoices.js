@@ -202,7 +202,13 @@ function initializeFlatPickr() {
         dateFormat: "d.m.Y"
     });
     $("#filter-by-month").flatpickr({
-        dateFormat: "d.m.Y"
+        plugins: [
+            new monthSelectPlugin({
+                shorthand: true,
+                dateFormat: "m.Y",
+                altFormat: "F Y",
+            })
+        ]
     });
 }
 $("#filter-by-number").on("input", function () {

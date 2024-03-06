@@ -26,7 +26,10 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 import static com.example.myhouse24admin.specification.InvoiceItemSpecification.byInvoiceId;
@@ -148,8 +151,9 @@ public class InvoiceServiceImpl implements InvoiceService {
             invoiceSpecification = invoiceSpecification.and(byCreationDateGreaterThan(dateFrom)).and(byCreationDateLessThan(dateTo));
         }
         if (!requestMap.get("monthDate").isEmpty()){
-            LocalDate localDate = LocalDate.parse(requestMap.get("monthDate"),DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            invoiceSpecification = invoiceSpecification.and(byMonth(localDate.getMonthValue()));
+            String [] date = requestMap.get("monthDate").split("\\.");
+            invoiceSpecification = invoiceSpecification.and(byMonth(Integer.valueOf(date[0])));
+            invoiceSpecification = invoiceSpecification.and(byYear(Integer.valueOf(date[1])));
         }
         return invoiceRepo.findAll(invoiceSpecification, pageable);
     }

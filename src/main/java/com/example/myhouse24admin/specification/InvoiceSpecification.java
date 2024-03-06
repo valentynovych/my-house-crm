@@ -48,4 +48,9 @@ public interface InvoiceSpecification {
         return (root, query, builder) ->
                 builder.equal(builder.function("month", Integer.class,root.get("creationDate")), month);
     }
+    static Specification<Invoice> byYear(Integer year){
+        return (root, query, builder) ->
+                builder.equal(builder.function("year", Integer.class,root.get("creationDate")), year);
+    }
+
 }
