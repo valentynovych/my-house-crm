@@ -1,13 +1,17 @@
 package com.example.myhouse24admin.serviceImpl;
 
+import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.ApartmentOwner;
+import com.example.myhouse24admin.mapper.ApartmentMapper;
 import com.example.myhouse24admin.mapper.ApartmentOwnerMapper;
 import com.example.myhouse24admin.model.apartmentOwner.*;
 import com.example.myhouse24admin.model.invoices.OwnerNameResponse;
 import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.repository.ApartmentOwnerRepo;
+import com.example.myhouse24admin.repository.ApartmentRepo;
 import com.example.myhouse24admin.service.ApartmentOwnerService;
 import com.example.myhouse24admin.service.MailService;
+import com.example.myhouse24admin.specification.ApartmentInterfaceSpecification;
 import com.example.myhouse24admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
@@ -21,26 +25,32 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.myhouse24admin.specification.ApartmentOwnerSpecification.*;
-
 @Service
 public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
     private final ApartmentOwnerRepo apartmentOwnerRepo;
+    private final ApartmentRepo apartmentRepo;
     private final ApartmentOwnerMapper apartmentOwnerMapper;
+    private final ApartmentMapper apartmentMapper;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final UploadFileUtil uploadFileUtil;
     private final Logger logger = LogManager.getLogger(ApartmentOwnerServiceImpl.class);
 
     public ApartmentOwnerServiceImpl(ApartmentOwnerRepo apartmentOwnerRepo,
+                                     ApartmentRepo apartmentRepo,
                                      ApartmentOwnerMapper apartmentOwnerMapper,
+                                     ApartmentMapper apartmentMapper,
                                      PasswordEncoder passwordEncoder,
                                      MailService mailService,
                                      UploadFileUtil uploadFileUtil) {
         this.apartmentOwnerRepo = apartmentOwnerRepo;
+        this.apartmentRepo = apartmentRepo;
         this.apartmentOwnerMapper = apartmentOwnerMapper;
+        this.apartmentMapper = apartmentMapper;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
         this.uploadFileUtil = uploadFileUtil;
@@ -127,7 +137,18 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         logger.info("getApartmentOwnerResponsesForTable - Getting apartment owner responses for table with filters " + filterRequest.toString());
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<ApartmentOwner> apartmentOwners = getFilteredOwners(pageable, filterRequest);
-        List<TableApartmentOwnerResponse> apartmentOwnerResponseList = apartmentOwnerMapper.apartmentOwnerListToTableApartmentOwnerResponseList(apartmentOwners.getContent());
+        List<TableApartmentOwnerResponse> apartmentOwnerResponseList = new ArrayList<>();
+        for(ApartmentOwner apartmentOwner: apartmentOwners.getContent()) {
+            List<Apartment> apartments = apartmentRepo.findAll(ApartmentInterfaceSpecification.byOwnerId(apartmentOwner.getId())
+                    .and(ApartmentInterfaceSpecification.byDeleted()));
+            List<HouseApartmentResponse> houseApartmentResponses = apartmentMapper.apartmentListToHouseApartmentResponseList(apartments);
+            List<Apartment> debtApartments = apartmentRepo.findAll(ApartmentInterfaceSpecification.byOwnerId(apartmentOwner.getId())
+                    .and(ApartmentInterfaceSpecification.byDeleted())
+                    .and(ApartmentInterfaceSpecification.byApartmentBalanceLessThanZero()));
+            TableApartmentOwnerResponse tableApartmentOwnerResponse = apartmentOwnerMapper.
+                    apartmentOwnerToTableApartmentOwnerResponse(apartmentOwner, houseApartmentResponses, !debtApartments.isEmpty());
+            apartmentOwnerResponseList.add(tableApartmentOwnerResponse);
+        }
         Page<TableApartmentOwnerResponse> apartmentOwnerResponsePage = new PageImpl<>(apartmentOwnerResponseList, pageable, apartmentOwners.getTotalElements());
         logger.info("getApartmentOwnerResponsesForTable - Apartment owner responses were got");
         return apartmentOwnerResponsePage;
@@ -160,16 +181,36 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         if (filterRequest.status() != null) {
             ownerSpecification = ownerSpecification.and(byStatus(filterRequest.status()));
         }
+        if(filterRequest.houseId() != null){
+            ownerSpecification = ownerSpecification.and(byHouseId(filterRequest.houseId()));
+        }
+        if(filterRequest.hasDebt() != null){
+            if(filterRequest.hasDebt()) {
+                ownerSpecification = ownerSpecification.and(byApartmentBalanceLessThanZero());
+            } else {
+                ownerSpecification = ownerSpecification.and(byApartmentBalanceGreaterThanZero());
+            }
+        }
+        if(!filterRequest.apartment().isEmpty()){
+            ownerSpecification = ownerSpecification.and(byApartmentNumber(filterRequest.apartment()));
+        }
         return apartmentOwnerRepo.findAll(ownerSpecification, pageable);
     }
 
     @Override
-    public void deleteOwnerById(Long id) {
+    public boolean deleteOwnerById(Long id) {
         logger.info("deleteOwnerById - Deleting apartment owner by id " + id);
-        ApartmentOwner apartmentOwner = apartmentOwnerRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Owner was not found with id " + id));
-        apartmentOwner.setDeleted(true);
-        apartmentOwnerRepo.save(apartmentOwner);
-        logger.info("deleteOwnerById - Apartment owner was deleted");
+        List<Apartment> apartments = apartmentRepo.findAll(ApartmentInterfaceSpecification.byOwnerId(id));
+        if (apartments.isEmpty()) {
+            ApartmentOwner apartmentOwner = apartmentOwnerRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Owner was not found with id " + id));
+            apartmentOwner.setDeleted(true);
+            apartmentOwnerRepo.save(apartmentOwner);
+            logger.info("deleteOwnerById - Apartment owner was deleted");
+            return true;
+        } else {
+            logger.info("deleteOwnerById - Apartment owner has apartment");
+            return false;
+        }
     }
 
     @Override

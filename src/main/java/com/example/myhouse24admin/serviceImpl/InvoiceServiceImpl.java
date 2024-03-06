@@ -27,10 +27,7 @@ import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.example.myhouse24admin.specification.InvoiceItemSpecification.byInvoiceId;
 import static com.example.myhouse24admin.specification.InvoiceSpecification.*;
@@ -94,12 +91,19 @@ public class InvoiceServiceImpl implements InvoiceService {
     public void createInvoice(InvoiceRequest invoiceRequest) {
         logger.info("createInvoice - Creating new invoice "+invoiceRequest.toString());
         Apartment apartment = apartmentRepo.findById(invoiceRequest.getApartmentId()).orElseThrow(()-> new EntityNotFoundException("Apartment was not found by id "+invoiceRequest.getApartmentId()));
+        setNewApartmentBalance(apartment, invoiceRequest);
         String number = createNumber();
         Invoice invoice = invoiceMapper.invoiceRequestToInvoice(invoiceRequest,
                 apartment, number);
         Invoice savedInvoice = invoiceRepo.save(invoice);
         saveInvoiceItems(invoiceRequest.getItemRequests(), savedInvoice);
         logger.info("createInvoice - Invoice was created");
+    }
+
+    private void setNewApartmentBalance(Apartment apartment, InvoiceRequest invoiceRequest) {
+        BigDecimal remainder = invoiceRequest.getPaid().subtract(invoiceRequest.getTotalPrice());
+        BigDecimal newBalance = apartment.getBalance().add(remainder);
+        apartment.setBalance(newBalance);
     }
 
     @Override
@@ -167,6 +171,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         logger.info("updateInvoice - Updating invoice with id "+id+" "+invoiceRequest.toString());
         Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
         Apartment apartment = apartmentRepo.findById(invoiceRequest.getApartmentId()).orElseThrow(()-> new EntityNotFoundException("Apartment was not found by id "+invoiceRequest.getApartmentId()));
+        setNewApartmentBalance(apartment, invoiceRequest);
         invoiceMapper.updateInvoice(invoice, invoiceRequest, apartment);
         List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
         invoiceItemRepo.deleteAll(invoiceItems);
@@ -193,5 +198,37 @@ public class InvoiceServiceImpl implements InvoiceService {
         ViewInvoiceResponse viewInvoiceResponse = invoiceMapper.invoiceToViewInvoiceResponse(invoice, itemResponses, totalPrice);
         logger.info("getInvoiceResponseForView - Invoice response was got");
         return viewInvoiceResponse;
+    }
+
+    @Override
+    public boolean deleteInvoice(Long id) {
+        logger.info("deleteInvoice - Deleting invoice by id "+id);
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
+        if(invoice.getPaid().compareTo(BigDecimal.valueOf(0)) != 0){
+            logger.info("deleteInvoice - Invoice has paid");
+            return false;
+        } else {
+            invoice.setDeleted(true);
+            invoiceRepo.save(invoice);
+            logger.info("deleteInvoice - Invoice was deleted");
+            return true;
+        }
+    }
+
+    @Override
+    public boolean deleteInvoices(Long[] invoiceIds) {
+        logger.info("deleteInvoices - Deleting invoices by ids %s".formatted(Arrays.toString(invoiceIds)));
+        List<Invoice> invoices = invoiceRepo.findAllById(List.of(invoiceIds));
+        for(Invoice invoice: invoices){
+            if(invoice.getPaid().compareTo(BigDecimal.valueOf(0)) != 0){
+                logger.info("deleteInvoices - Invoice has paid");
+                return false;
+            } else {
+                invoice.setDeleted(true);
+                invoiceRepo.save(invoice);
+            }
+        }
+        logger.info("deleteInvoices - Invoices were deleted");
+        return true;
     }
 }

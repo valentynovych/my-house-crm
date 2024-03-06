@@ -281,6 +281,7 @@ function deleteEntry() {
             toastr.error(errorMessage);
         }
     });
+    $("#delete-button").prop('disabled', false);
 }
 
 function getStatusSpan(status) {

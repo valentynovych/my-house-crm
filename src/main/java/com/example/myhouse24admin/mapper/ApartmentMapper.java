@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.*;
+import com.example.myhouse24admin.model.apartmentOwner.HouseApartmentResponse;
 import com.example.myhouse24admin.model.apartments.ApartmentAddRequest;
 import com.example.myhouse24admin.model.apartments.ApartmentExtendResponse;
 import com.example.myhouse24admin.model.apartments.ApartmentResponse;
@@ -77,4 +78,8 @@ public interface ApartmentMapper {
     }
 
     List<ApartmentNumberResponse> apartmentListToApartmentNameResponse(List<Apartment> apartments);
+    List<HouseApartmentResponse> apartmentListToHouseApartmentResponseList(List<Apartment> apartments);
+    @Mapping(target = "house", source = "house.name")
+    @Mapping(target = "apartment", source = "apartmentNumber")
+    HouseApartmentResponse apartmentToHouseApartmentResponse(Apartment apartment);
 }

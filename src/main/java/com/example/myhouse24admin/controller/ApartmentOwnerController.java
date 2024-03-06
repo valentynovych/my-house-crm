@@ -2,7 +2,10 @@ package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.entity.OwnerStatus;
 import com.example.myhouse24admin.model.apartmentOwner.*;
+import com.example.myhouse24admin.model.meterReadings.HouseNameResponse;
+import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.service.ApartmentOwnerService;
+import com.example.myhouse24admin.service.HouseService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -17,9 +20,12 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/admin/owners")
 public class ApartmentOwnerController {
     private final ApartmentOwnerService apartmentOwnerService;
+    private final HouseService houseService;
 
-    public ApartmentOwnerController(ApartmentOwnerService apartmentOwnerService) {
+    public ApartmentOwnerController(ApartmentOwnerService apartmentOwnerService,
+                                    HouseService houseService) {
         this.apartmentOwnerService = apartmentOwnerService;
+        this.houseService = houseService;
     }
 
     @GetMapping()
@@ -86,8 +92,12 @@ public class ApartmentOwnerController {
 
     @GetMapping("/delete/{id}")
     public @ResponseBody ResponseEntity<?> deleteOwner(@PathVariable Long id) {
-        apartmentOwnerService.deleteOwnerById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        boolean deleted = apartmentOwnerService.deleteOwnerById(id);
+        if(deleted) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("/view-owner/{id}")
@@ -107,5 +117,9 @@ public class ApartmentOwnerController {
         Page<ApartmentOwnerShortResponse> responsePage =
                 apartmentOwnerService.getShortResponseOwners(page, pageSize, fullName);
         return new ResponseEntity<>(responsePage, HttpStatus.OK);
+    }
+    @GetMapping("/get-houses")
+    public @ResponseBody Page<HouseNameResponse> getHouses(SelectSearchRequest selectSearchRequest) {
+        return houseService.getHousesForSelect(selectSearchRequest);
     }
 }

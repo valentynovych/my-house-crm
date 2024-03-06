@@ -78,12 +78,12 @@
                             <select class="form-select" id="filter-by-status"></select>
                         </div>
                     </td>
-                    <td class="px-2" style="min-width: 13rem">
+                    <td class="px-2" style="min-width: 9rem">
                         <div id="filterDebtWrapper" style="position: relative">
                             <select class="form-select" id="filter-by-debt">
                                 <option value=""></option>
-                                <option th:text="#{owners-have-debt}" th:value="1"></option>
-                                <option th:text="#{owners-not-have-debt}" th:value="0"></option>
+                                <option th:text="#{owners-have-debt}" th:value="true"></option>
+                                <option th:text="#{owners-not-have-debt}" th:value="false"></option>
                             </select>
                         </div>
                     </td>
@@ -115,5 +115,8 @@
     const modalDeleteButton = [[#{general-button-delete}]]
     const modalCloseButton = [[#{general-button-close}]]
     const deleteSuccessful = [[#{toastr-delete-message}]]
+    const haveDebt = [[#{owners-have-debt}]];
+    const notHaveDebt = [[#{owners-not-have-debt}]];
+    const deleteErrorMessage = [[#{owners-delete-error-message}]];
 </script>
 </html>

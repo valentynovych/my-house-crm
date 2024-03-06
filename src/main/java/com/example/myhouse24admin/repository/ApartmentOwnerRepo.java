@@ -5,9 +5,11 @@ import com.example.myhouse24admin.entity.Message;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.List;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public interface ApartmentOwnerRepo extends JpaRepository<ApartmentOwner, Long>, JpaSpecificationExecutor<ApartmentOwner> {

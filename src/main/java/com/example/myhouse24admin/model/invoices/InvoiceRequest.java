@@ -20,6 +20,7 @@ public class InvoiceRequest {
     @NotNull(message = "{validation-not-empty}")
     private BigDecimal paid;
     private boolean isProcessed;
+    private BigDecimal totalPrice;
     @Valid
     @NotNull(message = "{validation-necessary-service}")
     private List<InvoiceItemRequest> itemRequests;
@@ -70,6 +71,14 @@ public class InvoiceRequest {
 
     public void setProcessed(boolean processed) {
         isProcessed = processed;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public List<InvoiceItemRequest> getItemRequests() {

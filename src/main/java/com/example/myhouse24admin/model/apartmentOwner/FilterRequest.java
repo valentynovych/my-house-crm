@@ -11,6 +11,6 @@ public record FilterRequest(
         String apartment,
         String creationDate,
         OwnerStatus status,
-        Boolean debt
+        Boolean hasDebt
 ) {
 }

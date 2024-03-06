@@ -13,4 +13,6 @@ public interface InvoiceService {
     InvoiceResponse getInvoiceResponse(Long id);
     void updateInvoice(Long id, InvoiceRequest invoiceRequest);
     ViewInvoiceResponse getInvoiceResponseForView(Long id);
+    boolean deleteInvoice(Long id);
+    boolean deleteInvoices(Long[]invoiceIds);
 }

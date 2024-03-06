@@ -12,6 +12,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -54,11 +55,13 @@ public interface ApartmentOwnerMapper {
     @Mapping(target = "birthDate", expression = "java(convertDateToInstant(editApartmentOwnerRequest.birthDate()))")
     void setApartmentOwnerWithPassword(@MappingTarget ApartmentOwner apartmentOwner, EditApartmentOwnerRequest editApartmentOwnerRequest, String encodedPassword);
 
-    List<TableApartmentOwnerResponse> apartmentOwnerListToTableApartmentOwnerResponseList(List<ApartmentOwner> apartmentOwners);
-
     @Mapping(target = "fullName", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
     @Mapping(target = "creationDate", expression = "java(convertDateToString(apartmentOwner.getCreationDate()))")
-    TableApartmentOwnerResponse apartmentOwnerToTableApartmentOwnerResponse(ApartmentOwner apartmentOwner);
+    @Mapping(target = "houseApartmentResponses", source = "houseApartmentResponses")
+    @Mapping(target = "hasDebt", source = "hasDebt")
+    TableApartmentOwnerResponse apartmentOwnerToTableApartmentOwnerResponse(ApartmentOwner apartmentOwner,
+                                                                            List<HouseApartmentResponse> houseApartmentResponses,
+                                                                            boolean hasDebt);
 
     @Mapping(target = "birthDate", expression = "java(convertDateToString(apartmentOwner.getBirthDate()))")
     ViewApartmentOwnerResponse apartmentOwnerToViewApartmentOwnerResponse(ApartmentOwner apartmentOwner);

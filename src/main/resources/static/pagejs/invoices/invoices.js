@@ -13,10 +13,30 @@ let request = {
 };
 
 $(document).ready(function () {
+    getPersonalAccountsStatistic();
     getInvoices(0);
     initializeSelects();
     initializeFlatPickr();
 });
+function getPersonalAccountsStatistic() {
+    $.ajax({
+        type: 'get',
+        url: 'statistic/get-accounts-statistic',
+        dataType: 'json',
+        success: function (result) {
+            fillStatistic(result);
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
+
+function fillStatistic(stat) {
+    $('#accounts-balance').html(`${stat.accountsBalanceOverpayments} ${currency}.`)
+    $('#accounts-balance-arrears').html(`${stat.accountsBalanceArrears} ${currency}.`)
+}
+
 function getInvoices(currentPage) {
     blockCardDody();
     request.page = currentPage;
@@ -47,7 +67,7 @@ function drawTable(response) {
             $("tbody")
                 .append(
                     `<tr class="tr text-nowrap" data-href="invoices/view-invoice/${invoice.id}">
-                    <td><input class="form-check-input" type="checkbox"></td>
+                    <td><input class="form-check-input checks" name="checks" type="checkbox" id="${invoice.id}"></td>
                     <td>${invoice.number}</td>
                     <td>${getStatusSpan(invoice.status)}</td>
                     <td>${invoice.creationDate}</td>
@@ -63,8 +83,8 @@ function drawTable(response) {
                             <i class="ti ti-dots-vertical"></i>
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="../edit/${invoice.id}">
-                                <i class="ti ti-file me-1"></i>
+                            <a class="dropdown-item" href="invoices/copy/${invoice.id}">
+                                <i class="ti ti-file me-1"></i>${copy}
                             </a>
                             <a class="dropdown-item" href="invoices/edit/${invoice.id}">
                                 <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
@@ -83,7 +103,7 @@ function drawTable(response) {
     }
 }
 function addListenerToRow() {
-    $('tr[data-href] td:not(:last-child)').on('click', function () {
+    $('tr[data-href] td:not(:last-child) td:not(:first-child)').on('click', function () {
         window.location = $(this).parent().attr('data-href');
     })
 }
@@ -231,3 +251,95 @@ $('.clear-filters').on('click', function () {
     $('#filter-by-number, #filter-by-apartment')
         .val('').trigger('input');
 })
+
+let entryId;
+function openDeleteModal(id) {
+    if($("#deleteModal").length === 0) {
+        $("div.card").append(
+            `<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h4>${deleteModalText}</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal">
+                        ${modalCloseButton}
+                        </button>
+                        <button type="button" class="btn btn-danger" id="delete-button" onclick="deleteEntry()">
+                            ${modalDeleteButton}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`
+        )
+    }
+    $('#deleteModal').modal('show');
+    entryId = id;
+}
+function deleteEntry() {
+    $("#delete-button").prop('disabled', true);
+    $.ajax({
+        type: "GET",
+        url: "invoices/delete/"+entryId,
+        success: function () {
+            $('#deleteModal').modal('hide');
+            toastr.success(deleteSuccessful);
+            getInvoices(0)
+        },
+        error: function (errorResponse) {
+            $('#deleteModal').modal('hide');
+            if (errorResponse.status === 409) {
+                toastr.error(deleteErrorMessage);
+            } else {
+                toastr.error(errorMessage);
+            }
+        }
+    });
+    $("#delete-button").prop('disabled', false);
+}
+
+$("#mainCheck").on("change", function () {
+    $(".checks").each(function () {
+        $(this).prop("checked", !$(this).is(":checked"));
+    });
+});
+
+$("#delete-invoices").on("click", function () {
+    let invoiceIds = [];
+    $("input[name=checks]:checked").each(function () {
+        invoiceIds.push($(this).attr("id"));
+    });
+    deleteInvoices(invoiceIds);
+});
+function deleteInvoices(invoiceIds) {
+    if(invoiceIds.length != 0) {
+        blockCardDody();
+        $.ajax({
+            type: "GET",
+            url: "invoices/delete-invoices",
+            data: {
+                invoiceIds: invoiceIds
+            },
+            success: function () {
+                toastr.success(deleteSuccessful);
+                getInvoices(0)
+            },
+            error: function (errorResponse) {
+                if (errorResponse.status === 409) {
+                    toastr.error(deleteErrorMessage);
+                } else {
+                    toastr.error(errorMessage);
+                }
+            }
+        });
+    } else{
+        toastr.warning(chooseInvoice);
+    }
+}
