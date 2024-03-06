@@ -4,7 +4,6 @@ import com.example.myhouse24admin.model.messages.MessageResponse;
 import com.example.myhouse24admin.model.messages.MessageSendRequest;
 import com.example.myhouse24admin.model.messages.MessageTableResponse;
 import com.example.myhouse24admin.service.MessageService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -41,8 +40,8 @@ public class MessagesController {
     }
 
     @PostMapping("new-message")
-    public ResponseEntity<?> sendNewMessage(@ModelAttribute @Valid MessageSendRequest messageSendRequest, HttpServletRequest request) {
-        messageService.sendNewMessage(messageSendRequest, request);
+    public ResponseEntity<?> sendNewMessage(@ModelAttribute @Valid MessageSendRequest messageSendRequest) {
+        messageService.sendNewMessage(messageSendRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
