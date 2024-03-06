@@ -123,7 +123,7 @@ public class StaffServiceImpl implements StaffService {
             logger.info("updateStaffById() -> Start update entity with new password");
             staffMapper.updateWithPassword(staff, staffEditRequest);
             staff.setPassword(passwordEncoder.encode(staffEditRequest.password()));
-            // todo send notification to staff email
+            if (!isCurrentStaff(staff)) mailService.sendNewPassword(staff.getEmail(), staffEditRequest.password());
         } else {
             logger.info("updateStaffById() -> Start update entity without password");
             staffMapper.updateWithoutPassword(staff, staffEditRequest);
@@ -166,6 +166,11 @@ public class StaffServiceImpl implements StaffService {
         }
         String resetToken = passwordResetTokenService.createOrUpdatePasswordResetToken(new EmailRequest(staffById.getEmail()));
         mailService.sendInviteToStaff(resetToken, staffById);
+    }
+
+    private boolean isCurrentStaff(Staff staff) {
+        Staff currentStaff = getCurrentStaff();
+        return staff.getEmail().equals(currentStaff.getEmail());
     }
 
     private Staff findStaffById(Long staffId) {
