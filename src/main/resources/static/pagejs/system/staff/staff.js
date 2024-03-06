@@ -162,52 +162,52 @@ function getStatusLabel(status) {
 function drawTable(result) {
 
     if (result.content && result.content.length > 0) {
-    const page = result.pageable.pageNumber;
-    let iter = 0;
-    for (const staff of result.content) {
+        const page = result.pageable.pageNumber;
+        let iter = 0;
+        for (const staff of result.content) {
 
-        const badgeStatus = staff.status === 'NEW'
-            ? '<span class="badge bg-label-info me-1">' + statusNew + '</span>'
-            : staff.status === 'ACTIVE'
-                ? '<span class="badge bg-label-success me-1">' + statusActive + '</span>'
-                : '<span class="badge bg-label-danger me-1">' + statusDisabled + '</span>';
+            const badgeStatus = staff.status === 'NEW'
+                ? '<span class="badge bg-label-info me-1">' + statusNew + '</span>'
+                : staff.status === 'ACTIVE'
+                    ? '<span class="badge bg-label-success me-1">' + statusActive + '</span>'
+                    : '<span class="badge bg-label-danger me-1">' + statusDisabled + '</span>';
 
-        const buttonToDelete = (staff.role.name !== 'DIRECTOR')
-            ? '<button type="button" class="dropdown-item btn justify-content-start delete-staff" data-bs-toggle="modal" data-bs-target="#modalToDelete"' +
-            '       onclick="addDeleteEvent(' + staff.id + ')">\n' +
-            '       <i class="ti ti-trash me-1"></i>' + buttonLabelDelete + '\n' +
-            '</button>\n'
-            : '';
+            const buttonToDelete = (staff.role.name !== 'DIRECTOR')
+                ? '<button type="button" class="dropdown-item btn justify-content-start delete-staff" data-bs-toggle="modal" data-bs-target="#modalToDelete"' +
+                '       onclick="addDeleteEvent(' + staff.id + ')">\n' +
+                '       <i class="ti ti-trash me-1"></i>' + buttonLabelDelete + '\n' +
+                '</button>\n'
+                : '';
 
-        $('<tr data-href="staff/view-staff/' + staff.id + '" class="cursor-pointer">\n' +
-            '<td>' + ++iter + '</td>' +
-            '<td>' + staff.firstName + ' ' + staff.lastName + '</td>\n' +
-            '<td>' + getRoleLabel(staff.role.name) + '</td>\n' +
-            '<td>' + staff.phoneNumber + '</td>\n' +
-            '<td>' + staff.email + '</td>\n' +
-            '<td class="text-center">' + badgeStatus + '</td>\n' +
-            '<td>\n' +
-            '  <div class="dropdown">\n' +
-            '   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"\n' +
-            '           data-bs-toggle="dropdown">\n' +
-            '    <i class="ti ti-dots-vertical"></i>\n' +
-            '   </button>\n' +
-            '     <div class="dropdown-menu">\n' +
-            '       <button type="button" class="dropdown-item btn justify-content-start" onclick="sendInvite(' + staff.id + ')">' +
-            '           <i class="ti ti-mail me-1"></i>' + buttonLabelInvite + '</button>' +
-            '       <a class="dropdown-item" href="staff/edit-staff/' + staff.id + '">\n' +
-            '           <i class="ti ti-pencil me-1"></i>' + buttonLabelEdit + '\n' +
-            '       </a>\n' + buttonToDelete +
-            '     </div>\n' +
-            '  </div>\n' +
-            '</td>\n' +
-            '</tr>'
-        ).appendTo("tbody");
-        addListenerToRow();
-    }
+            $('<tr data-href="staff/view-staff/' + staff.id + '" class="cursor-pointer">\n' +
+                '<td>' + ++iter + '</td>' +
+                '<td>' + staff.firstName + ' ' + staff.lastName + '</td>\n' +
+                '<td>' + getRoleLabel(staff.role.name) + '</td>\n' +
+                '<td>' + staff.phoneNumber + '</td>\n' +
+                '<td>' + staff.email + '</td>\n' +
+                '<td class="text-center">' + badgeStatus + '</td>\n' +
+                '<td>\n' +
+                '  <div class="dropdown">\n' +
+                '   <button type="button" class="btn p-0 dropdown-toggle hide-arrow"\n' +
+                '           data-bs-toggle="dropdown">\n' +
+                '    <i class="ti ti-dots-vertical"></i>\n' +
+                '   </button>\n' +
+                '     <div class="dropdown-menu">\n' +
+                '       <button type="button" class="dropdown-item btn justify-content-start" onclick="sendInvite(' + staff.id + ')">' +
+                '           <i class="ti ti-mail me-1"></i>' + buttonLabelInvite + '</button>' +
+                '       <a class="dropdown-item" href="staff/edit-staff/' + staff.id + '">\n' +
+                '           <i class="ti ti-pencil me-1"></i>' + buttonLabelEdit + '\n' +
+                '       </a>\n' + buttonToDelete +
+                '     </div>\n' +
+                '  </div>\n' +
+                '</td>\n' +
+                '</tr>'
+            ).appendTo("tbody");
+            addListenerToRow();
+        }
 
-    drawPaginationElements(result, 'getStaff')
-    drawPagination(result.totalPages, page, 'getStaff');
+        drawPaginationElements(result, 'getStaff')
+        drawPagination(result.totalPages, page, 'getStaff');
     } else {
         $(`<tr>
             <td colspan="7" class="text-center fw-bold h4">${dataNotFound}</td>
@@ -218,6 +218,22 @@ function drawTable(result) {
 function addListenerToRow() {
     $('tr[data-href] td:not(:last-child)').on('click', function () {
         window.location = $(this).parent().attr('data-href');
+    })
+}
+
+function sendInvite(staffId) {
+    blockCardDody();
+    $.ajax({
+        url: 'staff/send-invite?staffId=' + staffId,
+        type: 'post',
+        success: function (response) {
+            toastr.success('Vse Ok');
+
+        },
+        error: function (error) {
+            toastr.error(errorMessage);
+            console.log(error)
+        }
     })
 }
 

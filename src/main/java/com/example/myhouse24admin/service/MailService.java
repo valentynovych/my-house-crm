@@ -10,4 +10,6 @@ public interface MailService {
     void sendNewPassword(String to, String newPassword);
 
     void sendMessage(String to, String subject, String messageHtml, Staff staff, HttpServletRequest request);
+
+    void sendInviteToStaff(String token,Staff staffById);
 }

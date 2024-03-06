@@ -25,14 +25,16 @@ import java.io.IOException;
 public class MailServiceImpl implements MailService {
     private final TemplateEngine templateEngine;
     private final SendGrid sendGrid;
+    private final HttpServletRequest httpServletRequest;
     private final Logger logger = LogManager.getLogger(MailServiceImpl.class);
 
     @Value("${sender}")
     private String sender;
 
-    public MailServiceImpl(TemplateEngine templateEngine, SendGrid sendGrid) {
+    public MailServiceImpl(TemplateEngine templateEngine, SendGrid sendGrid, HttpServletRequest httpServletRequest) {
         this.templateEngine = templateEngine;
         this.sendGrid = sendGrid;
+        this.httpServletRequest = httpServletRequest;
     }
 
     @Async
@@ -60,6 +62,15 @@ public class MailServiceImpl implements MailService {
         Content content = new Content("text/html", buildMessageContent(messageHtml, subject, staff, request));
         sendMail(subject, to, content);
         logger.info("sendMessage() -> message to: {}, has been send", to);
+    }
+
+    @Override
+    public void sendInviteToStaff(String token, Staff staffById) {
+        logger.info("sendInviteToStaff() -> start, with staffId: {}", staffById.getId());
+        String subject = "Запрошення у систему";
+        Content content = new Content("text/html", buildInviteContent(token, staffById));
+        sendMail(subject, staffById.getEmail(), content);
+        logger.info("sendInviteToStaff() -> end, invite has been send");
     }
 
     private void sendMail(String subject, String to, Content content) {
@@ -99,9 +110,9 @@ public class MailServiceImpl implements MailService {
 
     private String formLink(String token, HttpServletRequest httpRequest) {
         String fullUrl = ServletUriComponentsBuilder.fromRequestUri(httpRequest).build().toUriString();
-        int index = fullUrl.lastIndexOf("/");
+        int index = fullUrl.indexOf("admin");
         String baseUrl = fullUrl.substring(0, index);
-        String link = baseUrl + "/changePassword?token=" + token;
+        String link = baseUrl + "admin/changePassword?token=" + token;
         return link;
     }
 
@@ -126,5 +137,13 @@ public class MailServiceImpl implements MailService {
         String link = requestURL.substring(0, requestURL.lastIndexOf("admin"));
         link += "user/messages";
         return link;
+    }
+
+    private String buildInviteContent(String token, Staff staff) {
+        String link = formLink(token, httpServletRequest);
+        Context context = new Context();
+        context.setVariable("link", link);
+        context.setVariable("staffFullName", staff.getFirstName() + " " + staff.getLastName());
+        return templateEngine.process("email/sendInviteTemplate", context);
     }
 }

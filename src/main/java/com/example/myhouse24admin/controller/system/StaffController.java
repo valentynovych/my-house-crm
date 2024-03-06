@@ -97,4 +97,10 @@ public class StaffController {
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    @PostMapping("send-invite")
+    public ResponseEntity<?> sendInviteToStaff(@RequestParam Long staffId) {
+        staffService.sendInviteToStaff(staffId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

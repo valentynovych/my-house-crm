@@ -4,11 +4,15 @@ import com.example.myhouse24admin.entity.Language;
 import com.example.myhouse24admin.entity.Role;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.entity.StaffStatus;
+import com.example.myhouse24admin.exception.StaffAlreadyActiveException;
 import com.example.myhouse24admin.mapper.StaffMapper;
+import com.example.myhouse24admin.model.authentication.EmailRequest;
 import com.example.myhouse24admin.model.staff.StaffEditRequest;
 import com.example.myhouse24admin.model.staff.StaffResponse;
 import com.example.myhouse24admin.repository.RoleRepo;
 import com.example.myhouse24admin.repository.StaffRepo;
+import com.example.myhouse24admin.service.MailService;
+import com.example.myhouse24admin.service.PasswordResetTokenService;
 import com.example.myhouse24admin.service.StaffService;
 import com.example.myhouse24admin.specification.StaffSpecification;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,13 +38,17 @@ public class StaffServiceImpl implements StaffService {
     private final RoleRepo roleRepo;
     private final PasswordEncoder passwordEncoder;
     private final StaffMapper staffMapper;
+    private final MailService mailService;
+    private final PasswordResetTokenService passwordResetTokenService;
     private final Logger logger = LogManager.getLogger(StaffServiceImpl.class);
 
-    public StaffServiceImpl(StaffRepo staffRepo, RoleRepo roleRepo, PasswordEncoder passwordEncoder, StaffMapper staffMapper) {
+    public StaffServiceImpl(StaffRepo staffRepo, RoleRepo roleRepo, PasswordEncoder passwordEncoder, StaffMapper staffMapper, MailService mailService, PasswordResetTokenService passwordResetTokenService) {
         this.staffRepo = staffRepo;
         this.roleRepo = roleRepo;
         this.passwordEncoder = passwordEncoder;
         this.staffMapper = staffMapper;
+        this.mailService = mailService;
+        this.passwordResetTokenService = passwordResetTokenService;
     }
 
     @Override
@@ -147,6 +155,17 @@ public class StaffServiceImpl implements StaffService {
         Staff staff = byEmail.orElseThrow(() -> new EntityNotFoundException(String.format("Staff by email: %s, not found", name)));
         logger.info("getCurrentStaff() -> Exit, return staff with email: " + name);
         return staff;
+    }
+
+    @Override
+    public void sendInviteToStaff(Long staffId) {
+        Staff staffById = findStaffById(staffId);
+        if (staffById.getStatus().equals(StaffStatus.ACTIVE)) {
+            throw new StaffAlreadyActiveException(String.format("Staff with id: %s, have status: %s",
+                    staffById.getId(), staffById.getStatus()));
+        }
+        String resetToken = passwordResetTokenService.createOrUpdatePasswordResetToken(new EmailRequest(staffById.getEmail()));
+        mailService.sendInviteToStaff(resetToken, staffById);
     }
 
     private Staff findStaffById(Long staffId) {

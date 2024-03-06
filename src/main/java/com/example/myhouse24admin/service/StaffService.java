@@ -27,4 +27,6 @@ public interface StaffService {
     boolean deleteStaffById(Long staffId);
 
     Staff getCurrentStaff();
+
+    void sendInviteToStaff(Long staffId);
 }
