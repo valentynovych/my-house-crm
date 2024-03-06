@@ -11,6 +11,10 @@ let request = {
     creationDate: '',
     monthDate: ''
 };
+const BORDER_ALL = { top: { style: 'thin', color: { rgb: '000000' } },
+    right: { style: 'thin', color: { rgb: '000000' } },
+    bottom: { style: 'thin', color: { rgb: '000000' } },
+    left: { style: 'thin', color: { rgb: '000000' } } };
 
 $(document).ready(function () {
     getPersonalAccountsStatistic();
@@ -365,13 +369,21 @@ function getTable() {
     let table = [];
     let head = [];
     $('#myTHead tr').find('th').not(':first-child').not(':last-child').each(function () {
-        head.push($(this).text());
+        let text = $(this).text();
+        head.push({ v: text,
+            t: "s",
+            s: {font: { bold: true }, border: BORDER_ALL, alignment: { horizontal: 'center'}}
+        });
     });
     table.push(head);
     $('tr[data-href]').each(function () {
         let row = []
         $(this).find('td').not(":last-child").not(':first-child').each(function () {
-            row.push($(this).text());
+            let text = $(this).text();
+            row.push({ v: text,
+                t: "s",
+                s: {border: BORDER_ALL, alignment: { horizontal: 'center'}}
+            });
         });
         table.push(row);
     });
@@ -380,15 +392,5 @@ function getTable() {
 
 function styleTable(worksheet) {
     let DEF_ColW = 20;
-    worksheet['!cols'] = [{ width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }];
-    const colNames = ['A1', 'B1', 'C1', 'D1', 'E1', 'F1', 'G1', 'H1', "I1"];
-    for (const itm of colNames) {
-        if (worksheet[itm]) {
-            worksheet[itm].s = {
-                font: {
-                    bold: true
-                }
-            };
-        }
-    }
+    worksheet['!cols'] = [{ width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: 25 }, { width: 40 }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }];
 }
