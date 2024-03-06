@@ -83,8 +83,8 @@ function drawTable(response) {
                             <i class="ti ti-dots-vertical"></i>
                         </button>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="../edit/${invoice.id}">
-                                <i class="ti ti-file me-1"></i>
+                            <a class="dropdown-item" href="invoices/copy/${invoice.id}">
+                                <i class="ti ti-file me-1"></i>${copy}
                             </a>
                             <a class="dropdown-item" href="invoices/edit/${invoice.id}">
                                 <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}

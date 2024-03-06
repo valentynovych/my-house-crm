@@ -164,5 +164,18 @@ public class InvoiceController {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+    @GetMapping("/copy/{id}")
+    public ModelAndView getInvoicePageForCopy() {
+        return new ModelAndView("invoices/edit-invoice");
+    }
+    @PostMapping("/copy/{id}")
+    public @ResponseBody ResponseEntity<?> saveCopiedInvoice(@ModelAttribute @Valid InvoiceRequest invoiceRequest,
+                                                         HttpServletRequest request) {
+        invoiceService.createInvoice(invoiceRequest);
+        String url = request.getRequestURL().toString();
+        int index = url.lastIndexOf("/");
+        url = url.substring(0, index - 5);
+        return new ResponseEntity<>(url, HttpStatus.OK);
+    }
 
 }

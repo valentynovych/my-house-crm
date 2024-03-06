@@ -2,7 +2,13 @@ let tableLength = 5;
 let defaultInvoice;
 let i = 0;
 let tariffServices = [];
+let url = window.location.pathname;
 $(document).ready(function () {
+    if(url.includes("copy")) {
+        $(".breadCrumb").each(function () {
+            $(this).text(newBreadCrumb);
+        });
+    }
     initializeSelects();
     getInvoice();
 });
@@ -190,7 +196,6 @@ function setOwnerFields(response) {
 
 function getInvoice() {
     blockCardDody();
-    let url = window.location.pathname;
     let id = url.substring(url.lastIndexOf('/') + 1);
     $.ajax({
         type: "GET",
@@ -211,7 +216,11 @@ function setFields(response) {
         defaultDate: response.creationDate,
         dateFormat: "d.m.Y"
     });
-    $("#number").val(response.number);
+    if(url.includes("copy")) {
+        setNumber();
+    } else {
+        $("#number").val(response.number);
+    }
     let number = "";
     for (let j = 0; j < 10 - response.ownerResponse.accountNumber.toString().length; j++) {
         number += "0";
@@ -236,6 +245,20 @@ function setFields(response) {
     getReadings(0);
     setServiceTable(response.itemResponses, response.totalPrice);
 }
+function setNumber() {
+    $.ajax({
+        type: "GET",
+        url: "../get-number",
+        success: function (response) {
+            console.log(response);
+            $("#number").val(response);
+        },
+        error: function () {
+            toastr.error(errorMessage);
+        }
+    });
+}
+
 function getStatus(status) {
     switch (status) {
         case 'PAID':
