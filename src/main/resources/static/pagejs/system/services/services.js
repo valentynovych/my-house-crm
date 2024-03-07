@@ -31,7 +31,7 @@ function drawFormServices(listService) {
                                     <label class="form-label" for="services[${i}].name">${serviceLabel}</label>
                                     <input class="form-control" type="text" name="services[${i}].name"
                                         id="services[${i}].name" value="${service.name}" placeholder="${serviceLabel}">
-                                    <input type="number" class="visually-hidden" name="services[${i}].id"
+                                    <input type="number" class="visually-hidden service-id" name="services[${i}].id"
                                         id="services[${i}].id" value="${service.id}">
                                 </div>
                                 <div class="mb-3 col-md-4">
@@ -43,7 +43,7 @@ function drawFormServices(listService) {
                                     <button type="button" class="btn btn-outline-danger delete-service">
                                         <i class="ti ti-trash ti-xs me-1"></i>
                                     </button>
-                                </div>`: ''}
+                                </div>` : ''}
                                 <div class="mb-3 col-md-6 mt-0">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="services[${i}].showInMeter"
@@ -151,6 +151,7 @@ let serviceToDelete = [];
 function deleteService() {
     const serviceItemBlock = $(this).closest('.service-item');
     let serviceIdToDelete = serviceItemBlock.find('.service-id').attr('value');
+    console.log(serviceIdToDelete);
     if (serviceIdToDelete) {
         serviceToDelete.push(Number(serviceIdToDelete));
     }
@@ -165,7 +166,7 @@ function reorderServiceIndexes() {
     let unitItems = $('#servicesForm').find('.service-item');
     let index = 0;
     for (const unitItem of unitItems) {
-        $(unitItem).find('input').each(function (i, input) {
+        $(unitItem).find('input, select').each(function (i, input) {
             $(input).attr('id', $(input).attr('id').replace(/(\d{1,3})/g, index));
             $(input).attr('name', $(input).attr('name').replace(/(\d{1,3})/g, index));
         })
@@ -203,7 +204,14 @@ $('#save-services').on('click', function () {
             console.log(error)
             printErrorMessageToField(error);
             unblockBy('#servicesForm');
-            toastr.error(errorSaveMessage)
+            if (error.status === 409) {
+                toastr.error(errorMessageOnDelete.replace('{}',
+                    `<span class="fw-bold">${error.responseText}</span>`));
+            } else {
+                toastr.error(errorSaveMessage)
+            }
+            drawFormServices(serviceListToRestore);
+
         }
     });
 });
