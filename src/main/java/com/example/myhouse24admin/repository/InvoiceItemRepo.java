@@ -13,4 +13,5 @@ public interface InvoiceItemRepo extends JpaRepository<InvoiceItem, Long>, JpaSp
     BigDecimal getItemsSumByInvoiceId(@Param("invoiceId")Long invoiceId);
 
     boolean existsInvoiceItemByService_Id(Long serviceId);
+    boolean existsInvoiceItemByService_UnitOfMeasurement_Id(Long unitId);
 }

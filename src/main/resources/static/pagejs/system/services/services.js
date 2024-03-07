@@ -186,9 +186,9 @@ $('#save-services').on('click', function () {
     for (const servicesToDeleteElement of serviceToDelete) {
         formData.append('serviceToDelete[]', servicesToDeleteElement);
     }
-    for (const formDatum of formData.entries()) {
-        console.log(formDatum)
-    }
+    // for (const formDatum of formData.entries()) {
+    //     console.log(formDatum)
+    // }
 
     $.ajax({
         type: 'post',
@@ -335,9 +335,9 @@ $('#save-units').on('click', function () {
         formData.append('unitsToDelete[]', unitsToDeleteElement);
     }
 
-    for (const formDatum of formData.entries()) {
-        console.log(formDatum)
-    }
+    // for (const formDatum of formData.entries()) {
+    //     console.log(formDatum)
+    // }
 
     $.ajax({
         type: 'post',
@@ -353,7 +353,13 @@ $('#save-units').on('click', function () {
             console.log(error)
             printErrorMessageToField(error);
             unblockBy('#measurementUnist');
-            toastr.error(errorSaveMessage)
+            if (error.status === 409) {
+                toastr.error(errorMessageOnDeleteUnits.replace('{}',
+                    `<span class="fw-bold">${error.responseText}</span>`));
+            } else {
+                toastr.error(errorSaveMessage)
+            }
+            drawFormUnits(listUnitsToRestore);
         }
     });
 });

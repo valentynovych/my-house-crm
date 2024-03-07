@@ -38,8 +38,14 @@ public class ServiceController {
 
     @PostMapping("update-measurement-unist")
     public ResponseEntity<?> updateMeasurementUnits(@ModelAttribute @Valid UnitOfMeasurementDtoListWrap units) {
-        unitOfMeasurementService.updateMeasurementUnist(units);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            unitOfMeasurementService.updateMeasurementUnist(units);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ServiceAlreadyUsedException usedException) {
+            MultiValueMap<String, String> head = new LinkedMultiValueMap<>();
+            head.add("Content-Type", "text/html; charset=utf-8");
+            return new ResponseEntity<>(usedException.getServiceNames(), head, HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("get-measurement-units")
