@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      class="light-style layout-navbar-fixed layout-menu-fixed"
+      dir="ltr"
+      data-theme="theme-default"
+      data-template="vertical-menu-template-no-customizer">
+<head th:replace="~{layout/layout :: head}"></head>
+<body>
+<div class="container-xxl container-p-y">
+  <div class="misc-wrapper">
+    <h2 class="mb-1 mx-2" th:text="#{error-404}">404 ERROR</h2>
+    <p class="mb-4 mx-2" th:text="#{error-404-message}"></p>
+    <div class="mt-4">
+      <img
+              th:src="@{/assets/img/illustrations/page-misc-error.png}"
+              alt="page-misc-error"
+              width="225"
+              class="img-fluid"
+      />
+    </div>
+  </div>
+</div>
+<div class="container-fluid misc-bg-wrapper">
+  <img
+          th:src="@{/assets/img/illustrations/bg-shape-image-light.png}"
+          alt="page-misc-error"
+          data-app-light-img="illustrations/bg-shape-image-light.png"
+          data-app-dark-img="illustrations/bg-shape-image-dark.png"
+  />
+</div>
+</body>
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/popper/popper.js}"></script>
+<script th:src="@{/assets/vendor/js/bootstrap.js}"></script>
+<script th:src="@{/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js}"></script>
+<script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
+<script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
+<script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
+<script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+<script th:src="@{/assets/vendor/libs/toastr/toastr.js}"></script>
+
+<script th:src="@{/assets/vendor/js/menu.js}"></script>
+
+<script th:src="@{/assets/js/main.js}"></script>
+</html>

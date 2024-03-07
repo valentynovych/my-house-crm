@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{house-new-title}"></title>
+    <style>
+        .image-wrapper {
+            display: grid;
+            column-gap: 1rem;
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-areas:
+                    "first second third"
+                    "first four five";
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            object-fit: cover;
+        }
+
+    </style>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{house-new-title}" id="house-title"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{/admin/houses}" th:text="#{menu-item-houses}"></a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span id="house-breadcrumb">Dom</span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <div class="mb-4 d-flex justify-content-end">
+            <a th:href="@{/admin/houses/edit-house/}" id="edit-link" class="btn btn-primary"
+               th:text="#{house-edit-button}"></a>
+        </div>
+        <div class="row g-3">
+            <div class="table-left col-md-4">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="fw-bold" th:text="#{house-name-label}"></td>
+                            <td id="house-name"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{house-address-label}"></td>
+                            <td id="house-address"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{house-sections-label}"></td>
+                            <td id="house-sections"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{house-floors-label}"></td>
+                            <td id="house-floors"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{house-staff-label}"></td>
+                            <td id="house-staff" class="d-flex flex-column"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="right-images col-md-8">
+                <div class="image-wrapper">
+                    <figure style=" grid-area: first">
+                        <img class="img-thumbnail rounded" th:src="@{/assets/img/placeholder/placeholder.jpg}"
+                             id="image1">
+                    </figure>
+                    <figure style="grid-area: second">
+                        <img class="img-thumbnail rounded" th:src="@{/assets/img/placeholder/placeholder.jpg}"
+                             id="image2">
+                    </figure>
+                    <figure style="grid-area: third">
+                        <img class="img-thumbnail rounded" th:src="@{/assets/img/placeholder/placeholder.jpg}"
+                             id="image3">
+                    </figure>
+                    <figure style="grid-area: four">
+                        <img class="img-thumbnail rounded" th:src="@{/assets/img/placeholder/placeholder.jpg}"
+                             id="image4">
+                    </figure>
+                    <figure style="grid-area: five">
+                        <img class="img-thumbnail rounded" th:src="@{/assets/img/placeholder/placeholder.jpg}"
+                             id="image5">
+                    </figure>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/houses/view-house.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const successSaveMessage = /*[[#{service-message-success-save}]]*/ 'default';
+    const errorSaveMessage = /*[[#{service-message-error-save}]]*/ 'default';
+
+    const placeholderImage = /*[[@{/assets/img/placeholder/placeholder.jpg}]]*/ 'placeholderImage';
+    const uploadsPath = /*[[@{/uploads/}]]*/ 'placeholderImage';
+
+    const roleDirector = /*[[#{staff-role-director}]]*/ 'default';
+    const roleManager = /*[[#{staff-role-manager}]]*/ 'default';
+    const roleAccountant = /*[[#{staff-role-accountant}]]*/ 'default';
+    const roleElectrician = /*[[#{staff-role-electrician}]]*/ 'default';
+    const rolePlumber = /*[[#{staff-role-plumber}]]*/ 'default';
+</script>
+
+</html>

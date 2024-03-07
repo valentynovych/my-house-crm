@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{staff-title}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{staff-title}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{menu-item-system-settings} + ' / '"></span>
+            <a th:href="@{/admin/system-settings/staff}" th:text="#{menu-item-users} + ' / '"></a>
+            <a th:href="@{/admin/system-settings/staff/view-staff/}" th:text="#{staff-title} + ' / '"
+               id="current-staff-link"></a>
+            <span class="" th:text="#{breadcrumb-add}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <form id="staffForm">
+            <div class="input-wrapper row g-3">
+                <div class="col-md-6">
+                    <label for="firstName" class="form-label"
+                           th:text="#{staff-label-first-name}"></label>
+                    <input class="form-control" type="text" id="firstName"
+                           th:placeholder="#{staff-label-first-name}">
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label"
+                           th:text="#{staff-label-email}"></label>
+                    <input class="form-control" type="text" id="email"
+                           th:placeholder="#{staff-label-email}">
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label"
+                           th:text="#{staff-label-last-name}"></label>
+                    <input class="form-control" type="text" id="lastName"
+                           th:placeholder="#{staff-label-last-name}">
+                </div>
+                <div class="col-md-6">
+                    <label for="password" class="form-label"
+                           th:text="#{staff-label-password}"></label>
+                    <div class="input-group input-group-merge">
+                        <input type="password" id="password" class="form-control password"
+                               th:placeholder="#{staff-label-password}">
+                        <button class="btn btn-secondary generate-password" type="button"
+                                th:text="#{general-button-generate}">Генерувати
+                        </button>
+                        <span class="input-group-text cursor-pointer show-password" id="password-hide">
+                            <i class="ti ti-eye-off"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="phoneNumber" class="form-label"
+                           th:text="#{staff-label-phone-number}"></label>
+                    <input class="form-control" type="text" id="phoneNumber"
+                           th:placeholder="#{staff-label-phone-number}">
+                </div>
+                <div class="col-md-6">
+                    <label for="confirmPassword" class="form-label"
+                           th:text="#{staff-label-confirm-password}"></label>
+                    <div class="input-group input-group-merge">
+                        <input type="password" id="confirmPassword" class="form-control password"
+                               th:placeholder="#{staff-label-confirm-password}">
+                        <span class="input-group-text cursor-pointer show-password" id="confirmPassword-hide">
+                            <i class="ti ti-eye-off"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="row g-3 d-flex col-6 mt-0">
+                    <div class="col-md-6">
+                        <label for="roleId" class="form-label"
+                               th:text="#{staff-label-role}"></label>
+                        <select class="form-select" id="roleId"></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="roleId" class="form-label"
+                               th:text="#{staff-label-status}"></label>
+                        <select class="form-select" id="status"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end gap-3">
+                <button type="button" class="button-cancel btn btn-secondary mt-4"
+                        th:text="#{general-button-cancel}"></button>
+                <button type="button" class="button-save btn btn-primary mt-4"
+                        th:text="#{general-button-save}"></button>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/system/staff/edit-staff.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const staffErrorMessage = /*[[#{staff-add-error-message}]]*/ 'default';
+    const roleLabel = /*[[#{staff-label-role}]]*/ 'default';
+    const roleDirector = /*[[#{staff-role-director}]]*/ 'default';
+    const roleManager = /*[[#{staff-role-manager}]]*/ 'default';
+    const roleAccountant = /*[[#{staff-role-accountant}]]*/ 'default';
+    const roleElectrician = /*[[#{staff-role-electrician}]]*/ 'default';
+    const rolePlumber = /*[[#{staff-role-plumber}]]*/ 'default';
+
+    const statusLabel = /*[[#{staff-label-status}]]*/ 'default';
+    const statusNew = /*[[#{staff-status-new}]]*/ 'default';
+    const statusActive = /*[[#{staff-status-active}]]*/ 'default';
+    const statusDisabled = /*[[#{staff-status-disabled}]]*/ 'default';
+
+</script>
+
+</html>

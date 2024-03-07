@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{apartments-label-apartment}"></title>
+    <style>
+        .light-style div.account-select-wrap .select2-container--default .select2-selection--single {
+            border-radius: 0 0 .375rem .375rem !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{apartments-label-apartment}" id="curr-apartment-title"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{../../apartments}" th:text="#{menu-item-apartments}"></a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{apartments-label-apartment}"></span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <div class="mb-4 d-flex justify-content-end gap-3">
+            <button class="btn btn-outline-secondary" type="button" th:text="#{apartment-accept-payment}"
+                    id="accept-payment"></button>
+            <button class="btn btn-outline-secondary" type="button" th:text="#{apartment-create-invoice}"></button>
+            <a th:href="@{../../apartments/edit-apartment/}" id="edit-link" class="btn btn-primary"
+               th:text="#{apartment-edit-button}"></a>
+        </div>
+        <div class="row g-3">
+            <div class="table-left">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="fw-bold w-25" th:text="#{apartment-label-personal-account}"></td>
+                            <td id="personal-account"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{apartment-label-apartment-number}"></td>
+                            <td id="apartment-number"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{apartment-label-area}"></td>
+                            <td id="area"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{apartment-label-house}"></td>
+                            <td id="house"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{apartment-label-section}"></td>
+                            <td id="section" class="d-flex flex-column"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{apartment-label-floor}"></td>
+                            <td id="floor" class="d-flex flex-column"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{apartment-label-owner}"></td>
+                            <td id="owner" class="d-flex flex-column"></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold" th:text="#{apartment-label-tariff}"></td>
+                            <td id="tariff" class="d-flex flex-column"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/apartments/view-apartment.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const labelLinkViewMeters = /*[[#{apartment-link-view-meters}]]*/ 'default';
+    const labelLinkViewIncomes = /*[[#{apartment-link-view-incomes}]]*/ 'default';
+    const labelLinkViewInvoices = /*[[#{apartment-link-view-invoices}]]*/ 'default';
+
+</script>
+
+</html>

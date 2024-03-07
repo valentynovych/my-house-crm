@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="#{menu-item-contacts}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{site-management-contact-edit-page}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
+            <span th:text="#{site-management-contact-edit-page}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <form enctype="multipart/form-data" id="form" class="row g-3">
+            <div class="col-md-7 mt-2">
+                <div class="py-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+                    <h5 class="mb-0" th:text="#{menu-item-services}">Послуги</h5>
+                </div>
+            </div>
+            <div class="col-md-5 mt-2">
+                <div class="py-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+                    <h5 class="mb-0" th:text="#{menu-item-contacts}">Контакти</h5>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <label for="title" class="form-label" th:text="#{site-management-title}">Заголовок</label>
+                <input type="text" class="form-control" id="title" name="title"
+                       th:placeholder="#{site-management-title}" maxlength="100">
+            </div>
+            <div class="col-md-5">
+                <label for="fullName" class="form-label" th:text="#{owners-table-full-name}">ПІБ</label>
+                <input type="text" class="form-control" id="fullName" name="fullName"
+                       th:placeholder="#{owners-table-full-name}" maxlength="200">
+            </div>
+            <div class="col-md-7">
+                <label for="text" class="form-label" th:text="#{site-management-short-text}">Короткий текст</label>
+                <div id="text" name="text"></div>
+            </div>
+            <div class="col-md-5">
+                <div>
+                    <label for="location" class="form-label" th:text="#{contacts-location}">Локація</label>
+                    <input type="text" class="form-control" id="location" name="location" th:placeholder="#{contacts-location}"
+                           maxlength="200">
+                </div>
+                <div>
+                    <label for="address" class="form-label mt-3" th:text="#{contacts-address}">Адреса</label>
+                    <input type="text" class="form-control" id="address" name="address" th:placeholder="#{contacts-address}"
+                           maxlength="200">
+                </div>
+                <div>
+                    <label for="phoneNumber" class="form-label mt-3" th:text="#{staff-label-phone-number}">Телефон</label>
+                    <input type="text" class="form-control phoneNumber" id="phoneNumber" name="phoneNumber"
+                           placeholder="+380994445566" maxlength="13">
+                </div>
+            </div>
+            <div class="col-md-7">
+                <label for="linkToSite" class="form-label" th:text="#{contacts-commercial-link}">Посилання на комерційний сайт</label>
+                <input type="text" class="form-control" id="linkToSite" name="linkToSite"
+                       th:placeholder="#{contacts-commercial-link}" maxlength="200">
+            </div>
+            <div class="col-md-5">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" name="email"
+                       placeholder="Email" maxlength="100">
+            </div>
+            <div class="col-md-12 mt-2">
+                <div class="py-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+                    <h5 class="mb-0" th:text="#{contacts-map}">Мапа</h5>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="mapCode" class="form-label" th:text="#{contacts-map-code}">Код мапи</label>
+                <textarea type="text" class="form-control" rows="2" id="mapCode" name="mapCode"
+                          maxlength="100"></textarea>
+            </div>
+            <div class="col-md-12 mt-2">
+                <div class="py-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">
+                    <h5 class="mb-0" th:text="#{seo-settings}">Налаштування SEO</h5>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="seoTitle" class="form-label">Title</label>
+                <input type="text" class="form-control" id="seoTitle" name="seoTitle"
+                        maxlength="100">
+            </div>
+            <div class="col-md-12">
+                <label for="seoDescription" class="form-label">Description</label>
+                <textarea type="text" class="form-control" rows="2" id="seoDescription" name="seoDescription"
+                          maxlength="300"></textarea>
+            </div>
+            <div class="col-md-12">
+                <label for="seoKeywords" class="form-label">Keywords</label>
+                <textarea type="text" class="form-control" rows="2" id="seoKeywords" name="seoKeywords"
+                          maxlength="200"></textarea>
+            </div>
+            <div class="mt-5 d-flex justify-content-end gap-3">
+                <button type="button" class="btn btn-secondary" id="cancel-button" th:text="#{general-button-cancel}">Відмінити</button>
+                <button type="button" class="btn btn-primary" id="save-button" th:text="#{general-button-save}">Зберегти</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/site-management/contacts-page.js}"></script>
+<script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const successMessage = [[#{role-success-message}]];
+</script>
+</html>

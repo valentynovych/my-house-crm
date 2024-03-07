@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{apartments-title-new}"></title>
+    <style>
+        .light-style  div.account-select-wrap .select2-container--default .select2-selection--single {
+            border-radius: 0 0 .375rem .375rem !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{apartments-title-new}"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{../apartments}" th:text="#{menu-item-apartments}"></a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{apartments-title-new}"></span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <form id="apartmentForm">
+            <div class="input-wrapper row g-3 d-flex">
+                <div class="left-inputs col-md-6">
+                    <div class="col-md-12 mb-2">
+                        <label for="houseId" class="form-label"
+                               th:text="#{apartment-label-house}"></label>
+                        <div class="house-select-wrap">
+                            <select class="form-control select2" id="houseId" name="houseId"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label for="sectionId" class="form-label"
+                               th:text="#{apartment-label-section}"></label>
+                        <div class="section-select-wrap">
+                            <select class="form-control select2" id="sectionId" name="sectionId" disabled></select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label for="floorId" class="form-label"
+                               th:text="#{apartment-label-floor}"></label>
+                        <div class="floor-select-wrap">
+                            <select class="form-control select2" id="floorId" name="floorId" disabled></select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label for="ownerId" class="form-label"
+                               th:text="#{apartment-label-owner}"></label>
+                        <div class="owner-select-wrap">
+                            <select class="form-control select2" id="ownerId" name="ownerId"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label for="tariffId" class="form-label"
+                               th:text="#{apartment-label-tariff}"></label>
+                        <div class="tariff-select-wrap">
+                            <select class="form-control select2" id="tariffId" name="tariffId"></select>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label for="apartmentNumber" class="form-label"
+                               th:text="#{apartment-label-apartment-number}"></label>
+                        <input type="number" class="form-control" min="1" value="00000" id="apartmentNumber"
+                               name="apartmentNumber" disabled>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                        <label for="area" class="form-label"
+                               th:text="#{apartment-label-area}"></label>
+                        <input type="text" class="form-control" min="1" id="area" name="area"
+                               th:placeholder="#{apartment-enter-area}">
+                    </div>
+                </div>
+                <div class="right-inputs col-md-6 mb-2">
+                    <div class="col-md-12">
+                        <label for="personalAccountId" class="form-label"
+                               th:text="#{apartment-label-personal-account}"></label>
+                        <div class="account-select-wrap">
+                            <input type="text" class="form-control mt-0" min="1" id="personalAccountNew" name="personalAccountNew"
+                                   th:placeholder="#{apartment-enter-account}"
+                                   style="border-radius: .375rem .375rem 0 0">
+                            <select class="form-control select2" id="personalAccountId"
+                                    name="personalAccountId" style=""></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end gap-3 flex-wrap">
+                <button type="button" class="button-cancel btn btn-secondary mt-4"
+                        th:text="#{general-button-cancel}"></button>
+                <button type="button" class="button-save btn btn-primary mt-4"
+                        th:text="#{general-button-save}"></button>
+                <button type="button" class="button-save-and-add btn btn-primary mt-4"
+                        th:text="#{general-button-save-and-add}"></button>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/apartments/add-apartment.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const successSaveMessage = /*[[#{apartment-message-success-save}]]*/ 'default';
+
+    const chooseHouse = /*[[#{apartment-choose-house}]]*/ 'default';
+    const chooseSection = /*[[#{apartment-choose-section}]]*/ 'default';
+    const chooseFloor = /*[[#{apartment-choose-floor}]]*/ 'default';
+    const chooseOwner = /*[[#{apartment-choose-owner}]]*/ 'default';
+    const chooseTariff = /*[[#{apartment-choose-tariff}]]*/ 'default';
+    const enterArea = /*[[#{apartment-enter-area}]]*/ 'default';
+    const chooseAccount = /*[[#{apartment-choose-account}]]*/ 'default';
+    const labelApartmentNumber = /*[[#{apartment-label-apartment-number}]]*/ 'default';
+
+</script>
+
+</html>

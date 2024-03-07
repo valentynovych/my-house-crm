@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{menu-item-users}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{menu-item-users}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{menu-item-system-settings} + ' / '"></span>
+            <span th:text="#{menu-item-users}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body" id="dropdownParent">
+        <div class="mb-3 d-flex justify-content-end">
+            <a th:href="@{staff/add}" class="btn btn-primary me-2">
+                <span class="tf-icons ti-xs ti ti-plus me-1"></span>
+                <span th:text="#{staff-button-add}"></span>
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th colspan="7" class="p-1">
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary clear-filters"
+                                    th:text="#{general-button-clear-table}">Clear
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="table-primary text-center">
+                    <th>#</th>
+                    <th th:text="#{staff-title}"></th>
+                    <th th:text="#{staff-label-role}"></th>
+                    <th th:text="#{staff-label-phone-number}"></th>
+                    <th th:text="#{staff-label-email}"></th>
+                    <th th:text="#{staff-label-status}"></th>
+                    <th th:text="#{general-table-action}"></th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="text" id="filter-by-name" class="form-control password"></td>
+                    <td style="min-width: 13rem">
+                        <div>
+                            <select class="form-select select2" id="filter-by-role"></select>
+                        </div>
+                    </td>
+                    <td><input type="text" id="filter-by-phone" class="form-control"></td>
+                    <td><input type="text" id="filter-by-email" class="form-control password"></td>
+                    <td style="min-width: 12rem">
+                        <div>
+                            <select class="form-select select2" id="filter-by-status"></select>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="#{staff-modal-delete-title}"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{staff-modal-delete-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete"
+                            th:text="#{general-button-delete}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/system/staff/staff.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    const statusNew = /*[[#{staff-status-new}]]*/ 'default';
+    const statusActive = /*[[#{staff-status-active}]]*/ 'default';
+    const statusDisabled = /*[[#{staff-status-disabled}]]*/ 'default';
+
+    const roleLabel = /*[[#{staff-label-role}]]*/ 'default';
+    const roleDirector = /*[[#{staff-role-director}]]*/ 'default';
+    const roleManager = /*[[#{staff-role-manager}]]*/ 'default';
+    const roleAccountant = /*[[#{staff-role-accountant}]]*/ 'default';
+    const roleElectrician = /*[[#{staff-role-electrician}]]*/ 'default';
+    const rolePlumber = /*[[#{staff-role-plumber}]]*/ 'default';
+    const basePath = /*[[@{/system-settings/staff}]]*/ 'default';
+
+    const buttonLabelInvite = /*[[#{general-button-invite}]]*/ 'default';
+    const buttonLabelEdit = /*[[#{general-button-edit}]]*/ 'default';
+    const buttonLabelDelete = /*[[#{general-button-delete}]]*/ 'default';
+    const successMessageOnDelete = /*[[#{staff-message-success-delete}]]*/ 'default';
+    const errorMessageOnDelete = /*[[#{staff-message-error-delete}]]*/ 'default';
+
+    const tableShow = [[#{table-show}]];
+    const tableShowing = [[#{table-showing}]];
+    const tableEntries = [[#{table-entries}]];
+    const tableOf = [[#{table-of}]];
+    const dataNotFound = [[#{table-data-not-found}]];
+
+</script>
+</html>

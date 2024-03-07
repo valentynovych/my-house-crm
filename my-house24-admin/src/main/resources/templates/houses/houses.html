@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{menu-item-houses}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{menu-item-houses}"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item active">
+                    <a th:href="@{/admin/houses}" th:text="#{menu-item-houses}"></a>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body" id="dropdownParent">
+        <div class="mb-3 d-flex justify-content-end">
+            <a th:href="@{houses/add}" class="btn btn-primary me-2">
+                <span class="tf-icons ti-xs ti ti-plus me-1"></span>
+                <span th:text="#{house-add-button}"></span>
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th colspan="4" class="p-1">
+                        <div class="d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary clear-filters"
+                                    th:text="#{general-button-clear-table}">
+                            </button>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="table-primary text-center">
+                    <th>#</th>
+                    <th th:text="#{house-name-label}"></th>
+                    <th th:text="#{house-address-label}"></th>
+                    <th th:text="#{general-table-action}"></th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="text" id="filter-by-name" class="form-control"></td>
+                    <td><input type="text" id="filter-by-address" class="form-control"></td>
+                    <td></td>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{house-modal-delete-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete"
+                            th:text="#{general-button-delete}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/houses/houses.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    const buttonLabelEdit = /*[[#{general-button-edit}]]*/ 'default';
+    const buttonLabelDelete = /*[[#{general-button-delete}]]*/ 'default';
+    const successMessageOnDelete = /*[[#{house-message-success-delete}]]*/ 'default';
+    const errorMessageOnDelete = /*[[#{house-message-error-delete}]]*/ 'default';
+
+    const tableShow = [[#{table-show}]];
+    const tableShowing = [[#{table-showing}]];
+    const tableEntries = [[#{table-entries}]];
+    const tableOf = [[#{table-of}]];
+    const dataNotFound = [[#{table-data-not-found}]];
+
+</script>
+</html>
