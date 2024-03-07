@@ -33,3 +33,5 @@ build/
 ### VS Code ###
 .vscode/
 /src/main/resources/application.yml
+/my-house24-admin/src/main/resources/application.yml
+/my-house24-admin/HELP.md
