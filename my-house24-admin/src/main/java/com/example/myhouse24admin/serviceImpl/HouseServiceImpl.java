@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.example.myhouse24admin.specification.HouseInterfaceSpecification.*;
+import static com.example.myhouse24admin.specification.HouseInterfaceSpecification.byDeleted;
+import static com.example.myhouse24admin.specification.HouseInterfaceSpecification.byNameLike;
 
 @Service
 public class HouseServiceImpl implements HouseService {
@@ -68,12 +69,7 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public boolean deleteHouseById(Long houseId) {
         logger.info("deleteHouseById() - start");
-        Optional<House> byId = houseRepo.findById(houseId);
-        House house = byId.orElseThrow(() -> {
-            logger.error("House with id: {} not found", houseId);
-            return new EntityNotFoundException(String.format("ERROR: House with id: %s not found", houseId));
-        });
-        //TODO add check uses house anymore
+        House house = findHouseById(houseId);
         house.setDeleted(true);
         houseRepo.save(house);
         logger.info("deleteHouseById() - exit, house with id: {} marked deleted", houseId);
@@ -83,11 +79,7 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public HouseViewResponse getHouseById(Long houseId) {
         logger.info("getHouseById() -> start, with id: {}", houseId);
-        Optional<House> byId = houseRepo.findById(houseId);
-        House house = byId.orElseThrow(() -> {
-            logger.error("getHouseById() -> House with id: {} not found", houseId);
-            return new EntityNotFoundException(String.format("House with id: %s not found", houseId));
-        });
+        House house = findHouseById(houseId);
         HouseViewResponse response = houseMapper.houseToHouseViewResponse(house);
         logger.info("getHouseById() -> exit");
         return response;
@@ -96,11 +88,7 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public HouseResponse getHouseResponseById(Long houseId) {
         logger.info("getHouseResponseById() -> start, with id: {}", houseId);
-        Optional<House> byId = houseRepo.findById(houseId);
-        House house = byId.orElseThrow(() -> {
-            logger.error("getHouseResponseById() -> House with id: {} not found", houseId);
-            return new EntityNotFoundException(String.format("House with id: %s not found", houseId));
-        });
+        House house = findHouseById(houseId);
         house.setFloors(house.getFloors().stream().filter(floor -> !floor.isDeleted()).toList());
         house.setSections(house.getSections().stream().filter(section -> !section.isDeleted()).toList());
         HouseResponse houseResponse = houseMapper.houseToHouseResponse(house);
@@ -110,11 +98,7 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public void editHouse(Long houseId, HouseEditRequest houseEditRequest) {
-        Optional<House> byId = houseRepo.findById(houseId);
-        House house = byId.orElseThrow(() -> {
-            logger.error("getHouseResponseById() -> House with id: {} not found", houseId);
-            return new EntityNotFoundException(String.format("House with id: %s not found", houseId));
-        });
+        House house = findHouseById(houseId);
         houseMapper.updateHouseFromHouseRequest(house, houseEditRequest);
         List<MultipartFile> images = houseEditRequest.getImages();
         updateHouseImages(house, images);
@@ -137,16 +121,28 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public Page<HouseNameResponse> getHousesForSelect(SelectSearchRequest selectSearchRequest) {
         logger.info("getHousesForSelect - Getting house name responses for select " + selectSearchRequest.toString());
-        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Pageable pageable = PageRequest.of(selectSearchRequest.page() - 1, 10);
         Page<House> houses = getFilteredHousesForSelect(selectSearchRequest, pageable);
         List<HouseNameResponse> houseNameResponses = houseMapper.houseListToHouseNameResponseList(houses.getContent());
         Page<HouseNameResponse> houseNameResponsePage = new PageImpl<>(houseNameResponses, pageable, houses.getTotalElements());
         logger.info("getHousesForSelect - House name responses were got");
         return houseNameResponsePage;
     }
-    private Page<House> getFilteredHousesForSelect(SelectSearchRequest selectSearchRequest, Pageable pageable){
+
+    private House findHouseById(Long houseId) {
+        logger.info("findHouseById() -> start, with id: {}", houseId);
+        Optional<House> byId = houseRepo.findById(houseId);
+        House house = byId.orElseThrow(() -> {
+            logger.error("findHouseById() -> House by id: {} not found", houseId);
+            return new EntityNotFoundException(String.format("House by id: %s not found", houseId));
+        });
+        logger.info("findHouseById() -> end, return House");
+        return house;
+    }
+
+    private Page<House> getFilteredHousesForSelect(SelectSearchRequest selectSearchRequest, Pageable pageable) {
         Specification<House> houseSpecification = Specification.where(byDeleted());
-        if(!selectSearchRequest.search().isEmpty()){
+        if (!selectSearchRequest.search().isEmpty()) {
             houseSpecification = houseSpecification.and(byNameLike(selectSearchRequest.search()));
         }
         return houseRepo.findAll(houseSpecification, pageable);
