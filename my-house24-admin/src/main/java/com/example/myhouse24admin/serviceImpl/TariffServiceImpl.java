@@ -2,6 +2,7 @@ package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.entity.Tariff;
 import com.example.myhouse24admin.entity.TariffItem;
+import com.example.myhouse24admin.exception.TariffAlreadyUsedException;
 import com.example.myhouse24admin.mapper.TariffMapper;
 import com.example.myhouse24admin.model.invoices.TariffItemResponse;
 import com.example.myhouse24admin.model.invoices.TariffNameResponse;
@@ -100,18 +101,22 @@ public class TariffServiceImpl implements TariffService {
     @Override
     public boolean deleteTariffById(Long tariffId) {
         logger.info("deleteTariffById() -> start with id: {}", tariffId);
-        Optional<Tariff> byId = tariffRepo.findById(tariffId);
-        if (byId.isPresent()) {
-            Tariff tariff = byId.get();
-            tariff.setDeleted(true);
-            tariffRepo.save(tariff);
-            invoiceRepo.existsInvoiceByApartment_Tariff_Id(tariffId);
-            //TODO add check using tariff in invoices
-            logger.info("deleteTariffById() -> tariff with id: {} mark isDeleted and save", tariffId);
-            return true;
+        Tariff tariff = findTariffById(tariffId);
+        checkUsedTariffInInvoices(tariff);
+        tariff.setDeleted(true);
+        tariffRepo.save(tariff);
+        logger.info("deleteTariffById() -> tariff with id: {} mark isDeleted and save", tariffId);
+        return true;
+    }
+
+    private void checkUsedTariffInInvoices(Tariff tariff) {
+        boolean existsInInvoices = invoiceRepo.existsInvoiceByApartment_Tariff_Id(tariff.getId());
+        if (existsInInvoices) {
+            String name = tariff.getName();
+            logger.error("Tariff with name: {}, already used in invoices, can`t delete", name);
+            throw new TariffAlreadyUsedException(
+                    "Tariff with name: %s, already used in invoices, can`t delete", name);
         }
-        logger.error("deleteTariffById() -> Tariff with id: {} not found", tariffId);
-        return false;
     }
 
     @Override
@@ -140,5 +145,14 @@ public class TariffServiceImpl implements TariffService {
         List<TariffItemResponse> tariffItemResponses = mapper.tariffItemListToTariffItemResponse(tariffItems);
         logger.info("getTariffItems - Tariff item responses were got");
         return tariffItemResponses;
+    }
+
+    private Tariff findTariffById(Long tariffId) {
+        Optional<Tariff> byId = tariffRepo.findById(tariffId);
+        Tariff tariff = byId.orElseThrow(() -> {
+            logger.info("findTariffById() -> Tariff by id: {} not found", tariffId);
+            return new EntityNotFoundException(String.format("findTariffById() -> Tariff by id: %s not found", tariffId));
+        });
+        return tariff;
     }
 }

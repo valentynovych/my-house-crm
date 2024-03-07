@@ -75,9 +75,14 @@ function addDeleteEvent(tariffId) {
                     toastr.success(successMessageOnDelete)
                     setTimeout(() => getStaff(currentPage), 400);
                 },
-                error: function () {
+                error: function (error) {
                     $('.close-modal').click()
-                    toastr.error(errorMessageOnDelete);
+                    if (error.status === 409) {
+                        toastr.error(conflictMessageOnDelete.replace('{}',
+                            `<span class="fw-bold">${error.responseText}</span>`))
+                    } else {
+                        toastr.error(errorMessageOnDelete);
+                    }
 
                 }
             })

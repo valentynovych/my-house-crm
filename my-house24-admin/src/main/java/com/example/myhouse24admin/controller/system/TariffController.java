@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.controller.system;
 
+import com.example.myhouse24admin.exception.TariffAlreadyUsedException;
 import com.example.myhouse24admin.model.tariffs.TariffRequestWrap;
 import com.example.myhouse24admin.model.tariffs.TariffResponse;
 import com.example.myhouse24admin.service.TariffService;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -75,7 +78,14 @@ public class TariffController {
 
     @DeleteMapping("delete/{tariffId}")
     public ResponseEntity<?> deleteTariff(@PathVariable @Min(1) Long tariffId) {
-        boolean isDeleted = tariffService.deleteTariffById(tariffId);
+        boolean isDeleted;
+        try {
+            isDeleted = tariffService.deleteTariffById(tariffId);
+        } catch (TariffAlreadyUsedException usedException) {
+            MultiValueMap<String, String> head = new LinkedMultiValueMap<>();
+            head.add("Content-Type", "text/html; charset=utf-8");
+            return new ResponseEntity<>(usedException.getTariffName(), head, HttpStatus.CONFLICT);
+        }
         return isDeleted
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
