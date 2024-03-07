@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface InvoiceRepo extends JpaRepository<Invoice, Long>, JpaSpecificationExecutor<Invoice> {
     @Query(value = "SELECT * FROM invoices WHERE deleted = false ORDER BY id DESC LIMIT 1", nativeQuery = true)
     Optional<Invoice> findLast();
+
+    boolean existsInvoiceByApartment_Tariff_Id(Long tariffId);
 }
