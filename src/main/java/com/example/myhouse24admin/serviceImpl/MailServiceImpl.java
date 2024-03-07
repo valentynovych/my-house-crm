@@ -25,22 +25,24 @@ import java.io.IOException;
 public class MailServiceImpl implements MailService {
     private final TemplateEngine templateEngine;
     private final SendGrid sendGrid;
+    private final HttpServletRequest httpServletRequest;
     private final Logger logger = LogManager.getLogger(MailServiceImpl.class);
 
     @Value("${sender}")
     private String sender;
 
-    public MailServiceImpl(TemplateEngine templateEngine, SendGrid sendGrid) {
+    public MailServiceImpl(TemplateEngine templateEngine, SendGrid sendGrid, HttpServletRequest httpServletRequest) {
         this.templateEngine = templateEngine;
         this.sendGrid = sendGrid;
+        this.httpServletRequest = httpServletRequest;
     }
 
     @Async
     @Override
-    public void sendToken(String token, EmailRequest emailRequest, HttpServletRequest httpRequest) {
+    public void sendToken(String token, EmailRequest emailRequest) {
         logger.info("sendToken() - Sending token " + token + " to email " + emailRequest.email());
         String subject = "Встановлення нового паролю";
-        Content content = new Content("text/html", buildContent(token, httpRequest));
+        Content content = new Content("text/html", buildContent(token));
         sendMail(subject, emailRequest.email(), content);
         logger.info("sendToken() - Token was sent");
     }
@@ -55,11 +57,20 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendMessage(String to, String subject, String messageHtml, Staff staff, HttpServletRequest request) {
+    public void sendMessage(String to, String subject, String messageHtml, Staff staff) {
         logger.info("sendMessage() - start send message to: {}", to);
-        Content content = new Content("text/html", buildMessageContent(messageHtml, subject, staff, request));
+        Content content = new Content("text/html", buildMessageContent(messageHtml, subject, staff));
         sendMail(subject, to, content);
         logger.info("sendMessage() -> message to: {}, has been send", to);
+    }
+
+    @Override
+    public void sendInviteToStaff(String token, Staff staffById) {
+        logger.info("sendInviteToStaff() -> start, with staffId: {}", staffById.getId());
+        String subject = "Запрошення у систему";
+        Content content = new Content("text/html", buildInviteContent(token, staffById));
+        sendMail(subject, staffById.getEmail(), content);
+        logger.info("sendInviteToStaff() -> end, invite has been send");
     }
 
     private void sendMail(String subject, String to, Content content) {
@@ -90,18 +101,18 @@ public class MailServiceImpl implements MailService {
         return new Email(address);
     }
 
-    private String buildContent(String token, HttpServletRequest httpRequest) {
-        String link = formLink(token, httpRequest);
+    private String buildContent(String token) {
+        String link = formLink(token);
         Context context = new Context();
         context.setVariable("link", link);
         return templateEngine.process("email/passwordResetTokenEmailTemplate", context);
     }
 
-    private String formLink(String token, HttpServletRequest httpRequest) {
-        String fullUrl = ServletUriComponentsBuilder.fromRequestUri(httpRequest).build().toUriString();
-        int index = fullUrl.lastIndexOf("/");
+    private String formLink(String token) {
+        String fullUrl = ServletUriComponentsBuilder.fromRequestUri(httpServletRequest).build().toUriString();
+        int index = fullUrl.indexOf("admin");
         String baseUrl = fullUrl.substring(0, index);
-        String link = baseUrl + "/changePassword?token=" + token;
+        String link = baseUrl + "admin/changePassword?token=" + token;
         return link;
     }
 
@@ -111,20 +122,27 @@ public class MailServiceImpl implements MailService {
         return templateEngine.process("email/newPasswordTemplate", context);
     }
 
-    private String buildMessageContent(String messageContent, String subject, Staff staff, HttpServletRequest request) {
+    private String buildMessageContent(String messageContent, String subject, Staff staff) {
         Context context = new Context();
-        request.getRequestURI();
         context.setVariable("messageContent", messageContent);
         context.setVariable("subject", subject);
         context.setVariable("staff", staff);
-        context.setVariable("link", getLinkToUserMessages(request));
+        context.setVariable("link", getLinkToUserMessages());
         return templateEngine.process("email/sendMessageTemplate", context);
     }
 
-    private String getLinkToUserMessages(HttpServletRequest request) {
-        StringBuffer requestURL = request.getRequestURL();
+    private String getLinkToUserMessages() {
+        StringBuffer requestURL = httpServletRequest.getRequestURL();
         String link = requestURL.substring(0, requestURL.lastIndexOf("admin"));
         link += "user/messages";
         return link;
+    }
+
+    private String buildInviteContent(String token, Staff staff) {
+        String link = formLink(token);
+        Context context = new Context();
+        context.setVariable("link", link);
+        context.setVariable("staffFullName", staff.getFirstName() + " " + staff.getLastName());
+        return templateEngine.process("email/sendInviteTemplate", context);
     }
 }

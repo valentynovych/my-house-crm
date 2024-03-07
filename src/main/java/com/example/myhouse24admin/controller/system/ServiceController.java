@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.controller.system;
 
+import com.example.myhouse24admin.exception.ServiceAlreadyUsedException;
 import com.example.myhouse24admin.model.services.ServiceDtoListWrap;
 import com.example.myhouse24admin.model.services.ServiceResponse;
 import com.example.myhouse24admin.model.services.UnitOfMeasurementDto;
@@ -11,6 +12,8 @@ import jakarta.validation.constraints.Min;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -35,8 +38,14 @@ public class ServiceController {
 
     @PostMapping("update-measurement-unist")
     public ResponseEntity<?> updateMeasurementUnits(@ModelAttribute @Valid UnitOfMeasurementDtoListWrap units) {
-        unitOfMeasurementService.updateMeasurementUnist(units);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            unitOfMeasurementService.updateMeasurementUnist(units);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ServiceAlreadyUsedException usedException) {
+            MultiValueMap<String, String> head = new LinkedMultiValueMap<>();
+            head.add("Content-Type", "text/html; charset=utf-8");
+            return new ResponseEntity<>(usedException.getServiceNames(), head, HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("get-measurement-units")
@@ -51,10 +60,16 @@ public class ServiceController {
         return new ResponseEntity<>(serviceList, HttpStatus.OK);
     }
 
-    @PostMapping("update-services")
-    public ResponseEntity<?> updateServices(@ModelAttribute @Valid ServiceDtoListWrap servicesList) {
-        servicesService.updateServices(servicesList);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping(value = "update-services")
+    public @ResponseBody ResponseEntity<?> updateServices(@ModelAttribute @Valid ServiceDtoListWrap servicesList) {
+        try {
+            servicesService.updateServices(servicesList);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ServiceAlreadyUsedException usedException) {
+            MultiValueMap<String, String> head = new LinkedMultiValueMap<>();
+            head.add("Content-Type", "text/html; charset=utf-8");
+            return new ResponseEntity<>(usedException.getServiceNames(), head, HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("get-service-by-id/{serviceId}")
@@ -62,7 +77,5 @@ public class ServiceController {
         ServiceResponse serviceResponse = servicesService.getServiceById(serviceId);
         return new ResponseEntity<>(serviceResponse, HttpStatus.OK);
     }
-
-
 }
 

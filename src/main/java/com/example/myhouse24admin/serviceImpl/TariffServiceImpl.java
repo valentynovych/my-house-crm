@@ -9,6 +9,7 @@ import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.model.tariffs.TariffRequest;
 import com.example.myhouse24admin.model.tariffs.TariffRequestWrap;
 import com.example.myhouse24admin.model.tariffs.TariffResponse;
+import com.example.myhouse24admin.repository.InvoiceRepo;
 import com.example.myhouse24admin.repository.TariffItemRepo;
 import com.example.myhouse24admin.repository.TariffRepo;
 import com.example.myhouse24admin.service.TariffService;
@@ -32,12 +33,14 @@ public class TariffServiceImpl implements TariffService {
     private final TariffRepo tariffRepo;
     private final TariffItemRepo tariffItemRepo;
     private final TariffMapper mapper;
+    private final InvoiceRepo invoiceRepo;
     private final Logger logger = LogManager.getLogger(TariffServiceImpl.class);
 
-    public TariffServiceImpl(TariffRepo tariffRepo, TariffItemRepo tariffItemRepo, TariffMapper mapper) {
+    public TariffServiceImpl(TariffRepo tariffRepo, TariffItemRepo tariffItemRepo, TariffMapper mapper, InvoiceRepo invoiceRepo) {
         this.tariffRepo = tariffRepo;
         this.tariffItemRepo = tariffItemRepo;
         this.mapper = mapper;
+        this.invoiceRepo = invoiceRepo;
     }
 
     @Override
@@ -102,6 +105,7 @@ public class TariffServiceImpl implements TariffService {
             Tariff tariff = byId.get();
             tariff.setDeleted(true);
             tariffRepo.save(tariff);
+            invoiceRepo.existsInvoiceByApartment_Tariff_Id(tariffId);
             //TODO add check using tariff in invoices
             logger.info("deleteTariffById() -> tariff with id: {} mark isDeleted and save", tariffId);
             return true;
@@ -113,7 +117,7 @@ public class TariffServiceImpl implements TariffService {
     @Override
     public Page<TariffNameResponse> getTariffsForSelect(SelectSearchRequest selectSearchRequest) {
         logger.info("getTariffsForSelect - Getting tariff name responses for select " + selectSearchRequest.toString());
-        Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
+        Pageable pageable = PageRequest.of(selectSearchRequest.page() - 1, 10);
         Page<Tariff> tariffs = getFilteredTariffsForSelect(selectSearchRequest, pageable);
         List<TariffNameResponse> tariffNameResponses = mapper.tariffListToTariffNameResponseList(tariffs.getContent());
         Page<TariffNameResponse> tariffNameResponsePage = new PageImpl<>(tariffNameResponses, pageable, tariffs.getTotalElements());
@@ -123,7 +127,7 @@ public class TariffServiceImpl implements TariffService {
 
     private Page<Tariff> getFilteredTariffsForSelect(SelectSearchRequest selectSearchRequest, Pageable pageable) {
         Specification<Tariff> tariffSpecification = Specification.where(byDeleted());
-        if(!selectSearchRequest.search().isEmpty()){
+        if (!selectSearchRequest.search().isEmpty()) {
             tariffSpecification = tariffSpecification.and(byTariffName(selectSearchRequest.search()));
         }
         return tariffRepo.findAll(tariffSpecification, pageable);
@@ -131,7 +135,7 @@ public class TariffServiceImpl implements TariffService {
 
     @Override
     public List<TariffItemResponse> getTariffItems(Long tariffId) {
-        logger.info("getTariffItems - Getting tariff item responses by tariff id "+tariffId);
+        logger.info("getTariffItems - Getting tariff item responses by tariff id " + tariffId);
         List<TariffItem> tariffItems = tariffItemRepo.findAll(byTariffId(tariffId));
         List<TariffItemResponse> tariffItemResponses = mapper.tariffItemListToTariffItemResponse(tariffItems);
         logger.info("getTariffItems - Tariff item responses were got");

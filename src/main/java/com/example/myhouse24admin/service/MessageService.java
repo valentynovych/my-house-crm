@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import java.util.Map;
 
 public interface MessageService {
-    void sendNewMessage(MessageSendRequest messageSendRequest, HttpServletRequest request);
+    void sendNewMessage(MessageSendRequest messageSendRequest);
 
     Page<MessageTableResponse> getMessages(int page, int pageSize, Map<String, String> searchParams);
 

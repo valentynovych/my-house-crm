@@ -2,6 +2,7 @@ package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.entity.PasswordResetToken;
 import com.example.myhouse24admin.entity.Staff;
+import com.example.myhouse24admin.entity.StaffStatus;
 import com.example.myhouse24admin.model.authentication.EmailRequest;
 import com.example.myhouse24admin.repository.PasswordResetTokenRepo;
 import com.example.myhouse24admin.repository.StaffRepo;
@@ -74,7 +75,9 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     public void updatePassword(String token, String password) {
         logger.info("updatePassword() - Updating password by password reset token "+token);
         PasswordResetToken passwordResetToken = passwordResetTokenRepo.findByToken(token).orElseThrow(()-> new EntityNotFoundException("Password reset token was not found by token "+token));
-        passwordResetToken.getStaff().setPassword(passwordEncoder.encode(password));
+        Staff staff = passwordResetToken.getStaff();
+        staff.setPassword(passwordEncoder.encode(password));
+        staff.setStatus(StaffStatus.ACTIVE);
         passwordResetTokenRepo.save(passwordResetToken);
         logger.info("updatePassword() - Password was updated");
     }
