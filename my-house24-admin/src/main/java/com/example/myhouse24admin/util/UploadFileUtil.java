@@ -1,44 +1,39 @@
 package com.example.myhouse24admin.util;
 
-import org.apache.commons.io.FileUtils;
+import com.example.myhouse24admin.service.S3Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 @Component
 public class UploadFileUtil {
-    @Value("${upload.path}")
-    private String uploadPath;
     private final ResourceLoader resourceLoader;
+    private final S3Service s3Service;
     private final Logger logger = LogManager.getLogger(UploadFileUtil.class);
 
-    public UploadFileUtil(ResourceLoader resourceLoader) {
+    public UploadFileUtil(ResourceLoader resourceLoader, S3Service s3Service) {
         this.resourceLoader = resourceLoader;
+        this.s3Service = s3Service;
     }
 
     public void deleteFile(String filename) {
-        File deletedImage = new File(uploadPath + "/" + filename);
-        if (deletedImage.delete()) {
-            logger.info("image" + deletedImage.getAbsolutePath() + "has been delete");
+        if (s3Service.deleteFile(filename)) {
+            logger.info("image: {} - has been delete from bucked", filename);
         } else {
-            logger.info("image" + deletedImage.getAbsolutePath() + "not delete");
+            logger.info("image: {} - not delete from bucked", filename);
         }
     }
+
     public String saveDefaultOwnerImage() {
-        File file = new File(uploadPath+"\\defaultAvatar.png");
         Resource resource = resourceLoader.getResource("classpath:static/assets/img/avatars/1.png");
         try {
-            InputStream stream = resource.getInputStream();
-            FileUtils.copyInputStreamToFile(stream, file);
+            s3Service.uploadFile("defaultAvatar.png", (MultipartFile) resource.getFile());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -48,27 +43,14 @@ public class UploadFileUtil {
     public String saveFile(MultipartFile file) {
         String fileName = null;
         if (!file.isEmpty()) {
-            createDirectoryIfNotExist();
             String uuidFile = UUID.randomUUID().toString();
             try {
                 fileName = uuidFile + "_" + file.getOriginalFilename();
-                file.transferTo(new File(uploadPath + "/" + fileName));
+                s3Service.uploadFile(fileName, file);
             } catch (IOException e) {
-                logger.error("Error transfer file: {} to directory: {}, because: {}", fileName, uploadPath, e.getCause());
+                logger.error("Error transfer file: {} to AWS bucket, because: {}", fileName, e.getCause());
             }
         }
         return fileName;
-    }
-
-    private void createDirectoryIfNotExist() {
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            boolean mkdir = uploadDir.mkdir();
-            if (mkdir) {
-                logger.info("create directory for uploads file");
-            } else {
-                logger.info("directory for uploads file is not create");
-            }
-        }
     }
 }
