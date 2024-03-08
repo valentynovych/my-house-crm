@@ -16,7 +16,7 @@
 
     <modules>
         <module>my-house24-admin</module>
-        <module>my-house-24-user</module>
+        <module>my-house24-cabinet</module>
     </modules>
 
 </project>
