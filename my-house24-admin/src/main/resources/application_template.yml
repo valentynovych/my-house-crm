@@ -6,6 +6,12 @@ google:
     key:
       site:
       secret:
+#AWS S3
+aws:
+  accessKey:
+  secretAccessKey:
+  endpoint:
+  bucketName:
 
 spring:
   main:
