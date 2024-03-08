@@ -12,4 +12,5 @@ public interface MailService {
     void sendMessage(String to, String subject, String messageHtml, Staff staff);
 
     void sendInviteToStaff(String token,Staff staffById);
+    void sendActivationToOwner(String token, Long ownerId);
 }

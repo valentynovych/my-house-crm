@@ -54,6 +54,8 @@ public class ApartmentOwner {
     private List<Message> messages = new ArrayList<>();
     @OneToMany(mappedBy = "owner")
     private List<Apartment> apartments = new ArrayList<>();
+    @OneToOne(mappedBy = "apartmentOwner")
+    private OwnerPasswordResetToken ownerPasswordResetToken;
 
     public Long getId() {
         return id;
@@ -205,5 +207,13 @@ public class ApartmentOwner {
 
     public void setApartments(List<Apartment> apartments) {
         this.apartments = apartments;
+    }
+
+    public OwnerPasswordResetToken getOwnerPasswordResetToken() {
+        return ownerPasswordResetToken;
+    }
+
+    public void setOwnerPasswordResetToken(OwnerPasswordResetToken ownerPasswordResetToken) {
+        this.ownerPasswordResetToken = ownerPasswordResetToken;
     }
 }

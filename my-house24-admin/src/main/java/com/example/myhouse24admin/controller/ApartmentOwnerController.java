@@ -6,6 +6,8 @@ import com.example.myhouse24admin.model.meterReadings.HouseNameResponse;
 import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.service.ApartmentOwnerService;
 import com.example.myhouse24admin.service.HouseService;
+import com.example.myhouse24admin.service.MailService;
+import com.example.myhouse24admin.service.OwnerPasswordResetTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -20,12 +22,18 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/admin/owners")
 public class ApartmentOwnerController {
     private final ApartmentOwnerService apartmentOwnerService;
+    private final OwnerPasswordResetTokenService ownerPasswordResetTokenService;
     private final HouseService houseService;
+    private final MailService mailService;
 
     public ApartmentOwnerController(ApartmentOwnerService apartmentOwnerService,
-                                    HouseService houseService) {
+                                    OwnerPasswordResetTokenService ownerPasswordResetTokenService,
+                                    HouseService houseService,
+                                    MailService mailService) {
         this.apartmentOwnerService = apartmentOwnerService;
+        this.ownerPasswordResetTokenService = ownerPasswordResetTokenService;
         this.houseService = houseService;
+        this.mailService = mailService;
     }
 
     @GetMapping()
@@ -77,7 +85,7 @@ public class ApartmentOwnerController {
     }
 
     @PostMapping("/edit/{id}")
-    public @ResponseBody ResponseEntity<?> updateOwner(@PathVariable long id,
+    public @ResponseBody ResponseEntity<?> updateOwner(@PathVariable Long id,
                                                        @Valid @ModelAttribute
                                                        EditApartmentOwnerRequest editApartmentOwnerRequest,
                                                        @RequestParam(name = "avatar", required = false)
@@ -121,5 +129,11 @@ public class ApartmentOwnerController {
     @GetMapping("/get-houses")
     public @ResponseBody Page<HouseNameResponse> getHouses(SelectSearchRequest selectSearchRequest) {
         return houseService.getHousesForSelect(selectSearchRequest);
+    }
+    @PostMapping("/send-activation/{id}")
+    public @ResponseBody ResponseEntity<?> sendActivation(@PathVariable Long id) {
+        String token = ownerPasswordResetTokenService.createOrUpdatePasswordResetToken(id);
+        mailService.sendActivationToOwner(token, id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
