@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.service;
 
 import com.example.myhouse24admin.entity.Staff;
+import com.example.myhouse24admin.model.apartmentOwner.InvitationRequest;
 import com.example.myhouse24admin.model.authentication.EmailRequest;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -13,4 +14,5 @@ public interface MailService {
 
     void sendInviteToStaff(String token,Staff staffById);
     void sendActivationToOwner(String token, Long ownerId);
+    void sendInvitationToOwner(InvitationRequest invitationRequest);
 }

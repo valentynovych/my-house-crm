@@ -136,4 +136,17 @@ public class ApartmentOwnerController {
         mailService.sendActivationToOwner(token, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    @GetMapping("/send-invitation")
+    public ModelAndView getSendInvitationPage() {
+        return new ModelAndView("owners/send-invitation");
+    }
+    @PostMapping("/send-invitation")
+    public @ResponseBody ResponseEntity<?> sendInvitation(@Valid @ModelAttribute InvitationRequest invitationRequest,
+                                                          HttpServletRequest request) {
+        mailService.sendInvitationToOwner(invitationRequest);
+        String url = request.getRequestURL().toString();
+        int index = url.lastIndexOf("/");
+        String returnUrl = url.substring(0, index);
+        return new ResponseEntity<>(returnUrl, HttpStatus.OK);
+    }
 }
