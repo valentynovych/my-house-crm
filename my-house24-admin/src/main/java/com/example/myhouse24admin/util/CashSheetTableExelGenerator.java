@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.util;
 
+import com.example.myhouse24admin.entity.CashSheetType;
 import com.example.myhouse24admin.entity.PaymentType;
 import com.example.myhouse24admin.model.cashRegister.CashSheetTableResponse;
 import jakarta.servlet.ServletOutputStream;
@@ -11,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.MessageSource;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -120,17 +122,29 @@ public class CashSheetTableExelGenerator {
 
     private void writeData() {
         CellStyle style = createValueStyle();
+        BigDecimal sumProcessedIncomes = BigDecimal.ZERO;
+        BigDecimal sumProcessedExpense = BigDecimal.ZERO;
+
+        Row row;
         for (CashSheetTableResponse response : cashSheetTableResponses) {
             int columCount = 0;
-            Row row = sheet.createRow(rowCounter);
+            row = sheet.createRow(rowCounter);
             createCell(row, columCount++, response.getSheetNumber(), style);
             String creationDate = response.getCreationDate()
                     .atZone(ZoneId.systemDefault())
                     .format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             createCell(row, columCount++, creationDate, style);
-            createCell(row, columCount++, response.isProcessed()
-                    ? messageSource.getMessage("cash-register-label-sheet-status-confirmed", new Object[0], locale)
-                    : messageSource.getMessage("cash-register-label-sheet-status-not-confirmed", new Object[0], locale), style);
+            String processedLabel;
+            if (response.isProcessed()) {
+                processedLabel = messageSource.getMessage("cash-register-label-sheet-status-confirmed", new Object[0], locale);
+                if (response.getSheetType().equals(CashSheetType.INCOME))
+                    sumProcessedIncomes = sumProcessedIncomes.add(response.getAmount());
+                if (response.getSheetType().equals(CashSheetType.EXPENSE))
+                    sumProcessedExpense = sumProcessedExpense.add(response.getAmount());
+            } else {
+                processedLabel = messageSource.getMessage("cash-register-label-sheet-status-not-confirmed", new Object[0], locale);
+            }
+            createCell(row, columCount++, processedLabel, style);
             createCell(row, +columCount++, response.getPaymentItem().getName(), style);
             createCell(row, columCount++, response.getApartmentOwner() != null
                             ? response.getApartmentOwner().fullName()
@@ -152,5 +166,16 @@ public class CashSheetTableExelGenerator {
             createCell(row, columCount, response.getAmount().toString(), style);
             rowCounter++;
         }
+
+        Row rowIncomes = sheet.createRow(++rowCounter);
+        createCell(rowIncomes, 6,
+                messageSource.getMessage("cash-register-label-processed-income-amount", new Object[0], locale),
+                style);
+        createCell(rowIncomes, 7, sumProcessedIncomes.toString(), style);
+        Row rowExpense = sheet.createRow(++rowCounter);
+        createCell(rowExpense, 6,
+                messageSource.getMessage("cash-register-label-processed-expense-amount", new Object[0], locale),
+                style);
+        createCell(rowExpense, 7, sumProcessedExpense.toString(), style);
     }
 }
