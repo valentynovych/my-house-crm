@@ -33,8 +33,9 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
-    public S3Object getFile(String keyName) {
+    public S3Object getS3Object(String keyName) {
         logger.info("getFile() -> start getting file from AWS, keyName: {}", keyName);
+        if (!s3client.doesObjectExist(bucketName, keyName)) return new S3Object();
         S3Object object = s3client.getObject(bucketName, keyName);
         logger.info("getFile() -> end, success get file: {}", object.getKey());
         return object;

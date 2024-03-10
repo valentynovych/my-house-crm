@@ -8,7 +8,7 @@ import java.io.IOException;
 public interface S3Service {
     void uploadFile(String keyName, MultipartFile file) throws IOException;
 
-    S3Object getFile(String keyName);
+    S3Object getS3Object(String keyName);
 
     boolean deleteFile(String keyName);
 

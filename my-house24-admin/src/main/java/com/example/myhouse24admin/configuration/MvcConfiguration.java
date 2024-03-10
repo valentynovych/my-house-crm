@@ -1,12 +1,11 @@
 package com.example.myhouse24admin.configuration;
 
-import com.amazonaws.services.s3.AmazonS3URI;
-import org.springframework.beans.factory.annotation.Value;
+import com.example.myhouse24admin.configuration.awsConfiguration.S3ResourceResolve;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.core.io.UrlResource;
+import org.springframework.http.CacheControl;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -22,15 +21,19 @@ import java.util.Locale;
 @EnableWebMvc
 public class MvcConfiguration implements WebMvcConfigurer {
 
-    @Value("${aws.endpoint}")
-    private String s3Location;
+    private final S3ResourceResolve s3ResourceResolve;
+
+    public MvcConfiguration(S3ResourceResolve s3ResourceResolve) {
+        this.s3ResourceResolve = s3ResourceResolve;
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations(UrlResource.from(new AmazonS3URI(s3Location).getURI()));
-//                .addResourceLocations("file:uploads/");
+                .resourceChain(false)
+                .addResolver(s3ResourceResolve);
     }
 
     @Bean

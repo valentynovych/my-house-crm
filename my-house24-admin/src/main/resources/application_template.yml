@@ -10,7 +10,6 @@ google:
 aws:
   accessKey:
   secretAccessKey:
-  endpoint:
   bucketName:
 
 spring:
