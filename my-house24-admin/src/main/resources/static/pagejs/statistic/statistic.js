@@ -122,8 +122,10 @@ function drawPaidArrearsInvoicesStatistic(statistic) {
                 legend: {
                     position: 'bottom'
                 }
-            }
-        },
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
     };
 
     const barChart = document.querySelector('#arrears-paid-arrears-invoice-statistic');
@@ -168,8 +170,10 @@ function drawIncomeExpenseStatistic(statistic) {
                 legend: {
                     position: 'bottom'
                 }
-            }
-        },
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
     };
 
     const barChart = document.querySelector('#income-expense-chart');
