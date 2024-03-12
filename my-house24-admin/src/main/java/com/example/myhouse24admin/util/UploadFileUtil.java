@@ -59,7 +59,9 @@ public class UploadFileUtil {
         }
         return fileName;
     }
-
+    public File getFileByName(String name){
+        return new File(uploadPath+"/"+name);
+    }
     private void createDirectoryIfNotExist() {
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
