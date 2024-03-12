@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface ApartmentRepo extends JpaRepository<Apartment, Long>, JpaSpecificationExecutor<Apartment> {
 
     Optional<Apartment> findApartmentByPersonalAccount_Id(Long personalAccountId);
+
+    int countApartmentsByDeletedIsFalse();
 }

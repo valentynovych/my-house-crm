@@ -27,9 +27,12 @@ public interface PersonalAccountRepo extends JpaRepository<PersonalAccount, Long
     Optional<PersonalAccount> findPersonalAccountByApartment(Apartment apartment);
 
     Optional<PersonalAccount> findPersonalAccountByApartment_Id(Long apartmentId);
+
     @Query("SELECT MIN(pa.accountNumber + 1) AS min_free_number " +
             "FROM PersonalAccount pa " +
             "LEFT JOIN PersonalAccount pa2 ON pa.accountNumber + 1 = pa2.accountNumber " +
             "WHERE pa2.accountNumber IS NULL")
     Long findMinimalFreeAccountNumber();
+
+    int countPersonalAccountsByDeletedIsFalse();
 }

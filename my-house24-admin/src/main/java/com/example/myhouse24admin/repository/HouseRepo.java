@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HouseRepo extends JpaRepository<House, Long>, JpaSpecificationExecutor<House> {
+
+    int countHousesByDeletedIsFalse();
 }

@@ -1,5 +1,8 @@
 package com.example.myhouse24admin.controller;
 
+import com.example.myhouse24admin.model.statistic.IncomeExpenseStatistic;
+import com.example.myhouse24admin.model.statistic.InvoicePaidArrearsStatistic;
+import com.example.myhouse24admin.model.statistic.StatisticGeneralResponse;
 import com.example.myhouse24admin.service.StatisticService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequestMapping("/admin/statistic")
@@ -22,14 +27,37 @@ public class StatisticController {
     }
 
     @GetMapping("")
-    public ModelAndView getStatisticPage(){
+    public ModelAndView getStatisticPage() {
         return new ModelAndView("statistic/statistic");
     }
 
     @GetMapping("get-accounts-statistic")
     public @ResponseBody ResponseEntity<?> getPersonalAccountsStatistic() {
-        Map<String, String> personalAccountMetrics = statisticService.getPersonalAccountsMetrics();
-        return new ResponseEntity<>(personalAccountMetrics, HttpStatus.OK);
+        Map<String, String> personalAccountsMetrics = statisticService.getPersonalAccountsMetrics();
+        return new ResponseEntity<>(personalAccountsMetrics, HttpStatus.OK);
+    }
+
+    @GetMapping("get-general-statistic")
+    public @ResponseBody ResponseEntity<?> getGeneralStatistic() {
+        StatisticGeneralResponse generalStatistic;
+        try {
+            generalStatistic = statisticService.getGeneralStatistic();
+            return new ResponseEntity<>(generalStatistic, HttpStatus.OK);
+        } catch (ExecutionException | InterruptedException exception) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("get-income-expense-statistic")
+    public @ResponseBody ResponseEntity<?> getIncomeExpenseStatistic() {
+        List<IncomeExpenseStatistic> incomeExpenseStatisticPerYear = statisticService.getIncomeExpenseStatisticPerYear();
+        return new ResponseEntity<>(incomeExpenseStatisticPerYear, HttpStatus.OK);
+    }
+
+    @GetMapping("get-paid-arrears-statistic")
+    public @ResponseBody ResponseEntity<?> getInvoicesPaidArrearsStatistic() {
+        List<InvoicePaidArrearsStatistic> paidArrearsStatisticPerYear = statisticService.getInvoicesPaidArrearsStatisticPerYear();
+        return new ResponseEntity<>(paidArrearsStatisticPerYear, HttpStatus.OK);
     }
 
 
