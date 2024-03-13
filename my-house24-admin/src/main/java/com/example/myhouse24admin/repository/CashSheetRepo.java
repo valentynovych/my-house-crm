@@ -20,7 +20,7 @@ public interface CashSheetRepo extends JpaRepository<CashSheet, Long>, JpaSpecif
     boolean existsCashSheetByPaymentItem_Id(Long paymentItemId);
 
     @Async
-    CompletableFuture<List<CashSheet>> findByCreationDateBetween(Instant dateFrom, Instant dateTo);
+    CompletableFuture<List<CashSheet>> findByCreationDateBetweenAndDeletedIsFalse(Instant dateFrom, Instant dateTo);
 
     Optional<CashSheet> findCashSheetByInvoice_Id(Long invoiceId);
 }

@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.controller;
 
+import com.example.myhouse24admin.model.statistic.BalanceStatistic;
 import com.example.myhouse24admin.model.statistic.IncomeExpenseStatistic;
 import com.example.myhouse24admin.model.statistic.InvoicePaidArrearsStatistic;
 import com.example.myhouse24admin.model.statistic.StatisticGeneralResponse;
@@ -33,7 +34,7 @@ public class StatisticController {
 
     @GetMapping("get-accounts-statistic")
     public @ResponseBody ResponseEntity<?> getPersonalAccountsStatistic() {
-        Map<String, String> personalAccountsMetrics = statisticService.getPersonalAccountsMetrics();
+        BalanceStatistic personalAccountsMetrics = statisticService.getPersonalAccountsMetrics();
         return new ResponseEntity<>(personalAccountsMetrics, HttpStatus.OK);
     }
 

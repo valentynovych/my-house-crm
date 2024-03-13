@@ -228,8 +228,9 @@ function getPersonalAccountsStatistic() {
 }
 
 function fillStatistic(stat) {
-    $('#accounts-balance').html(`${stat.accountsBalanceOverpayments} ${currency}.`)
-    $('#accounts-balance-arrears').html(`${stat.accountsBalanceArrears} ${currency}.`)
+    $('#accounts-balance').html(`${stat.accountsBalanceOverpayments} ${currency}.`);
+    $('#accounts-balance-arrears').html(`${stat.accountsBalanceArrears} ${currency}.`);
+    $('#cash-register-balance').html(`${stat.cashRegisterBalance} ${currency}.`);
 }
 
 $('#export-to-exel').on('click', function () {

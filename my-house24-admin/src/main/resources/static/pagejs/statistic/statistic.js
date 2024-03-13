@@ -74,7 +74,14 @@ function fillPersonalAccountsStatistic(response) {
 
     $('#account-balance-arrears').html(`${response.accountsBalanceArrears} ${currency}`).hide().show('');
     $('#account-current-balance').html(`${response.accountsBalanceOverpayments} ${currency}`).hide().show('');
-    $('#account-cash-register-balance').html(1545).hide().show('');
+    const cashRegisterBalance = response.cashRegisterBalance;
+    const $account = $('#account-cash-register-balance');
+    $account.html(`${cashRegisterBalance} ${currency}`).hide().show('');
+    if (cashRegisterBalance < 0) {
+        $account.closest('.card').addClass('bg-label-danger');
+    } else {
+        $account.closest('.card').addClass('bg-label-success');
+    }
 }
 
 function getListMonthLabels(listDate) {
