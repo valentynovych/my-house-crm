@@ -202,6 +202,7 @@ $('#save-services').on('click', function () {
         },
         error: function (error) {
             console.log(error)
+            serviceToDelete = [];
             printErrorMessageToField(error);
             unblockBy('#servicesForm');
             if (error.status === 409) {
@@ -351,6 +352,7 @@ $('#save-units').on('click', function () {
         },
         error: function (error) {
             console.log(error)
+            unitsToDelete = [];
             printErrorMessageToField(error);
             unblockBy('#measurementUnist');
             if (error.status === 409) {
