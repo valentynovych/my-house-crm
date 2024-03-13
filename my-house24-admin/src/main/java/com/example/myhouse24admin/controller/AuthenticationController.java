@@ -43,7 +43,7 @@ public class AuthenticationController {
     }
     @GetMapping("/sentToken")
     public ModelAndView getSentTokenPage() {
-        return new ModelAndView("security/sentToken.html");
+        return new ModelAndView("security/sentToken");
     }
     @GetMapping("/changePassword")
     public ModelAndView changePassword(@RequestParam("token")String token){

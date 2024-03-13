@@ -3,6 +3,7 @@ package com.example.myhouse24admin.service;
 import com.example.myhouse24admin.model.invoices.*;
 import org.springframework.data.domain.Page;
 
+import java.io.File;
 import java.util.Map;
 
 public interface InvoiceService {
@@ -15,4 +16,6 @@ public interface InvoiceService {
     ViewInvoiceResponse getInvoiceResponseForView(Long id);
     boolean deleteInvoice(Long id);
     boolean deleteInvoices(Long[]invoiceIds);
+    File createPdfFile(Long id, String template);
+    String getInvoiceNumber(Long id);
 }

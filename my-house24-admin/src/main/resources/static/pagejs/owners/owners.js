@@ -190,6 +190,12 @@ function drawTable(response) {
                             <i class="ti ti-dots-vertical"></i>
                         </button>
                         <div class="dropdown-menu">
+                            <button type="button" 
+                            class="dropdown-item btn justify-content-start" 
+                            onclick="sendOwnerActivation(${owner.id})"
+                            ${setDisabled(owner.status)}>
+                                <i class="ti ti-mail me-1"></i>${sendActivation}
+                            </button>
                             <a class="dropdown-item" href="owners/edit/${owner.id}">
                                 <i class="ti ti-pencil me-1"></i>${buttonLabelEdit}
                             </a>
@@ -233,6 +239,28 @@ function getStatusSpan(status){
             return '<span class="badge bg-label-success">'+ activeStatus +'</span>';
         case 'DISABLED':
             return '<span class="badge bg-label-danger">'+ disabledStatus +'</span>';
+    }
+}
+function sendOwnerActivation(ownerId) {
+    $.ajax({
+        type: "POST",
+        url: "owners/send-activation/"+ownerId,
+        success: function () {
+            toastr.success(sentMessage);
+        },
+        error: function (errorResponse) {
+            toastr.error(errorMessage);
+        }
+    });
+}
+function setDisabled(status) {
+    switch (status) {
+        case 'NEW':
+            return '';
+        case 'ACTIVE':
+            return 'disabled';
+        case 'DISABLED':
+            return 'disabled';
     }
 }
 

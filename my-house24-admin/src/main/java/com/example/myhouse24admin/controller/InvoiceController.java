@@ -1,19 +1,29 @@
 package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.entity.InvoiceStatus;
+import com.example.myhouse24admin.model.invoiceTemplate.InvoiceTemplateListRequest;
+import com.example.myhouse24admin.model.invoiceTemplate.InvoiceTemplateResponse;
 import com.example.myhouse24admin.model.invoices.*;
 import com.example.myhouse24admin.model.meterReadings.*;
 import com.example.myhouse24admin.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +38,7 @@ public class InvoiceController {
     private final ServicesService servicesService;
     private final MeterReadingService meterReadingService;
     private final ApartmentOwnerService apartmentOwnerService;
+    private final InvoiceTemplateService invoiceTemplateService;
 
     public InvoiceController(HouseService houseService,
                              SectionService sectionService,
@@ -36,7 +47,8 @@ public class InvoiceController {
                              InvoiceService invoiceService,
                              ServicesService servicesService,
                              MeterReadingService meterReadingService,
-                             ApartmentOwnerService apartmentOwnerService) {
+                             ApartmentOwnerService apartmentOwnerService,
+                             InvoiceTemplateService invoiceTemplateService) {
         this.houseService = houseService;
         this.sectionService = sectionService;
         this.apartmentService = apartmentService;
@@ -45,6 +57,7 @@ public class InvoiceController {
         this.servicesService = servicesService;
         this.meterReadingService = meterReadingService;
         this.apartmentOwnerService = apartmentOwnerService;
+        this.invoiceTemplateService = invoiceTemplateService;
     }
 
     @GetMapping()
@@ -176,6 +189,56 @@ public class InvoiceController {
         int index = url.lastIndexOf("/");
         url = url.substring(0, index - 5);
         return new ResponseEntity<>(url, HttpStatus.OK);
+    }
+    @GetMapping("/templates-settings")
+    public ModelAndView getTemplatesSettingsPage() {
+        return new ModelAndView("invoices/templates-settings");
+    }
+    @GetMapping("/templates-settings/get")
+    public @ResponseBody List<InvoiceTemplateResponse> getInvoiceTemplates() {
+        return invoiceTemplateService.getInvoiceTemplatesResponses();
+    }
+    @PostMapping("/templates-settings")
+    public @ResponseBody ResponseEntity<?> updateInvoiceTemplates(@Valid @ModelAttribute InvoiceTemplateListRequest invoiceTemplateListRequest) {
+        invoiceTemplateService.updateTemplates(invoiceTemplateListRequest);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @PostMapping("/templates-settings/set-default/{id}")
+    public @ResponseBody ResponseEntity<?> setDefaultInvoice(@PathVariable Long id) {
+        invoiceTemplateService.setDefaultInvoice(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping ("/templates-settings/download-template/{fileName}")
+    public @ResponseBody ResponseEntity<InputStreamResource> downloadTemplate(@PathVariable String fileName) throws FileNotFoundException, UnsupportedEncodingException {
+        File file = invoiceTemplateService.getTemplateFile(fileName);
+        System.out.println(file.getName());
+        MediaType mediaType = invoiceTemplateService.getMediaTypeForFileName(fileName);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename="+ URLEncoder.encode(fileName, "UTF-8"))
+                .contentType(mediaType)
+                .contentLength(file.length())
+                .body(new InputStreamResource(new FileInputStream(file)));
+    }
+    @GetMapping("/view-invoice/print/{id}")
+    public ModelAndView getPrintTemplatePage() {
+        return new ModelAndView("invoices/print-invoice");
+    }
+    @GetMapping("/view-invoice/print/download/{id}/{template}")
+    public @ResponseBody ResponseEntity<InputStreamResource> downloadInvoice(@PathVariable("id") Long id,
+                                                                             @PathVariable("template")String template) throws FileNotFoundException, UnsupportedEncodingException {
+        File file = invoiceService.createPdfFile(id, template);
+        MediaType mediaType = invoiceTemplateService.getMediaTypeForFileName(file.getName());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename="+ URLEncoder.encode(file.getName(), "UTF-8"))
+                .contentType(mediaType)
+                .contentLength(file.length())
+                .body(new InputStreamResource(new FileInputStream(file)));
+    }
+    @GetMapping("/get-number/{id}")
+    public @ResponseBody String getNumberById(@PathVariable Long id) {
+        return invoiceService.getInvoiceNumber(id);
     }
 
 }

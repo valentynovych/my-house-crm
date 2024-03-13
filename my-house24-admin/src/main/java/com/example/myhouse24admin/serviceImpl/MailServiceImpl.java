@@ -1,7 +1,10 @@
 package com.example.myhouse24admin.serviceImpl;
 
+import com.example.myhouse24admin.entity.ApartmentOwner;
 import com.example.myhouse24admin.entity.Staff;
+import com.example.myhouse24admin.model.apartmentOwner.InvitationRequest;
 import com.example.myhouse24admin.model.authentication.EmailRequest;
+import com.example.myhouse24admin.repository.ApartmentOwnerRepo;
 import com.example.myhouse24admin.service.MailService;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
@@ -9,6 +12,7 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,15 +29,20 @@ import java.io.IOException;
 public class MailServiceImpl implements MailService {
     private final TemplateEngine templateEngine;
     private final SendGrid sendGrid;
+    private final ApartmentOwnerRepo apartmentOwnerRepo;
     private final HttpServletRequest httpServletRequest;
     private final Logger logger = LogManager.getLogger(MailServiceImpl.class);
 
     @Value("${sender}")
     private String sender;
 
-    public MailServiceImpl(TemplateEngine templateEngine, SendGrid sendGrid, HttpServletRequest httpServletRequest) {
+    public MailServiceImpl(TemplateEngine templateEngine,
+                           SendGrid sendGrid,
+                           ApartmentOwnerRepo apartmentOwnerRepo,
+                           HttpServletRequest httpServletRequest) {
         this.templateEngine = templateEngine;
         this.sendGrid = sendGrid;
+        this.apartmentOwnerRepo = apartmentOwnerRepo;
         this.httpServletRequest = httpServletRequest;
     }
 
@@ -72,6 +81,41 @@ public class MailServiceImpl implements MailService {
         sendMail(subject, staffById.getEmail(), content);
         logger.info("sendInviteToStaff() -> end, invite has been send");
     }
+
+    @Override
+    public void sendActivationToOwner(String token, Long ownerId) {
+        logger.info("sendActivationToOwner() - Sending activation with token " + token + " to owner with id " + ownerId);
+        ApartmentOwner apartmentOwner = apartmentOwnerRepo.findById(ownerId).orElseThrow(()-> new EntityNotFoundException("Owner was not found by id "+ownerId));
+        String subject = "Активація облікового запису";
+        Content content = new Content("text/html", buildOwnerActivationContent(token));
+        sendMail(subject, apartmentOwner.getEmail(), content);
+        logger.info("sendActivationToOwner() - Token was sent");
+    }
+
+    @Override
+    public void sendInvitationToOwner(InvitationRequest invitationRequest) {
+        logger.info("sendInvitationToOwner() - Sending invitation to owner with email " + invitationRequest.email());
+        String subject = "Запрошення власника";
+        Content content = new Content("text/html", buildOwnerInvitationContent());
+        sendMail(subject, invitationRequest.email(), content);
+        logger.info("sendInvitationToOwner() - Invitation was sent");
+    }
+
+    private String buildOwnerInvitationContent() {
+        String link = formOwnerInvitationLink();
+        Context context = new Context();
+        context.setVariable("link", link);
+        return templateEngine.process("email/ownerInviteTemplate",context);
+    }
+
+    private String formOwnerInvitationLink() {
+        String fullUrl = ServletUriComponentsBuilder.fromRequestUri(httpServletRequest).build().toUriString();
+        int index = fullUrl.indexOf("admin");
+        String baseUrl = fullUrl.substring(0, index);
+        String link = baseUrl + "cabinet/register";
+        return link;
+    }
+
 
     private void sendMail(String subject, String to, Content content) {
         logger.info("sendMail() - start");
@@ -144,5 +188,18 @@ public class MailServiceImpl implements MailService {
         context.setVariable("link", link);
         context.setVariable("staffFullName", staff.getFirstName() + " " + staff.getLastName());
         return templateEngine.process("email/sendInviteTemplate", context);
+    }
+    private String buildOwnerActivationContent(String token) {
+        String link = formOwnerActivationLink(token);
+        Context context = new Context();
+        context.setVariable("link", link);
+        return templateEngine.process("email/ownerActivationTemplate", context);
+    }
+    private String formOwnerActivationLink(String token){
+        String fullUrl = ServletUriComponentsBuilder.fromRequestUri(httpServletRequest).build().toUriString();
+        int index = fullUrl.indexOf("admin");
+        String baseUrl = fullUrl.substring(0, index);
+        String link = baseUrl + "cabinet/changePassword?token=" + token;
+        return link;
     }
 }

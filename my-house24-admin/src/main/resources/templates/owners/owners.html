@@ -19,7 +19,7 @@
             <div class="btn-group me-4">
                 <button
                         type="button"
-                        class="btn btn-success dropdown-toggle"
+                        class="btn btn-primary dropdown-toggle"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                         th:text="#{general-choose-action}"
@@ -31,11 +31,11 @@
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
-                    <li><a class="dropdown-item" href="javascript:void(0);" th:text="#{owners-action-message-to-debtor}"></a></li>
+                    <li><a class="dropdown-item" th:href="@{/admin/messages/new-message}" th:text="#{owners-action-message-to-debtor}"></a></li>
                     <li>
                         <hr class="dropdown-divider" />
                     </li>
-                    <li><a class="dropdown-item" href="javascript:void(0);" th:text="#{owners-action-send-invitation}"></a></li>
+                    <li><a class="dropdown-item" th:href="@{/admin/owners/send-invitation}" th:text="#{owners-action-send-invitation}" id="send-invitation"></a></li>
                 </ul>
         </div>
     </div>
@@ -118,5 +118,7 @@
     const haveDebt = [[#{owners-have-debt}]];
     const notHaveDebt = [[#{owners-not-have-debt}]];
     const deleteErrorMessage = [[#{owners-delete-error-message}]];
+    const sendActivation = [[#{owners-send-activation}]];
+    const sentMessage = [[#{owners-message-sent}]];
 </script>
 </html>

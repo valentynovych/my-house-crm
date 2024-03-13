@@ -6,6 +6,7 @@ import com.example.myhouse24admin.entity.Service;
 import com.example.myhouse24admin.model.invoices.InvoiceItemRequest;
 import com.example.myhouse24admin.model.invoices.InvoiceItemResponse;
 import com.example.myhouse24admin.model.invoices.InvoiceResponse;
+import com.example.myhouse24admin.model.invoices.XmlListInvoiceItemDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,4 +25,9 @@ public interface InvoiceItemMapper {
     @Mapping(target = "serviceName", source = "service.name")
     @Mapping(target = "unitName", source = "service.unitOfMeasurement.name")
     InvoiceItemResponse invoiceItemToInvoiceItemResponse(InvoiceItem invoiceItem);
+    List<XmlListInvoiceItemDto> invoiceItemListToXmlListInvoiceItemDtoList(List<InvoiceItem> invoiceItems);
+
+    @Mapping(target = "service", source = "service.name")
+    @Mapping(target = "unitOfMeasurement", source = "service.unitOfMeasurement.name")
+    XmlListInvoiceItemDto invoiceItemToXmlListInvoiceItemDto(InvoiceItem invoiceItem);
 }

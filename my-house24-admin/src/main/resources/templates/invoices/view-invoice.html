@@ -36,8 +36,11 @@
              style="border-style: solid; border-width: thin; border-color: #dbdade #dbdade white #dbdade">
             <div id="invoice"></div>
             <div class="row me-0">
-                <button type="button" class="btn btn-secondary me-2 col-auto" id="print-button"
-                        th:text="#{invoices-print}">Друкувати
+                <a type="button" class="btn btn-secondary me-2 col-auto" id="print-link"
+                     href=""   th:text="#{invoices-print}">Друкувати
+                </a>
+                <button type="button" class="btn btn-secondary me-2 col-auto" id="to-excel-button"
+                        th:text="#{general-button-export-to-excel}">
                 </button>
                 <button type="button" class="btn btn-secondary me-2 col-auto" id="send-button"
                         th:text="#{invoices-send-to-email}">Відправити на email

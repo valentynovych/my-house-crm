@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="#{menu-item-invoices}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{invoices-template-settings}"></h3>
+        <h6>
+            <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
+            <a th:href="@{/admin/invoices}" th:text="#{menu-item-invoices} + ' / '"></a>
+            <span th:text="#{invoices-template-settings}"></span>
+        </h6>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <form enctype="multipart/form-data" id="form" class="row g-3">
+            <h4 class="mb-0" th:text="#{invoices-template-list}"></h4>
+            <div class="mt-0" id="savedTemplates">
+            </div>
+            <div class="mt-0" id="newTemplates">
+            </div>
+            <div class="mt-5 d-flex justify-content-end gap-3">
+                <button type="button" class="btn btn-secondary" id="cancel-button" th:text="#{general-button-cancel}">Відмінити</button>
+                <button type="button" class="btn btn-primary" id="save-button" th:text="#{general-button-save}">Зберегти</button>
+                <button type="button" class="btn btn-primary" id="add-template" th:text="#{invoices-add-template}">Додати шаблон</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/invoices/templates-settings.js}"></script>
+<script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const templateNameLabel = [[#{payment-item-name}]];
+    const imageLabel = [[#{invoices-upload-file}]];
+    const downloadButton = [[#{invoices-template-download}]];
+    const setDefaultButton = [[#{invoices-template-set-default}]];
+    const deleteTemplateButton = [[#{invoices-template-delete}]];
+    const deleteModalText = [[#{services-page-modal-delete-body}]];
+    const modalDeleteButton = [[#{general-button-delete}]];
+    const modalCloseButton = [[#{general-button-close}]];
+    const deleteSuccessful = [[#{toastr-delete-message}]];
+    const addWarning = [[#{invoices-template-add}]];
+    const successMessage = [[#{role-success-message}]];
+    const defaultText = [[#{invoices-template-default}]];
+    const fileExtension = [[#{validation-file-extension-not-xsl}]];
+</script>
+</html>
