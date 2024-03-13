@@ -67,8 +67,10 @@ public class InvoiceServiceImpl implements InvoiceService {
                               ServicesRepo servicesRepo,
                               ApartmentOwnerMapper apartmentOwnerMapper,
                               InvoiceMapper invoiceMapper,
-                              InvoiceItemMapper invoiceItemMapper, CashRegisterService cashRegisterService, StaffService staffService, PaymentItemService paymentItemService) {
                               InvoiceItemMapper invoiceItemMapper,
+                              CashRegisterService cashRegisterService,
+                              StaffService staffService,
+                              PaymentItemService paymentItemService,
                               PdfGenerator pdfGenerator) {
         this.invoiceRepo = invoiceRepo;
         this.invoiceItemRepo = invoiceItemRepo;

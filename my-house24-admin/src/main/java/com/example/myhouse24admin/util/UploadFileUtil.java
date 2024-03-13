@@ -1,5 +1,7 @@
 package com.example.myhouse24admin.util;
 
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.example.myhouse24admin.service.S3Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,17 +10,18 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 @Component
 public class UploadFileUtil {
-    private final ResourceLoader resourceLoader;
+//    private final ResourceLoader resourceLoader;
     private final S3Service s3Service;
     private final Logger logger = LogManager.getLogger(UploadFileUtil.class);
 
-    public UploadFileUtil(ResourceLoader resourceLoader, S3Service s3Service) {
-        this.resourceLoader = resourceLoader;
+    public UploadFileUtil(S3Service s3Service) {
+//        this.resourceLoader = resourceLoader;
         this.s3Service = s3Service;
     }
 
@@ -31,12 +34,12 @@ public class UploadFileUtil {
     }
 
     public String saveDefaultOwnerImage() {
-        Resource resource = resourceLoader.getResource("classpath:static/assets/img/avatars/1.png");
-        try {
-            s3Service.uploadFile("defaultAvatar.png", (MultipartFile) resource.getFile());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        Resource resource = resourceLoader.getResource("classpath:static/assets/img/avatars/1.png");
+//        try {
+//            s3Service.uploadFile("defaultAvatar.png", (MultipartFile) resource.getFile());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         return "defaultAvatar.png";
     }
 
@@ -54,17 +57,9 @@ public class UploadFileUtil {
         return fileName;
     }
     public File getFileByName(String name){
-        return new File(uploadPath+"/"+name);
+        S3Object s3Object =  s3Service.getS3Object(name);
+        S3ObjectInputStream s3is = s3Object.getObjectContent();
+        return null;
     }
-    private void createDirectoryIfNotExist() {
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            boolean mkdir = uploadDir.mkdir();
-            if (mkdir) {
-                logger.info("create directory for uploads file");
-            } else {
-                logger.info("directory for uploads file is not create");
-            }
-        }
-    }
+
 }
