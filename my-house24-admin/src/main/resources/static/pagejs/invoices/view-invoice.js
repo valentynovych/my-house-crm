@@ -6,6 +6,7 @@ const BORDER_ALL = { top: { style: 'thin', color: { rgb: '000000' } },
         left: { style: 'thin', color: { rgb: '000000' } } };
 $(document).ready(function () {
     $("#edit-invoice-link").attr("href", "../edit/" + id);
+    $("#print-link").attr("href", "print/" + id);
     getInvoice();
 });
 
@@ -37,7 +38,7 @@ function setFields(response) {
         number += "0";
     }
     number += response.accountNumber;
-    let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
+    let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10);
     $("#account").text(accountNumber);
     var parts = response.creationDate.split('.');
     let month = new Date(parts[2], parts[1] - 1, parts[0]).toLocaleString(dateLocale, {month: 'long', year: 'numeric'});
@@ -88,7 +89,9 @@ function setServiceTable(itemResponses, totalPrice) {
     );
 }
 
-$("#print-button").on("click", function () {
+
+
+$("#to-excel-button").on("click", function () {
     let name = createFileName();
     let table = getViewTable();
     table.push([]);

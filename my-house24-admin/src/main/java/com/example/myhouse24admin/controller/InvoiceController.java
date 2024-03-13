@@ -220,5 +220,25 @@ public class InvoiceController {
                 .contentLength(file.length())
                 .body(new InputStreamResource(new FileInputStream(file)));
     }
+    @GetMapping("/view-invoice/print/{id}")
+    public ModelAndView getPrintTemplatePage() {
+        return new ModelAndView("invoices/print-invoice");
+    }
+    @GetMapping("/view-invoice/print/download/{id}/{template}")
+    public @ResponseBody ResponseEntity<InputStreamResource> downloadInvoice(@PathVariable("id") Long id,
+                                                                             @PathVariable("template")String template) throws FileNotFoundException, UnsupportedEncodingException {
+        File file = invoiceService.createPdfFile(id, template);
+        MediaType mediaType = invoiceTemplateService.getMediaTypeForFileName(file.getName());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename="+ URLEncoder.encode(file.getName(), "UTF-8"))
+                .contentType(mediaType)
+                .contentLength(file.length())
+                .body(new InputStreamResource(new FileInputStream(file)));
+    }
+    @GetMapping("/get-number/{id}")
+    public @ResponseBody String getNumberById(@PathVariable Long id) {
+        return invoiceService.getInvoiceNumber(id);
+    }
 
 }

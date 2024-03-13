@@ -1,9 +1,6 @@
 package com.example.myhouse24admin.serviceImpl;
 
-import com.example.myhouse24admin.entity.Apartment;
-import com.example.myhouse24admin.entity.Invoice;
-import com.example.myhouse24admin.entity.InvoiceItem;
-import com.example.myhouse24admin.entity.InvoiceStatus;
+import com.example.myhouse24admin.entity.*;
 import com.example.myhouse24admin.mapper.ApartmentOwnerMapper;
 import com.example.myhouse24admin.mapper.InvoiceItemMapper;
 import com.example.myhouse24admin.mapper.InvoiceMapper;
@@ -13,23 +10,32 @@ import com.example.myhouse24admin.repository.InvoiceItemRepo;
 import com.example.myhouse24admin.repository.InvoiceRepo;
 import com.example.myhouse24admin.repository.ServicesRepo;
 import com.example.myhouse24admin.service.InvoiceService;
+import com.example.myhouse24admin.util.PdfGenerator;
+import com.example.myhouse24admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.fop.apps.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.xml.sax.SAXException;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.transform.*;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 import static com.example.myhouse24admin.specification.InvoiceItemSpecification.byInvoiceId;
@@ -44,6 +50,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final ApartmentOwnerMapper apartmentOwnerMapper;
     private final InvoiceMapper invoiceMapper;
     private final InvoiceItemMapper invoiceItemMapper;
+    private final PdfGenerator pdfGenerator;
     private final Logger logger = LogManager.getLogger(InvoiceServiceImpl.class);
 
     public InvoiceServiceImpl(InvoiceRepo invoiceRepo,
@@ -52,7 +59,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                               ServicesRepo servicesRepo,
                               ApartmentOwnerMapper apartmentOwnerMapper,
                               InvoiceMapper invoiceMapper,
-                              InvoiceItemMapper invoiceItemMapper) {
+                              InvoiceItemMapper invoiceItemMapper,
+                              PdfGenerator pdfGenerator) {
         this.invoiceRepo = invoiceRepo;
         this.invoiceItemRepo = invoiceItemRepo;
         this.apartmentRepo = apartmentRepo;
@@ -60,6 +68,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         this.apartmentOwnerMapper = apartmentOwnerMapper;
         this.invoiceMapper = invoiceMapper;
         this.invoiceItemMapper = invoiceItemMapper;
+        this.pdfGenerator = pdfGenerator;
     }
 
     @Override
@@ -195,7 +204,6 @@ public class InvoiceServiceImpl implements InvoiceService {
     public ViewInvoiceResponse getInvoiceResponseForView(Long id) {
         logger.info("getInvoiceResponseForView - Getting invoice response for view by id "+id);
         Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
-        System.out.println(invoice.getApartment().getPersonalAccount().getAccountNumber());
         BigDecimal totalPrice = invoiceItemRepo.getItemsSumByInvoiceId(id);
         List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
         List<InvoiceItemResponse> itemResponses = invoiceItemMapper.invoiceItemListToInvoiceItemResponseList(invoiceItems);
@@ -235,4 +243,42 @@ public class InvoiceServiceImpl implements InvoiceService {
         logger.info("deleteInvoices - Invoices were deleted");
         return true;
     }
+
+    @Override
+    public String getInvoiceNumber(Long id) {
+        logger.info("getInvoiceNumber - Getting invoice number by id "+id);
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
+        String number = invoice.getNumber();
+        logger.info("getInvoiceNumber - Invoice number was got");
+        return number;
+    }
+
+    @Override
+    public File createPdfFile(Long id, String template) {
+        logger.info("createPdfFile - Creating pdf file with template "+template+" and by id "+id);
+        XmlInvoiceDto xmlInvoiceDto = formxmlInvoiceDto(id);
+        File pdfFile = pdfGenerator.formPdfFile(xmlInvoiceDto,template);
+        logger.info("createPdfFile - Pdf file was created");
+        return pdfFile;
+    }
+
+    private XmlInvoiceDto formxmlInvoiceDto(Long id) {
+        List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
+        List<XmlListInvoiceItemDto> invoiceItemDtos = invoiceItemMapper.invoiceItemListToXmlListInvoiceItemDtoList(invoiceItems);
+        XmlInvoiceItemsDto xmlInvoiceItemsDto = new XmlInvoiceItemsDto(invoiceItemDtos);
+        BigDecimal totalPrice = invoiceItemRepo.getItemsSumByInvoiceId(id);
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
+        XmlInvoiceDto xmlInvoiceDto = invoiceMapper.invoiceToXmlInvoiceDto(invoice,
+                xmlInvoiceItemsDto, totalPrice);
+        return xmlInvoiceDto;
+    }
+
 }
+
+
+
+
+
+
+
+

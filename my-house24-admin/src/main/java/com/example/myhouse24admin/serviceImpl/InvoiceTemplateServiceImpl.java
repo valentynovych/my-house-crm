@@ -98,4 +98,5 @@ public class InvoiceTemplateServiceImpl implements InvoiceTemplateService {
         logger.info("getMediaTypeForFileName - Media type was got");
         return mediaType;
     }
+
 }
