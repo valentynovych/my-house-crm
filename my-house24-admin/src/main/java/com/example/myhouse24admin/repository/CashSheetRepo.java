@@ -21,4 +21,6 @@ public interface CashSheetRepo extends JpaRepository<CashSheet, Long>, JpaSpecif
 
     @Async
     CompletableFuture<List<CashSheet>> findByCreationDateBetween(Instant dateFrom, Instant dateTo);
+
+    Optional<CashSheet> findCashSheetByInvoice_Id(Long invoiceId);
 }

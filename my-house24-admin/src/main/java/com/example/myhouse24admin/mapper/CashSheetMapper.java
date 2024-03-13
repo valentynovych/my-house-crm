@@ -1,11 +1,10 @@
 package com.example.myhouse24admin.mapper;
 
-import com.example.myhouse24admin.entity.CashSheet;
-import com.example.myhouse24admin.entity.PaymentItem;
-import com.example.myhouse24admin.entity.PersonalAccount;
-import com.example.myhouse24admin.entity.Staff;
+import com.example.myhouse24admin.entity.*;
 import com.example.myhouse24admin.model.cashRegister.*;
+import com.example.myhouse24admin.model.invoices.InvoiceShortResponse;
 import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -30,6 +29,7 @@ public interface CashSheetMapper {
     @Mapping(target = "paymentItem.id", source = "paymentItemId")
     CashSheet cashSheetIncomeAddRequestToCashSheet(CashSheetIncomeAddRequest cashSheetIncomeAddRequest);
 
+    @Mapping(target = "invoice", source = "invoice", qualifiedByName = "setInvoice")
     CashSheetResponse cashSheetToCashSheetWithOwnerResponse(CashSheet cashSheetById);
 
     @Mapping(target = "personalAccount", source = "personalAccountId", qualifiedByName = "setPersonalAccount")
@@ -38,6 +38,7 @@ public interface CashSheetMapper {
     @Mapping(target = "sheetNumber", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "sheetType", ignore = true)
+    @Mapping(target = "invoice", ignore = true)
     void updateCashSheetFromCashSheetIncomeUpdateRequest(@MappingTarget CashSheet cashSheet, CashSheetIncomeUpdateRequest updateRequest);
 
     @Mapping(target = "sheetType", constant = "EXPENSE")
@@ -82,5 +83,19 @@ public interface CashSheetMapper {
         return staff;
     }
 
+    @Named(value = "setInvoice")
+    static InvoiceShortResponse setInvoice(Invoice invoice) {
+        return Mappers.getMapper(InvoiceMapper.class).invoiceToInvoiceShortResponse(invoice);
+    }
 
+
+    @Mapping(target = "sheetNumber", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "sheetType", ignore = true)
+    @Mapping(target = "invoice", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "creationDate", ignore = true)
+    @Mapping(target = "amount", source = "paid")
+    @Mapping(target = "personalAccount", source = "apartment.personalAccount")
+    void updateCashSheetFromInvoice(@MappingTarget CashSheet cashSheet, Invoice invoice);
 }

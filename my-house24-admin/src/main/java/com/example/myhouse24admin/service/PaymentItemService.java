@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.service;
 
+import com.example.myhouse24admin.entity.PaymentItem;
 import com.example.myhouse24admin.model.paymentItem.PaymentItemDto;
 import org.springframework.data.domain.Page;
 
@@ -17,4 +18,6 @@ public interface PaymentItemService {
     boolean deleteItemById(Long itemId);
 
     Map<String, String> getItemTypes();
+
+    PaymentItem getDefaultPaymentItemForInvoices();
 }

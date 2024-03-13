@@ -1,7 +1,6 @@
 package com.example.myhouse24admin.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -29,6 +28,8 @@ public class CashSheet {
     private String comment;
     @Column(nullable = false)
     private boolean deleted;
+    @OneToOne(cascade = {CascadeType.MERGE})
+    private Invoice invoice;
     @ManyToOne
     @JoinColumn(name = "personal_account_id", referencedColumnName = "id")
     private PersonalAccount personalAccount;
@@ -125,5 +126,13 @@ public class CashSheet {
 
     public void setSheetNumber(String sheetNumber) {
         this.sheetNumber = sheetNumber;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
     }
 }

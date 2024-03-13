@@ -1,9 +1,6 @@
 package com.example.myhouse24admin.mapper;
 
-import com.example.myhouse24admin.entity.Apartment;
-import com.example.myhouse24admin.entity.Invoice;
-import com.example.myhouse24admin.entity.PersonalAccount;
-import com.example.myhouse24admin.entity.Tariff;
+import com.example.myhouse24admin.entity.*;
 import com.example.myhouse24admin.model.invoices.*;
 import com.example.myhouse24admin.util.DateConverter;
 import org.mapstruct.InjectionStrategy;
@@ -12,8 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import java.math.BigDecimal;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 import java.util.List;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
@@ -26,14 +22,17 @@ public interface InvoiceMapper {
     @Mapping(target = "status", source = "invoiceRequest.status")
     Invoice invoiceRequestToInvoice(InvoiceRequest invoiceRequest,
                                     Apartment apartment, String number);
+
     default Instant convertStringToInstant(String date) {
         return DateConverter.stringToInstant(date);
     }
+
     @Mapping(target = "apartment", expression = "java(invoice.getApartment().getApartmentNumber()+\", \"+invoice.getApartment().getHouse().getName())")
     @Mapping(target = "ownerFullName", expression = "java(invoice.getApartment().getOwner().getLastName()+\" \"+invoice.getApartment().getOwner().getMiddleName()+\" \"+invoice.getApartment().getOwner().getFirstName())")
     @Mapping(target = "totalPrice", source = "totalPrice")
     @Mapping(target = "creationDate", expression = "java(convertInstantToString(invoice.getCreationDate()))")
     TableInvoiceResponse invoiceToTableInvoiceResponse(Invoice invoice, BigDecimal totalPrice);
+
     @Mapping(target = "totalPrice", source = "totalPrice")
     @Mapping(target = "creationDate", expression = "java(convertInstantToString(invoice.getCreationDate()))")
     @Mapping(target = "sectionNameResponse.id", source = "invoice.apartment.section.id")
@@ -52,15 +51,18 @@ public interface InvoiceMapper {
     @Mapping(target = "number", source = "invoice.number")
     @Mapping(target = "processed", expression = "java(invoice.isProcessed())")
     InvoiceResponse invoiceToInvoiceResponse(Invoice invoice, BigDecimal totalPrice, List<InvoiceItemResponse> itemResponses);
-    default String convertInstantToString(Instant date){
+
+    default String convertInstantToString(Instant date) {
         return DateConverter.instantToString(date);
     }
+
     @Mapping(target = "apartment", source = "apartment")
     @Mapping(target = "creationDate", expression = "java(convertStringToInstant(invoiceRequest.getCreationDate()))")
     @Mapping(target = "status", source = "invoiceRequest.status")
     @Mapping(ignore = true, target = "id")
     void updateInvoice(@MappingTarget Invoice invoice, InvoiceRequest invoiceRequest,
                        Apartment apartment);
+
     @Mapping(target = "number", source = "invoice.number")
     @Mapping(target = "creationDate", expression = "java(convertInstantToString(invoice.getCreationDate()))")
     @Mapping(target = "processed", expression = "java(invoice.isProcessed())")
@@ -75,4 +77,20 @@ public interface InvoiceMapper {
     @Mapping(target = "totalPrice", source = "totalPrice")
     @Mapping(target = "itemResponses", source = "itemResponses")
     ViewInvoiceResponse invoiceToViewInvoiceResponse(Invoice invoice, List<InvoiceItemResponse> itemResponses, BigDecimal totalPrice);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "sheetType", constant = "INCOME")
+    @Mapping(target = "invoice", source = "newInvoice")
+    @Mapping(target = "personalAccount", source = "newInvoice.apartment.personalAccount")
+    @Mapping(target = "staff", source = "staff")
+    @Mapping(target = "paymentItem", source = "paymentItem")
+    @Mapping(target = "processed", source = "newInvoice.processed")
+    @Mapping(target = "amount", source = "newInvoice.paid")
+    CashSheet invoiceToCashSheet(String sheetNumber, Invoice newInvoice, Staff staff, PaymentItem paymentItem);
+
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "number", source = "number")
+    @Mapping(target = "creationDate", source = "creationDate")
+    InvoiceShortResponse invoiceToInvoiceShortResponse(Invoice invoice);
 }

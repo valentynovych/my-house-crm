@@ -1,5 +1,7 @@
 package com.example.myhouse24admin.service;
 
+import com.example.myhouse24admin.entity.CashSheet;
+import com.example.myhouse24admin.entity.Invoice;
 import com.example.myhouse24admin.model.cashRegister.*;
 import org.springframework.data.domain.Page;
 
@@ -22,4 +24,8 @@ public interface CashRegisterService {
     void updateSheetById(Long sheetId, CashSheetExpenseUpdateRequest updateRequest);
 
     String deleteCashSheetById(Long sheetId);
+
+    void saveCashSheet(CashSheet cashSheet);
+
+    void updateCashSheetFromInvoice(Invoice invoice);
 }

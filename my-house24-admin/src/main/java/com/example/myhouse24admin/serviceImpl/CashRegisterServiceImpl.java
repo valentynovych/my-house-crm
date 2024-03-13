@@ -1,7 +1,9 @@
 package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.entity.CashSheet;
+import com.example.myhouse24admin.entity.Invoice;
 import com.example.myhouse24admin.mapper.CashSheetMapper;
+import com.example.myhouse24admin.mapper.InvoiceMapper;
 import com.example.myhouse24admin.model.cashRegister.*;
 import com.example.myhouse24admin.repository.CashSheetRepo;
 import com.example.myhouse24admin.service.CashRegisterService;
@@ -22,11 +24,13 @@ public class CashRegisterServiceImpl implements CashRegisterService {
 
     private final CashSheetRepo cashSheetRepo;
     private final CashSheetMapper cashSheetMapper;
+    private final InvoiceMapper invoiceMapper;
     private final Logger logger = LogManager.getLogger(CashRegisterServiceImpl.class);
 
-    public CashRegisterServiceImpl(CashSheetRepo cashSheetRepo, CashSheetMapper cashSheetMapper) {
+    public CashRegisterServiceImpl(CashSheetRepo cashSheetRepo, CashSheetMapper cashSheetMapper, InvoiceMapper invoiceMapper) {
         this.cashSheetRepo = cashSheetRepo;
         this.cashSheetMapper = cashSheetMapper;
+        this.invoiceMapper = invoiceMapper;
     }
 
     @Override
@@ -72,6 +76,9 @@ public class CashRegisterServiceImpl implements CashRegisterService {
         logger.info("updateSheetById() -> start, with id: {}", sheetId);
         CashSheet cashSheetById = findCashSheetById(sheetId);
         cashSheetMapper.updateCashSheetFromCashSheetIncomeUpdateRequest(cashSheetById, updateRequest);
+        if (cashSheetById.getInvoice() != null) {
+            cashSheetById.getInvoice().setProcessed(updateRequest.isProcessed());
+        }
         CashSheet save = cashSheetRepo.save(cashSheetById);
         logger.info("updateSheetById() -> end, success update CashSheet with id: {}", save.getId());
     }
@@ -104,6 +111,23 @@ public class CashRegisterServiceImpl implements CashRegisterService {
         cashSheetRepo.save(cashSheet);
         logger.info("deleteCashSheetById() -> end, success mark CashSheet with id: {} as isDeleted ", sheetId);
         return "Success";
+    }
+
+    @Override
+    public void saveCashSheet(CashSheet cashSheet) {
+        cashSheetRepo.save(cashSheet);
+    }
+
+    @Override
+    public void updateCashSheetFromInvoice(Invoice invoice) {
+        logger.info("updateCashSheetFromInvoice() -> start, with Invoice id: {}", invoice.getId());
+        CashSheet cashSheet = cashSheetRepo.findCashSheetByInvoice_Id(invoice.getId()).orElseThrow(() -> {
+            logger.error("updateCashSheetFromInvoice() -> CashSheet with Invoice id: {} not found", invoice.getId());
+            return new EntityNotFoundException(String.format("CashSheet with Invoice id: %s not found", invoice.getId()));
+        });
+        cashSheetMapper.updateCashSheetFromInvoice(cashSheet, invoice);
+        saveCashSheet(cashSheet);
+        logger.info("updateCashSheetFromInvoice() -> end, success update CashSheet with Invoice id: {}", invoice.getId());
     }
 
     private CashSheet findCashSheetById(Long cashSheetId) {

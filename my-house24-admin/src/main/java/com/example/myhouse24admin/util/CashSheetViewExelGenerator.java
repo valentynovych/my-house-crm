@@ -107,8 +107,14 @@ public class CashSheetViewExelGenerator {
         createRow(messageSource.getMessage("cash-register-label-payment-item-name", new Object[0], locale),
                 headerStyle, sheetResponse.getPaymentItem().getName(), style);
 
-        createRow(messageSource.getMessage("cash-register-label-invoice", new Object[0], locale),
-                headerStyle, "// TODO", style); //TODO add get invoice number
+        if (sheetResponse.getInvoice() != null) {
+            String dividerFrom = messageSource.getMessage("cash-register-label-divider-from", new Object[0], locale);
+            String invoiceCreationDate = LocalDate.ofInstant(sheetResponse.getInvoice().creationDate(), ZoneId.systemDefault())
+                    .format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            String value = String.format("%s %s %s", sheetResponse.getInvoice().number(), dividerFrom, invoiceCreationDate);
+            createRow(messageSource.getMessage("cash-register-label-invoice", new Object[0], locale),
+                    headerStyle, value, style);
+        }
 
         String staffFullName = sheetResponse.getStaff().getFirstName() + " " + sheetResponse.getStaff().getLastName();
         createRow(messageSource.getMessage("cash-register-label-staff", new Object[0], locale),

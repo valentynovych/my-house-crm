@@ -96,6 +96,11 @@ public class PaymentItemServiceImpl implements PaymentItemService {
         }
         return paymentTypes;
     }
+    @Override
+    public PaymentItem getDefaultPaymentItemForInvoices() {
+        PaymentItem paymentItemById = findPaymentItemById(1L);
+        return paymentItemById;
+    }
 
     private PaymentItem findPaymentItemById(Long paymentItemId) {
         log.info("findPaymentItemById() -> start, with id: {}", paymentItemId);

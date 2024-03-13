@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.model.cashRegister;
 
 import com.example.myhouse24admin.entity.CashSheetType;
+import com.example.myhouse24admin.model.invoices.InvoiceShortResponse;
 import com.example.myhouse24admin.model.paymentItem.PaymentItemDto;
 import com.example.myhouse24admin.model.personalAccounts.PersonalAccountWithApartmentOwnerResponse;
 import com.example.myhouse24admin.model.staff.StaffShortResponse;
@@ -22,6 +23,7 @@ public class CashSheetResponse {
     private BigDecimal amount;
     private StaffShortResponse staff;
     private String comment;
+    private InvoiceShortResponse invoice;
 
     public Long getId() {
         return id;
@@ -101,5 +103,13 @@ public class CashSheetResponse {
 
     public void setCreationDate(Instant creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public InvoiceShortResponse getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(InvoiceShortResponse invoice) {
+        this.invoice = invoice;
     }
 }
