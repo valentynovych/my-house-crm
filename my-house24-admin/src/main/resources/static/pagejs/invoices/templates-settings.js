@@ -46,6 +46,7 @@ function showSavedTemplates(response) {
     }
 }
 function setDefault(setDefaultButton) {
+    blockCardDody();
     let templateDiv = $(setDefaultButton).parent().parent();
     let id = $(templateDiv).attr("id");
     $.ajax({
@@ -161,6 +162,7 @@ $("#save-button").on("click", function () {
     if($("#savedTemplates").children().length == 0 && $("#newTemplates").children().length == 0){
         toastr.warning(addWarning);
     } else {
+        blockCardDody();
         let formData = collectData();
         sendData(formData);
     }
