@@ -5,12 +5,15 @@ $(document).ready(function () {
 });
 $("#download-link").on("click", function (e) {
     e.preventDefault();
+    blockBy(".card-body");
     let file = $('input[type=radio]:checked').attr("id");
     if(file === undefined){
         toastr.warning(chooseTemplate);
+        unblockBy(".card-body")
     } else {
         $(this).attr("href", "download/" + id + "/" + file);
         window.location = $(this).attr("href");
+        unblockBy(".card-body")
     }
 });
 function getTemplates() {
