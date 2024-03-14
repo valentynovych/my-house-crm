@@ -14,16 +14,36 @@ $(document).ready(function () {
     });
 
     $.ajax({
-        type: "GET",
-        url: "/" + root + "/admin/getPermissions",
-        data: {
+        type: "GET", url: "/" + root + "/admin/getPermissions", data: {
             role: roles[0].authority
-        },
-        success: function (response) {
+        }, success: function (response) {
             showMenuItems(response);
-        },
-        error: function () {
+        }, error: function () {
             toastr.error(errorMessage);
+        }
+    });
+
+    const getOwnersData = {
+        page: 0,
+        pageSize: 5,
+        ownerStatus: 'NEW',
+    };
+
+    let urlGetNewStaff = `/admin/system-settings/staff/get-staff?
+        page=${getOwnersData.page}
+        &pageSize=${getOwnersData.pageSize}
+        &status=${getOwnersData.ownerStatus}`;
+
+    $.ajax({
+        url: '/' + root + urlGetNewStaff,
+        type: 'get',
+        data: getOwnersData,
+        success: function (response) {
+            console.log(response);
+            buildNewOwnerList(response);
+        },
+        error: function (error) {
+            console.log(error)
         }
     });
 });
@@ -68,8 +88,7 @@ function showMenuItems(permissions) {
 $("#logoutLink").on("click", function (e) {
     e.preventDefault();
     if ($('#logoutModal').length === 0) {
-        $("div.card").append(
-            `<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        $("div.card").append(`<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -87,8 +106,7 @@ $("#logoutLink").on("click", function (e) {
                     </div>
                 </div>
             </div>
-        </div>`
-        )
+        </div>`)
     }
     $('#logoutModal').modal('show');
 });
@@ -101,4 +119,33 @@ $(window).on('load, ajaxStop', function () {
     $('img').on('error', function () {
         $(this).attr('src', defaultPlaceholderImage);
     })
-})
+});
+
+function buildNewOwnerList(response) {
+    const countNewOwners = response.totalElements;
+    const $newOwnerList = $('#new-owners-list');
+    const $labelNewOwners = $('#label-new-owners-count');
+
+    $newOwnerList.empty();
+
+    if (countNewOwners > 0) {
+        const $indicator = $('#new-owners-count');
+
+        $indicator.removeClass('d-none');
+        $indicator.html(countNewOwners);
+        $labelNewOwners.html(`${labelNewOwnersCount} : ${countNewOwners}`);
+
+        for (let newStaff of response.content) {
+            $newOwnerList.append($(`<li class="list-group-item list-group-item-action dropdown-notifications-item py-2">
+                <div class="d-flex">
+                    <a href="/${root}/admin/system-settings/staff/view-staff/${newStaff.id}" 
+                    class="h6 mb-0">${newStaff.firstName} ${newStaff.lastName}</a>
+                </div>
+           </li>`));
+        }
+    } else {
+        $labelNewOwners.html(`${labelNewOwnersCount} : ${noneOwners}`);
+    }
+}
+
+
