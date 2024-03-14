@@ -30,6 +30,7 @@ public interface InvoiceMapper {
     @Mapping(target = "apartment", expression = "java(invoice.getApartment().getApartmentNumber()+\", \"+invoice.getApartment().getHouse().getName())")
     @Mapping(target = "ownerFullName", expression = "java(invoice.getApartment().getOwner().getLastName()+\" \"+invoice.getApartment().getOwner().getMiddleName()+\" \"+invoice.getApartment().getOwner().getFirstName())")
     @Mapping(target = "totalPrice", source = "totalPrice")
+    @Mapping(target = "isProcessed", expression = "java(invoice.isProcessed())")
     @Mapping(target = "creationDate", expression = "java(convertInstantToString(invoice.getCreationDate()))")
     TableInvoiceResponse invoiceToTableInvoiceResponse(Invoice invoice, BigDecimal totalPrice);
 

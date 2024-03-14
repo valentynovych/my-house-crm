@@ -52,6 +52,7 @@ function getInvoices(currentPage) {
         success: function (response) {
             $("tbody").children().remove();
             $(".card-footer").children().remove();
+            console.log(response);
             drawTable(response);
         },
         error: function () {
@@ -122,7 +123,8 @@ function getStatusSpan(status) {
     }
 }
 function getProcessed(isProcessed) {
-    return isProcessed? processed: notProcessed;
+    return isProcessed ? '<span class="badge bg-label-success">' + processed + '</span>' :
+        '<span class="badge bg-label-danger">' + notProcessed + '</span>';
 }
 function initializeSelects() {
     initializeStatusSelect();

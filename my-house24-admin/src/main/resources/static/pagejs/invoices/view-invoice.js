@@ -44,7 +44,7 @@ function setFields(response) {
     let month = new Date(parts[2], parts[1] - 1, parts[0]).toLocaleString(dateLocale, {month: 'long', year: 'numeric'});
     $("#month").text(month);
     $("#status").append(getStatusSpan(response.invoiceStatus));
-    $("#isProcessed").append(getProcessedSpan(response.isProcessed));
+    $("#isProcessed").append(getProcessedSpan(response.processed));
     $("#number").val(response.number);
     $("#creationDate").val(response.creationDate);
     setServiceTable(response.itemResponses, response.totalPrice);
