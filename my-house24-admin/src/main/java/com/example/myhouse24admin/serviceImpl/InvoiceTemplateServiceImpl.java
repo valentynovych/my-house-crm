@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
+import static com.example.myhouse24admin.specification.InvoiceTemplateSpecification.byDefault;
+
 @Service
 public class InvoiceTemplateServiceImpl implements InvoiceTemplateService {
     private final InvoiceTemplateRepo invoiceTemplateRepo;
@@ -77,6 +80,12 @@ public class InvoiceTemplateServiceImpl implements InvoiceTemplateService {
     @Override
     public void setDefaultInvoice(Long id) {
         logger.info("setDefaultInvoice - Setting invoice template with id "+id+" as default");
+        List<InvoiceTemplate> invoiceTemplates = invoiceTemplateRepo.findAll(byDefault());
+        if(!invoiceTemplates.isEmpty()) {
+            InvoiceTemplate defaultInvoiceTemplate = invoiceTemplates.get(0);
+            defaultInvoiceTemplate.setDefault(false);
+            invoiceTemplateRepo.save(defaultInvoiceTemplate);
+        }
         InvoiceTemplate invoiceTemplate = invoiceTemplateRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice template was not found by id "+id));
         invoiceTemplate.setDefault(true);
         invoiceTemplateRepo.save(invoiceTemplate);

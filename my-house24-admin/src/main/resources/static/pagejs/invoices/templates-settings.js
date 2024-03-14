@@ -207,6 +207,12 @@ function sendData(formData) {
     });
 }
 
+$("#cancel-button").on("click", function () {
+    $("#savedTemplates").empty();
+    $("#newTemplates").empty();
+    showSavedTemplates(defaultTemplateSettings);
+});
+
 
 
 
