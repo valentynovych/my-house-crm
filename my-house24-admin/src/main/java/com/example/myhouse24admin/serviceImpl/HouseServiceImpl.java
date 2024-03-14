@@ -111,11 +111,11 @@ public class HouseServiceImpl implements HouseService {
     }
 
     private void updateHouseImages(House house, List<MultipartFile> images) {
-        if (!images.get(0).isEmpty()) house.setImage1(fileUtil.saveFile(images.get(0)));
-        if (!images.get(1).isEmpty()) house.setImage2(fileUtil.saveFile(images.get(1)));
-        if (!images.get(2).isEmpty()) house.setImage3(fileUtil.saveFile(images.get(2)));
-        if (!images.get(3).isEmpty()) house.setImage4(fileUtil.saveFile(images.get(3)));
-        if (!images.get(4).isEmpty()) house.setImage5(fileUtil.saveFile(images.get(4)));
+        if (!images.get(0).isEmpty()) house.setImage1(fileUtil.saveMultipartFile(images.get(0)));
+        if (!images.get(1).isEmpty()) house.setImage2(fileUtil.saveMultipartFile(images.get(1)));
+        if (!images.get(2).isEmpty()) house.setImage3(fileUtil.saveMultipartFile(images.get(2)));
+        if (!images.get(3).isEmpty()) house.setImage4(fileUtil.saveMultipartFile(images.get(3)));
+        if (!images.get(4).isEmpty()) house.setImage5(fileUtil.saveMultipartFile(images.get(4)));
     }
 
     @Override

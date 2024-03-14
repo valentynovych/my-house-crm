@@ -11,6 +11,5 @@ public interface InvoiceTemplateService {
     void updateTemplates(InvoiceTemplateListRequest invoiceTemplateListRequest);
     List<InvoiceTemplateResponse> getInvoiceTemplatesResponses();
     void setDefaultInvoice(Long id);
-    File getTemplateFile(String fileName);
-    MediaType getMediaTypeForFileName(String fileName);
+    byte[] getTemplateFile(String fileName);
 }

@@ -14,27 +14,17 @@ import com.example.myhouse24admin.service.InvoiceService;
 import com.example.myhouse24admin.service.PaymentItemService;
 import com.example.myhouse24admin.service.StaffService;
 import com.example.myhouse24admin.util.PdfGenerator;
-import com.example.myhouse24admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.fop.apps.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.xml.sax.SAXException;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.transform.*;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.math.BigDecimal;
 import java.time.*;
@@ -285,10 +275,15 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public File createPdfFile(Long id, String template) {
+    public byte[] createPdfFile(Long id, String template) {
         logger.info("createPdfFile - Creating pdf file with template "+template+" and by id "+id);
         XmlInvoiceDto xmlInvoiceDto = formxmlInvoiceDto(id);
-        File pdfFile = pdfGenerator.formPdfFile(xmlInvoiceDto,template);
+        byte[] pdfFile = new byte[0];
+        try {
+            pdfFile = pdfGenerator.formPdfFile(xmlInvoiceDto,template);
+        } catch (IOException e) {
+            logger.info(e.getMessage());
+        }
         logger.info("createPdfFile - Pdf file was created");
         return pdfFile;
     }

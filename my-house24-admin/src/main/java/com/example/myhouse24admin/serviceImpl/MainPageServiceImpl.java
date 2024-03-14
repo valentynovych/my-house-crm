@@ -83,7 +83,7 @@ public class MainPageServiceImpl implements MainPageService {
             return image;
         } else {
             uploadFileUtil.deleteFile(image);
-            return uploadFileUtil.saveFile(imageFile);
+            return uploadFileUtil.saveMultipartFile(imageFile);
         }
     }
 
@@ -106,7 +106,7 @@ public class MainPageServiceImpl implements MainPageService {
         }
     }
     private void createMainPageBlock(MainPageBlockRequest mainPageBlockRequest){
-        String imageName = uploadFileUtil.saveFile(mainPageBlockRequest.getImage());
+        String imageName = uploadFileUtil.saveMultipartFile(mainPageBlockRequest.getImage());
         MainPageBlock mainPageBlock = mainPageMapper.createMainPageBlock(mainPageBlockRequest, imageName);
         mainPageBlockRepo.save(mainPageBlock);
     }
@@ -121,7 +121,7 @@ public class MainPageServiceImpl implements MainPageService {
             return mainPageBlock.getImage();
         } else {
             uploadFileUtil.deleteFile(mainPageBlock.getImage());
-            return uploadFileUtil.saveFile(image);
+            return uploadFileUtil.saveMultipartFile(image);
         }
     }
 

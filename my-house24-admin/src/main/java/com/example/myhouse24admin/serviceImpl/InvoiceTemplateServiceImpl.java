@@ -10,12 +10,13 @@ import com.example.myhouse24admin.service.InvoiceTemplateService;
 import com.example.myhouse24admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletContext;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 @Service
 public class InvoiceTemplateServiceImpl implements InvoiceTemplateService {
@@ -65,7 +66,7 @@ public class InvoiceTemplateServiceImpl implements InvoiceTemplateService {
     private void saveNewInvoiceTemplates(List<InvoiceTemplateRequest> invoiceTemplates) {
         if(invoiceTemplates != null) {
             for (InvoiceTemplateRequest invoiceTemplateRequest : invoiceTemplates) {
-                String fileName = uploadFileUtil.saveFile(invoiceTemplateRequest.getFile());
+                String fileName = uploadFileUtil.saveMultipartFile(invoiceTemplateRequest.getFile());
                 InvoiceTemplate invoiceTemplate = invoiceTemplateMapper
                         .invoiceTemplateRequestToInvoiceTemplate(invoiceTemplateRequest, fileName);
                 invoiceTemplateRepo.save(invoiceTemplate);
@@ -83,20 +84,16 @@ public class InvoiceTemplateServiceImpl implements InvoiceTemplateService {
     }
 
     @Override
-    public File getTemplateFile(String fileName) {
+    public byte[] getTemplateFile(String fileName) {
         logger.info("getTemplateFile - Getting file by name "+fileName);
-        File file = uploadFileUtil.getFileByName(fileName);
+        InputStream inputStream = uploadFileUtil.getFileInputStreamByName(fileName);
+        byte[] bytes = null;
+        try {
+            bytes = IOUtils.toByteArray(inputStream);
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
         logger.info("getTemplateFile - File was got");
-        return file;
+        return bytes;
     }
-
-    @Override
-    public MediaType getMediaTypeForFileName(String fileName) {
-        logger.info("getMediaTypeForFileName - Getting media type for file with name "+fileName);
-        String mineType = servletContext.getMimeType(fileName);
-        MediaType mediaType = MediaType.parseMediaType(mineType);
-        logger.info("getMediaTypeForFileName - Media type was got");
-        return mediaType;
-    }
-
 }

@@ -95,7 +95,7 @@ public class ServicesPageServiceImpl implements ServicesPageService {
         }
     }
     private void createServicePageBlock(ServicePageBlockRequest servicePageBlockRequest){
-        String imageName = uploadFileUtil.saveFile(servicePageBlockRequest.getImage());
+        String imageName = uploadFileUtil.saveMultipartFile(servicePageBlockRequest.getImage());
         ServicePageBlock servicePageBlock = servicesPageMapper.createServicePageBlock(servicePageBlockRequest,imageName);
         servicePageBlockRepo.save(servicePageBlock);
     }
@@ -110,7 +110,7 @@ public class ServicesPageServiceImpl implements ServicesPageService {
             return servicePageBlockInDb.getImage();
         } else {
             uploadFileUtil.deleteFile(servicePageBlockInDb.getImage());
-            return uploadFileUtil.saveFile(image);
+            return uploadFileUtil.saveMultipartFile(image);
         }
     }
 
