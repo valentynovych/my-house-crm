@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 public class S3ServiceImpl implements S3Service {
@@ -26,10 +29,24 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
-    public void uploadFile(String keyName, MultipartFile file) throws IOException {
-        logger.info("uploadFile() -> start uploading file to AWS bucket {file: {}}", file);
+    public void uploadMultipartFile(String keyName, MultipartFile file) throws IOException {
+        logger.info("uploadMultipartFile() -> start uploading multipart file to AWS bucket {file: {}}", file);
         var putObjectResult = s3client.putObject(bucketName, keyName, file.getInputStream(), null);
+        logger.info("uploadMultipartFile() -> end, success upload multipart file to AWS, putObjectMetadata: {}", putObjectResult.getMetadata());
+    }
+
+    @Override
+    public void uploadFile(String keyName, File file) throws IOException {
+        logger.info("uploadFile() -> start uploading file to AWS bucket {file: {}}", file);
+        var putObjectResult = s3client.putObject(bucketName, keyName, new FileInputStream(file), null);
         logger.info("uploadFile() -> end, success upload file to AWS, putObjectMetadata: {}", putObjectResult.getMetadata());
+    }
+
+    @Override
+    public void uploadInputStream(String keyName, InputStream inputStream) {
+        logger.info("uploadInputStream() -> start uploading inputStream to AWS bucket");
+        var putObjectResult = s3client.putObject(bucketName, keyName, inputStream, null);
+        logger.info("uploadInputStream() -> end, success upload inputStream to AWS, putObjectMetadata: {}", putObjectResult.getMetadata());
     }
 
     @Override

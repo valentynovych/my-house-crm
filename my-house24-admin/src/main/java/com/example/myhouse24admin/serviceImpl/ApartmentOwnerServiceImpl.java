@@ -72,7 +72,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         if (multipartFile == null) {
             return uploadFileUtil.saveDefaultOwnerImage();
         }
-        return uploadFileUtil.saveFile(multipartFile);
+        return uploadFileUtil.saveMultipartFile(multipartFile);
     }
 
     String createOwnerId() {
@@ -127,7 +127,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
 
     private void updateImage(MultipartFile multipartFile, ApartmentOwner apartmentOwner) {
         if (multipartFile != null) {
-            String createdImageName = uploadFileUtil.saveFile(multipartFile);
+            String createdImageName = uploadFileUtil.saveMultipartFile(multipartFile);
             apartmentOwner.setAvatar(createdImageName);
         }
     }

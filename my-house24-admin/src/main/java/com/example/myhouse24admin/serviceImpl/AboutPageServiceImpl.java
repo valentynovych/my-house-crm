@@ -119,7 +119,7 @@ public class AboutPageServiceImpl implements AboutPageService {
     private void saveDocuments(List<MultipartFile> newDocuments) {
         if(newDocuments != null){
             for(MultipartFile newDocument: newDocuments){
-                String documentName = uploadFileUtil.saveFile(newDocument);
+                String documentName = uploadFileUtil.saveMultipartFile(newDocument);
                 Document document = new Document();
                 document.setName(documentName);
                 documentRepo.save(document);
@@ -130,7 +130,7 @@ public class AboutPageServiceImpl implements AboutPageService {
     private void saveGalleryImages(List<MultipartFile> newImages) {
         if(newImages != null) {
             for (MultipartFile newImage : newImages) {
-                String imageName = uploadFileUtil.saveFile(newImage);
+                String imageName = uploadFileUtil.saveMultipartFile(newImage);
                 Gallery gallery = new Gallery();
                 gallery.setImage(imageName);
                 galleryRepo.save(gallery);
@@ -140,7 +140,7 @@ public class AboutPageServiceImpl implements AboutPageService {
     private void saveAdditionalGalleryImages(List<MultipartFile> additionalNewImages) {
         if(additionalNewImages != null) {
             for (MultipartFile additionalNewImage : additionalNewImages) {
-                String imageName = uploadFileUtil.saveFile(additionalNewImage);
+                String imageName = uploadFileUtil.saveMultipartFile(additionalNewImage);
                 AdditionalGallery additionalGallery = new AdditionalGallery();
                 additionalGallery.setImage(imageName);
                 additionalGalleryRepo.save(additionalGallery);
@@ -153,7 +153,7 @@ public class AboutPageServiceImpl implements AboutPageService {
             return aboutPage.getDirectorImage();
         } else {
             uploadFileUtil.deleteFile(aboutPage.getDirectorImage());
-            return uploadFileUtil.saveFile(image);
+            return uploadFileUtil.saveMultipartFile(image);
         }
     }
 }
