@@ -1,6 +1,7 @@
 package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.entity.*;
+import com.example.myhouse24admin.model.statistic.BalanceStatistic;
 import com.example.myhouse24admin.model.statistic.IncomeExpenseStatistic;
 import com.example.myhouse24admin.model.statistic.InvoicePaidArrearsStatistic;
 import com.example.myhouse24admin.model.statistic.StatisticGeneralResponse;
@@ -15,8 +16,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -36,6 +37,7 @@ public class StatisticServiceImpl implements StatisticService {
     private final InvoiceRepo invoiceRepo;
     private final InvoiceItemRepo invoiceItemRepo;
     private final int year = LocalDate.now().getYear();
+    private final Month currentMonth = LocalDate.now().getMonth();
     private final Logger logger = LogManager.getLogger(StatisticServiceImpl.class);
 
     public StatisticServiceImpl(PersonalAccountRepo personalAccountRepo, HouseRepo houseRepo,
@@ -53,28 +55,28 @@ public class StatisticServiceImpl implements StatisticService {
     }
 
     @Override
-    public Map<String, String> getPersonalAccountsMetrics() {
-        logger.info("Get personal accounts metrics");
-        Map<String, String> metrics = new HashMap<>();
-        PersonalAccountSpecification byBalanceIsNegative = new PersonalAccountSpecification(Map.of("balance", "arrears"));
-        List<PersonalAccount> allNegative = personalAccountRepo.findAll(byBalanceIsNegative);
-        BigDecimal accountsBalanceArrears = allNegative.stream()
-                .map(personalAccount -> personalAccount.getApartment().getBalance())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        metrics.put("accountsBalanceArrears", accountsBalanceArrears.toString());
+    public BalanceStatistic getPersonalAccountsMetrics() {
+        logger.info("getPersonalAccountsMetrics() ->Get personal accounts metrics");
+        BigDecimal accountsBalanceArrears;
+        BigDecimal accountsBalanceOverpayments;
+        BigDecimal cashRegisterBalance;
 
-        PersonalAccountSpecification byBalanceIsPositive = new PersonalAccountSpecification(Map.of("balance", "overpayment"));
-        List<PersonalAccount> allPositive = personalAccountRepo.findAll(byBalanceIsPositive);
-        BigDecimal accountsBalanceOverpayments = allPositive.stream()
-                .map(personalAccount -> personalAccount.getApartment().getBalance())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        try {
+            accountsBalanceArrears = getAccountsBalanceArrears().get();
+            accountsBalanceOverpayments = getAccountsBalanceOverpayments().get();
+            cashRegisterBalance = getCashRegisterBalance().get();
+            logger.info("getPersonalAccountsMetrics() -> Get personal accounts metrics completed");
+        } catch (InterruptedException | ExecutionException e) {
+            logger.error("getPersonalAccountsMetrics() -> Get personal accounts metrics failed", e);
+            throw new RuntimeException(e);
+        }
 
-        metrics.put("accountsBalanceOverpayments", accountsBalanceOverpayments.toString());
-
-        //TODO add current cash register
-        logger.info("Get personal accounts metrics completed");
+        BalanceStatistic metrics = new BalanceStatistic(
+                accountsBalanceArrears, accountsBalanceOverpayments, cashRegisterBalance);
+        logger.info("getPersonalAccountsMetrics() -> Get personal accounts metrics completed");
         return metrics;
     }
+
 
     @Override
     public StatisticGeneralResponse getGeneralStatistic() throws ExecutionException, InterruptedException {
@@ -110,26 +112,20 @@ public class StatisticServiceImpl implements StatisticService {
                     Instant dateFrom = startMouth.atStartOfDay(ZoneId.systemDefault()).toInstant();
                     Instant dateTo = endMouth.atStartOfDay(ZoneId.systemDefault()).toInstant();
                     List<CashSheet> cashSheets;
+
+                    BigDecimal totalIncome;
+                    BigDecimal totalExpense;
                     try {
-                        cashSheets = cashSheetRepo.findByCreationDateBetween(dateFrom, dateTo).get();
+                        cashSheets = cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalse(dateFrom, dateTo).get();
+                        totalIncome = getAmountValueFromCashSheetsBySheetType(cashSheets, CashSheetType.INCOME).get();
+                        totalExpense = getAmountValueFromCashSheetsBySheetType(cashSheets, CashSheetType.EXPENSE).get();
                         logger.info("getIncomeExpenseStatisticPerYear() -> " +
                                 "Get income expense statistic per year -> month: {} completed", month);
                     } catch (InterruptedException | ExecutionException e) {
                         logger.error("Get income expense statistic per year error", e);
                         throw new RuntimeException(e);
                     }
-
-                    BigDecimal totalIncome = cashSheets.stream()
-                            .filter(sheet -> sheet.getSheetType() == CashSheetType.INCOME)
-                            .map(CashSheet::getAmount)
-                            .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-                    BigDecimal totalExpense = cashSheets.stream()
-                            .filter(sheet -> sheet.getSheetType() == CashSheetType.EXPENSE)
-                            .map(CashSheet::getAmount)
-                            .reduce(BigDecimal.ZERO, BigDecimal::add);
                     logger.info("Get income expense statistic per year completed");
-
                     return new IncomeExpenseStatistic(dateFrom, totalIncome, totalExpense);
                 })
                 .collect(Collectors.toList());
@@ -168,6 +164,53 @@ public class StatisticServiceImpl implements StatisticService {
                     return new InvoicePaidArrearsStatistic(dateFrom, totalPaid, invoiceItemsCostSum != null ? invoiceItemsCostSum : BigDecimal.ZERO);
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Async
+    protected CompletableFuture<BigDecimal> getCashRegisterBalance() throws ExecutionException, InterruptedException {
+        logger.info("Get cash register balance");
+        LocalDate localDate = LocalDate.of(year, currentMonth, 1);
+        List<CashSheet> cashSheets = cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalse(
+                getInstantFromLocalDate(localDate).get(),
+                getInstantFromLocalDate(localDate.plusMonths(1)).get()).get();
+
+        BigDecimal incomeBalance = getAmountValueFromCashSheetsBySheetType(cashSheets, CashSheetType.INCOME).get();
+        BigDecimal expenseBalance = getAmountValueFromCashSheetsBySheetType(cashSheets, CashSheetType.EXPENSE).get();
+
+        logger.info("Get cash register balance completed, incomeBalance: {}, expenseBalance: {}", incomeBalance, expenseBalance);
+        return CompletableFuture.completedFuture(incomeBalance.subtract(expenseBalance));
+    }
+
+    @Async
+    protected CompletableFuture<BigDecimal> getAmountValueFromCashSheetsBySheetType(List<CashSheet> cashSheets, CashSheetType cashSheetType) {
+        return CompletableFuture.completedFuture(cashSheets.stream()
+                .filter(sheet -> sheet.getSheetType() == cashSheetType)
+                .map(CashSheet::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
+    }
+
+    @Async
+    protected CompletableFuture<BigDecimal> getAccountsBalanceArrears() {
+        logger.info("getAccountsBalanceArrears() -> Get accounts balance arrears");
+        PersonalAccountSpecification byBalanceIsNegative = new PersonalAccountSpecification(Map.of("balance", "arrears"));
+        List<PersonalAccount> allNegative = personalAccountRepo.findAll(byBalanceIsNegative);
+        BigDecimal accountsBalanceArrears = allNegative.stream()
+                .map(personalAccount -> personalAccount.getApartment().getBalance())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        logger.info("getAccountsBalanceArrears() -> Get accounts balance arrears completed");
+        return CompletableFuture.completedFuture(accountsBalanceArrears);
+    }
+
+    @Async
+    protected CompletableFuture<BigDecimal> getAccountsBalanceOverpayments() {
+        logger.info("getAccountsBalanceOverpayments() -> Get accounts balance overpayments");
+        PersonalAccountSpecification byBalanceIsPositive = new PersonalAccountSpecification(Map.of("balance", "overpayment"));
+        List<PersonalAccount> allPositive = personalAccountRepo.findAll(byBalanceIsPositive);
+        BigDecimal accountsBalanceOverpayments = allPositive.stream()
+                .map(personalAccount -> personalAccount.getApartment().getBalance())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        logger.info("getAccountsBalanceOverpayments() -> Get accounts balance overpayments completed");
+        return CompletableFuture.completedFuture(accountsBalanceOverpayments);
     }
 
     @Async
