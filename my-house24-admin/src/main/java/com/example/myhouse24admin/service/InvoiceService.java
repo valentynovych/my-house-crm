@@ -17,4 +17,5 @@ public interface InvoiceService {
     boolean deleteInvoices(Long[]invoiceIds);
     byte[] createPdfFile(Long id, String template);
     String getInvoiceNumber(Long id);
+    String getInvoiceOwnerEmail(Long id);
 }

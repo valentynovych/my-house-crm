@@ -57,3 +57,25 @@ function showTemplates(response) {
 function isDefault(isDefault) {
     return isDefault? "checked": "";
 }
+$("#send-button").on("click", function () {
+    blockCardDody();
+    let file = $('input[type=radio]:checked').attr("id");
+    if(file === undefined){
+        toastr.warning(chooseTemplate);
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "../send-invoice/"+id + "/" + file,
+            success: function () {
+                toastr.success(messageSent);
+            },
+            error: function () {
+                toastr.error(errorMessage);
+            }
+        });
+    }
+
+});
+
+
+

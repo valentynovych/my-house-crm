@@ -15,4 +15,5 @@ public interface MailService {
     void sendInviteToStaff(String token,Staff staffById);
     void sendActivationToOwner(String token, Long ownerId);
     void sendInvitationToOwner(InvitationRequest invitationRequest);
+    void sendInvoice(String to, byte[] fileBytes);
 }

@@ -275,6 +275,15 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    public String getInvoiceOwnerEmail(Long id) {
+        logger.info("getInvoiceOwnerEmail - Getting invoice owner email by id "+id);
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
+        String email = invoice.getApartment().getOwner().getEmail();
+        logger.info("getInvoiceOwnerEmail - Invoice owner email was got");
+        return email;
+    }
+
+    @Override
     public byte[] createPdfFile(Long id, String template) {
         logger.info("createPdfFile - Creating pdf file with template "+template+" and by id "+id);
         XmlInvoiceDto xmlInvoiceDto = formxmlInvoiceDto(id);

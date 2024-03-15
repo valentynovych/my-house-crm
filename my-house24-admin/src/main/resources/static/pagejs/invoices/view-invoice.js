@@ -7,6 +7,7 @@ const BORDER_ALL = { top: { style: 'thin', color: { rgb: '000000' } },
 $(document).ready(function () {
     $("#edit-invoice-link").attr("href", "../edit/" + id);
     $("#print-link").attr("href", "print/" + id);
+    $("#send-link").attr("href", "print/" + id);
     getInvoice();
 });
 

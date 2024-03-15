@@ -39,6 +39,7 @@ public class InvoiceController {
     private final ServicesService servicesService;
     private final MeterReadingService meterReadingService;
     private final ApartmentOwnerService apartmentOwnerService;
+    private final MailService mailService;
 
     public InvoiceController(HouseService houseService,
                              SectionService sectionService,
@@ -47,7 +48,8 @@ public class InvoiceController {
                              InvoiceService invoiceService,
                              ServicesService servicesService,
                              MeterReadingService meterReadingService,
-                             ApartmentOwnerService apartmentOwnerService) {
+                             ApartmentOwnerService apartmentOwnerService,
+                             MailService mailService) {
         this.houseService = houseService;
         this.sectionService = sectionService;
         this.apartmentService = apartmentService;
@@ -56,6 +58,7 @@ public class InvoiceController {
         this.servicesService = servicesService;
         this.meterReadingService = meterReadingService;
         this.apartmentOwnerService = apartmentOwnerService;
+        this.mailService = mailService;
     }
 
     @GetMapping()
@@ -204,6 +207,15 @@ public class InvoiceController {
     @GetMapping("/get-number/{id}")
     public @ResponseBody String getNumberById(@PathVariable Long id) {
         return invoiceService.getInvoiceNumber(id);
+    }
+
+    @PostMapping("/view-invoice/send-invoice/{id}/{template}")
+    public @ResponseBody ResponseEntity<?> sendInvoice(@PathVariable Long id,
+                                                       @PathVariable("template")String template) {
+        String email = invoiceService.getInvoiceOwnerEmail(id);
+        byte [] pdfFile = invoiceService.createPdfFile(id, template);
+        mailService.sendInvoice(email,pdfFile);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

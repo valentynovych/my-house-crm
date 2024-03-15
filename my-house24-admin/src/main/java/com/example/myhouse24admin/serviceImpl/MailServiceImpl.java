@@ -10,6 +10,7 @@ import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Attachments;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,6 +25,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Base64;
 
 @Service
 public class MailServiceImpl implements MailService {
@@ -52,7 +55,7 @@ public class MailServiceImpl implements MailService {
         logger.info("sendToken() - Sending token " + token + " to email " + emailRequest.email());
         String subject = "Встановлення нового паролю";
         Content content = new Content("text/html", buildContent(token));
-        sendMail(subject, emailRequest.email(), content);
+        formAndSendMail(subject, emailRequest.email(), content);
         logger.info("sendToken() - Token was sent");
     }
 
@@ -61,7 +64,7 @@ public class MailServiceImpl implements MailService {
         logger.info("sendToken() - Sending password " + newPassword + " to email " + to);
         String subject = "Новий пароль";
         Content content = new Content("text/html", buildPasswordContent(newPassword));
-        sendMail(subject, to, content);
+        formAndSendMail(subject, to, content);
         logger.info("sendToken() - Success send new password to email {}", to);
     }
 
@@ -69,7 +72,7 @@ public class MailServiceImpl implements MailService {
     public void sendMessage(String to, String subject, String messageHtml, Staff staff) {
         logger.info("sendMessage() - start send message to: {}", to);
         Content content = new Content("text/html", buildMessageContent(messageHtml, subject, staff));
-        sendMail(subject, to, content);
+        formAndSendMail(subject, to, content);
         logger.info("sendMessage() -> message to: {}, has been send", to);
     }
 
@@ -78,7 +81,7 @@ public class MailServiceImpl implements MailService {
         logger.info("sendInviteToStaff() -> start, with staffId: {}", staffById.getId());
         String subject = "Запрошення у систему";
         Content content = new Content("text/html", buildInviteContent(token, staffById));
-        sendMail(subject, staffById.getEmail(), content);
+        formAndSendMail(subject, staffById.getEmail(), content);
         logger.info("sendInviteToStaff() -> end, invite has been send");
     }
 
@@ -88,7 +91,7 @@ public class MailServiceImpl implements MailService {
         ApartmentOwner apartmentOwner = apartmentOwnerRepo.findById(ownerId).orElseThrow(()-> new EntityNotFoundException("Owner was not found by id "+ownerId));
         String subject = "Активація облікового запису";
         Content content = new Content("text/html", buildOwnerActivationContent(token));
-        sendMail(subject, apartmentOwner.getEmail(), content);
+        formAndSendMail(subject, apartmentOwner.getEmail(), content);
         logger.info("sendActivationToOwner() - Token was sent");
     }
 
@@ -97,10 +100,38 @@ public class MailServiceImpl implements MailService {
         logger.info("sendInvitationToOwner() - Sending invitation to owner with email " + invitationRequest.email());
         String subject = "Запрошення власника";
         Content content = new Content("text/html", buildOwnerInvitationContent());
-        sendMail(subject, invitationRequest.email(), content);
+        formAndSendMail(subject, invitationRequest.email(), content);
         logger.info("sendInvitationToOwner() - Invitation was sent");
     }
 
+    @Override
+    public void sendInvoice(String to, byte[] fileBytes) {
+        logger.info("sendInvoice() - Sending invoice to owner with email " + to);
+        String subject = "Квитанція";
+        Content content = new Content("text/html", "Вам надіслано квитанцію");
+        formAndSendMailWithAttachment(to, subject, content, fileBytes);
+    }
+
+    private void formAndSendMailWithAttachment(String to, String subject, Content content, byte[] fileBytes) {
+        logger.info("formAndSendMailWithAttachment() - forming email");
+        Mail mail = new Mail(getEmailFromAddress(sender), subject, getEmailFromAddress(to), content);
+        Attachments attachments = formAttachment(fileBytes);
+        mail.addAttachments(attachments);
+        try {
+            sendMail(mail, to);
+        } catch (IOException ex) {
+            logger.error(ex.getMessage());
+        }
+    }
+    private Attachments formAttachment(byte[] fileBytes){
+        Attachments attachments = new Attachments();
+        attachments.setFilename("invoice_"+ LocalDate.now()+".pdf");
+        attachments.setType("application/pdf");
+        attachments.setDisposition("attachment");
+        String attachmentContent = Base64.getEncoder().encodeToString(fileBytes);
+        attachments.setContent(attachmentContent);
+        return  attachments;
+    }
     private String buildOwnerInvitationContent() {
         String link = formOwnerInvitationLink();
         Context context = new Context();
@@ -117,20 +148,21 @@ public class MailServiceImpl implements MailService {
     }
 
 
-    private void sendMail(String subject, String to, Content content) {
-        logger.info("sendMail() - start");
+    private void formAndSendMail(String subject, String to, Content content) {
+        logger.info("formAndSendMail() - forming email");
         Mail mail = new Mail(getEmailFromAddress(sender), subject, getEmailFromAddress(to), content);
-
         try {
-            Request request = buildRequest(mail);
-            logger.info("sendMail() - start sending mail to: {}", to);
-            sendGrid.api(request);
-            logger.info("sendMail() - Mail has been send");
+            sendMail(mail, to);
         } catch (IOException ex) {
             logger.error(ex.getMessage());
         }
     }
-
+    private void sendMail(Mail mail, String to) throws IOException {
+        Request request = buildRequest(mail);
+        logger.info("sendMail() - start sending mail to: {}", to);
+        sendGrid.api(request);
+        logger.info("sendMail() - Mail has been send");
+    }
     private Request buildRequest(Mail mail) throws IOException {
         logger.info("buildRequest() -> Start");
         Request request = new Request();
