@@ -1,5 +1,6 @@
 package com.example.myhouse24user.model.owner;
 
+import com.example.myhouse24user.entity.Apartment;
 import com.example.myhouse24user.entity.ApartmentOwner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,7 +23,15 @@ public class ApartmentOwnerDetails implements UserDetails {
     }
 
     public String getFullName() {
-        return apartmentOwner.getFirstName()+" "+apartmentOwner.getLastName();
+        return apartmentOwner.getFirstName() + " " + apartmentOwner.getLastName();
+    }
+
+    public List<Apartment> getApartments() {
+        return apartmentOwner.getApartments();
+    }
+
+    public String getAvatar() {
+        return apartmentOwner.getAvatar();
     }
 
     @Override
