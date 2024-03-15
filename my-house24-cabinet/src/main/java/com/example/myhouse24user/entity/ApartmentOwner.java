@@ -20,7 +20,7 @@ public class ApartmentOwner {
     private String lastName;
     @Column(name = "middle_name",length = 50, nullable = false)
     private String middleName;
-    @Column(name = "birth_date", nullable = false)
+    @Column(name = "birth_date")
     private Instant birthDate;
     @Column(name = "creation_date", nullable = false)
     private Instant creationDate;
