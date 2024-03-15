@@ -32,7 +32,10 @@ public class SecurityConfiguration {
         http
                 .csrf((c)-> c.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/assets/**","/pagejs/**", "/cabinet/forgotPassword", "/cabinet/sentToken", "/cabinet/changePassword", "/cabinet/tokenExpired", "/cabinet/success").permitAll()
+                        .requestMatchers("/assets/**","/pagejs/**", "/cabinet/forgotPassword",
+                                "/cabinet/sentToken", "/cabinet/changePassword",
+                                "/cabinet/tokenExpired", "/cabinet/success",
+                                "/cabinet/register").permitAll()
                         .requestMatchers("/cabinet/**").hasRole("OWNER")
                         .anyRequest().authenticated()
                 )
