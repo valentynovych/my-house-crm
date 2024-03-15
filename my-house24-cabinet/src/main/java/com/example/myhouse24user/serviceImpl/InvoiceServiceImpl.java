@@ -61,7 +61,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         String email = userDetails.getUsername();
-        Specification<Invoice> invoiceSpecification = Specification.where(byDeleted()).and(byOwnerEmail(email));
+        Specification<Invoice> invoiceSpecification = Specification.where(byDeleted())
+                .and(byOwnerEmail(email)).and(byProcessedTrue());
         if(!requestMap.get("number").isEmpty()){
             invoiceSpecification = invoiceSpecification.and(byNumber(requestMap.get("number")));
         }
@@ -72,6 +73,10 @@ public class InvoiceServiceImpl implements InvoiceService {
             LocalDate localDate = LocalDate.parse(requestMap.get("date"), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             invoiceSpecification = invoiceSpecification.and(byCreationDate(localDate));
         }
+        if(!requestMap.get("apartmentId").isEmpty()){
+            invoiceSpecification = invoiceSpecification.and(byApartmentId(Long.valueOf(requestMap.get("apartmentId"))));
+        }
+
         return invoiceRepo.findAll(invoiceSpecification, pageable);
     }
 }

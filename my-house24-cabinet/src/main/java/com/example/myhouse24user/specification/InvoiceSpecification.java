@@ -14,6 +14,10 @@ public interface InvoiceSpecification {
         return (root, query, builder) ->
                 builder.equal(root.get("deleted"), false);
     }
+    static Specification<Invoice> byProcessedTrue(){
+        return (root, query, builder) ->
+                builder.equal(root.get("isProcessed"), true);
+    }
     static Specification<Invoice> byNumber(String number){
         return (root, query, builder) ->
                 builder.like(builder.upper(root.get("number")), "%"+number.toUpperCase()+"%");
@@ -31,6 +35,12 @@ public interface InvoiceSpecification {
             Join<Invoice, Apartment> apartmentJoin = root.join("apartment");
             Join<Apartment, ApartmentOwner> ownerJoin = apartmentJoin.join("owner");
             return builder.equal(ownerJoin.get("email"), email);
+        };
+    }
+    static Specification<Invoice> byApartmentId(Long apartmentId){
+        return (root, query, builder) -> {
+            Join<Invoice, Apartment> apartmentJoin = root.join("apartment");
+            return builder.equal(apartmentJoin.get("id"), apartmentId);
         };
     }
 }

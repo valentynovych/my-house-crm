@@ -1,11 +1,14 @@
 let tableLength = 5;
 let timer;
+let url = window.location.pathname;
+let id = url.substring(url.lastIndexOf('/') + 1);
 let request = {
     page: 0,
     pageSize: tableLength,
     number: "",
     date: "",
     status: "",
+    apartmentId: ""
 };
 
 $(document).ready(function () {
@@ -15,11 +18,19 @@ $(document).ready(function () {
 });
 function getInvoices(currentPage) {
     blockCardDody();
+    let link;
+    if(id.localeCompare("invoices") === 0){
+        link = "invoices/get";
+        request.apartmentId = "";
+    } else {
+        link = "get";
+        request.apartmentId = id;
+    }
     request.page = currentPage;
     request.pageSize = tableLength;
     $.ajax({
         type: "GET",
-        url: "invoices/get",
+        url: link,
         data: request,
         success: function (response) {
             $("tbody").children().remove();
@@ -39,7 +50,7 @@ function drawTable(response) {
         for (const invoice of response.content) {
             $("tbody")
                 .append(
-                    `<tr class="tr text-nowrap" data-href="invoices/view-invoice/${invoice.id}">
+                    `<tr class="tr text-nowrap" data-href="view-invoice/${invoice.id}">
                     <td>${invoice.number}</td>
                     <td>${invoice.creationDate}</td>
                     <td>${getStatusSpan(invoice.status)}</td>

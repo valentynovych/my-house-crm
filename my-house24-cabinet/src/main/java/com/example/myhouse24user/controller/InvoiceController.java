@@ -34,4 +34,8 @@ public class InvoiceController {
     public @ResponseBody InvoiceStatus[] getStatuses() {
         return InvoiceStatus.values();
     }
+    @GetMapping("/{id}")
+    public ModelAndView getInvoicesForApartmentPage() {
+        return new ModelAndView("invoices/invoices");
+    }
 }
