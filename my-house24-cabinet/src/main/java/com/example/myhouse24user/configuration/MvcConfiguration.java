@@ -1,5 +1,6 @@
 package com.example.myhouse24user.configuration;
 
+import com.example.myhouse24user.configuration.awsConfiguration.S3ResourceResolve;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +19,18 @@ import java.util.Locale;
 @Configuration
 @EnableWebMvc
 public class MvcConfiguration implements WebMvcConfigurer {
+
+    private final S3ResourceResolve s3ResourceResolve;
+
+    public MvcConfiguration(S3ResourceResolve s3ResourceResolve) {
+        this.s3ResourceResolve = s3ResourceResolve;
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:uploads/");
+                .resourceChain(false).addResolver(s3ResourceResolve);
     }
 
     @Bean
