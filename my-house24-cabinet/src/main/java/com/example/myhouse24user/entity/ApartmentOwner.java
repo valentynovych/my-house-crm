@@ -52,7 +52,7 @@ public class ApartmentOwner {
             inverseJoinColumns = { @JoinColumn(name = "message_id") }
     )
     private List<Message> messages = new ArrayList<>();
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
     private List<Apartment> apartments = new ArrayList<>();
     @OneToOne(mappedBy = "apartmentOwner")
     private OwnerPasswordResetToken ownerPasswordResetToken;

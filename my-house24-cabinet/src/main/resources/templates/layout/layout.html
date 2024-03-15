@@ -130,141 +130,68 @@
             </div>
 
             <div class="menu-inner-shadow"></div>
-
-            <ul class="menu-inner py-1">
-
+            <ul class="menu-inner py-1" th:with="apartments = ${#authentication.principal.apartments}">
                 <li class="menu-item">
-                    <a th:href="@{/admin/statistic}" class="menu-link" id="lin">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons ti ti-chart-pie"></i>
-                        <div data-i18n="Email" th:text="#{menu-item-statistic}">Статистика</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a th:href="@{/admin/cash-register}" class="menu-link">
-                        <i class="menu-icon tf-icons ti ti-cash"></i>
-                        <div data-i18n="Kanban" th:text="#{menu-item-cash-register}">Каса</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a th:href="@{/admin/invoices}" class="menu-link">
-                        <i class="menu-icon tf-icons ti ti-file-spreadsheet"></i>
-                        <div data-i18n="Kanban" th:text="#{menu-item-invoices}">Квитанції на оплату</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a th:href="@{/admin/personal-accounts}" class="menu-link">
-                        <i class="menu-icon tf-icons ti ti-star"></i>
-                        <div data-i18n="Kanban" th:text="#{menu-item-personal-account}">Особисті рахунки</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a th:href="@{/admin/apartments}" class="menu-link">
-                        <i class="menu-icon tf-icons ti ti-bed"></i>
-                        <div data-i18n="Users" th:text="#{menu-item-apartments}">Квартири</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a th:href="@{/admin/owners}" class="menu-link">
-                        <i class="menu-icon tf-icons ti ti-user"></i>
-                        <div data-i18n="Users" th:text="#{menu-item-apartment-owners}">Власники квартир</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a th:href="@{/admin/houses}" class="menu-link">
-                        <i class="menu-icon tf-icons ti ti-home"></i>
-                        <div data-i18n="Users" th:text="#{menu-item-houses}">Будинки</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a th:href="@{/admin/messages}" class="menu-link">
-                        <i class="menu-icon tf-icons ti ti-mail"></i>
-                        <div data-i18n="Users" th:text="#{menu-item-messages}">Повідомлення</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a th:href="@{/admin/master-requests}" class="menu-link">
-                        <i class="menu-icon tf-icons ti ti-users"></i>
-                        <div data-i18n="Users" th:text="#{menu-item-master-request}">Заявки для виклику майстра</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a th:href="@{/admin/meter-readings}" class="menu-link">
-                        <i class="menu-icon tf-icons ti ti-table"></i>
-                        <div data-i18n="Users" th:text="#{menu-item-meters}">Показання лічильників</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-layout"></i>
-                        <div data-i18n="Roles & Permissions" th:text="#{menu-item-site-management}">Управління сайтом
-                        </div>
+                        <div th:text="#{menu-item-statistic}"></div>
                     </a>
                     <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a th:href="@{/admin/site-management/home-page}" class="menu-link">
-                                <div data-i18n="Roles" th:text="#{menu-item-home-page}">Головна сторінка</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a th:href="@{/admin/site-management/about-page}" class="menu-link">
-                                <div data-i18n="Permission" th:text="#{menu-item-about-us}">Про нас</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a th:href="@{/admin/site-management/service-page}" class="menu-link">
-                                <div data-i18n="Permission" th:text="#{menu-item-services-page}">Послуги</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a th:href="@{/admin/site-management/contacts-page}" class="menu-link">
-                                <div data-i18n="Permission" th:text="#{menu-item-contacts}">Контакти</div>
+                        <li class="menu-item" th:each="apartment : ${apartments}">
+                            <a th:href="@{/cabinet/statistic/{id}(id=${apartment.id})}" class="menu-link">
+                                <div th:text="${apartment.house.name} + ' - '
+                                + #{menu-item-apartmet-short} + ${apartment.apartmentNumber}"></div>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons ti ti-settings"></i>
-                        <div data-i18n="Roles & Permissions" th:text="#{menu-item-system-settings}">Налаштування
-                            системи
-                        </div>
+                        <i class="menu-icon tf-icons ti ti-file-spreadsheet"></i>
+                        <div th:text="#{menu-item-invoices}"></div>
                     </a>
                     <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a th:href="@{/admin/system-settings/services}" class="menu-link">
-                                <div data-i18n="Roles" th:text="#{menu-item-services}">Послуги</div>
+                        <li class="menu-item" th:each="apartment : ${apartments}">
+                            <a th:href="@{/cabinet/invoices/{id}(id=${apartment.id})}" class="menu-link">
+                                <div th:text="${apartment.house.name} + ' - '
+                                + #{menu-item-apartmet-short} + ${apartment.apartmentNumber}"></div>
                             </a>
                         </li>
-                        <li class="menu-item">
-                            <a th:href="@{/admin/system-settings/tariffs}" class="menu-link">
-                                <div data-i18n="Permission" th:text="#{menu-item-tariffs}">Тарифи</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a th:href="@{/admin/system-settings/roles}" class="menu-link">
-                                <div data-i18n="Permission" th:text="#{menu-item-roles}">Ролі</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a th:href="@{/admin/system-settings/staff}" class="menu-link">
-                                <div data-i18n="Permission" th:text="#{menu-item-users}">Користувачі</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a th:href="@{/admin/system-settings/payment-details}" class="menu-link">
-                                <div data-i18n="Permission" th:text="#{menu-item-payments-details}">Платіжні реквізити
-                                </div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a th:href="@{/admin/system-settings/payment-items}" class="menu-link">
-                                <div data-i18n="Permission" th:text="#{menu-item-articles-payments}">Статті платежів
-                                </div>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-calculator"></i>
+                        <div th:text="#{menu-item-tariffs}"></div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item" th:each="apartment : ${apartments}">
+                            <a th:href="@{/cabinet/tariffs/{id}(id=${apartment.id})}" class="menu-link">
+                                <div th:text="${apartment.house.name} + ' - '
+                                + #{menu-item-apartmet-short} + ${apartment.apartmentNumber}"></div>
                             </a>
                         </li>
                     </ul>
                 </li>
 
+                <li class="menu-item">
+                    <a th:href="@{/cabinet/messages}" class="menu-link" id="lin">
+                        <i class="menu-icon tf-icons ti ti-mail"></i>
+                        <div data-i18n="Email" th:text="#{menu-item-messages}"></div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/cabinet/master-requests}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-users"></i>
+                        <div data-i18n="Kanban" th:text="#{menu-item-master-request}"></div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a th:href="@{/cabinet/profile}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-user"></i>
+                        <div data-i18n="Kanban" th:text="#{menu-item-profile}"></div>
+                    </a>
+                </li>
             </ul>
         </aside>
         <div class="layout-page">
@@ -320,7 +247,7 @@
                             <ul class="dropdown-menu dropdown-menu-end py-0">
                                 <li class="dropdown-menu-header border-bottom">
                                     <div class="dropdown-header d-flex align-items-center py-3">
-                                        <h6 class="text-body mb-0 me-auto">Нових користувачів: 2</h6>
+                                        <h6 class="text-body mb-0 me-auto">Нових повідомлень: 2</h6>
                                         <a
                                                 href="javascript:void(0)"
                                                 class="dropdown-notifications-all text-body"
@@ -347,10 +274,10 @@
                                 </li>
                                 <li class="dropdown-menu-footer border-top">
                                     <a
-                                            th:href="@{/admin/staff}"
+                                            th:href="@{/cabinet/messages}"
                                             class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center"
                                     >
-                                        Перейти в розділ користувачів
+                                        Всі повідомлення
                                     </a>
                                 </li>
                             </ul>
@@ -360,7 +287,7 @@
                         <!-- User -->
                         <li class="nav-item navbar-dropdown dropdown-user dropdown">
                             <div class="avatar avatar-online ms-3 me-2">
-                                <img th:src="@{/assets/img/avatars/1.png}" alt class="h-auto rounded-circle"/>
+                                <img th:src="@{/uploads/{avatar}(avatar=${#authentication.principal.avatar})}" alt class="h-auto rounded-circle"/>
                             </div>
                         </li>
                         <li class="nav-item me-3">
