@@ -315,24 +315,26 @@
                                     aria-expanded="false"
                             >
                                 <i class="ti ti-bell ti-md"></i>
-                                <span class="badge bg-danger rounded-pill badge-notifications">2</span>
+                                <span class="badge bg-danger rounded-pill badge-notifications d-none"
+                                      id="new-owners-count"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end py-0">
                                 <li class="dropdown-menu-header border-bottom">
                                     <div class="dropdown-header d-flex align-items-center py-3">
-                                        <h6 class="text-body mb-0 me-auto">Нових користувачів: 2</h6>
+                                        <h6 class="text-body mb-0 me-auto" id="label-new-owners-count">Нових
+                                            користувачів: 2</h6>
                                         <a
                                                 href="javascript:void(0)"
                                                 class="dropdown-notifications-all text-body"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
-                                                title="Mark all as read"
-                                        ><i class="ti ti-mail-opened fs-4"></i
-                                        ></a>
+                                                title="Mark all as read">
+                                            <i class="ti ti-mail-opened fs-4"></i
+                                            ></a>
                                     </div>
                                 </li>
                                 <li class="dropdown-notifications-list scrollable-container">
-                                    <ul class="list-group list-group-flush">
+                                    <ul class="list-group list-group-flush" id="new-owners-list">
                                         <li class="list-group-item list-group-item-action dropdown-notifications-item">
                                             <div class="d-flex">
                                                 <h6 class="mb-1">Іван Іванов</h6>
@@ -346,12 +348,9 @@
                                     </ul>
                                 </li>
                                 <li class="dropdown-menu-footer border-top">
-                                    <a
-                                            th:href="@{/admin/staff}"
-                                            class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center"
-                                    >
-                                        Перейти в розділ користувачів
-                                    </a>
+                                    <a th:href="@{/admin/system-settings/staff}"
+                                       class="dropdown-item d-flex justify-content-center text-primary p-2 h-px-40 mb-1 align-items-center"
+                                       th:text="#{menu-item-new-owners-button}"></a>
                                 </li>
                             </ul>
                         </li>
@@ -421,6 +420,8 @@
     const electricianRole = [[#{staff-role-electrician}]];
     const plumberRole = [[#{staff-role-plumber}]];
     const defaultPlaceholderImage = /*[[@{/assets/img/placeholder/placeholder.jpg}]]*/ 'placeholderImage';
+    const labelNewOwnersCount = /*[[#{menu-item-new-owners}]]*/ 'ownerCounts';
+    const noneOwners = /*[[#{menu-item-empty-owners}]]*/ 'ownerCounts';
 </script>
 <script th:src="@{/pagejs/layout/layout.js}"></script>
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
