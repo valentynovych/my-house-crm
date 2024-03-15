@@ -151,6 +151,11 @@
                         <div th:text="#{menu-item-invoices}"></div>
                     </a>
                     <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a th:href="@{/cabinet/invoices}" th:text="#{menu-item-invoices-all}"
+                               class="menu-link">
+                            </a>
+                        </li>
                         <li class="menu-item" th:each="apartment : ${apartments}">
                             <a th:href="@{/cabinet/invoices/{id}(id=${apartment.id})}" class="menu-link">
                                 <div th:text="${apartment.house.name} + ' - '
