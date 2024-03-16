@@ -7,9 +7,6 @@
     <title th:text="#{menu-item-statistic}"></title>
     <style>
         .count-statistic .card:hover {
-            cursor: pointer;
-            transform: translateY(-10px);
-            transition: 0.4s;
             box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             background-color: #e2e6f0;
@@ -32,192 +29,91 @@
             <span class="h4"></span>
         </div>
         <div class="row count-statistic">
-            <!--     Count Houses       -->
+            <!--     Current balance       -->
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
                 <div class="card card-border-shadow-primary">
-                    <a href="../admin/houses">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2 pb-1">
-                                <div class="avatar me-2">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-2 pb-1">
+                            <div class="avatar me-2">
                                     <span class="avatar-initial rounded bg-label-primary">
                                         <i class="ti ti-home ti-md"></i>
                                     </span>
-                                </div>
-                                <h4 class="ms-1 mb-0" id="count-houses"></h4>
                             </div>
-                            <p class="mb-1" ></p>
+                            <h4 class="ms-1 mb-0" id="current-balance"></h4>
                         </div>
-                    </a>
+                        <p class="mb-1" th:text="#{statistic-label-current-balance}"></p>
+                    </div>
                 </div>
             </div>
-
-            <!--     Count Active Apartment Owners       -->
+            <!--     Personal account       -->
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
                 <div class="card card-border-shadow-primary">
-                    <a href="../admin/owners">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2 pb-1">
-                                <div class="avatar me-2">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-2 pb-1">
+                            <div class="avatar me-2">
                                     <span class="avatar-initial rounded bg-label-primary">
                                         <i class="ti ti-users-group ti-md"></i>
                                     </span>
-                                </div>
-                                <h4 class="ms-1 mb-0" id="count-apartment-owners"></h4>
                             </div>
-                            <p class="mb-1" ></p>
+                            <h4 class="ms-1 mb-0" id="personal-account"></h4>
                         </div>
-                    </a>
+                        <p class="mb-1" th:text="#{statistic-label-personal-account-number}"></p>
+                    </div>
                 </div>
             </div>
-
-            <!--     Count Master Request In progress       -->
+            <!--     Average on last month       -->
             <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
                 <div class="card card-border-shadow-primary">
-                    <a href="../admin/master-requests">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2 pb-1">
-                                <div class="avatar me-2">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-2 pb-1">
+                            <div class="avatar me-2">
                                     <span class="avatar-initial rounded bg-label-facebook">
                                         <i class="ti ti-progress-bolt ti-md"></i>
                                     </span>
-                                </div>
-                                <h4 class="ms-1 mb-0" id="count-master-request-in-progress"></h4>
                             </div>
-                            <p class="mb-1"></p>
+                            <h4 class="ms-1 mb-0" id="average-on-last-month"></h4>
                         </div>
-                    </a>
-                </div>
-            </div>
-
-            <!--     Count Apartments       -->
-            <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                <div class="card card-border-shadow-primary">
-                    <a href="../admin/apartments">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2 pb-1">
-                                <div class="avatar me-2">
-                                    <span class="avatar-initial rounded bg-label-success">
-                                        <i class="ti ti-door ti-md"></i>
-                                    </span>
-                                </div>
-                                <h4 class="ms-1 mb-0" id="count-apartments"></h4>
-                            </div>
-                            <p class="mb-1"></p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!--     Count Personal Accounts       -->
-            <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                <div class="card card-border-shadow-primary">
-                    <a href="../admin/personal-accounts">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2 pb-1">
-                                <div class="avatar me-2">
-                                    <span class="avatar-initial rounded bg-label-primary">
-                                        <i class="ti ti-cash ti-md"></i>
-                                    </span>
-                                </div>
-                                <h4 class="ms-1 mb-0" id="count-personal-accounts"></h4>
-                            </div>
-                            <p class="mb-1"></p>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <!--     Count New Master Requests       -->
-            <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
-                <div class="card card-border-shadow-primary">
-                    <a href="../admin/master-requests">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2 pb-1">
-                                <div class="avatar me-2">
-                                    <span class="avatar-initial rounded bg-label-info">
-                                        <i class="ti ti-home-plus ti-md"></i>
-                                    </span>
-                                </div>
-                                <h4 class="ms-1 mb-0" id="count-new-master-requests"></h4>
-                            </div>
-                            <p class="mb-1" ></p>
-                        </div>
-                    </a>
+                        <p class="mb-1" th:text="#{statistic-label-average-on-last-month}"></p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-3">
-            <div class="col-sm-12 col-md-8" id="arrears-paid-arrears-chart">
-                <div class="card" style="height: 100%">
-                    <div class="card-header">
-                        <span class="h3 my-3" ></span>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="arrears-paid-arrears-invoice-statistic"></canvas>
-                    </div>
-                </div>
-
+        <div class="row">
+            <div class="my-3">
+                <span class="h3 my-3" th:text="#{statistic-label-expense-statistic}"></span>
             </div>
-            <div class="col-sm-12 col-md-4" id="account-statistic">
-                <!--     Amount arrears balance       -->
-                <div class="col-md-12 mb-4">
-                    <div class="card card-border-shadow-primary bg-label-danger">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2 pb-1">
-                                <div class="avatar me-2">
-                                    <span class="avatar-initial rounded bg-label-dark">
-                                        <i class="ti ti-currency-hryvnia"></i>
-                                    </span>
-                                </div>
-                                <h4 class="ms-1 mb-0" id="account-balance-arrears"></h4>
-                            </div>
-                            <p class="mb-1" ></p>
-                        </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h5 th:text="#{statistic-label-expense-statistic-per-month}"></h5>
+                    </div>
+                    <div class="card-body" style="aspect-ratio: 1 / 1">
+                        <canvas id="expense-per-month-chart"
+                                style="position: relative; height: 100%; width: 100%"></canvas>
                     </div>
                 </div>
-                <!--     Amount current balance       -->
-                <div class="col-md-12 mb-4">
-                    <div class="card card-border-shadow-primary bg-label-facebook">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2 pb-1">
-                                <div class="avatar me-2">
-                                    <span class="avatar-initial rounded bg-label-dark">
-                                        <i class="ti ti-currency-hryvnia"></i>
-                                    </span>
-                                </div>
-                                <h4 class="ms-1 mb-0" id="account-current-balance"></h4>
-                            </div>
-                            <p class="mb-1" ></p>
-                        </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h5 th:text="#{statistic-label-expense-statistic-per-year}"></h5>
                     </div>
-                </div>
-                <!--     Amount cash register balance       -->
-                <div class="col-md-12">
-                    <div class="card card-border-shadow-primary">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-2 pb-1">
-                                <div class="avatar me-2">
-                                    <span class="avatar-initial rounded bg-label-dark">
-                                        <i class="ti ti-currency-hryvnia"></i>
-                                    </span>
-                                </div>
-                                <h4 class="ms-1 mb-0" id="account-cash-register-balance"></h4>
-                            </div>
-                            <p class="mb-1" ></p>
-                        </div>
+                    <div class="card-body" style="aspect-ratio: 1 / 1">
+                        <canvas id="expense-per-year-chart"
+                                style="position: relative; height: 100%; width: 100%"></canvas>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12 col-md-12 mt-3" id="income-expense-statistic">
-                <div class="card" style="height: 25rem">
+                <div class="card " style="height: 30rem">
                     <div class="card-header">
-                        <span class="h3 my-3" ></span>
+                        <span class="h3 my-3" th:text="#{statistic-label-expense-per-year-by-month}"></span>
                     </div>
                     <div class="card-body">
-                        <canvas id="income-expense-chart"></canvas>
+                        <canvas id="expense-per-year-on-month-chart"></canvas>
                     </div>
                 </div>
             </div>
@@ -225,17 +121,13 @@
     </div>
 </div>
 
-
 </body>
 <script layout:fragment="additionalScript" th:src="@{/assets/vendor/libs/chartjs/chartjs.js}"></script>
 <script layout:fragment="script" th:src="@{/pagejs/statistic/statistic.js}"></script>
 <script layout:fragment="initThymeleafVarianle" th:inline="javascript">
 
     const currency = /*[[#{general-currency}]]*/ '';
-    const labelIncome = /*[[#{payment-item-label-type-income}]]*/ 'default';
-    const labelExpenses = /*[[#{payment-item-label-type-expense}]]*/ 'default';
-    const labelArrears = /*[[#{statistic-label-arrears}]]*/ 'default';
-    const labelPaidArrears = /*[[#{statistic-label-paid-arrears}]]*/ 'default';
+    const paymentsNotFound = /*[[#{statistic-label-payment-not-found}]]*/ '';
 
 </script>
 </html>

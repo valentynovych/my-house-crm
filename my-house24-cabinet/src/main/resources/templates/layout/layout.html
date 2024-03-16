@@ -44,7 +44,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/toastr/toastr.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-auth.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/css/pages/page-misc.css}"/>
-    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>
+<!--    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>-->
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/typography.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/katex.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/editor.css}"/>
@@ -131,7 +131,7 @@
 
             <div class="menu-inner-shadow"></div>
             <ul class="menu-inner py-1" th:with="apartments = ${#authentication.principal.apartments}">
-                <li class="menu-item">
+                <li class="menu-item" data-parrent="/cabinet/statistic/">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons ti ti-chart-pie"></i>
                         <div th:text="#{menu-item-statistic}"></div>
@@ -145,7 +145,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item" data-parrent="/cabinet/invoices/">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons ti ti-file-spreadsheet"></i>
                         <div th:text="#{menu-item-invoices}"></div>
@@ -159,7 +159,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item" data-parrent="/cabinet/tariffs/">
                     <a href="javascript:void(0);" class="menu-link menu-toggle">
                         <i class="menu-icon tf-icons ti ti-calculator"></i>
                         <div th:text="#{menu-item-tariffs}"></div>
@@ -177,19 +177,19 @@
                 <li class="menu-item">
                     <a th:href="@{/cabinet/messages}" class="menu-link" id="lin">
                         <i class="menu-icon tf-icons ti ti-mail"></i>
-                        <div data-i18n="Email" th:text="#{menu-item-messages}"></div>
+                        <div th:text="#{menu-item-messages}"></div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a th:href="@{/cabinet/master-requests}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-users"></i>
-                        <div data-i18n="Kanban" th:text="#{menu-item-master-request}"></div>
+                        <div th:text="#{menu-item-master-request}"></div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a th:href="@{/cabinet/profile}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-user"></i>
-                        <div data-i18n="Kanban" th:text="#{menu-item-profile}"></div>
+                        <div th:text="#{menu-item-profile}"></div>
                     </a>
                 </li>
             </ul>
@@ -369,6 +369,7 @@
 
 
 <!-- Page JS -->
+<script layout:fragment="additionalScript"></script>
 <script layout:fragment="script"></script>
 <th:block layout:fragment="initThymeleafVarianle"></th:block>
 </html>
