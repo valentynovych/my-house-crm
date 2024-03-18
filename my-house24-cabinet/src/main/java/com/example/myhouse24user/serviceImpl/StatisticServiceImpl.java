@@ -99,7 +99,7 @@ public class StatisticServiceImpl implements StatisticService {
                 .parallel()
                 .mapToObj(month -> {
                     logger.info("getExpensePerYearOnMonthStatistic() -> month: {}", month);
-                    LocalDate startMonth = today.minusMonths(12 - month).toLocalDate();
+                    LocalDate startMonth = today.toLocalDate().withDayOfMonth(1).minusMonths(12 - month);
                     LocalDate endMonth = startMonth.plusMonths(1);
                     Instant instantStartMonth = getInstantFromLocalDate(startMonth);
                     BigDecimal totalAmount;
