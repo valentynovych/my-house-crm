@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="#{menu-item-profile}"></title>
+    <style>
+        .image-wrapper {
+            display: grid;
+            column-gap: 1rem;
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-areas:
+                    "first second third"
+                    "first four five";
+        }
+
+        .image-wrapper img {
+            height: 100%;
+            object-fit: cover;
+        }
+
+    </style>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 class="invoice-breadcrumb"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{menu-item-profile}"></span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <div class="row g-4">
+            <div class="col-4">
+                <div class="px-2" style="border-style: solid; border-width: thin; border-color: #dbdade">
+                    <div class="mt-2 d-flex justify-content-center">
+                        <img style="max-width: 150px; height: auto" id="ownerAvatar"
+                             src="https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
+                             alt class="h-auto rounded-circle"/>
+                    </div>
+                    <h6 class="text-center mt-2" id="fullName"></h6>
+                    <div class="d-flex justify-content-between py-2"
+                         style="border-style: solid; border-width: thin; border-color: #dbdade white">
+                        <div th:text="#{profile-phoneNumber}"></div>
+                        <div id="phoneNumber"></div>
+                    </div>
+                    <div class="d-flex justify-content-between py-2"
+                         style="border-style: solid; border-width: thin; border-color: #dbdade white">
+                        <div>Viber</div>
+                        <div id="viberNumber"></div>
+                    </div>
+                    <div class="d-flex justify-content-between py-2"
+                         style="border-style: solid; border-width: thin; border-color: #dbdade white">
+                        <div>Telegram</div>
+                        <div id="telegramUsername"></div>
+                    </div>
+                    <div class="d-flex justify-content-between py-2"
+                         style="border-style: solid; border-width: thin; border-color: #dbdade white">
+                        <div>Email</div>
+                        <div id="email"></div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <a th:href="@{profile/edit}" type="button" class="btn btn-primary my-2" th:text="#{profile-edit}"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8" id="apartments">
+                <h4 th:text="#{profile-my-apartments}"></h4>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/profile/view-profile.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const errorMessage =[[#{toastr-error-message}]];
+    const ap = [[#{profile-apartment}]];
+    const description = [[#{profile-description}]];
+    const houseName = [[#{profile-house-name}]];
+    const address = [[#{profile-address}]];
+    const apartmentNumber = [[#{profile-apartment-number}]];
+    const area = [[#{profile-area}]];
+    const floor = [[#{profile-floor}]];
+    const section = [[#{profile-section}]];
+    const personalAccount = [[#{profile-personal-account}]];
+</script>
+</html>
