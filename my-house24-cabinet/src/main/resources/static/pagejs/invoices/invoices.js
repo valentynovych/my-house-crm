@@ -50,7 +50,7 @@ function drawTable(response) {
         for (const invoice of response.content) {
             $("tbody")
                 .append(
-                    `<tr class="tr text-nowrap" data-href="view-invoice/${invoice.id}">
+                    `<tr class="tr text-nowrap" data-href="invoices/view-invoice/${invoice.id}">
                     <td>${invoice.number}</td>
                     <td>${invoice.creationDate}</td>
                     <td>${getStatusSpan(invoice.status)}</td>

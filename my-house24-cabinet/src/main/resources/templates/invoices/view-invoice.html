@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+  <title th:text="#{menu-item-apartment-owners}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+  <div class="d-flex justify-content-between px-3 align-items-end">
+    <h3 class="invoice-breadcrumb"></h3>
+    <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+        </li>
+        <li class="breadcrumb-item active">
+          <span th:text="#{menu-item-invoices}"></span>
+        </li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<div layout:fragment="content">
+  <div class="card-body">
+    <div class="d-flex justify-content-end py-2">
+      <button type="button" class="btn btn-info me-2 col-auto" id="print-button"
+              th:text="#{invoices-print}">
+        Друкувати
+      </button>
+<!--        <a type="button" class="btn btn-info me-2 col-auto" id="print-link"-->
+<!--           href=""   th:text="#{invoices-print}">Друкувати-->
+<!--        </a>-->
+    </div>
+    <table class="table table-bordered mt-3" id="service-table">
+      <thead>
+      <tr class="text-center">
+        <th class="fw-bold w-25">#</th>
+        <th class="fw-bold w-25" th:text="#{invoices-service}"></th>
+        <th class="fw-bold w-25" th:text="#{invoices-amount-of-consumption}"></th>
+        <th class="fw-bold w-25" th:text="#{invoices-unit-of-measurement}"></th>
+        <th class="fw-bold w-25" th:text="#{invoices-price-per-unit}"></th>
+        <th class="fw-bold w-25" th:text="#{invoices-cost}"></th>
+      </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+      </tbody>
+    </table>
+    <div class="mt-4 d-flex justify-content-end">
+      <a type="button" class="btn btn-warning col-auto" id="download-link"
+         href=""   th:text="#{invoices-download-in-pdf}"> Завантажити у PDF
+      </a>
+    </div>
+  </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/invoices/view-invoice.js}"></script>
+<script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
+  const errorMessage =[[#{toastr-error-message}]];
+  const invoice = [[#{invoices-invoice}]];
+  const total = [[#{invoices-total}]];
+</script>
+</html>
