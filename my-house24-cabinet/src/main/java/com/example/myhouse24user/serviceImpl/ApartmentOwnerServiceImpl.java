@@ -7,10 +7,13 @@ import com.example.myhouse24user.model.authentication.RegistrationRequest;
 import com.example.myhouse24user.repository.ApartmentOwnerRepo;
 import com.example.myhouse24user.service.ApartmentOwnerService;
 import com.example.myhouse24user.util.UploadFileUtil;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
@@ -32,16 +35,17 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
 
     @Override
     public void register(RegistrationRequest registrationRequest) {
-        logger.info("register() - Registering owner "+registrationRequest.toString());
+        logger.info("register() - Registering owner " + registrationRequest.toString());
         String avatar = uploadFileUtil.saveDefaultOwnerImage();
         String encodedPassword = passwordEncoder.encode(registrationRequest.password());
         String ownerId = createOwnerId();
         ApartmentOwner apartmentOwner = apartmentOwnerMapper
                 .registrationRequestToApartmentOwner(registrationRequest, avatar, encodedPassword,
-                        OwnerStatus.NEW, ownerId,"");
+                        OwnerStatus.NEW, ownerId, "");
         apartmentOwnerRepo.save(apartmentOwner);
         logger.info("register() - Owner was registered");
     }
+
     private String createOwnerId() {
         if (isTableEmpty()) {
             return "00001";
@@ -64,5 +68,15 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
             newOwnerId += "0";
         }
         return newOwnerId + numberPart;
+    }
+
+    @Override
+    public ApartmentOwner findApartmentOwnerByEmail(String ownerEmail) {
+        Optional<ApartmentOwner> byEmail = apartmentOwnerRepo.findByEmail(ownerEmail);
+        ApartmentOwner apartmentOwner = byEmail.orElseThrow(() -> {
+            logger.error("getMessagesByOwnerEmail() -> ApartmentOwner by email: {} - not found", ownerEmail);
+            return new EntityNotFoundException(String.format("getMessagesByOwnerEmail() -> ApartmentOwner by email: %s - not found", ownerEmail));
+        });
+        return apartmentOwner;
     }
 }

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{menu-item-messages}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{menu-item-messages}"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{menu-item-messages}"></span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <div class="table-responsive" id="dropdownParent">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th colspan="4" class="p-1">
+                        <div class="d-flex justify-content-end">
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" id="filter-by-text"
+                                       th:placeholder="#{general-label-search}">
+                            </div>
+                        </div>
+
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="4" class="p-1 action-row">
+                        <div class="d-flex justify-content-start">
+                            <div class="d-flex gap-3">
+                                <div class="form-check px-1">
+                                    <label class="form-check-label btn btn-outline-secondary btn-sm py-2 px-2 hovering-zoom"
+                                           for="checked-all-top">
+                                        <input class="form-check-input checked-all m-auto"
+                                               type="checkbox" value=""
+                                               id="checked-all-top">
+                                    </label>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-secondary btn-sm delete-checked-message"
+                                            type="button" data-bs-toggle="modal" data-bs-target="#modalToDelete">
+                                        <i class="ti ti-trash text-danger"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+                <tr class="table-primary">
+                    <th style="width: 3rem"></th>
+                    <th th:text="#{messages-label-message-from}"></th>
+                    <th style="min-width: 20rem" th:text="#{messages-label-text}"></th>
+                    <th style="width: 13rem;" th:text="#{messages-label-date}"></th>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                <tr>
+                    <td colspan="4" class="text-center h5" th:text="#{general-label-empty-table}"></td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="4" class="p-1 action-row">
+                        <div class="d-flex justify-content-start">
+                            <div class="d-flex gap-3">
+                                <div class="form-check px-1">
+                                    <label class="form-check-label btn btn-outline-secondary btn-sm py-2 px-2"
+                                           for="checked-all-bottom">
+                                        <input class="form-check-input checked-all m-auto"
+                                               type="checkbox" value=""
+                                               id="checked-all-bottom">
+                                    </label>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-secondary btn-sm delete-checked-message"
+                                            type="button" data-bs-toggle="modal" data-bs-target="#modalToDelete">
+                                        <i class="ti ti-trash text-danger"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{messages-modal-delete-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete" data-bs-dismiss="modal"
+                            th:text="#{general-button-delete}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/messages/messages.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    const tableShow = [[#{table-show}]];
+    const tableShowing = [[#{table-showing}]];
+    const tableEntries = [[#{table-entries}]];
+    const tableOf = [[#{table-of}]];
+    const emptyTableLabel = /*[[#{general-label-empty-table}]]*/ 'default';
+
+    const successMessageOnDelete = /*[[#{messages-message-delete-success}]]*/ 'default'
+    const messagesNotSelectedItem = /*[[#{messages-message-not-selected}]]*/ 'default'
+
+</script>
+</html>
