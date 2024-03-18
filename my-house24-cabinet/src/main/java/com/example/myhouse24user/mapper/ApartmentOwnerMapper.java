@@ -4,11 +4,14 @@ import com.example.myhouse24user.entity.ApartmentOwner;
 import com.example.myhouse24user.entity.Language;
 import com.example.myhouse24user.entity.OwnerStatus;
 import com.example.myhouse24user.model.authentication.RegistrationRequest;
+import com.example.myhouse24user.model.owner.ApartmentResponse;
+import com.example.myhouse24user.model.owner.ViewOwnerResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.time.Instant;
+import java.util.List;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface ApartmentOwnerMapper {
@@ -36,4 +39,16 @@ public interface ApartmentOwnerMapper {
     default Language getLanguage() {
         return Language.UKR;
     }
+    @Mapping(target = "apartmentResponses", source = "apartmentResponses")
+    @Mapping(target = "id", source = "apartmentOwner.id")
+    @Mapping(target = "firstName", source = "apartmentOwner.firstName")
+    @Mapping(target = "lastName", source = "apartmentOwner.lastName")
+    @Mapping(target = "middleName", source = "apartmentOwner.middleName")
+    @Mapping(target = "phoneNumber", source = "apartmentOwner.phoneNumber")
+    @Mapping(target = "viberNumber", source = "apartmentOwner.viberNumber")
+    @Mapping(target = "telegramUsername", source = "apartmentOwner.telegramUsername")
+    @Mapping(target = "email", source = "apartmentOwner.email")
+    @Mapping(target = "avatar", source = "apartmentOwner.avatar")
+    ViewOwnerResponse ownerToViewOwnerResponse(ApartmentOwner apartmentOwner,
+                                               List<ApartmentResponse> apartmentResponses);
 }

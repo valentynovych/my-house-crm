@@ -49,6 +49,7 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/katex.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/quill/editor.css}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/plugins/monthSelect/style.css">
+    <link rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css">
     <!-- Helpers -->
     <script th:src="@{/assets/vendor/js/helpers.js}"></script>
 
@@ -151,6 +152,11 @@
                         <div th:text="#{menu-item-invoices}"></div>
                     </a>
                     <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a th:href="@{/cabinet/invoices}" th:text="#{menu-item-invoices-all}"
+                               class="menu-link">
+                            </a>
+                        </li>
                         <li class="menu-item" th:each="apartment : ${apartments}">
                             <a th:href="@{/cabinet/invoices/{id}(id=${apartment.id})}" class="menu-link">
                                 <div th:text="${apartment.house.name} + ' - '
@@ -356,6 +362,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/plugins/monthSelect/index.js"></script>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.min.js"></script>
+<script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
 
 <script th:src="@{/assets/vendor/js/menu.js}"></script>
 <!-- endbuild -->
