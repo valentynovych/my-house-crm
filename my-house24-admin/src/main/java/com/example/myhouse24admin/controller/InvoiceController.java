@@ -197,7 +197,7 @@ public class InvoiceController {
     }
     @GetMapping("/view-invoice/print/download/{id}/{template}")
     public @ResponseBody ResponseEntity<byte[]> downloadInvoice(@PathVariable("id") Long id,
-                                                                             @PathVariable("template")String template) throws FileNotFoundException, UnsupportedEncodingException {
+                                                                             @PathVariable("template")String template) throws UnsupportedEncodingException {
         byte[] file = invoiceService.createPdfFile(id, template);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
