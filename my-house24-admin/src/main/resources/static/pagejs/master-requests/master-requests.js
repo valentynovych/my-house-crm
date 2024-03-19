@@ -245,7 +245,7 @@ function drawTable(result) {
             const date = new Date(request.visitDate * 1000);
             const dateString = date.toLocaleString().slice(0, 17);
             const apartment = request.apartment;
-            const master = request.master;
+            const masterName = request.master ? `${request.master.lastName} ${request.master.firstName}` : '---';
             const status = getMasterRequestStatus(request.status);
             const apartmentLabel = `${apartment.apartmentNumber}, ${apartment.house.name}`
             const statusBadge = function (statusValue) {
@@ -265,12 +265,12 @@ function drawTable(result) {
             $(`<tr data-href="master-requests/view-request/${request.id}" class="cursor-pointer  ${isExpiredRequest ? 'bg-label-danger' : ''}">
             <td class="text-center">${(request.id + '').padStart(3, '000')}</td>
             <td>${dateString}</td>
-            <td class="text-center">${getMasterTypeLabel(master.role.name)}</td>
+            <td class="text-center">${getMasterTypeLabel(request.masterType)}</td>
             <td>${request.description}</td>
             <td>${apartmentLabel}</td>
             <td>${apartment.owner.fullName}</td>
             <td class="text-center">${request.apartmentOwnerPhone}</td>
-            <td>${master.firstName} ${master.lastName}</td>
+            <td>${masterName}</td>
             <td class="text-center">${statusBadge(request.status)}</td>
             <td class="text-center">
               <div class="dropdown">

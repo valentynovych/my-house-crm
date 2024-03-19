@@ -164,10 +164,10 @@ function fillInputs(request) {
 
     $selectMasterType.on('change', function () {
         const status = $selectMasterType.select2('data')[0];
-        initSelectStaff(status, false);
+        initSelectStaff(status.id, false);
     })
 
-    $selectMasterType.val(request.master.role.name).trigger('change');
+    $selectMasterType.val(request.masterType).trigger('change');
 
     $selectStatus.select2({
         dropdownParent: $('#status-wrap'),
@@ -195,10 +195,6 @@ function fillInputs(request) {
             maximumInputLength: 50,
             placeholder: chooseMaster,
             disabled: isDisabled,
-            data: [{
-                id: request.master.id,
-                text: `${request.master.firstName} ${request.master.lastName}`
-            }],
             ajax: {
                 type: "GET",
                 url: '../../system-settings/staff/get-staff',
@@ -207,7 +203,7 @@ function fillInputs(request) {
                         name: params.term,
                         page: (params.page - 1) || 0,
                         pageSize: 10,
-                        roleName: status.id
+                        roleName: status
                     };
                 },
                 processResults: function (response) {
@@ -225,6 +221,10 @@ function fillInputs(request) {
                 }
             }
         });
+        if (request.master) {
+            const masterOption = new Option(`${request.master.firstName} ${request.master.lastName}`, request.master.id, true, true);
+            $selectStaff.append(masterOption).trigger('change');
+        }
     }
 
     autosize($inputComment);

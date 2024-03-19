@@ -24,8 +24,10 @@ public class MasterRequest {
     @JoinColumn(name = "apartment_id", referencedColumnName = "id", nullable = false)
     private Apartment apartment;
     @ManyToOne
-    @JoinColumn(name = "staff_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "staff_id", referencedColumnName = "id")
     private Staff staff;
+    @Column(name = "master_type", length = 50, nullable = false)
+    private String masterType;
     @Column(length = 500, nullable = false)
     private String description;
     @Column(length = 1000)
@@ -109,5 +111,13 @@ public class MasterRequest {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getMasterType() {
+        return masterType;
+    }
+
+    public void setMasterType(String masterType) {
+        this.masterType = masterType;
     }
 }

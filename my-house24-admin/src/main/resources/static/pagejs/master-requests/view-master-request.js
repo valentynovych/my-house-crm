@@ -51,13 +51,15 @@ function fillInputs(request) {
                 return `<span class="badge rounded-pill bg-danger">${getMasterRequestStatus(statusValue)}</span>`;
         }
     }
+
     const apartment = request.apartment;
+    const masterName = request.master ? `${request.master.lastName} ${request.master.firstName}` : '---';
     $('#status').html(statusBadge(request.status));
     $('#apartmentOwner').html(apartment.owner.fullName)
     $('#apartmentOwnerPhone').html(apartment.owner.phoneNumber)
     $('#apartment').html(`${(apartment.apartmentNumber + '').padStart(3, '000')} ${apartment.house.name}`)
-    $('#masterType').html(getMasterTypeLabel(request.master.role.name))
-    $('#master').html(`${request.master.firstName} ${request.master.lastName}`)
+    $('#masterType').html(getMasterTypeLabel(request.masterType))
+    $('#master').html(`${masterName}`)
     $('#description').html(request.description);
     $('#comment').html(request.comment);
     $('#creationDate').html(new Date(request.creationDate * 1000).toLocaleString().slice(0, 17))
