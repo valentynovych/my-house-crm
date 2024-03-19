@@ -43,6 +43,12 @@ function getInvoices(currentPage) {
     });
 }
 function drawTable(response) {
+    let dataHref;
+    if(id.localeCompare("invoices") === 0){
+        dataHref = "invoices/view-invoice/";
+    } else {
+        dataHref = "view-invoice/";
+    }
     if (response.numberOfElements == 0) {
         let tdCount = $("td").length;
         $("tbody").append(`<tr class="tr"><td colspan="${tdCount}" class="text-center">${dataNotFound}</td>></tr>`);
@@ -50,7 +56,7 @@ function drawTable(response) {
         for (const invoice of response.content) {
             $("tbody")
                 .append(
-                    `<tr class="tr text-nowrap" data-href="invoices/view-invoice/${invoice.id}">
+                    `<tr class="tr text-nowrap" data-href="${dataHref+""+invoice.id}">
                     <td>${invoice.number}</td>
                     <td>${invoice.creationDate}</td>
                     <td>${getStatusSpan(invoice.status)}</td>
