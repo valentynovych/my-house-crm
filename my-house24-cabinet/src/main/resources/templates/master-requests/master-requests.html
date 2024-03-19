@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{menu-item-cash-register}"></title>
+    <style>
+        .select2-width {
+            width: fit-content !important;
+            max-width: 150% !important;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="card-body">
+        <div class="mb-4 d-flex justify-content-end align-items-start">
+            <div class="btn-group" id="hover-dropdown-demo">
+                <a th:href="@{master-requests/add-request}" class="btn btn-primary waves-effect waves-light"
+                   th:text="#{master-request-button-add-new}"></a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr class="table-primary text-center">
+                    <th th:text="#{master-request-label-number}"></th>
+                    <th th:text="#{master-request-label-master-type}"></th>
+                    <th th:text="#{master-request-label-description}"></th>
+                    <th th:text="#{master-request-label-visit-date}"></th>
+                    <th th:text="#{master-request-label-status}"></th>
+                    <th th:text="#{general-table-action}"></th>
+                </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer d-flex justify-content-between"></div>
+    <!-- Modal -->
+    <div class="modal fade" id="modalToDelete" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <h4 th:text="#{master-request-modal-delete-body}"></h4>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary close-modal" data-bs-dismiss="modal"
+                            th:text="#{general-button-close}"></button>
+                    <button type="button" class="btn btn-danger submit-delete" data-bs-dismiss="modal"
+                            th:text="#{general-button-delete}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/master-requests/master-requests.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    const buttonLabelDelete = /*[[#{general-button-delete}]]*/ 'default';
+
+    const successMessageOnDelete = /*[[#{master-request-message-delete-success}]]*/ 'default';
+    const errorMessageOnDelete = /*[[#{master-request-message-delete-error}]]*/ 'default';
+
+    const roleElectrician = /*[[#{master-request-staff-role-electrician}]]*/ 'default';
+    const rolePlumber = /*[[#{master-request-staff-role-plumber}]]*/ 'default';
+
+    const labelStatusNew = /*[[#{master-request-label-status-new}]]*/ 'default';
+    const labelStatusDone = /*[[#{master-request-label-status-done}]]*/ 'default';
+    const labelStatusInProgress = /*[[#{master-request-label-status-in-progress}]]*/ 'default';
+    const labelStatusCanceled = /*[[#{master-request-label-status-canceled}]]*/ 'default';
+
+    const tableShow = [[#{table-show}]];
+    const tableShowing = [[#{table-showing}]];
+    const tableEntries = [[#{table-entries}]];
+    const tableOf = [[#{table-of}]];
+    const emptyTableLabel = /*[[#{general-label-empty-table}]]*/ 'default';
+
+</script>
+</html>

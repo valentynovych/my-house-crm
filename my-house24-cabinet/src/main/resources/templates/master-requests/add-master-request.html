@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <title th:text="#{master-request-add-title}"></title>
+</head>
+<body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{master-request-add-title}"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{../master-requests}" th:text="#{menu-item-master-request}"></a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{master-request-add-title}"></span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div layout:fragment="content">
+    <div class="card-body">
+        <form id="master-request-form">
+            <div class="input-wrapper col-sm-12 col-md-6">
+                <div class="col-md-12 mb-2" id="masterType-wrap">
+                    <label for="masterType" class="form-label"
+                           th:text="#{master-request-label-master-type}"></label>
+                    <div class="staffId-select-wrap">
+                        <select class="form-control select2" id="masterType" name="masterType"></select>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-2" id="apartmentId-wrap">
+                    <label for="apartmentId" class="form-label"
+                           th:text="#{master-request-label-apartment}"></label>
+                    <div class="staffId-select-wrap">
+                        <select class="form-control select2" id="apartmentId" name="apartmentId"></select>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-2 d-flex gap-4">
+                    <div class="col-sm-12 col-md-5 mb-2">
+                        <label for="visitDate" class="form-label" th:text="#{master-request-label-visit-date}"></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="ti ti-calendar"></i></span>
+                            <input class="form-control" type="text" id="visitDate" name="visitDate">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-5 mb-2 d-flex align-items-end">
+                        <div class="wrap input-group">
+                            <span class="input-group-text"><i class="ti ti-clock"></i></span>
+                            <input type="text" class="form-control" id="visitTime" name="visitTime">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-2">
+                    <label for="description" class="form-label"
+                           th:text="#{master-request-label-description}"></label>
+                    <textarea class="form-control" rows="4" id="description" name="description"
+                              th:placeholder="#{master-request-label-description}"></textarea>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end gap-3 flex-wrap">
+                <button type="button" class="button-save btn btn-primary mt-4"
+                        th:text="#{master-request-button-send-request}"></button>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer"></div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/master-requests/add-master-request.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+
+    const chooseApartment = /*[[#{master-request-label-apartment}]]*/ 'default';
+    const chooseMasterType = /*[[#{master-request-label-master-type}]]*/ 'default';
+
+    const roleElectrician = /*[[#{master-request-staff-role-electrician}]]*/ 'default';
+    const rolePlumber = /*[[#{master-request-staff-role-plumber}]]*/ 'default';
+
+    const labelStatusNew = /*[[#{master-request-label-status-new}]]*/ 'default';
+    const labelStatusDone = /*[[#{master-request-label-status-done}]]*/ 'default';
+    const labelStatusInProgress = /*[[#{master-request-label-status-in-progress}]]*/ 'default';
+    const labelStatusCanceled = /*[[#{master-request-label-status-canceled}]]*/ 'default';
+
+</script>
+
+</html>

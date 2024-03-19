@@ -293,7 +293,8 @@
                         <!-- User -->
                         <li class="nav-item navbar-dropdown dropdown-user dropdown">
                             <div class="avatar avatar-online ms-3 me-2">
-                                <img th:src="@{/uploads/{avatar}(avatar=${#authentication.principal.avatar})}" alt class="h-auto rounded-circle"/>
+                                <img th:src="@{/uploads/{avatar}(avatar=${#authentication.principal.avatar})}" alt
+                                     class="h-auto rounded-circle"/>
                             </div>
                         </li>
                         <li class="nav-item me-3">
@@ -344,6 +345,7 @@
 <script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
 <script th:inline="javascript">
     const defaultPlaceholderImage = /*[[@{/assets/img/placeholder/placeholder.jpg}]]*/ 'placeholderImage';
+    const errorMessage = /*[[#{general-error-message}]]*/ 'errorMessage';
 </script>
 <script th:src="@{/pagejs/layout/layout.js}"></script>
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>

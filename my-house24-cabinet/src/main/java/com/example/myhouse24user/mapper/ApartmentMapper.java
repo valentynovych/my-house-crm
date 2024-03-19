@@ -1,6 +1,7 @@
 package com.example.myhouse24user.mapper;
 
 import com.example.myhouse24user.entity.Apartment;
+import com.example.myhouse24user.model.apartments.ApartmentShortResponse;
 import com.example.myhouse24user.model.owner.ApartmentResponse;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -11,6 +12,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface ApartmentMapper {
     List<ApartmentResponse> apartmentListToApartmentResponseList(List<Apartment> apartments);
+
     @Mapping(target = "houseName", source = "house.name")
     @Mapping(target = "houseAddress", source = "house.address")
     @Mapping(target = "floor", source = "floor.name")
@@ -22,4 +24,8 @@ public interface ApartmentMapper {
     @Mapping(target = "image4", source = "house.image4")
     @Mapping(target = "image5", source = "house.image5")
     ApartmentResponse apartmentToApartmentResponse(Apartment apartment);
+
+    List<ApartmentShortResponse> apartmentListToApartmentShortResponseList(List<Apartment> apartmentList);
+
+    ApartmentShortResponse apartmentListToApartmentShortResponseList(Apartment apartment);
 }
