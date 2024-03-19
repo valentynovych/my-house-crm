@@ -344,6 +344,8 @@
 <script th:src="@{/assets/vendor/libs/node-waves/node-waves.js}"></script>
 <script th:inline="javascript">
     const defaultPlaceholderImage = /*[[@{/assets/img/placeholder/placeholder.jpg}]]*/ 'placeholderImage';
+    const logoutModalMessage = [[#{logout-modal-message}]];
+    const logoutModalYes = [[#{logout-modal-yes}]];
 </script>
 <script th:src="@{/pagejs/layout/layout.js}"></script>
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>
