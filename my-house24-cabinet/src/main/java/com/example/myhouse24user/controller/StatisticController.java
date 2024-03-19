@@ -8,6 +8,8 @@ import com.example.myhouse24user.service.StatisticService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.RememberMeAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -27,7 +29,7 @@ public class StatisticController {
 
     @GetMapping
     public ModelAndView viewStatistic(Principal principal) {
-        ApartmentOwnerDetails details = (ApartmentOwnerDetails) ((RememberMeAuthenticationToken) principal).getPrincipal();
+        ApartmentOwnerDetails details = (ApartmentOwnerDetails) ((Authentication) principal).getPrincipal();
         return new ModelAndView("redirect:/cabinet/statistic/" + details.getApartments().get(0).getId());
     }
 

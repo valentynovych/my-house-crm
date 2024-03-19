@@ -1,6 +1,7 @@
 const apartmentId = window.location.pathname.match(/\d+/);
 
 $(document).ready(function () {
+    blockBy('.count-statistic')
     $.ajax({
         url: '../statistic/get-general-statistic?apartment=' + apartmentId,
         type: 'get',
@@ -10,8 +11,11 @@ $(document).ready(function () {
         error: function (error) {
             console.log(error);
         }
-    });
+    }).done(function () {
+        unblockBy('.count-statistic')
+    })
 
+    blockBy('.expense-per-month-chart')
     $.ajax({
         url: '../statistic/get-expense-per-month?apartment=' + apartmentId,
         type: 'get',
@@ -21,8 +25,11 @@ $(document).ready(function () {
         error: function (error) {
             console.log(error);
         }
+    }).done(function () {
+        unblockBy('.expense-per-month-chart');
     });
 
+    blockBy('.expense-per-year-chart')
     $.ajax({
         url: '../statistic/get-expense-per-year?apartment=' + apartmentId,
         type: 'get',
@@ -32,8 +39,11 @@ $(document).ready(function () {
         error: function (error) {
             console.log(error);
         }
-    });
+    }).done(function () {
+        unblockBy('.expense-per-year-chart');
+    })
 
+    blockBy('.expense-per-year-on-month-chart');
     $.ajax({
         url: '../statistic/get-expense-per-year-on-month?apartment=' + apartmentId,
         type: 'get',
@@ -43,7 +53,9 @@ $(document).ready(function () {
         error: function (error) {
             console.log(error);
         }
-    });
+    }).done(function () {
+        unblockBy('.expense-per-year-on-month-chart');
+    })
 
 });
 

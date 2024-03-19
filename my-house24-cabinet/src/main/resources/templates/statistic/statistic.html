@@ -88,7 +88,7 @@
                     <div class="card-header text-center">
                         <h5 th:text="#{statistic-label-expense-statistic-per-month}"></h5>
                     </div>
-                    <div class="card-body" style="aspect-ratio: 1 / 1">
+                    <div class="card-body expense-per-month-chart" style="aspect-ratio: 1 / 1">
                         <canvas id="expense-per-month-chart"
                                 style="position: relative; height: 100%; width: 100%"></canvas>
                     </div>
@@ -99,7 +99,7 @@
                     <div class="card-header text-center">
                         <h5 th:text="#{statistic-label-expense-statistic-per-year}"></h5>
                     </div>
-                    <div class="card-body" style="aspect-ratio: 1 / 1">
+                    <div class="card-body expense-per-year-chart" style="aspect-ratio: 1 / 1">
                         <canvas id="expense-per-year-chart"
                                 style="position: relative; height: 100%; width: 100%"></canvas>
                     </div>
@@ -112,7 +112,7 @@
                     <div class="card-header">
                         <span class="h3 my-3" th:text="#{statistic-label-expense-per-year-by-month}"></span>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body expense-per-year-on-month-chart">
                         <canvas id="expense-per-year-on-month-chart"></canvas>
                     </div>
                 </div>
