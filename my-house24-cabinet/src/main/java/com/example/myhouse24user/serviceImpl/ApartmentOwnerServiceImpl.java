@@ -6,7 +6,9 @@ import com.example.myhouse24user.entity.OwnerStatus;
 import com.example.myhouse24user.mapper.ApartmentMapper;
 import com.example.myhouse24user.mapper.ApartmentOwnerMapper;
 import com.example.myhouse24user.model.authentication.RegistrationRequest;
+import com.example.myhouse24user.model.owner.ApartmentOwnerRequest;
 import com.example.myhouse24user.model.owner.ApartmentResponse;
+import com.example.myhouse24user.model.owner.EditOwnerResponse;
 import com.example.myhouse24user.model.owner.ViewOwnerResponse;
 import com.example.myhouse24user.repository.ApartmentOwnerRepo;
 import com.example.myhouse24user.repository.ApartmentRepo;
@@ -19,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -87,9 +90,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
     @Override
     public ViewOwnerResponse getViewOwnerResponse() {
         logger.info("getViewOwnerResponse() - Getting view owner response");
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        String email = userDetails.getUsername();
+        String email = getLoggedOwnerEmail();
         ApartmentOwner apartmentOwner = apartmentOwnerRepo.findByEmail(email).orElseThrow(()-> new EntityNotFoundException("Owner was not found by email "+email));
         List<Apartment> apartments = apartmentRepo.findAll(byOwnerEmail(email));
         List<ApartmentResponse> apartmentResponses = apartmentMapper.apartmentListToApartmentResponseList(apartments);
@@ -97,5 +98,39 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
                 .ownerToViewOwnerResponse(apartmentOwner, apartmentResponses);
         logger.info("getViewOwnerResponse() - View owner response was got");
         return viewOwnerResponse;
+    }
+
+    @Override
+    public EditOwnerResponse getEditOwnerResponse() {
+        logger.info("getViewOwnerResponse() - Getting edit owner response");
+        String email = getLoggedOwnerEmail();
+        ApartmentOwner apartmentOwner = apartmentOwnerRepo.findByEmail(email).orElseThrow(()-> new EntityNotFoundException("Owner was not found by email "+email));
+        EditOwnerResponse editOwnerResponse = apartmentOwnerMapper.ownerToEditOwnerResponse(apartmentOwner);
+        logger.info("getEditOwnerResponse() - Edit owner response was got");
+        return editOwnerResponse;
+    }
+    private String getLoggedOwnerEmail(){
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        String email = userDetails.getUsername();
+        return email;
+    }
+
+    @Override
+    public void updateProfile(ApartmentOwnerRequest apartmentOwnerRequest, MultipartFile multipartFile) {
+        ApartmentOwner apartmentOwner = apartmentOwnerRepo.findById(apartmentOwnerRequest.id()).orElseThrow(() -> new EntityNotFoundException("Owner not found by id " + apartmentOwnerRequest.id()));
+        if (apartmentOwnerRequest.password().isEmpty()) {
+            apartmentOwnerMapper.setApartmentOwnerWithoutPassword(apartmentOwner, apartmentOwnerRequest);
+        } else {
+            apartmentOwnerMapper.setApartmentOwnerWithPassword(apartmentOwner, apartmentOwnerRequest, passwordEncoder.encode(apartmentOwnerRequest.password()));
+        }
+        updateImage(multipartFile, apartmentOwner);
+        apartmentOwnerRepo.save(apartmentOwner);
+    }
+    private void updateImage(MultipartFile multipartFile, ApartmentOwner apartmentOwner) {
+        if (multipartFile != null) {
+            String createdImageName = uploadFileUtil.saveMultipartFile(multipartFile);
+            apartmentOwner.setAvatar(createdImageName);
+        }
     }
 }

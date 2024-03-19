@@ -22,4 +22,5 @@ public interface ApartmentMapper {
     @Mapping(target = "image4", source = "house.image4")
     @Mapping(target = "image5", source = "house.image5")
     ApartmentResponse apartmentToApartmentResponse(Apartment apartment);
+
 }
