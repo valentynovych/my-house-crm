@@ -89,7 +89,7 @@ public class MainPageServiceImpl implements MainPageService {
 
     private void deleteMainPageBlocks(List<Long> idsToDelete) {
         if(idsToDelete != null){
-            mainPageRepo.deleteAllById(idsToDelete);
+            mainPageBlockRepo.deleteAllById(idsToDelete);
         }
     }
     private void updateMainPageBlocks(List<MainPageBlockRequest> mainPageBlocks) {
