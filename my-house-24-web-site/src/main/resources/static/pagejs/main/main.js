@@ -4,13 +4,14 @@ $(document).ready(function () {
 });
 
 function getMainPage() {
-    blockCardDody();
+    blockBy('.content-wrapper');
     $.ajax({
         type: "GET",
         url: "home/get",
         success: function (response) {
             console.log(response);
             showPage(response);
+            unblockBy('.content-wrapper');
         },
         error: function () {
             toastr.error(errorMessage);
