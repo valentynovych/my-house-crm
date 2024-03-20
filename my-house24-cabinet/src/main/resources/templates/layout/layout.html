@@ -248,24 +248,24 @@
                                     aria-expanded="false"
                             >
                                 <i class="ti ti-bell ti-md"></i>
-                                <span class="badge bg-danger rounded-pill badge-notifications">2</span>
+                                <span class="badge bg-danger rounded-pill badge-notifications d-none" id="messages-count">2</span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end py-0">
                                 <li class="dropdown-menu-header border-bottom">
                                     <div class="dropdown-header d-flex align-items-center py-3">
-                                        <h6 class="text-body mb-0 me-auto">Нових повідомлень: 2</h6>
+                                        <h6 class="text-body mb-0 me-auto" id="new-messages-count-text">Нових повідомлень: 2</h6>
                                         <a
                                                 href="javascript:void(0)"
                                                 class="dropdown-notifications-all text-body"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
-                                                title="Mark all as read"
-                                        ><i class="ti ti-mail-opened fs-4"></i
-                                        ></a>
+                                                th:title="#{read-all-messages}"
+                                                id="mark-read-all"
+                                        ><i class="ti ti-mail-opened fs-4"></i></a>
                                     </div>
                                 </li>
                                 <li class="dropdown-notifications-list scrollable-container">
-                                    <ul class="list-group list-group-flush">
+                                    <ul class="list-group list-group-flush" id="unreadMessagesList">
                                         <li class="list-group-item list-group-item-action dropdown-notifications-item">
                                             <div class="d-flex">
                                                 <h6 class="mb-1">Іван Іванов</h6>
@@ -346,6 +346,8 @@
 <script th:inline="javascript">
     const defaultPlaceholderImage = /*[[@{/assets/img/placeholder/placeholder.jpg}]]*/ 'placeholderImage';
     const errorMessage = /*[[#{general-error-message}]]*/ 'errorMessage';
+    const newMessagesLabel = /*[[#{messages-label-new-messages}]]*/ 'errorMessage';
+    const newMessagesNotExistsLabel = /*[[#{messages-label-new-messages-not-exists}]]*/ 'errorMessage';
 </script>
 <script th:src="@{/pagejs/layout/layout.js}"></script>
 <script th:src="@{/assets/vendor/libs/hammer/hammer.js}"></script>

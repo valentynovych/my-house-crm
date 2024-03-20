@@ -16,6 +16,7 @@ public class OwnerMessageSpecification implements Specification<OwnerMessage> {
     private static final String BY_OWNER_EMAIL = "ownerEmail";
     private static final String BY_TEXT = "search";
     private static final String BY_ID = "id";
+    private static final String BY_READ = "read";
 
     public OwnerMessageSpecification(Map<String, String> searchParams) {
         this.searchParams = searchParams;
@@ -25,7 +26,7 @@ public class OwnerMessageSpecification implements Specification<OwnerMessage> {
     public Predicate toPredicate(Root<OwnerMessage> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<>();
         searchParams.forEach((param, value) -> {
-            if (!value.isEmpty())
+            if ( value != null && !value.isEmpty())
                 switch (param) {
                     case BY_OWNER_EMAIL -> {
                         Join<OwnerMessage, ApartmentOwner> ownerJoin = root.join("apartmentOwner", JoinType.LEFT);
@@ -39,11 +40,15 @@ public class OwnerMessageSpecification implements Specification<OwnerMessage> {
                         );
                     }
                     case BY_ID -> {
-                        Join<OwnerMessage, Message> messageJoin = root.join("message", JoinType.LEFT);
                         predicates.add(criteriaBuilder.equal(root.get("id"), Long.valueOf(value)));
                     }
+                    case BY_READ -> {
+                        predicates.add(criteriaBuilder.equal(root.get("isRead"), Boolean.valueOf(value)));
+                    }
+                    default -> throw new IllegalArgumentException("Invalid search parameter: " + param);
                 }
         });
+
         predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }

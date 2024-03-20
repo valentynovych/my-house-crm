@@ -1,5 +1,6 @@
 package com.example.myhouse24user.controller;
 
+import com.example.myhouse24user.model.messages.ListLongWrapper;
 import com.example.myhouse24user.model.messages.OwnerMessageResponse;
 import com.example.myhouse24user.service.MessagesService;
 import org.springframework.data.domain.Page;
@@ -61,5 +62,20 @@ public class MessagesController {
     public ResponseEntity<?> readMessage(@PathVariable Long messageId, Principal principal) {
         messagesService.readMessage(principal.getName(), messageId);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("read-all-messages")
+    public ResponseEntity<?> readMessage(@RequestBody ListLongWrapper wrapper, Principal principal) {
+        messagesService.readAllMessage(principal.getName(), wrapper.getIdsToMarkAsRead());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("get-unread-messages")
+    public ResponseEntity<Page<OwnerMessageResponse>> getUnreadMessages(Principal principal,
+                                               @RequestParam int page,
+                                               @RequestParam int pageSize) {
+        Page<OwnerMessageResponse> unreadMessages =
+                messagesService.getUnreadMessages(principal.getName(), page, pageSize);
+        return new ResponseEntity<>(unreadMessages, HttpStatus.OK);
     }
 }
