@@ -3,8 +3,6 @@ package com.example.myhouse24user.entity;
 import jakarta.persistence.*;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "messages")
@@ -23,8 +21,6 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "staff_id", referencedColumnName = "id", nullable = false)
     private Staff staff;
-    @ManyToMany(mappedBy = "messages", cascade = {CascadeType.DETACH, CascadeType.REFRESH})
-    private List<ApartmentOwner> apartmentOwners = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -72,13 +68,5 @@ public class Message {
 
     public void setStaff(Staff staff) {
         this.staff = staff;
-    }
-
-    public List<ApartmentOwner> getApartmentOwners() {
-        return apartmentOwners;
-    }
-
-    public void setApartmentOwners(List<ApartmentOwner> apartmentOwners) {
-        this.apartmentOwners = apartmentOwners;
     }
 }

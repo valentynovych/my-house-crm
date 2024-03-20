@@ -17,10 +17,27 @@ $(document).ready(function () {
 
 function fill(response) {
     $('#subject').html(response.subject);
-    $('#staff').html(`${response.staff.fullName}`);
+    $('#staff').html(`${response.staffFullName}`);
     const date = new Date(response.sendDate * 1000).toLocaleString().slice(0, 17);
     $('#sendDate').html(date);
     $('.message-text').html(response.text);
+
+    if (!response.isRead) {
+        sendIsRead();
+    }
+}
+
+function sendIsRead() {
+    $.ajax({
+        url: '../read-message/' + messageId,
+        type: 'post',
+        success: function (response) {
+        },
+        error: function (error) {
+            console.log(error);
+            toastr.error(errorMessage);
+        }
+    })
 }
 
 $('.submit-delete').on('click', function () {

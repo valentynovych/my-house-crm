@@ -1,6 +1,6 @@
 package com.example.myhouse24user.controller;
 
-import com.example.myhouse24user.model.messages.MessageResponse;
+import com.example.myhouse24user.model.messages.OwnerMessageResponse;
 import com.example.myhouse24user.service.MessagesService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -36,14 +36,14 @@ public class MessagesController {
                                          @RequestParam int pageSize,
                                          @RequestParam(required = false, name = "text") String search,
                                          Principal principal) {
-        Page<MessageResponse> messageResponsePage =
+        Page<OwnerMessageResponse> messageResponsePage =
                 messagesService.getApartmentOwnerMessages(principal.getName(), page, pageSize, search);
         return new ResponseEntity<>(messageResponsePage, HttpStatus.OK);
     }
 
     @GetMapping("get-message/{messageId}")
     public ResponseEntity<?> getMessageById(@PathVariable Long messageId, Principal principal) {
-        MessageResponse messageResponse = messagesService.getMessageById(principal.getName(), messageId);
+        OwnerMessageResponse messageResponse = messagesService.getMessageById(principal.getName(), messageId);
         return new ResponseEntity<>(messageResponse, HttpStatus.OK);
     }
 
@@ -54,6 +54,12 @@ public class MessagesController {
         } catch (IllegalArgumentException exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("read-message/{messageId}")
+    public ResponseEntity<?> readMessage(@PathVariable Long messageId, Principal principal) {
+        messagesService.readMessage(principal.getName(), messageId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

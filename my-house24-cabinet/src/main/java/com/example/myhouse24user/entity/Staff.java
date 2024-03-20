@@ -132,4 +132,8 @@ public class Staff {
     public void setStatus(StaffStatus status) {
         this.status = status;
     }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

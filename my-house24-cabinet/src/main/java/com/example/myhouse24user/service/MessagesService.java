@@ -1,15 +1,17 @@
 package com.example.myhouse24user.service;
 
-import com.example.myhouse24user.model.messages.MessageResponse;
+import com.example.myhouse24user.model.messages.OwnerMessageResponse;
 import org.springframework.data.domain.Page;
 
 import java.security.Principal;
 
 public interface MessagesService {
 
-    Page<MessageResponse> getApartmentOwnerMessages(String name, int page, int pageSize, String search);
+    Page<OwnerMessageResponse> getApartmentOwnerMessages(String name, int page, int pageSize, String search);
 
-    MessageResponse getMessageById(String name, Long messageId);
+    OwnerMessageResponse getMessageById(String name, Long messageId);
 
     void deleteMessages(Principal principal, Long[] messagesToDelete);
+
+    void readMessage(String ownerEmail, Long messageId);
 }

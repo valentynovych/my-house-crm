@@ -83,12 +83,12 @@ function drawTable(result) {
         for (const message of result.content) {
             const sendDate = new Date(message.sendDate * 1000).toLocaleString().slice(0, 17);
             const lineText = message.text.replace(/<[^>]*>/g, ' ');
-            $(`<tr data-href="messages/view-message/${message.id}" >
+            $(`<tr data-href="messages/view-message/${message.id}" ${!message.isRead ? 'class="bg-label-primary"' : ''}">
                 <td>
                     <input class="form-check-input m-auto" type="checkbox" 
                     id="to-delete-${message.id}" data-id="${message.id}">
                 </td>
-                <td class="fw-bold cursor-pointer">${message.staff.fullName}</td>
+                <td class="fw-bold cursor-pointer">${message.staffFullName}</td>
                 <td class="text-message cursor-pointer">
                     <span class="fw-bold">${message.subject}</span> - ${lineText}
                 </td>
