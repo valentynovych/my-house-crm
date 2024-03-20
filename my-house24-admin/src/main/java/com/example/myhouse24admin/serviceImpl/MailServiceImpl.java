@@ -210,7 +210,7 @@ public class MailServiceImpl implements MailService {
     private String getLinkToUserMessages() {
         StringBuffer requestURL = httpServletRequest.getRequestURL();
         String link = requestURL.substring(0, requestURL.lastIndexOf("admin"));
-        link += "user/messages";
+        link += "cabinet/messages";
         return link;
     }
 

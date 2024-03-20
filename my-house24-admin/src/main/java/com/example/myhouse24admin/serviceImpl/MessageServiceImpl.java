@@ -1,15 +1,13 @@
 package com.example.myhouse24admin.serviceImpl;
 
-import com.example.myhouse24admin.entity.Apartment;
-import com.example.myhouse24admin.entity.ApartmentOwner;
-import com.example.myhouse24admin.entity.Message;
-import com.example.myhouse24admin.entity.Staff;
+import com.example.myhouse24admin.entity.*;
 import com.example.myhouse24admin.mapper.MessageMapper;
+import com.example.myhouse24admin.mapper.OwnerMessageMapper;
 import com.example.myhouse24admin.model.messages.MessageResponse;
 import com.example.myhouse24admin.model.messages.MessageSendRequest;
 import com.example.myhouse24admin.model.messages.MessageTableResponse;
-import com.example.myhouse24admin.repository.ApartmentOwnerRepo;
 import com.example.myhouse24admin.repository.MessageRepo;
+import com.example.myhouse24admin.repository.OwnerMessageRepo;
 import com.example.myhouse24admin.service.ApartmentService;
 import com.example.myhouse24admin.service.MailService;
 import com.example.myhouse24admin.service.MessageService;
@@ -17,7 +15,6 @@ import com.example.myhouse24admin.service.StaffService;
 import com.example.myhouse24admin.specification.ApartmentSpecification;
 import com.example.myhouse24admin.specification.MessageSpecification;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.*;
@@ -33,19 +30,24 @@ public class MessageServiceImpl implements MessageService {
     private final ApartmentService apartmentService;
     private final MessageMapper messageMapper;
     private final MailService mailService;
-    private final ApartmentOwnerRepo apartmentOwnerRepo;
+    private final OwnerMessageMapper ownerMessageMapper;
+    private final OwnerMessageRepo ownerMessageRepo;
     private final Logger logger = LogManager.getLogger(MessageServiceImpl.class);
 
     public MessageServiceImpl(MessageRepo messageRepo,
                               StaffService staffService,
                               ApartmentService apartmentService,
-                              MessageMapper messageMapper, MailService mailService, ApartmentOwnerRepo apartmentOwnerRepo) {
+                              MessageMapper messageMapper,
+                              MailService mailService,
+                              OwnerMessageMapper ownerMessageMapper,
+                              OwnerMessageRepo ownerMessageRepo) {
         this.messageRepo = messageRepo;
         this.staffService = staffService;
         this.apartmentService = apartmentService;
         this.messageMapper = messageMapper;
         this.mailService = mailService;
-        this.apartmentOwnerRepo = apartmentOwnerRepo;
+        this.ownerMessageMapper = ownerMessageMapper;
+        this.ownerMessageRepo = ownerMessageRepo;
     }
 
     @Override
@@ -53,16 +55,9 @@ public class MessageServiceImpl implements MessageService {
         logger.info("sendNewMessage() -> send message: {}", messageSendRequest);
         List<ApartmentOwner> apartmentOwnerForSendMessage = findApartmentOwnerForSendMessage(messageSendRequest);
         Staff currentStaff = staffService.getCurrentStaff();
-        Message message = messageMapper.messageSendRequestToMessage(messageSendRequest, currentStaff, apartmentOwnerForSendMessage);
-        for (ApartmentOwner owner : apartmentOwnerForSendMessage) {
-            owner.getMessages().add(message);
-            logger.info("sendNewMessage() -> send message to: {}", owner.getEmail());
-            mailService.sendMessage(owner.getEmail(), messageSendRequest.getSubject(),
-                    messageSendRequest.getText(), currentStaff);
-        }
-        logger.info("sendNewMessage() -> success send message to all apartment owners, count: {}",
-                apartmentOwnerForSendMessage.size());
-        apartmentOwnerRepo.saveAll(apartmentOwnerForSendMessage);
+        Message message = messageMapper.messageSendRequestToMessage(messageSendRequest, currentStaff);
+        sendNewMessageToOwners(message, apartmentOwnerForSendMessage);
+        logger.info("sendNewMessage() -> success send messages to apartment owners");
     }
 
     @Override
@@ -84,12 +79,16 @@ public class MessageServiceImpl implements MessageService {
             logger.error("deleteMessages() -> Input array size not equals to find Messages array");
             throw new IllegalArgumentException("Input array size not equals to find Messages array");
         }
-        List<ApartmentOwner> ownersByMessagesIn = apartmentOwnerRepo.findApartmentOwnersByMessagesIn(ids);
-        ownersByMessagesIn.forEach(apartmentOwner -> apartmentOwner.getMessages().removeAll(allById));
-        logger.info("deleteMessages() -> start delete messages in owners, messages ids: {}", ids);
-        apartmentOwnerRepo.saveAll(ownersByMessagesIn);
-        messageRepo.deleteAllById(ids);
+        deleteOwnerMessages(allById);
+        messageRepo.deleteAll(allById);
         logger.info("deleteMessages() -> success delete messages, count: {}", allById.size());
+    }
+
+    private void deleteOwnerMessages(List<Message> allById) {
+        logger.info("deleteOwnerMessages() -> start with count: {}", allById.size());
+        List<OwnerMessage> allByMessageIn = ownerMessageRepo.findAllByMessageIn(allById);
+        ownerMessageRepo.deleteAll(allByMessageIn);
+        logger.info("deleteOwnerMessages() -> success delete owner messages");
     }
 
     @Override
@@ -99,6 +98,29 @@ public class MessageServiceImpl implements MessageService {
         MessageResponse messageResponse = messageMapper.messageToMessageResponse(message);
         logger.info("getMessageById() -> end return message with id: {}", messageResponse.getId());
         return messageResponse;
+    }
+
+    private void sendNewMessageToOwners(Message message, List<ApartmentOwner> apartmentOwnerForSendMessage) {
+        logger.info("sendNewMessage() -> send message: {}", message);
+        for (ApartmentOwner owner : apartmentOwnerForSendMessage) {
+            logger.info("sendNewMessage() -> send message to: {}", owner.getEmail());
+            mailService.sendMessage(owner.getEmail(), message.getSubject(),
+                    message.getText(), message.getStaff());
+        }
+        logger.info("sendNewMessage() -> success send message to all apartment owners, count: {}",
+                apartmentOwnerForSendMessage.size());
+        saveOwnerMessages(apartmentOwnerForSendMessage, message);
+    }
+
+    private void saveOwnerMessages(List<ApartmentOwner> apartmentOwnerForSendMessage, Message message) {
+        logger.info("saveOwnerMessages() -> start with count: {}", apartmentOwnerForSendMessage.size());
+        List<OwnerMessage> ownerMessages = new ArrayList<>();
+        for (ApartmentOwner owner : apartmentOwnerForSendMessage) {
+            ownerMessages.add(
+                    ownerMessageMapper.createOwnerMessageFromMessageAndApartmentOwner(message, owner));
+        }
+        ownerMessageRepo.saveAll(ownerMessages);
+        logger.info("saveOwnerMessages() -> success save owner messages, count: {}", ownerMessages.size());
     }
 
     private Message findMessageById(Long messageId) {

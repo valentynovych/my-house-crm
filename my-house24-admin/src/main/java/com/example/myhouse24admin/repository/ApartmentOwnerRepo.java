@@ -22,7 +22,7 @@ public interface ApartmentOwnerRepo extends JpaRepository<ApartmentOwner, Long>,
     @Query(value = "SELECT * FROM apartment_owners WHERE deleted = false ORDER BY id DESC LIMIT 1", nativeQuery = true)
     ApartmentOwner findLast();
 
-    List<ApartmentOwner> findApartmentOwnersByMessagesIn(Collection<Long> messages);
+//    List<ApartmentOwner> findApartmentOwnersByMessagesIn(Collection<Long> messages);
 
     int countApartmentOwnersByDeletedIsFalseAndStatus(OwnerStatus status);
 }

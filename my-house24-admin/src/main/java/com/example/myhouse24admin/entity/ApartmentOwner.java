@@ -12,13 +12,13 @@ public class ApartmentOwner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "owner_id",length = 10, nullable = false)
+    @Column(name = "owner_id", length = 10, nullable = false)
     private String ownerId;
-    @Column(name = "first_name",length = 50, nullable = false)
+    @Column(name = "first_name", length = 50, nullable = false)
     private String firstName;
-    @Column(name = "last_name",length = 50, nullable = false)
+    @Column(name = "last_name", length = 50, nullable = false)
     private String lastName;
-    @Column(name = "middle_name",length = 50, nullable = false)
+    @Column(name = "middle_name", length = 50, nullable = false)
     private String middleName;
     @Column(name = "birth_date")
     private Instant birthDate;
@@ -29,11 +29,11 @@ public class ApartmentOwner {
     private OwnerStatus status;
     @Column(name = "about_owner", length = 300, nullable = false)
     private String aboutOwner;
-    @Column(name = "phone_number",length = 13, nullable = false)
+    @Column(name = "phone_number", length = 13, nullable = false)
     private String phoneNumber;
-    @Column(name = "viber_number",length = 13)
+    @Column(name = "viber_number", length = 13)
     private String viberNumber;
-    @Column(name = "telegram_username",length = 50)
+    @Column(name = "telegram_username", length = 50)
     private String telegramUsername;
     @Column(length = 100, nullable = false)
     private String email;
@@ -45,13 +45,10 @@ public class ApartmentOwner {
     private boolean deleted;
     @Enumerated(EnumType.STRING)
     private Language language;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "owners_messages",
-            joinColumns = { @JoinColumn(name = "owner_id") },
-            inverseJoinColumns = { @JoinColumn(name = "message_id") }
-    )
-    private List<Message> messages = new ArrayList<>();
+    @OneToMany(mappedBy = "apartmentOwner", cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE})
+    private List<OwnerMessage> ownerMessages = new ArrayList<>();
     @OneToMany(mappedBy = "owner")
     private List<Apartment> apartments = new ArrayList<>();
     @OneToOne(mappedBy = "apartmentOwner")
@@ -193,14 +190,6 @@ public class ApartmentOwner {
         this.language = language;
     }
 
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
-
     public List<Apartment> getApartments() {
         return apartments;
     }
@@ -215,5 +204,13 @@ public class ApartmentOwner {
 
     public void setOwnerPasswordResetToken(OwnerPasswordResetToken ownerPasswordResetToken) {
         this.ownerPasswordResetToken = ownerPasswordResetToken;
+    }
+
+    public List<OwnerMessage> getOwnerMessages() {
+        return ownerMessages;
+    }
+
+    public void setOwnerMessages(List<OwnerMessage> ownerMessages) {
+        this.ownerMessages = ownerMessages;
     }
 }

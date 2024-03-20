@@ -23,8 +23,11 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "staff_id", referencedColumnName = "id", nullable = false)
     private Staff staff;
-    @ManyToMany(mappedBy = "messages", cascade = {CascadeType.DETACH, CascadeType.REFRESH})
-    private List<ApartmentOwner> apartmentOwners = new ArrayList<>();
+    @OneToMany(mappedBy = "message", cascade = {
+            CascadeType.DETACH,
+            CascadeType.REFRESH,
+            CascadeType.DETACH})
+    List<OwnerMessage> ownerMessages = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -74,11 +77,11 @@ public class Message {
         this.staff = staff;
     }
 
-    public List<ApartmentOwner> getApartmentOwners() {
-        return apartmentOwners;
+    public List<OwnerMessage> getOwnerMessages() {
+        return ownerMessages;
     }
 
-    public void setApartmentOwners(List<ApartmentOwner> apartmentOwners) {
-        this.apartmentOwners = apartmentOwners;
+    public void setOwnerMessages(List<OwnerMessage> ownerMessages) {
+        this.ownerMessages = ownerMessages;
     }
 }
