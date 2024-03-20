@@ -118,6 +118,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
 
     @Override
     public void updateProfile(ApartmentOwnerRequest apartmentOwnerRequest, MultipartFile multipartFile) {
+        logger.info("updateProfile() - Updating owner profile");
         ApartmentOwner apartmentOwner = apartmentOwnerRepo.findById(apartmentOwnerRequest.id()).orElseThrow(() -> new EntityNotFoundException("Owner not found by id " + apartmentOwnerRequest.id()));
         if (apartmentOwnerRequest.password().isEmpty()) {
             apartmentOwnerMapper.setApartmentOwnerWithoutPassword(apartmentOwner, apartmentOwnerRequest);
@@ -126,6 +127,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         }
         updateImage(multipartFile, apartmentOwner);
         apartmentOwnerRepo.save(apartmentOwner);
+        logger.info("updateProfile() - Owner profile was updated");
     }
     private void updateImage(MultipartFile multipartFile, ApartmentOwner apartmentOwner) {
         if (multipartFile != null) {
