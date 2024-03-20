@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html dir="ltr"
+        th:lang="${#locale.language}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/core.css}" class="template-customizer-core-css"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/css/rtl/theme-default.css}" class="template-customizer-theme-css"/>
+    <link rel="stylesheet" th:href="@{/assets/css/demo.css}"/>
+
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/spinkit/spinkit.css}"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script th:src="@{/assets/js/config.js}"></script>
+</head>
+<body>
+<header class="p-3 text-bg-dark" style="position: fixed; top:0; width: 100%; z-index: 9999;">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between">
+            <div class="col-md-3 mb-2 mb-md-0 d-flex justify-content-start align-items-center">
+                <div class="col-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 106 106">
+                <defs>
+                    <style>.cls-1 {
+                        fill: #fff;
+                    }
+
+                    .cls-2 {
+                        fill: #ffc868;
+                    }
+
+                    .cls-3 {
+                        fill: #12adb8;
+                    }
+
+                    .cls-4 {
+                        fill: #ff7575;
+                    }
+
+                    .cls-5 {
+                        opacity: 0.1;
+                    }
+
+                    .cls-6 {
+                        fill: #171c1f;
+                    }
+
+                    .cls-7 {
+                        opacity: 0.15;
+                    }</style>
+                </defs>
+                <title>home</title>
+                <g id="Home">
+                    <g id="Fill">
+                        <path class="cls-1" d="M53,19,15,49V98a6,6,0,0,0,6,6H85a6,6,0,0,0,6-6V49Z"/>
+                    </g>
+                    <g id="Yellow">
+                        <path class="cls-2" d="M17,96v2a4,4,0,0,0,4,4H85a4,4,0,0,0,4-4V96Z"/>
+                    </g>
+                    <g id="Orange">
+                        <polygon class="cls-3" points="53 2 2 43 2 59 53 19 104 59 104 43 53 2"/>
+                    </g>
+                    <g id="Red">
+                        <path class="cls-4" d="M63,64H43a2,2,0,0,0-2,2v36H65V66A2,2,0,0,0,63,64Z"/>
+                    </g>
+                    <g id="Shadows" class="cls-5">
+                        <path d="M85,100H21a4,4,0,0,1-4-4v2a4,4,0,0,0,4,4H85a4,4,0,0,0,4-4V96A4,4,0,0,1,85,100ZM54.29,21.47h0a2,2,0,0,0-2.57,0h0L17,48.7v5.08L53,25.54,89,53.78V48.7Z"/></g><g
+                            id="Inner_Lines_1" data-name="Inner Lines 1">
+                        <path class="cls-6" d="M17,96H39V94H17ZM58,83a1,1,0,1,0,1,1A1,1,0,0,0,58,83Zm9,11v2H89V94Z"/>
+                    </g>
+                    <g id="Inner_Lines_2" data-name="Inner Lines 2" class="cls-7">
+                        <path class="cls-6" d="M6,55H8V39H6Zm31,1H32a1,1,0,0,0,0,2h5a1,1,0,0,0,0-2ZM27,78H23a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2ZM26,53h8a1,1,0,0,0,0-2H26a1,1,0,0,0,0,2ZM98,39V55h2V39ZM84,68H76a1,1,0,0,0,0,2h8a1,1,0,0,0,0-2ZM57,38H54a1,1,0,0,0,0,2h3a1,1,0,0,0,0-2ZM78,83H74a1,1,0,1,0,0,2h4a1,1,0,1,0,0-2ZM70,53H64a1,1,0,0,0,0,2h6a1,1,0,0,0,0-2Z"/>
+                    </g>
+                    <g id="Outline">
+                        <path class="cls-6" d="M105.29,41.48h0l-51-41h0a2,2,0,0,0-2.58,0h0l-51,41h0A2,2,0,0,0,0,43V59a2,2,0,0,0,3.28,1.52h0L13,52.91V98a8,8,0,0,0,8,8H85a8,8,0,0,0,8-8V52.91l9.71,7.62h0A2,2,0,0,0,106,59V43A2,2,0,0,0,105.29,41.48ZM63,102H43V66H63Zm26-4a4,4,0,0,1-4,4H67V66a4,4,0,0,0-4-4H43a4,4,0,0,0-4,4v36H21a4,4,0,0,1-4-4V49.78L53,21.54,89,49.78Zm13-43.11L54.29,17.47h0a1.94,1.94,0,0,0-2-.35h0a2,2,0,0,0-.58.34h0L4,54.89V44L53,4.57,102,44Z"/>
+                    </g>
+                </g>
+            </svg>
+                </div>
+                <div class="col-auto ms-2"> <h3 class="mb-0" th:text="#{app-name}"></h3></div>
+            </div>
+
+            <ul class="nav col-12 col-lg-auto mb-2 justify-content-center mb-md-0">
+                <li class="nav-item dropdown me-4">
+                    <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <big><i class="bi bi-translate"></i></big>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li>
+                            <a href="?lang=en" class="dropdown-item" data-language="en"
+                               th:classappend="${#locale.language == 'en'} ? 'active' : ''">
+                                <span class="align-middle" th:text="#{lang.eng}">English</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?lang=uk" class="dropdown-item" data-language="uk"
+                               th:classappend="${#locale.language == 'uk'} ? 'active' : ''">
+                                <span class="align-middle" th:text="#{lang.ukr}">Ukrainian</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#" class="nav-link px-2 text-secondary" th:text="#{menu-item-home}"></a></li>
+                <li><a href="#" class="nav-link px-2 text-white" th:text="#{menu-item-about-us}"></a></li>
+                <li><a href="#" class="nav-link px-2 text-white" th:text="#{menu-item-services}"></a></li>
+                <li><a href="#" class="nav-link px-2 text-white" th:text="#{menu-item-contacts}"></a></li>
+                <li><a href="#" class="nav-link px-2 text-white" th:text="#{menu-login}"></a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+<div class="content-wrapper mt-5">
+    <div class="container-xxl flex-grow-1 container-p-y px-5 pt-4" layout:fragment="content">
+    </div>
+</div>
+
+
+<div class="container text-bg-dark mx-0" style="max-width: 100%; color: white">
+    <footer class="py-3 my-4 mb-0">
+        <p class="text-center" style="color: white">© 2024 Copyright, Powered by МійДім24</p>
+    </footer>
+</div>
+</body>
+<script th:src="@{/assets/vendor/libs/jquery/jquery.js}"></script>
+<script th:src="@{/assets/vendor/libs/block-ui/block-ui.js}"></script>
+<script th:src="@{/assets/js/main.js}"></script>
+<script th:src="@{/pagejs/general/custom-block-ui.js}"></script>
+<script layout:fragment="script"></script>
+<th:block layout:fragment="initThymeleafVarianle"></th:block>
+</html>

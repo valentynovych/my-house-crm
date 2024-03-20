@@ -50,6 +50,5 @@ public record EditApartmentOwnerRequest(
         String email,
         String password,
         String confirmPassword
-
 ) {
 }

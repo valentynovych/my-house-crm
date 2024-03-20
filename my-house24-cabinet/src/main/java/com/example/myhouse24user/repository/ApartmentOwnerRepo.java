@@ -11,6 +11,9 @@ import java.util.Optional;
 public interface ApartmentOwnerRepo extends JpaRepository<ApartmentOwner, Long>, JpaSpecificationExecutor<ApartmentOwner> {
     Optional<ApartmentOwner> findByEmail(String email);
     Optional<ApartmentOwner> findByEmailAndDeletedIsFalse(String email);
+    Optional<ApartmentOwner> findByTelegramUsernameAndDeletedIsFalse(String telegramUsername);
+    Optional<ApartmentOwner> findByViberNumberAndDeletedIsFalse(String viberNumber);
+    Optional<ApartmentOwner> findByPhoneNumberAndDeletedIsFalse(String phoneNumber);
     @Query(value = "SELECT * FROM apartment_owners WHERE deleted = false ORDER BY id DESC LIMIT 1", nativeQuery = true)
     ApartmentOwner findLast();
     boolean existsApartmentOwnerByEmail(String email);

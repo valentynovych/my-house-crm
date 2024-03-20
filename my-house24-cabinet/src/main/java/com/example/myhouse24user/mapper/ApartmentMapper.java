@@ -28,4 +28,5 @@ public interface ApartmentMapper {
     List<ApartmentShortResponse> apartmentListToApartmentShortResponseList(List<Apartment> apartmentList);
 
     ApartmentShortResponse apartmentListToApartmentShortResponseList(Apartment apartment);
+
 }

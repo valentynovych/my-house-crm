@@ -4,11 +4,15 @@ import com.example.myhouse24user.entity.ApartmentOwner;
 import com.example.myhouse24user.entity.Language;
 import com.example.myhouse24user.entity.OwnerStatus;
 import com.example.myhouse24user.model.authentication.RegistrationRequest;
+import com.example.myhouse24user.model.owner.ApartmentOwnerRequest;
 import com.example.myhouse24user.model.owner.ApartmentResponse;
+import com.example.myhouse24user.model.owner.EditOwnerResponse;
 import com.example.myhouse24user.model.owner.ViewOwnerResponse;
+import com.example.myhouse24user.util.DateConverter;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.time.Instant;
 import java.util.List;
@@ -51,4 +55,27 @@ public interface ApartmentOwnerMapper {
     @Mapping(target = "avatar", source = "apartmentOwner.avatar")
     ViewOwnerResponse ownerToViewOwnerResponse(ApartmentOwner apartmentOwner,
                                                List<ApartmentResponse> apartmentResponses);
+    @Mapping(target = "image", source = "avatar")
+    @Mapping(target = "birthDate", expression = "java(convertDateToString(apartmentOwner.getBirthDate()))")
+    EditOwnerResponse ownerToEditOwnerResponse(ApartmentOwner apartmentOwner);
+    default String convertDateToString(Instant date) {
+        return DateConverter.instantToString(date);
+    }
+    @Mapping(ignore = true, target = "password")
+    @Mapping(ignore = true, target = "id")
+    @Mapping(ignore = true, target = "ownerId")
+    @Mapping(target = "birthDate", expression = "java(convertDateToInstant(apartmentOwnerRequest.birthDate()))")
+    void setApartmentOwnerWithoutPassword(@MappingTarget ApartmentOwner apartmentOwner,
+                                          ApartmentOwnerRequest apartmentOwnerRequest);
+    @Mapping(target = "password", source = "encodedPassword")
+    @Mapping(ignore = true, target = "ownerId")
+    @Mapping(ignore = true, target = "id")
+    @Mapping(target = "birthDate", expression = "java(convertDateToInstant(apartmentOwnerRequest.birthDate()))")
+    void setApartmentOwnerWithPassword(@MappingTarget ApartmentOwner apartmentOwner,
+                                       ApartmentOwnerRequest apartmentOwnerRequest,
+                                       String encodedPassword);
+    default Instant convertDateToInstant(String birthDate) {
+        return DateConverter.stringToInstant(birthDate);
+    }
+
 }

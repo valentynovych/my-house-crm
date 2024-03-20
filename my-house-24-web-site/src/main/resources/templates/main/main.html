@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{menu-item-home}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="" class="d-block w-100" id="image1" alt="image1">
+            </div>
+            <div class="carousel-item">
+                <img src="" class="d-block w-100" id="image2" alt="image2">
+            </div>
+            <div class="carousel-item">
+                <img src="" class="d-block w-100" id="image3" alt="image3">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <div class="d-flex justify-content-around mt-4">
+        <div class="col-7">
+            <h4 class="pb-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;" id="title"></h4>
+            <div class="mt-4" id="text"></div>
+            <div class="d-flex justify-content-between mt-4">
+                <a th:href="@{/about-us}" type="button" class="btn btn-primary"
+                th:text="#{main-page-details}">Details</a>
+                <div class="d-flex justify-content-between col-6" id="show-links">
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <h4 class="pb-3"
+                style="border-bottom-style: solid; border-bottom-color: #dbdade;"
+                th:text="#{main-page-contacts}">Contacts</h4>
+            <div id="contacts"></div>
+        </div>
+    </div>
+    <div class="row g-2 mt-5" id="blocks">
+
+    </div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/main/main.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const errorMessage =[[#{toastr-error-message}]];
+</script>
+</html>

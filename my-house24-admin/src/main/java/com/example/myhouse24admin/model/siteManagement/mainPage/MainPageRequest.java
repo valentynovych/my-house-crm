@@ -7,6 +7,7 @@ import com.example.myhouse24admin.validators.fileValidator.mainPage.image2.Image
 import com.example.myhouse24admin.validators.fileValidator.mainPage.image3.Image3NotEmpty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class MainPageRequest {
     @NotBlank(message = "{validation-not-empty}")
     private String title;
     @NotBlank(message = "{validation-not-empty}")
+    @Size(max = 500,message = "{validation-size-max}")
     private String text;
     private boolean showLinks;
     @Image1NotEmpty(message = "{validation-image-required}")
