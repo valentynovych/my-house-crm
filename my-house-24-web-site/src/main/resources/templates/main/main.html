@@ -34,13 +34,16 @@
             <h4 class="pb-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;" id="title"></h4>
             <div class="mt-4" id="text"></div>
             <div class="d-flex justify-content-between mt-4">
-                <a th:href="@{/about-us}" type="button" class="btn btn-primary">Detailed</a>
+                <a th:href="@{/about-us}" type="button" class="btn btn-primary"
+                th:text="#{main-page-details}">Details</a>
                 <div class="d-flex justify-content-between col-6" id="show-links">
                 </div>
             </div>
         </div>
         <div class="col-4">
-            <h4 class="pb-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">Contacts</h4>
+            <h4 class="pb-3"
+                style="border-bottom-style: solid; border-bottom-color: #dbdade;"
+                th:text="#{main-page-contacts}">Contacts</h4>
             <div id="contacts"></div>
         </div>
     </div>

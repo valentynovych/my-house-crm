@@ -17,7 +17,7 @@ function blockCardDody() {
         },
         overlayCSS: {
             backgroundColor: "#fff",
-            opacity: 0.8
+            opacity: 0.98
         }
     })
 }
