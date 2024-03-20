@@ -52,7 +52,6 @@
 </body>
 <script layout:fragment="script" th:src="@{/pagejs/invoices/view-invoice.js}"></script>
 <script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
-  const errorMessage =[[#{toastr-error-message}]];
   const invoice = [[#{invoices-invoice}]];
   const total = [[#{invoices-total}]];
 </script>
