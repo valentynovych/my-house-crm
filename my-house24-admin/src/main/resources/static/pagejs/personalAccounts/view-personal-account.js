@@ -88,12 +88,12 @@ function fillInputs(account) {
     $cardFooter.addClass('d-flex flex-column gap-2')
     $(`<a href="../../meter-readings/apartment/${account.id}">${labelLinkViewMeters}</a>`).appendTo($cardFooter);
     $(`<a href="../../cash-register?personalAccount=${account.id}&sheetType=INCOME">${labelLinkViewIncomes}</a>`).appendTo($cardFooter);
-    $(`<a href="../../invoices?apartment=${account.id}">${labelLinkViewInvoices}</a>`).appendTo($cardFooter);
+    $(`<a href="../../invoices?apartment=${account.apartment.apartmentNumber}">${labelLinkViewInvoices}</a>`).appendTo($cardFooter);
 }
 
 $('#accept-payment').on('click', function () {
     window.location = '../../cash-register/add-income-sheet?forAccount=' + apartmentId;
-})
+});
 
 function decorateAccountNumber(accountNumber) {
     let s = (accountNumber + '').padStart(10, '0000000000');
