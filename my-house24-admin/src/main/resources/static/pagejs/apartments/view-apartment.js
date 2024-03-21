@@ -44,11 +44,15 @@ function fillInputs(apartment) {
     $cardFooter.addClass('d-flex flex-column gap-2')
     $(`<a href="../../meter-readings/apartment/${apartment.id}">${labelLinkViewMeters}</a>`).appendTo($cardFooter);
     $(`<a href="../../cash-register?personalAccount=${apartment.personalAccount.id}&sheetType=INCOME">${labelLinkViewIncomes}</a>`).appendTo($cardFooter);
-    $(`<a href="../../invoices?apartment=${apartment.id}">${labelLinkViewInvoices}</a>`).appendTo($cardFooter);
+    $(`<a href="../../invoices?apartment=${apartment.apartmentNumber}">${labelLinkViewInvoices}</a>`).appendTo($cardFooter);
 }
 
 $('#accept-payment').on('click', function () {
     window.location = '../../cash-register/add-income-sheet?forAccount=' + apartmentToRestore.personalAccount.id;
+});
+
+$('#create-invoice').on('click', function () {
+    window.location = '../../invoices/add?forApartment=' + apartmentToRestore.id;
 });
 
 function decorateAccountNumber(accountNumber) {

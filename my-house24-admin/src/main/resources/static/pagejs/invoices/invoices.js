@@ -11,17 +11,21 @@ let request = {
     creationDate: '',
     monthDate: ''
 };
-const BORDER_ALL = { top: { style: 'thin', color: { rgb: '000000' } },
-    right: { style: 'thin', color: { rgb: '000000' } },
-    bottom: { style: 'thin', color: { rgb: '000000' } },
-    left: { style: 'thin', color: { rgb: '000000' } } };
+const BORDER_ALL = {
+    top: {style: 'thin', color: {rgb: '000000'}},
+    right: {style: 'thin', color: {rgb: '000000'}},
+    bottom: {style: 'thin', color: {rgb: '000000'}},
+    left: {style: 'thin', color: {rgb: '000000'}}
+};
 
 $(document).ready(function () {
+    checkRequestParams();
     getPersonalAccountsStatistic();
     getInvoices(0);
     initializeSelects();
     initializeFlatPickr();
 });
+
 function getPersonalAccountsStatistic() {
     $.ajax({
         type: 'get',
@@ -37,8 +41,10 @@ function getPersonalAccountsStatistic() {
 }
 
 function fillStatistic(stat) {
-    $('#accounts-balance').html(`${stat.accountsBalanceOverpayments} ${currency}.`)
-    $('#accounts-balance-arrears').html(`${stat.accountsBalanceArrears} ${currency}.`)
+    console.log(stat);
+    $('#accounts-balance').html(`${stat.accountsBalanceOverpayments} ${currency}.`);
+    $('#accounts-balance-arrears').html(`${stat.accountsBalanceArrears} ${currency}.`);
+    $('#cash-register-balance').html(`${stat.cashRegisterBalance} ${currency}.`);
 }
 
 function getInvoices(currentPage) {
@@ -68,7 +74,10 @@ function drawTable(response) {
     } else {
         for (const invoice of response.content) {
             var parts = invoice.creationDate.split('.');
-            let date = new Date(parts[2],parts[1]-1,parts[0]).toLocaleString(dateLocale,{month:'long', year:'numeric'});
+            let date = new Date(parts[2], parts[1] - 1, parts[0]).toLocaleString(dateLocale, {
+                month: 'long',
+                year: 'numeric'
+            });
             $("tbody")
                 .append(
                     `<tr class="tr text-nowrap" data-href="invoices/view-invoice/${invoice.id}">
@@ -107,25 +116,29 @@ function drawTable(response) {
         addListenerToRow();
     }
 }
+
 function addListenerToRow() {
     $('tr[data-href]').find('td').not(":last-child").not(':first-child').on('click', function () {
         window.location = $(this).parent().attr('data-href');
     })
 }
+
 function getStatusSpan(status) {
     switch (status) {
         case 'PAID':
-            return '<span class="badge bg-label-success">'+ paidStatus +'</span>';
+            return '<span class="badge bg-label-success">' + paidStatus + '</span>';
         case 'UNPAID':
-            return '<span class="badge bg-label-danger">'+ unpaidStatus +'</span>';
+            return '<span class="badge bg-label-danger">' + unpaidStatus + '</span>';
         case 'PARTLY_PAID':
-            return '<span class="badge bg-label-warning">'+ partlyPaidStatus +'</span>';
+            return '<span class="badge bg-label-warning">' + partlyPaidStatus + '</span>';
     }
 }
+
 function getProcessed(isProcessed) {
     return isProcessed ? '<span class="badge bg-label-success">' + processed + '</span>' :
         '<span class="badge bg-label-danger">' + notProcessed + '</span>';
 }
+
 function initializeSelects() {
     initializeStatusSelect();
     initializeOwnerSelect();
@@ -161,6 +174,7 @@ function initializeStatusSelect() {
         }
     });
 }
+
 function getStatus(status) {
     switch (status) {
         case 'PAID':
@@ -171,10 +185,11 @@ function getStatus(status) {
             return partlyPaidStatus;
     }
 }
+
 function initializeOwnerSelect() {
     $('#filter-by-owner').select2({
         dropdownParent: $('#dropdownParent'),
-        placeholder:"",
+        placeholder: "",
         allowClear: true,
         maximumInputLength: 100,
         ajax: {
@@ -203,6 +218,7 @@ function initializeOwnerSelect() {
         }
     });
 }
+
 function initializeFlatPickr() {
     $("#filter-by-date").flatpickr({
         dateFormat: "d.m.Y"
@@ -217,6 +233,7 @@ function initializeFlatPickr() {
         ]
     });
 }
+
 $("#filter-by-number").on("input", function () {
     request.number = $(this).val();
     searchAfterDelay();
@@ -246,9 +263,10 @@ $("#filter-by-processed").on("change", function () {
     request.processed = $(this).val();
     searchAfterDelay();
 });
+
 function searchAfterDelay() {
     clearTimeout(timer);
-    timer = setTimeout(function() {
+    timer = setTimeout(function () {
         getInvoices(0);
     }, 800);
 }
@@ -261,8 +279,9 @@ $('.clear-filters').on('click', function () {
 })
 
 let entryId;
+
 function openDeleteModal(id) {
-    if($("#deleteModal").length === 0) {
+    if ($("#deleteModal").length === 0) {
         $("div.card").append(
             `<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -291,11 +310,12 @@ function openDeleteModal(id) {
     $('#deleteModal').modal('show');
     entryId = id;
 }
+
 function deleteEntry() {
     $("#delete-button").prop('disabled', true);
     $.ajax({
         type: "GET",
-        url: "invoices/delete/"+entryId,
+        url: "invoices/delete/" + entryId,
         success: function () {
             $('#deleteModal').modal('hide');
             toastr.success(deleteSuccessful);
@@ -326,8 +346,9 @@ $("#delete-invoices").on("click", function () {
     });
     deleteInvoices(invoiceIds);
 });
+
 function deleteInvoices(invoiceIds) {
-    if(invoiceIds.length != 0) {
+    if (invoiceIds.length != 0) {
         blockCardDody();
         $.ajax({
             type: "GET",
@@ -347,7 +368,7 @@ function deleteInvoices(invoiceIds) {
                 }
             }
         });
-    } else{
+    } else {
         toastr.warning(chooseInvoice);
     }
 }
@@ -357,7 +378,7 @@ $("#export-to-excel").on("click", function () {
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
-    let name = "invoices-"+dd+"-"+mm+"-"+yyyy+".xlsx";
+    let name = "invoices-" + dd + "-" + mm + "-" + yyyy + ".xlsx";
     let table = getTable();
     var workbook = XLSX.utils.book_new();
     var worksheet = XLSX.utils.aoa_to_sheet(table);
@@ -372,9 +393,10 @@ function getTable() {
     let head = [];
     $('#myTHead tr').find('th').not(':first-child').not(':last-child').each(function () {
         let text = $(this).text();
-        head.push({ v: text,
+        head.push({
+            v: text,
             t: "s",
-            s: {font: { bold: true }, border: BORDER_ALL, alignment: { horizontal: 'center'}}
+            s: {font: {bold: true}, border: BORDER_ALL, alignment: {horizontal: 'center'}}
         });
     });
     table.push(head);
@@ -382,9 +404,10 @@ function getTable() {
         let row = []
         $(this).find('td').not(":last-child").not(':first-child').each(function () {
             let text = $(this).text();
-            row.push({ v: text,
+            row.push({
+                v: text,
                 t: "s",
-                s: {border: BORDER_ALL, alignment: { horizontal: 'center'}}
+                s: {border: BORDER_ALL, alignment: {horizontal: 'center'}}
             });
         });
         table.push(row);
@@ -394,5 +417,26 @@ function getTable() {
 
 function styleTable(worksheet) {
     let DEF_ColW = 20;
-    worksheet['!cols'] = [{ width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }, { width: 25 }, { width: 40 }, { width: DEF_ColW }, { width: DEF_ColW }, { width: DEF_ColW }];
+    worksheet['!cols'] = [{width: DEF_ColW}, {width: DEF_ColW}, {width: DEF_ColW}, {width: DEF_ColW}, {width: 25}, {width: 40}, {width: DEF_ColW}, {width: DEF_ColW}, {width: DEF_ColW}];
+}
+
+function checkRequestParams() {
+    const apartmentNumberFromUrl = findGetParameter('apartment');
+    if (apartmentNumberFromUrl) {
+        request.apartmentNumber = apartmentNumberFromUrl;
+    }
+    $('#filter-by-apartment').val(('' + apartmentNumberFromUrl).padStart(5, '0'));
+}
+
+function findGetParameter(parameterName) {
+    let result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+            tmp = item.split("=");
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
 }

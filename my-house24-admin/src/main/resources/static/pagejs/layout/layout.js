@@ -1,6 +1,14 @@
 const currentUrl = window.location.href;
 const myArray = currentUrl.split("/");
 var root = myArray[3];
+let getOwnersData = {
+    page: 0,
+    pageSize: 5,
+    ownerStatus: 'NEW',
+};
+
+let isLastOwnerPage = false;
+let requestInProgress = false;
 $(document).ready(function () {
     $("#roleName").text(getRoleName(roles[0].authority));
     const currHref = window.location.pathname;
@@ -20,30 +28,6 @@ $(document).ready(function () {
             showMenuItems(response);
         }, error: function () {
             toastr.error(errorMessage);
-        }
-    });
-
-    const getOwnersData = {
-        page: 0,
-        pageSize: 5,
-        ownerStatus: 'NEW',
-    };
-
-    let urlGetNewStaff = `/admin/system-settings/staff/get-staff?
-        page=${getOwnersData.page}
-        &pageSize=${getOwnersData.pageSize}
-        &status=${getOwnersData.ownerStatus}`;
-
-    $.ajax({
-        url: '/' + root + urlGetNewStaff,
-        type: 'get',
-        data: getOwnersData,
-        success: function (response) {
-            console.log(response);
-            buildNewOwnerList(response);
-        },
-        error: function (error) {
-            console.log(error)
         }
     });
 });
@@ -121,31 +105,94 @@ $(window).on('load, ajaxStop', function () {
     })
 });
 
-function buildNewOwnerList(response) {
-    const countNewOwners = response.totalElements;
-    const $newOwnerList = $('#new-owners-list');
-    const $labelNewOwners = $('#label-new-owners-count');
+function getNewOwners() {
+    requestInProgress = true;
+    console.log(getOwnersData)
+    let urlGetNewStaff = `/admin/system-settings/staff/get-staff?page=${getOwnersData.page}&pageSize=${getOwnersData.pageSize}&status=${getOwnersData.ownerStatus}`;
 
-    $newOwnerList.empty();
+    $.ajax({
+        url: '/' + root + urlGetNewStaff,
+        type: 'get',
+        success: function (response) {
+            buildNewOwnerList(response);
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    }).done(function () {
+        $('.loading-spinner').remove();
+        requestInProgress = false;
+    });
+}
+
+function buildNewOwnerList(response) {
+
+    isLastOwnerPage = response.last;
+    const countNewOwners = response.totalElements;
+    const $labelNewOwners = $('#label-new-owners-count');
 
     if (countNewOwners > 0) {
         const $indicator = $('#new-owners-count');
-
         $indicator.removeClass('d-none');
         $indicator.html(countNewOwners);
         $labelNewOwners.html(`${labelNewOwnersCount} : ${countNewOwners}`);
+        addItemsToNewOwnerList(response);
+    } else {
+        $labelNewOwners.html(`${labelNewOwnersCount} : ${noneOwners}`);
+    }
+}
 
-        for (let newStaff of response.content) {
-            $newOwnerList.append($(`<li class="list-group-item list-group-item-action dropdown-notifications-item py-2">
+function addItemsToNewOwnerList(response) {
+    const $newOwnerList = $('#new-owners-list');
+    for (let newStaff of response.content) {
+        $newOwnerList.append(buildNewOwnerItem(newStaff));
+    }
+}
+
+function buildNewOwnerItem(newStaff) {
+    return `<li class="list-group-item list-group-item-action dropdown-notifications-item py-2">
                 <div class="d-flex">
                     <a href="/${root}/admin/system-settings/staff/view-staff/${newStaff.id}" 
                     class="h6 mb-0">${newStaff.firstName} ${newStaff.lastName}</a>
                 </div>
-           </li>`));
+           </li>`;
+}
+
+$(window).ready(function () {
+    getNewOwners();
+    const elementById = document.getElementById('new-owners-list');
+    elementById.style.maxHeight = '150px';
+
+    new PerfectScrollbar(elementById, {
+        wheelPropagation: false,
+        suppressScrollX: true,
+    });
+
+    $(elementById).on('ps-y-reach-end', function () {
+        if (!isLastOwnerPage && !requestInProgress) {
+            getOwnersData.page++;
+            getNewOwners();
+            addLoadingSpinnerToNewOwnerList();
         }
-    } else {
-        $labelNewOwners.html(`${labelNewOwnersCount} : ${noneOwners}`);
-    }
+    });
+});
+
+function addLoadingSpinnerToNewOwnerList() {
+    const $newOwnerList = $('#new-owners-list').parent();
+    $newOwnerList.append(buildLoadingSpinner());
+}
+
+function buildLoadingSpinner() {
+    return `<div class="col loading-spinner d-flex justify-content-center">
+                <div class="sk-chase sk-primary">
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                </div>
+            </div>`;
 }
 
 
