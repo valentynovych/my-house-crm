@@ -51,6 +51,10 @@ $('#accept-payment').on('click', function () {
     window.location = '../../cash-register/add-income-sheet?forAccount=' + apartmentToRestore.personalAccount.id;
 });
 
+$('#create-invoice').on('click', function () {
+    window.location = '../../invoices/add?forApartment=' + apartmentToRestore.id;
+});
+
 function decorateAccountNumber(accountNumber) {
     let s = (accountNumber + '').padStart(10, '0000000000');
     return s.substring(0, 5) + '-' + s.substring(5, 10);

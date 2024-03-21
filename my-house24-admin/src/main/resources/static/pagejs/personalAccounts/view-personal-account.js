@@ -1,14 +1,14 @@
-const apartmentId = window.location.pathname.match(/\d+/);
-let apartmentToRestore;
+const personalAccountId = window.location.pathname.match(/\d+/);
+let accountToRestore;
 
 blockCardDody();
 $(document).ready(function () {
     $.ajax({
-        url: '../get-account/' + apartmentId,
+        url: '../get-account/' + personalAccountId,
         type: 'get',
         success: function (response) {
             console.log(response)
-            apartmentToRestore = response;
+            accountToRestore = response;
             fillInputs(response);
         },
         error: function (error) {
@@ -92,7 +92,11 @@ function fillInputs(account) {
 }
 
 $('#accept-payment').on('click', function () {
-    window.location = '../../cash-register/add-income-sheet?forAccount=' + apartmentId;
+    window.location = '../../cash-register/add-income-sheet?forAccount=' + personalAccountId;
+});
+
+$('#create-invoice').on('click', function () {
+    window.location = '../../invoices/add?forApartment=' + accountToRestore.apartment.id;
 });
 
 function decorateAccountNumber(accountNumber) {

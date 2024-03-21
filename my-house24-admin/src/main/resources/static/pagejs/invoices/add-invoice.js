@@ -1,7 +1,7 @@
 let i = 0;
 let tableLength = 5;
 let meterReadings;
-let tariffServices;
+let tariffServices = [];
 $(document).ready(function () {
     initializeSelects();
     setNumber();
@@ -17,7 +17,6 @@ function setNumber() {
         type: "GET",
         url: "get-number",
         success: function (response) {
-            console.log(response);
             $("#number").val(response);
         },
         error: function () {
@@ -31,6 +30,7 @@ function initializeSelects() {
     initializeSectionSelect();
     initializeApartmentSelect();
     initializeStatusSelect();
+    checkRequestParams();
 }
 
 function initializeHouseSelect() {
@@ -151,7 +151,6 @@ function initializeStatusSelect() {
                     })
                 };
             }
-
         }
     });
 }
@@ -193,11 +192,7 @@ $("#apartmentId").on("change", function () {
 function setOwnerFields(response) {
     $("#owner").text(response.ownerFullName);
     $("#phone-number").text(response.ownerPhoneNumber);
-    let number = "";
-    for (let j = 0; j < 10 - response.accountNumber.toString().length; j++) {
-        number += "0";
-    }
-    number += response.accountNumber;
+    let number = response.accountNumber.toString().padStart(10, '0');
     let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
     $("#personalAccount").val(accountNumber);
     let houseOption = new Option(response.tariffName, response.tariffId, true, true);
@@ -264,6 +259,7 @@ function setRowInServiceTable() {
         </tr>`
     );
 }
+
 function addListenerToSelects() {
     $(".select2").on("change", function () {
         $(this).parent().parent().find(".quantity").val("").trigger("input");
@@ -271,6 +267,7 @@ function addListenerToSelects() {
         setPricePerUnit(this);
     });
 }
+
 function setUnit(select) {
     $.ajax({
         type: "GET",
@@ -288,6 +285,7 @@ function setUnit(select) {
         }
     });
 }
+
 function setPricePerUnit(select) {
     let count = 0;
     for (tariffService of tariffServices) {
@@ -314,17 +312,20 @@ function calculateCost(input) {
     costInput.val((perUnitInput.val() * quantityInput.val()).toFixed(2));
     costInput.trigger("input");
 }
+
 function calculateTotal() {
     let sum = 0;
     $("#service-table").find(".cost").each(function () {
         sum += Number($(this).val());
     });
-    $("#total").text(total+": ");
+    $("#total").text(total + ": ");
     $("#totalPrice").text(sum).trigger("change");
 }
+
 let deleteButton;
+
 function openDeleteModal(button) {
-    if($("#deleteModal").length === 0) {
+    if ($("#deleteModal").length === 0) {
         $("#dropdownParent").append(
             `<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -353,6 +354,7 @@ function openDeleteModal(button) {
     $('#deleteModal').modal('show');
     deleteButton = button;
 }
+
 function deleteRow() {
     $(deleteButton).parent().parent().remove();
     calculateTotal();
@@ -380,7 +382,7 @@ function initializeServiceSelects() {
                 console.log(values);
                 return {
                     results: $.map(response.content, function (item) {
-                        if(!values.includes(item.id)) {
+                        if (!values.includes(item.id)) {
                             return {
                                 text: item.name,
                                 id: item.id
@@ -396,6 +398,7 @@ function initializeServiceSelects() {
         }
     });
 }
+
 $("#tariff").on("change", function () {
     blockBy("#service-div");
     $.ajax({
@@ -405,8 +408,9 @@ $("#tariff").on("change", function () {
             tariffId: $("#tariff").val()
         },
         success: function (response) {
-            console.log(response)
-            tariffServices = response;
+            if (response.length > 0) {
+                tariffServices = response;
+            }
             setPrices();
             calculateTotal();
             unblockBy("#service-div");
@@ -416,6 +420,7 @@ $("#tariff").on("change", function () {
         }
     });
 });
+
 function setPrices() {
     $("#service-table").find("tr").each(function () {
         let select = $(this).find("select");
@@ -427,6 +432,7 @@ $("#set-for-tariffs").on("click", function () {
     blockBy("#service-div");
     drawServiceTable(tariffServices);
 });
+
 function drawServiceTable(response) {
     if (response === undefined || response.length === 0) {
         toastr.warning(chooseApartment);
@@ -446,8 +452,9 @@ function drawServiceTable(response) {
         unblockBy("#service-div");
     }
 }
+
 $("#set-amount").on("click", function () {
-    if($("input[name=checks]:checked").length !== 0) {
+    if ($("input[name=checks]:checked").length !== 0) {
         blockBy("#service-div");
         let serviceIds = [];
         $("input[name=checks]:checked").each(function () {
@@ -496,8 +503,9 @@ function appendTotal() {
         </tr>`
     );
 }
+
 function changePaid() {
-    if($("#status").val() !== null && $("#status").val().localeCompare("PAID") === 0){
+    if ($("#status").val() !== null && $("#status").val().localeCompare("PAID") === 0) {
         $("#paid").val(Number($("#totalPrice").text()));
     }
 }
@@ -602,10 +610,10 @@ $("#save-button").on("click", function () {
 function collectItemsData() {
     let formData = new FormData();
     let ind = 0;
-    if($("#service-table").find("tr").children("td").length !== 1) {
+    if ($("#service-table").find("tr").children("td").length !== 1) {
         $("#service-table").find("tr").not(':last').each(function () {
             let service = $(this).find(".select2");
-            let serviceId = service.val() == null? '': service.val();
+            let serviceId = service.val() == null ? '' : service.val();
             formData.append("itemRequests[" + ind + "].serviceId", serviceId)
             service.attr("name", "itemRequests[" + ind + "].serviceId");
             let quantity = $(this).find(".quantity");
@@ -624,17 +632,18 @@ function collectItemsData() {
 }
 
 function appendInvoiceFields(formData) {
-    let apartmentId = $("#apartmentId").val() == null? '': $("#apartmentId").val();
-    formData.append("apartmentId",apartmentId);
-    formData.append("creationDate",$("#creationDate").val());
-    let status = $("#status").val() == null? '': $("#status").val();
-    formData.append("status",status);
-    formData.append("paid",$("#paid").val());
-    let house = $("#house").val() == null? '': $("#house").val();
-    formData.append("house",house);
-    formData.append("isProcessed",$("#processed").is(':checked'));
-    formData.append("totalPrice",$("#totalPrice").text());
+    let apartmentId = $("#apartmentId").val() == null ? '' : $("#apartmentId").val();
+    formData.append("apartmentId", apartmentId);
+    formData.append("creationDate", $("#creationDate").val());
+    let status = $("#status").val() == null ? '' : $("#status").val();
+    formData.append("status", status);
+    formData.append("paid", $("#paid").val());
+    let house = $("#house").val() == null ? '' : $("#house").val();
+    formData.append("house", house);
+    formData.append("isProcessed", $("#processed").is(':checked'));
+    formData.append("totalPrice", $("#totalPrice").text());
 }
+
 function sendData(formData) {
     blockCardDody();
     clearAllErrorMessage();
@@ -672,4 +681,41 @@ function clearFields() {
             <td colSpan="7" class="text-center">${noData}</td>
         </tr>`
     );
+}
+
+function checkRequestParams() {
+    let apartmentFromUrl = findGetParameter('forApartment');
+    if (apartmentFromUrl) {
+
+        $.ajax({
+            type: "GET",
+            url: '../apartments/get-apartment/' + apartmentFromUrl,
+            dataType: 'json',
+            success: function (response) {
+                fillInputsFromApartment(response);
+            }
+        })
+    }
+}
+
+function fillInputsFromApartment(apartment) {
+    const houseOption = new Option(apartment.house.name, apartment.house.id, true, true);
+    $('#house').append(houseOption).trigger('change');
+    const sectionOption = new Option(apartment.section.name, apartment.section.id, true, true);
+    $('#section').append(sectionOption).trigger('change');
+    const apartmentOption = new Option(apartment.apartmentNumber, apartment.id, true, true);
+    $('#apartmentId').append(apartmentOption).trigger('change');
+}
+
+function findGetParameter(parameterName) {
+    let result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+            tmp = item.split("=");
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
 }
