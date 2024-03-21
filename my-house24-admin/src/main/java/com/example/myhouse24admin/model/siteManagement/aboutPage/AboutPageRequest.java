@@ -3,16 +3,21 @@ package com.example.myhouse24admin.model.siteManagement.aboutPage;
 import com.example.myhouse24admin.model.siteManagement.servicesPage.SeoRequest;
 import com.example.myhouse24admin.validators.fileValidator.aboutPage.ImageNotEmpty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public class AboutPageRequest {
     @NotBlank(message = "{validation-not-empty}")
+    @Size(max = 100,message = "{validation-size-max}")
     private String title;
     @NotBlank(message = "{validation-not-empty}")
+    @Size(max = 500,message = "{validation-size-max}")
     private String aboutText;
+    @Size(max = 100,message = "{validation-size-max}")
     private String additionalTitle;
+    @Size(max = 500,message = "{validation-size-max}")
     private String additionalText;
     @ImageNotEmpty(message = "{validation-image-required}")
     private MultipartFile directorImage;

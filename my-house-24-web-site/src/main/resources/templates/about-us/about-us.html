@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{menu-item-about-us}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <nav aria-label="breadcrumb" class="mt-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{home}" th:text="#{menu-item-home}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="#{menu-item-about-us}"></li>
+        </ol>
+    </nav>
+    <h4 class="mt-5 pb-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;"
+        id="title"></h4>
+    <div class="d-flex justify-content-between mt-4">
+        <div class="col-8" id="aboutText"></div>
+        <div class="col-3" id="directorImage"></div>
+    </div>
+    <div id="galleryDiv">
+    </div>
+    <div id="additional">
+        <h4 class="mt-4 pb-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;"
+            id="additionalTitle"></h4>
+    </div>
+    <div id="documentsDiv">
+    </div>
+</div>
+
+</body>
+<script layout:fragment="script" th:src="@{/pagejs/about-us/about-us.js}"></script>
+<script layout:fragment="initThymeleafVarianle" th:inline="javascript">
+    const errorMessage =[[#{toastr-error-message}]];
+    const download = [[#{about-page-download}]];
+</script>
+</html>

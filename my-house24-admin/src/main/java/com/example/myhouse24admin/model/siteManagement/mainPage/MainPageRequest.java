@@ -14,6 +14,7 @@ import java.util.List;
 
 public class MainPageRequest {
     @NotBlank(message = "{validation-not-empty}")
+    @Size(max = 100,message = "{validation-size-max}")
     private String title;
     @NotBlank(message = "{validation-not-empty}")
     @Size(max = 500,message = "{validation-size-max}")
