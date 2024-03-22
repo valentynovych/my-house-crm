@@ -25,6 +25,12 @@ function getInvoices(currentPage) {
     } else {
         link = "get";
         request.apartmentId = id;
+        let house = $("ul.menu-sub li.active").text();
+        $(".breadcrumb").append(
+            `<li class="breadcrumb-item active">
+                <span>${house}</span>
+            </li>`
+        );
     }
     request.page = currentPage;
     request.pageSize = tableLength;
