@@ -54,6 +54,7 @@ public class OwnerPasswordResetTokenServiceImpl implements OwnerPasswordResetTok
         String token = UUID.randomUUID().toString();
         apartmentOwner.getOwnerPasswordResetToken().setToken(token);
         apartmentOwner.getOwnerPasswordResetToken().setExpirationDate();
+        apartmentOwner.getOwnerPasswordResetToken().setUsed(false);
         apartmentOwnerRepo.save(apartmentOwner);
         return token;
     }
@@ -68,7 +69,9 @@ public class OwnerPasswordResetTokenServiceImpl implements OwnerPasswordResetTok
     public boolean isPasswordResetTokenValid(String token) {
         logger.info("isPasswordResetTokenValid() - Checking if password reset token "+token+" valid");
         Optional<OwnerPasswordResetToken> passwordResetToken = ownerPasswordResetTokenRepo.findByToken(token);
-        boolean isValid = passwordResetToken.isPresent() && !passwordResetToken.get().getExpirationDate().isBefore(Instant.now());
+        boolean isValid = passwordResetToken.isPresent()
+                && !passwordResetToken.get().isUsed()
+                && !passwordResetToken.get().getExpirationDate().isBefore(Instant.now());
         logger.info("isPasswordResetTokenValid() - Password reset token was checked");
         return isValid;
     }
@@ -80,6 +83,7 @@ public class OwnerPasswordResetTokenServiceImpl implements OwnerPasswordResetTok
         ApartmentOwner apartmentOwner = passwordResetToken.getApartmentOwner();
         apartmentOwner.setPassword(passwordEncoder.encode(password));
         apartmentOwner.setStatus(OwnerStatus.ACTIVE);
+        passwordResetToken.setUsed(true);
         ownerPasswordResetTokenRepo.save(passwordResetToken);
         logger.info("updatePassword() - Password was updated");
     }

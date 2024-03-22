@@ -14,6 +14,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -23,37 +26,34 @@ import java.io.IOException;
 public class MailServiceImpl implements MailService {
     private final TemplateEngine templateEngine;
     private final SendGrid sendGrid;
-    private final HttpServletRequest httpServletRequest;
     private final Logger logger = LogManager.getLogger(MailServiceImpl.class);
 
     @Value("${sender}")
     private String sender;
 
-    public MailServiceImpl(TemplateEngine templateEngine, SendGrid sendGrid, HttpServletRequest httpServletRequest) {
+    public MailServiceImpl(TemplateEngine templateEngine, SendGrid sendGrid) {
         this.templateEngine = templateEngine;
         this.sendGrid = sendGrid;
-        this.httpServletRequest = httpServletRequest;
     }
 
     @Async
     @Override
-    public void sendToken(String token, EmailRequest emailRequest) {
+    public void sendToken(String token, EmailRequest emailRequest, String currentUrl) {
         logger.info("sendToken() - Sending token " + token + " to email " + emailRequest.email());
         String subject = "Встановлення нового паролю";
-        Content content = new Content("text/html", buildContent(token));
+        Content content = new Content("text/html", buildContent(token, currentUrl));
         sendMail(subject, emailRequest.email(), content);
         logger.info("sendToken() - Token was sent");
     }
-    private String buildContent(String token) {
-        String link = formLink(token);
+    private String buildContent(String token, String currentUrl) {
+        String link = formLink(token, currentUrl);
         Context context = new Context();
         context.setVariable("link", link);
         return templateEngine.process("email/passwordResetTokenEmailTemplate", context);
     }
-    private String formLink(String token) {
-        String fullUrl = ServletUriComponentsBuilder.fromRequestUri(httpServletRequest).build().toUriString();
-        int index = fullUrl.indexOf("cabinet");
-        String baseUrl = fullUrl.substring(0, index);
+    private String formLink(String token, String currentUrl) {
+        int index = currentUrl.indexOf("cabinet");
+        String baseUrl = currentUrl.substring(0, index);
         String link = baseUrl + "cabinet/changePassword?token=" + token;
         return link;
     }

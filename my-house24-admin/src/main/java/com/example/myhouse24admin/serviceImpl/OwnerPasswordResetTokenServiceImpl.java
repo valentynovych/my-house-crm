@@ -45,6 +45,7 @@ public class OwnerPasswordResetTokenServiceImpl implements OwnerPasswordResetTok
         String token = UUID.randomUUID().toString();
         apartmentOwner.getOwnerPasswordResetToken().setToken(token);
         apartmentOwner.getOwnerPasswordResetToken().setExpirationDate();
+        apartmentOwner.getOwnerPasswordResetToken().setUsed(false);
         apartmentOwnerRepo.save(apartmentOwner);
         return token;
     }
