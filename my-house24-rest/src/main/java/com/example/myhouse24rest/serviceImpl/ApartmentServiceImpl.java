@@ -3,12 +3,12 @@ package com.example.myhouse24rest.serviceImpl;
 import com.example.myhouse24rest.entity.Apartment;
 import com.example.myhouse24rest.mapper.ApartmentMapper;
 import com.example.myhouse24rest.model.apartment.ApartmentShortResponse;
+import com.example.myhouse24rest.model.apartment.ApartmentShortResponsePage;
 import com.example.myhouse24rest.repository.ApartmentRepo;
 import com.example.myhouse24rest.service.ApartmentService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +40,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     private Page<ApartmentShortResponse> convertApartmentPageToApartmentResponsePage(Page<Apartment> apartmentsPage) {
         logger.info("convertApartmentPageToApartmentResponsePage() - start convert Page: {}", apartmentsPage);
         List<ApartmentShortResponse> apartmentResponses = apartmentMapper.apartmentListToApartmentShortResponseList(apartmentsPage.getContent());
-        Page<ApartmentShortResponse> responsePage = new PageImpl<>(apartmentResponses, apartmentsPage.getPageable(), apartmentsPage.getTotalElements());
+        Page<ApartmentShortResponse> responsePage = new ApartmentShortResponsePage(apartmentResponses, apartmentsPage.getPageable(), apartmentsPage.getTotalElements());
         logger.info("convertApartmentPageToApartmentResponsePage() - end convert Page: {} and totalElements: {}", responsePage, responsePage.getTotalElements());
         return responsePage;
     }
