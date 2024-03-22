@@ -215,4 +215,8 @@ public class ApartmentOwner {
     public void setOwnerMessages(List<OwnerMessage> ownerMessages) {
         this.ownerMessages = ownerMessages;
     }
+
+    public String getFullName() {
+        return String.format("%s %s %s", firstName, middleName, lastName);
+    }
 }
