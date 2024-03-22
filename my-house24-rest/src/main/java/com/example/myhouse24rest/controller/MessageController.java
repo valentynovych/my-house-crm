@@ -40,4 +40,12 @@ public class MessageController {
         Page<MessageResponse> unreadMessages = messageService.getUnreadMessages(principal, page, pageSize);
         return new ResponseEntity<>(unreadMessages, HttpStatus.OK);
     }
+
+    @GetMapping("get-all-messages")
+    public ResponseEntity<?> getAllMessages(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int pageSize,
+                                            Principal principal) {
+        Page<MessageResponse> allMessages = messageService.getAllMessages(principal, page, pageSize);
+        return new ResponseEntity<>(allMessages, HttpStatus.OK);
+    }
 }

@@ -58,6 +58,17 @@ public class MessageServiceImpl implements MessageService {
         return messageResponses;
     }
 
+    @Override
+    public Page<MessageResponse> getAllMessages(Principal principal, int page, int pageSize) {
+        logger.info("getAllMessages() - Page: {} and pageSize: {} and ownerEmail: {}", page, pageSize, principal.getName());
+        Pageable pageable = Pageable.ofSize(pageSize).withPage(page);
+        Page<OwnerMessage> ownerMessages = ownerMessageRepo.findOwnerMessagesByApartmentOwner_Email(
+                principal.getName(), pageable);
+        Page<MessageResponse> messageResponses = convertPageOwnerMessageToPageMessageResponse(ownerMessages);
+        logger.info("getAllMessages() - Page: {} and pageSize: {} and ownerEmail: {} converted", page, pageSize, principal.getName());
+        return messageResponses;
+    }
+
     private Page<MessageResponse> convertPageOwnerMessageToPageMessageResponse(Page<OwnerMessage> ownerMessages) {
         logger.info("convertPageOwnerMessageToPageMessageResponse() - Page: {}", ownerMessages);
         List<MessageResponse> messageResponses = ownerMessageMapper.ownerMessagesToMessageResponses(ownerMessages.getContent());

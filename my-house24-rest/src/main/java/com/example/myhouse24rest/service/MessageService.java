@@ -11,4 +11,6 @@ public interface MessageService {
     void readMessageById(Long messageId, Principal principal);
 
     Page<MessageResponse> getUnreadMessages(Principal principal, int page, int pageSize);
+
+    Page<MessageResponse> getAllMessages(Principal principal, int page, int pageSize);
 }
