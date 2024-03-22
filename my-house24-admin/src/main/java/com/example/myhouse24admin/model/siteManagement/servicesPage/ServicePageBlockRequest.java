@@ -5,6 +5,7 @@ import com.example.myhouse24admin.validators.fileValidator.servicesPage.ImageNot
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 @ImageNotEmpty(
         id = "id",
@@ -14,8 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class ServicePageBlockRequest{
         private Long id;
         @NotBlank(message = "{validation-not-empty}")
+        @Size(max = 100,message = "{validation-size-max}")
         private String title;
         @NotBlank(message = "{validation-not-empty}")
+        @Size(max = 300,message = "{validation-size-max}")
         private String description;
         private MultipartFile image;
 
