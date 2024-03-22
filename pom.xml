@@ -18,6 +18,7 @@
         <module>my-house24-admin</module>
         <module>my-house24-cabinet</module>
         <module>my-house-24-web-site</module>
+        <module>my-house24-rest</module>
     </modules>
 
 </project>
