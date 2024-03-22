@@ -1,6 +1,7 @@
 package com.example.myhouse24rest.entity;
 
 import jakarta.persistence.*;
+import org.apache.commons.lang3.StringUtils;
 
 @Entity
 @Table(name = "personal_accounts")
@@ -57,5 +58,10 @@ public class PersonalAccount {
 
     public Long getAccountNumber() {
         return accountNumber;
+    }
+
+    public String getFormattedPersonalAccountNumber() {
+        String numberOfString = StringUtils.leftPad(String.valueOf(accountNumber), 10, "0");
+        return numberOfString.substring(0, 5) + "-" + numberOfString.substring(5, 10);
     }
 }
