@@ -38,11 +38,11 @@ function showPage(response) {
         );
     }
     $("#contacts").append(
-        `<div>${response.contactsResponse.fullName}</div>
-         <div>${response.contactsResponse.location}</div>
-         <div>${response.contactsResponse.address}</div>
-         <div>${response.contactsResponse.phoneNumber}</div>
-         <div>${response.contactsResponse.email}</div>`
+        `<div><i class="bi bi-person-circle"></i> ${response.contactsResponse.fullName}</div>
+         <div><i class="bi bi-geo-alt-fill"></i> ${response.contactsResponse.location}</div>
+         <div><i class="bi bi-compass"></i> ${response.contactsResponse.address}</div>
+         <div><i class="bi bi-telephone-fill"></i> ${response.contactsResponse.phoneNumber}</div>
+         <div><i class="bi bi-envelope"></i> ${response.contactsResponse.email}</div>`
     );
     showMainBlocks(response);
 }
