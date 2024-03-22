@@ -1,4 +1,4 @@
-let tableLength = 5;
+let tableLength = 2;
 $(document).ready(function () {
     getServicePage(0);
 });
@@ -24,6 +24,7 @@ function getServicePage(currentPage) {
 }
 
 function showPage(response) {
+    $(".pagination").empty();
     for(let service of response.content){
         $("#services").append(
             `<div class="d-flex justify-content-between mt-5">
@@ -39,9 +40,5 @@ function showPage(response) {
             </div>`
         );
     }
-    // if (response.totalPages > 0) {
-    //     const page = response.pageable.pageNumber;
-    //     drawPaginationElements(response, "getServicePage");
-    //     drawPagination(response.totalPages, page, 'getServicePage');
-    // }
+    buildPagination(response);
 }

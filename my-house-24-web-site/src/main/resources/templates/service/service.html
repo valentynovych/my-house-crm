@@ -19,16 +19,17 @@
     <div id="services">
 
     </div>
-    <div class="pagination"></div>
+    <div class="d-flex justify-content-end mt-5">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+            </ul>
+        </nav>
+    </div>
 </div>
 
 </body>
 <script layout:fragment="script" th:src="@{/pagejs/service/service.js}"></script>
 <script layout:fragment="initThymeleafVarianle" th:inline="javascript">
     const errorMessage =[[#{toastr-error-message}]];
-    const tableShow = [[#{table-show}]];
-    const tableShowing = [[#{table-showing}]];
-    const tableEntries = [[#{table-entries}]];
-    const tableOf = [[#{table-of}]];
 </script>
 </html>
