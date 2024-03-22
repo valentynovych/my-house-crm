@@ -15,6 +15,7 @@ public class PasswordResetToken {
     private String token;
     @Column(nullable = false)
     private Instant expirationDate;
+    private boolean used;
     private static final int EXPIRATION = 20;
     @OneToOne
     @JoinColumn(nullable = false, name = "staff_id", referencedColumnName = "id")
@@ -54,6 +55,15 @@ public class PasswordResetToken {
     private Instant calculateExpirationDate(){
         return Instant.now().plus(EXPIRATION, ChronoUnit.MINUTES);
     }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
     public Staff getStaff() {
         return staff;
     }

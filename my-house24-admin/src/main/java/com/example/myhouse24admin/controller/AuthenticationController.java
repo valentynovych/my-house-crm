@@ -36,9 +36,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/forgotPassword")
-    public @ResponseBody ResponseEntity<?> sendPasswordResetToken(@Valid EmailRequest emailRequest) {
+    public @ResponseBody ResponseEntity<?> sendPasswordResetToken(@Valid EmailRequest emailRequest,
+                                                                  HttpServletRequest httpServletRequest) {
         String token = passwordResetTokenService.createOrUpdatePasswordResetToken(emailRequest);
-        mailService.sendToken(token,emailRequest);
+        mailService.sendToken(token,emailRequest, String.valueOf(httpServletRequest.getRequestURL()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/sentToken")

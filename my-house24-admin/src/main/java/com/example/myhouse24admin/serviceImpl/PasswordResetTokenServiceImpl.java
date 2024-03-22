@@ -52,6 +52,7 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
         String token = UUID.randomUUID().toString();
         staff.getPasswordResetToken().setToken(token);
         staff.getPasswordResetToken().setExpirationDate();
+        staff.getPasswordResetToken().setUsed(false);
         staffRepo.save(staff);
         return token;
     }
@@ -66,7 +67,9 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     public boolean isPasswordResetTokenValid(String token) {
         logger.info("isPasswordResetTokenValid() - Checking if password reset token "+token+" valid");
         Optional<PasswordResetToken> passwordResetToken = passwordResetTokenRepo.findByToken(token);
-        boolean isValid = passwordResetToken.isPresent() && !passwordResetToken.get().getExpirationDate().isBefore(Instant.now());
+        boolean isValid = passwordResetToken.isPresent()
+                && !passwordResetToken.get().isUsed()
+                && !passwordResetToken.get().getExpirationDate().isBefore(Instant.now());
         logger.info("isPasswordResetTokenValid() - Password reset token was checked");
         return isValid;
     }
@@ -78,6 +81,7 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
         Staff staff = passwordResetToken.getStaff();
         staff.setPassword(passwordEncoder.encode(password));
         staff.setStatus(StaffStatus.ACTIVE);
+        passwordResetToken.setUsed(true);
         passwordResetTokenRepo.save(passwordResetToken);
         logger.info("updatePassword() - Password was updated");
     }

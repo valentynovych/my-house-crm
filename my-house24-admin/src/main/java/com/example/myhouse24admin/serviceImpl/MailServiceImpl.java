@@ -51,10 +51,10 @@ public class MailServiceImpl implements MailService {
 
     @Async
     @Override
-    public void sendToken(String token, EmailRequest emailRequest) {
+    public void sendToken(String token, EmailRequest emailRequest, String currentUrl) {
         logger.info("sendToken() - Sending token " + token + " to email " + emailRequest.email());
         String subject = "Встановлення нового паролю";
-        Content content = new Content("text/html", buildContent(token));
+        Content content = new Content("text/html", buildContent(token, currentUrl));
         formAndSendMail(subject, emailRequest.email(), content);
         logger.info("sendToken() - Token was sent");
     }
@@ -77,10 +77,10 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendInviteToStaff(String token, Staff staffById) {
+    public void sendInviteToStaff(String token, Staff staffById, String currentUrl) {
         logger.info("sendInviteToStaff() -> start, with staffId: {}", staffById.getId());
         String subject = "Запрошення у систему";
-        Content content = new Content("text/html", buildInviteContent(token, staffById));
+        Content content = new Content("text/html", buildInviteContent(token, staffById, currentUrl));
         formAndSendMail(subject, staffById.getEmail(), content);
         logger.info("sendInviteToStaff() -> end, invite has been send");
     }
@@ -177,17 +177,16 @@ public class MailServiceImpl implements MailService {
         return new Email(address);
     }
 
-    private String buildContent(String token) {
-        String link = formLink(token);
+    private String buildContent(String token, String currentUrl) {
+        String link = formLink(token, currentUrl);
         Context context = new Context();
         context.setVariable("link", link);
         return templateEngine.process("email/passwordResetTokenEmailTemplate", context);
     }
 
-    private String formLink(String token) {
-        String fullUrl = ServletUriComponentsBuilder.fromRequestUri(httpServletRequest).build().toUriString();
-        int index = fullUrl.indexOf("admin");
-        String baseUrl = fullUrl.substring(0, index);
+    private String formLink(String token, String currentUrl) {
+        int index = currentUrl.indexOf("admin");
+        String baseUrl = currentUrl.substring(0, index);
         String link = baseUrl + "admin/changePassword?token=" + token;
         return link;
     }
@@ -214,8 +213,8 @@ public class MailServiceImpl implements MailService {
         return link;
     }
 
-    private String buildInviteContent(String token, Staff staff) {
-        String link = formLink(token);
+    private String buildInviteContent(String token, Staff staff, String currentUrl) {
+        String link = formLink(token, currentUrl);
         Context context = new Context();
         context.setVariable("link", link);
         context.setVariable("staffFullName", staff.getFirstName() + " " + staff.getLastName());

@@ -16,6 +16,7 @@ import com.example.myhouse24admin.service.PasswordResetTokenService;
 import com.example.myhouse24admin.service.StaffService;
 import com.example.myhouse24admin.specification.StaffSpecification;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -39,15 +40,23 @@ public class StaffServiceImpl implements StaffService {
     private final PasswordEncoder passwordEncoder;
     private final StaffMapper staffMapper;
     private final MailService mailService;
+    private final HttpServletRequest httpServletRequest;
     private final PasswordResetTokenService passwordResetTokenService;
     private final Logger logger = LogManager.getLogger(StaffServiceImpl.class);
 
-    public StaffServiceImpl(StaffRepo staffRepo, RoleRepo roleRepo, PasswordEncoder passwordEncoder, StaffMapper staffMapper, MailService mailService, PasswordResetTokenService passwordResetTokenService) {
+    public StaffServiceImpl(StaffRepo staffRepo,
+                            RoleRepo roleRepo,
+                            PasswordEncoder passwordEncoder,
+                            StaffMapper staffMapper,
+                            MailService mailService,
+                            HttpServletRequest httpServletRequest,
+                            PasswordResetTokenService passwordResetTokenService) {
         this.staffRepo = staffRepo;
         this.roleRepo = roleRepo;
         this.passwordEncoder = passwordEncoder;
         this.staffMapper = staffMapper;
         this.mailService = mailService;
+        this.httpServletRequest = httpServletRequest;
         this.passwordResetTokenService = passwordResetTokenService;
     }
 
@@ -165,7 +174,7 @@ public class StaffServiceImpl implements StaffService {
                     staffById.getId(), staffById.getStatus()));
         }
         String resetToken = passwordResetTokenService.createOrUpdatePasswordResetToken(new EmailRequest(staffById.getEmail()));
-        mailService.sendInviteToStaff(resetToken, staffById);
+        mailService.sendInviteToStaff(resetToken, staffById, String.valueOf(httpServletRequest.getRequestURL()));
     }
 
     private boolean isCurrentStaff(Staff staff) {
