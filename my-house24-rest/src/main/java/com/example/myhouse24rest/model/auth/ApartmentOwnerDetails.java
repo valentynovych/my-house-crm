@@ -63,4 +63,8 @@ public class ApartmentOwnerDetails implements UserDetails {
     public boolean isEnabled() {
         return isEnabled;
     }
+
+    public ApartmentOwner getOwner() {
+        return apartmentOwner;
+    }
 }

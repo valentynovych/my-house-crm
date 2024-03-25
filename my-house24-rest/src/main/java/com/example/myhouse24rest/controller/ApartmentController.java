@@ -37,7 +37,7 @@ public class ApartmentController {
 
     @Operation(
             summary = "Get all apartments",
-            description = "Get all apartments from apartmentOwner, with pagination" +
+            description = "Get all apartments from apartmentOwner, with pagination " +
                     "by page and pageSize")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",

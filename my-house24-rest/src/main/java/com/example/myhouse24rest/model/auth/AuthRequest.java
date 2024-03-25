@@ -14,6 +14,6 @@ public record AuthRequest(
         @Schema(example = "password1!A3Q")
         @NotEmpty(message = "Password cannot be empty")
         @NotNull(message = "Password cannot be null")
-        @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", message = "Invalid password")
+        @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=,./?])(?=\\S+$).{8,}$", message = "Invalid password")
         String password) {
 }

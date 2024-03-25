@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -72,5 +73,14 @@ public class JwtTokenUtils {
                 .setSigningKey(tokenSecret)
                 .parseClaimsJws(jwtToken);
         return true;
+    }
+
+    public Instant getExpiredDate(String token) {
+        Date expiration = Jwts.parser()
+                .setSigningKey(tokenSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+        return expiration.toInstant();
     }
 }
