@@ -21,8 +21,8 @@ import java.util.Optional;
 public class MessageServiceImpl implements MessageService {
 
     private final OwnerMessageRepo ownerMessageRepo;
-    private final Logger logger = LogManager.getLogger(MessageServiceImpl.class);
     private final OwnerMessageMapper ownerMessageMapper;
+    private final Logger logger = LogManager.getLogger(MessageServiceImpl.class);
 
     public MessageServiceImpl(OwnerMessageRepo ownerMessageRepo, OwnerMessageMapper ownerMessageMapper) {
         this.ownerMessageRepo = ownerMessageRepo;
