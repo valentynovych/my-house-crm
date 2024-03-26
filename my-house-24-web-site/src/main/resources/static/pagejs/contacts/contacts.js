@@ -22,6 +22,7 @@ function getContactsPage() {
 function showPage(response) {
     $("#title").text(response.title);
     $("#text").text(response.text);
+    $("#map").append(response.mapCode);
     $("#contacts").append(
         `<div><i class="bi bi-person-circle"></i> ${response.fullName}</div>
          <div><i class="bi bi-geo-alt-fill"></i> ${response.location}</div>

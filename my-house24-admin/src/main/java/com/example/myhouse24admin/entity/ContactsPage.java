@@ -24,7 +24,7 @@ public class ContactsPage {
     private String phoneNumber;
     @Column(length = 100, nullable = false, unique = true)
     private String email;
-    @Column(name = "map_code",length = 100, nullable = false)
+    @Column(name = "map_code",length = 500, nullable = false)
     private String mapCode;
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "seo_id", referencedColumnName = "id", nullable = false)

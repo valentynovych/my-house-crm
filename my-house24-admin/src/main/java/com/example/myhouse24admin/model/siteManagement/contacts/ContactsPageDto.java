@@ -31,7 +31,7 @@ public record ContactsPageDto(
         @Size(max = 100, message = "{validation-size-max}")
         String email,
         @NotBlank(message = "{validation-not-empty}")
-        @Size(max = 50, message = "{validation-size-max}")
+        @Size(max = 500, message = "{validation-size-max}")
         String mapCode,
         @Size(max = 100, message = "{validation-size-max}")
         String seoTitle,
