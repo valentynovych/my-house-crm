@@ -14,6 +14,7 @@ function getServicePage(currentPage) {
         },
         success: function (response) {
             console.log(response);
+            $("#services").empty();
             showPage(response);
             unblockBy('.content-wrapper');
         },

@@ -99,11 +99,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private XmlInvoiceDto formxmlInvoiceDto(Long id) {
+        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
         List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
         List<XmlListInvoiceItemDto> invoiceItemDtos = invoiceItemMapper.invoiceItemListToXmlListInvoiceItemDtoList(invoiceItems);
         XmlInvoiceItemsDto xmlInvoiceItemsDto = new XmlInvoiceItemsDto(invoiceItemDtos);
         BigDecimal totalPrice = invoiceItemRepo.getItemsSumByInvoiceId(id);
-        Invoice invoice = invoiceRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Invoice was not found by id "+id));
         XmlInvoiceDto xmlInvoiceDto = invoiceMapper.invoiceToXmlInvoiceDto(invoice,
                 xmlInvoiceItemsDto, totalPrice);
         return xmlInvoiceDto;
