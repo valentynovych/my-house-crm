@@ -5,18 +5,14 @@ import com.example.myhouse24user.entity.Apartment;
 import com.example.myhouse24user.entity.ApartmentOwner;
 import com.example.myhouse24user.entity.House;
 import com.example.myhouse24user.model.owner.ApartmentOwnerDetails;
-import com.example.myhouse24user.repository.ApartmentOwnerRepo;
 import com.example.myhouse24user.securityFilter.RecaptchaFilter;
-import com.example.myhouse24user.service.InvoiceService;
 import com.example.myhouse24user.service.RecaptchaService;
 import com.example.myhouse24user.service.S3Service;
-import com.example.myhouse24user.serviceImpl.InvoiceServiceImpl;
 import com.example.myhouse24user.serviceImpl.RecaptchaServiceImpl;
 import com.example.myhouse24user.util.UploadFileUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -46,11 +42,6 @@ public class TestConfig {
         apartment.setHouse(house);
         apartmentOwner.setApartments(List.of(apartment));
         return new ApartmentOwnerDetails(apartmentOwner);
-    }
-
-    @Bean
-    public ApartmentOwnerRepo apartmentOwnerRepo() {
-        return mock(ApartmentOwnerRepo.class);
     }
 
     @Bean
@@ -88,10 +79,5 @@ public class TestConfig {
     @Bean
     public UploadFileUtil uploadFileUtil() {
         return new UploadFileUtil(s3Service());
-    }
-
-    @Bean
-    public InvoiceService invoiceService() {
-        return mock(InvoiceServiceImpl.class);
     }
 }
