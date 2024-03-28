@@ -6,7 +6,9 @@ import com.example.myhouse24user.model.invoice.ViewInvoiceResponse;
 import com.example.myhouse24user.service.InvoiceService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,14 +26,13 @@ public class InvoiceController {
     public InvoiceController(InvoiceService invoiceService) {
         this.invoiceService = invoiceService;
     }
-
     @GetMapping("")
     public ModelAndView getInvoicesPage() {
         return new ModelAndView("invoices/invoices");
     }
     @GetMapping("/get")
-    public @ResponseBody Page<InvoiceResponse> getInvoices(@RequestParam Map<String, String> requestMap) {
-        return invoiceService.getInvoiceResponses(requestMap);
+    public @ResponseBody ResponseEntity<Page<InvoiceResponse>> getInvoices(@RequestParam Map<String, String> requestMap) {
+        return new ResponseEntity<>(invoiceService.getInvoiceResponses(requestMap), HttpStatus.OK);
     }
     @GetMapping("/get-statuses")
     public @ResponseBody InvoiceStatus[] getStatuses() {

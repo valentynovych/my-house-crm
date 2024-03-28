@@ -77,7 +77,7 @@ public class TestConfig {
 
     @Bean
     public RecaptchaService recaptchaService() {
-        return new RecaptchaServiceImpl(restTemplate());
+        return mock(RecaptchaService.class);
     }
 
     @Bean
@@ -90,8 +90,4 @@ public class TestConfig {
         return new UploadFileUtil(s3Service());
     }
 
-    @Bean
-    public InvoiceService invoiceService() {
-        return mock(InvoiceServiceImpl.class);
-    }
 }
