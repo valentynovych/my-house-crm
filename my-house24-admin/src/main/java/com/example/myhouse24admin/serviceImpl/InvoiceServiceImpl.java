@@ -86,7 +86,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private String formNumber(String number) {
         int numberPart = Integer.parseInt(number);
-        return StringUtils.leftPad(Integer.toString(numberPart + 1), 10, "000000000");
+        return StringUtils.leftPad(Integer.toString(numberPart + 1), 10, "0");
     }
 
     @Override
@@ -237,8 +237,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     public boolean deleteInvoice(Long id) {
         logger.info("deleteInvoice - Deleting invoice by id " + id);
         Invoice invoice = invoiceRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Invoice was not found by id " + id));
-        if (invoice.getPaid().compareTo(BigDecimal.valueOf(0)) != 0) {
-            logger.info("deleteInvoice - Invoice has paid");
+        if (isInvoicePaid(invoice)) {
+            logger.info("deleteInvoice - Invoice has been paid");
             return false;
         } else {
             invoice.setDeleted(true);
@@ -247,14 +247,17 @@ public class InvoiceServiceImpl implements InvoiceService {
             return true;
         }
     }
+    private boolean isInvoicePaid(Invoice invoice){
+        return invoice.getPaid().compareTo(BigDecimal.valueOf(0)) != 0;
+    }
 
     @Override
     public boolean deleteInvoices(Long[] invoiceIds) {
         logger.info("deleteInvoices - Deleting invoices by ids %s".formatted(Arrays.toString(invoiceIds)));
         List<Invoice> invoices = invoiceRepo.findAllById(List.of(invoiceIds));
         for (Invoice invoice : invoices) {
-            if (invoice.getPaid().compareTo(BigDecimal.valueOf(0)) != 0) {
-                logger.info("deleteInvoices - Invoice has paid");
+            if (isInvoicePaid(invoice)) {
+                logger.info("deleteInvoices - Invoice has been paid");
                 return false;
             } else {
                 invoice.setDeleted(true);
