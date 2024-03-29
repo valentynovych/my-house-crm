@@ -1,27 +1,22 @@
 package com.example.myhouse24user.controller;
 
-import com.example.myhouse24user.configuration.awsConfiguration.S3ResourceResolve;
 import com.example.myhouse24user.model.authentication.EmailRequest;
 import com.example.myhouse24user.model.authentication.ForgotPasswordRequest;
 import com.example.myhouse24user.model.authentication.RegistrationRequest;
 import com.example.myhouse24user.repository.ApartmentOwnerRepo;
-import com.example.myhouse24user.securityFilter.RecaptchaFilter;
 import com.example.myhouse24user.service.ApartmentOwnerService;
 import com.example.myhouse24user.service.MailService;
 import com.example.myhouse24user.service.OwnerPasswordResetTokenService;
 import com.example.myhouse24user.service.RecaptchaService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.MockBeans;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -31,12 +26,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = AuthenticationController.class)
-@AutoConfigureMockMvc(addFilters = false)
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@AutoConfigureMockMvc
 class AuthenticationControllerTest {
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private RecaptchaService recaptchaService;
     @MockBean
     private OwnerPasswordResetTokenService ownerPasswordResetTokenService;
     @MockBean
@@ -45,12 +42,7 @@ class AuthenticationControllerTest {
     private ApartmentOwnerService apartmentOwnerService;
     @MockBean
     private ApartmentOwnerRepo apartmentOwnerRepo;
-    @MockBean
-    private S3ResourceResolve s3ResourceResolve;
-    @MockBean
-    private RecaptchaFilter recaptchaFilter;
-    @MockBean
-    private RecaptchaService recaptchaService;
+
 
     @Test
     void getLoginPage() throws Exception {
@@ -154,7 +146,7 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void registerOwner_Recapthca_Should_Be_valid() throws Exception {
+    void registerOwner_Recaptcha_Should_Be_valid() throws Exception {
         when(recaptchaService.isRecaptchaValid(anyString())).thenReturn(true);
         doNothing().when(apartmentOwnerService).register(any(RegistrationRequest.class));
         this.mockMvc.perform(post("/cabinet/register")
@@ -168,7 +160,7 @@ class AuthenticationControllerTest {
                 .andExpect(status().isOk());
     }
     @Test
-    void registerOwner_Recapthca_Should_Not_Be_valid() throws Exception {
+    void registerOwner_Recaptcha_Should_Not_Be_valid() throws Exception {
         when(recaptchaService.isRecaptchaValid(anyString())).thenReturn(false);
         this.mockMvc.perform(post("/cabinet/register")
                         .param("recaptcha","recaptcha")
@@ -179,6 +171,7 @@ class AuthenticationControllerTest {
                                         true)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.size()", is(1)));
+                .andExpect(jsonPath("$.size()", is(1)))
+                .andExpect(jsonPath("$.grecaptha").exists());
     }
 }
