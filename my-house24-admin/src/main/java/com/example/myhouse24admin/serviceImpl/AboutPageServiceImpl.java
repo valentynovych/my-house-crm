@@ -74,13 +74,13 @@ public class AboutPageServiceImpl implements AboutPageService {
     @Override
     public void updateAboutPage(AboutPageRequest aboutPageRequest) {
         logger.info("updateAboutPage - Updating about page");
+        AboutPage aboutPage = aboutPageRepo.findById(1L).orElseThrow(() -> new EntityNotFoundException("About page was not found by id 1"));
         deleteGalleryImages(aboutPageRequest.getGalleryIdsToDelete());
         deleteAdditionalGalleryImages(aboutPageRequest.getAdditionalGalleryIdsToDelete());
         deleteDocuments(aboutPageRequest.getDocumentIdsToDelete());
         saveDocuments(aboutPageRequest.getNewDocuments());
         saveGalleryImages(aboutPageRequest.getNewImages());
         saveAdditionalGalleryImages(aboutPageRequest.getAdditionalNewImages());
-        AboutPage aboutPage = aboutPageRepo.findById(1L).orElseThrow(() -> new EntityNotFoundException("About page was not found by id 1"));
         String imageName = updateImage(aboutPageRequest.getDirectorImage(), aboutPage);
         aboutPageMapper.updateAboutPage(aboutPage, aboutPageRequest, imageName);
         aboutPageRepo.save(aboutPage);
