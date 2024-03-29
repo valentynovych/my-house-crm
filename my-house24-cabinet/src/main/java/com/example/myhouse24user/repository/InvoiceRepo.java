@@ -14,8 +14,7 @@ import java.util.concurrent.CompletableFuture;
 @Repository
 public interface InvoiceRepo extends JpaRepository<Invoice, Long>, JpaSpecificationExecutor<Invoice> {
 
-    @Async
-    CompletableFuture<List<Invoice>> findInvoicesByApartmentAndCreationDateBetween(Apartment apartment, Instant dateFrom, Instant dateTo);
+    List<Invoice> findInvoicesByApartmentAndCreationDateBetween(Apartment apartment, Instant dateFrom, Instant dateTo);
 
     List<Invoice> findInvoicesByApartment(Apartment apartment);
 }

@@ -14,7 +14,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -37,7 +34,7 @@ public class StatisticServiceImpl implements StatisticService {
     private final InvoiceRepo invoiceRepo;
     private final InvoiceItemRepo invoiceItemRepo;
     private final Logger logger = LogManager.getLogger(StatisticServiceImpl.class);
-    private final static LocalDateTime today = LocalDateTime.now();
+    private static LocalDateTime today;
 
     public StatisticServiceImpl(ApartmentRepo apartmentRepo, InvoiceRepo invoiceRepo, InvoiceItemRepo invoiceItemRepo) {
         this.apartmentRepo = apartmentRepo;
@@ -61,39 +58,29 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public List<StatisticItem> getExpensePerMonthStatistic(Long apartment, Principal principal) {
         logger.info("getExpensePerMonthStatistic() -> start, apartmentId: {}", apartment);
+        today = LocalDateTime.now();
         Apartment apartmentByIdAndOwnerEmail = findApartmentByIdAndOwner_Email(apartment, principal.getName());
         LocalDate startCurrentMonth = LocalDate.of(today.getYear(), today.getMonth(), 1);
-        List<StatisticItem> statisticItems;
-        try {
-            statisticItems = getInvoiceItemsStatistic(apartmentByIdAndOwnerEmail, startCurrentMonth).get();
-            logger.info("getExpensePerMonthStatistic() -> end, apartmentId: {} statisticItems: {}", apartment, statisticItems);
-        } catch (InterruptedException | ExecutionException e) {
-            logger.error("getExpensePerMonthStatistic() -> error", e);
-            throw new RuntimeException(e);
-        }
+        List<StatisticItem> statisticItems = getInvoiceItemsStatistic(apartmentByIdAndOwnerEmail, startCurrentMonth);
+        logger.info("getExpensePerMonthStatistic() -> end, apartmentId: {} statisticItems: {}", apartment, statisticItems);
         return statisticItems;
     }
 
     @Override
     public List<StatisticItem> getExpensePerYearStatistic(Long apartment, Principal principal) {
         logger.info("getExpensePerYearStatistic() -> start, apartmentId: {}", apartment);
+        today = LocalDateTime.now();
         Apartment apartmentByIdAndOwnerEmail = findApartmentByIdAndOwner_Email(apartment, principal.getName());
         LocalDate startCurrentMonth = LocalDate.of(today.getYear(), 1, 1);
-
-        List<StatisticItem> statisticItems;
-        try {
-            statisticItems = getInvoiceItemsStatistic(apartmentByIdAndOwnerEmail, startCurrentMonth).get();
-            logger.info("getExpensePerYearStatistic() -> end, apartmentId: {} statisticItems: {}", apartment, statisticItems);
-        } catch (InterruptedException | ExecutionException e) {
-            logger.error("getExpensePerYearStatistic() -> error", e);
-            throw new RuntimeException(e);
-        }
+        List<StatisticItem> statisticItems = getInvoiceItemsStatistic(apartmentByIdAndOwnerEmail, startCurrentMonth);
+        logger.info("getExpensePerYearStatistic() -> end, apartmentId: {} statisticItems: {}", apartment, statisticItems);
         return statisticItems;
     }
 
     @Override
     public List<StatisticDateItem> getExpensePerYearOnMonthStatistic(Long apartmentId, Principal principal) {
         logger.info("getExpensePerYearOnMonthStatistic() -> start, apartmentId: {}", apartmentId);
+        today = LocalDateTime.now();
         Apartment apartment = findApartmentByIdAndOwner_Email(apartmentId, principal.getName());
         return IntStream.rangeClosed(1, 12)
                 .parallel()
@@ -102,58 +89,42 @@ public class StatisticServiceImpl implements StatisticService {
                     LocalDate startMonth = today.toLocalDate().withDayOfMonth(1).minusMonths(12 - month);
                     LocalDate endMonth = startMonth.plusMonths(1);
                     Instant instantStartMonth = getInstantFromLocalDate(startMonth);
-                    BigDecimal totalAmount;
 
-                    try {
-                        logger.info("getExpensePerYearOnMonthStatistic() -> find invoices between {} and {}", instantStartMonth, getInstantFromLocalDate(endMonth));
-                        List<Invoice> invoices = getInvoiceByApartmentAndDateBetween(
-                                apartment,
-                                instantStartMonth,
-                                getInstantFromLocalDate(endMonth)
-                        ).get();
-                        logger.info("getExpensePerYearOnMonthStatistic() -> find {} invoices", invoices.size());
-                        totalAmount = getTotalAmountInvoices(invoices).get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        logger.error("getExpensePerYearOnMonthStatistic() -> error", e);
-                        throw new RuntimeException(e);
-                    }
+                    logger.info("getExpensePerYearOnMonthStatistic() -> find invoices between {} and {}", instantStartMonth, getInstantFromLocalDate(endMonth));
+                    List<Invoice> invoices = getInvoiceByApartmentAndDateBetween(
+                            apartment,
+                            instantStartMonth,
+                            getInstantFromLocalDate(endMonth));
+                    BigDecimal totalAmount = getTotalAmountInvoices(invoices);
                     logger.info("getExpensePerYearOnMonthStatistic() -> month: {} totalAmount: {}", month, totalAmount);
                     return new StatisticDateItem(instantStartMonth, totalAmount);
                 })
                 .collect(Collectors.toList());
     }
 
-    @Async
-    protected CompletableFuture<BigDecimal> getTotalAmountInvoices(List<Invoice> invoices) {
+    private BigDecimal getTotalAmountInvoices(List<Invoice> invoices) {
         logger.info("getTotalAmountInvoices() -> start");
         BigDecimal totalAmountInvoices = invoices.stream()
                 .map(Invoice::getPaid)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         logger.info("getTotalAmountInvoices() -> end, totalAmountInvoices: {}", totalAmountInvoices);
-        return CompletableFuture.completedFuture(totalAmountInvoices);
+        return totalAmountInvoices;
     }
 
-    @Async
-    protected CompletableFuture<List<StatisticItem>> getInvoiceItemsStatistic(Apartment apartment, LocalDate dateFrom) {
+    private List<StatisticItem> getInvoiceItemsStatistic(Apartment apartment, LocalDate dateFrom) {
         logger.info("getInvoiceItemsStatistic() -> start");
         List<StatisticItem> statisticItems;
-        try {
-            List<Invoice> invoices = getInvoiceByApartmentAndDateBetween(
-                    apartment,
-                    getInstantFromLocalDate(dateFrom),
-                    today.atZone(ZoneId.systemDefault()).toInstant()
-            ).get();
-            statisticItems = getStatisticItemFromInvoiceItems(invoiceItemRepo.findInvoiceItemsByInvoiceIn(invoices)).get();
-        } catch (InterruptedException | ExecutionException e) {
-            logger.error("getInvoiceItemsStatistic() -> error", e);
-            throw new RuntimeException(e);
-        }
+        List<Invoice> invoices = getInvoiceByApartmentAndDateBetween(
+                apartment,
+                getInstantFromLocalDate(dateFrom),
+                today.atZone(ZoneId.systemDefault()).toInstant()
+        );
+        statisticItems = getStatisticItemFromInvoiceItems(invoiceItemRepo.findInvoiceItemsByInvoiceIn(invoices));
         logger.info("getInvoiceItemsStatistic() -> end, statisticItems: {}", statisticItems);
-        return CompletableFuture.completedFuture(statisticItems);
+        return statisticItems;
     }
 
-    @Async
-    protected CompletableFuture<List<StatisticItem>> getStatisticItemFromInvoiceItems(List<InvoiceItem> invoiceItems) {
+    private List<StatisticItem> getStatisticItemFromInvoiceItems(List<InvoiceItem> invoiceItems) {
         logger.info("getStatisticItemFromInvoiceItems() -> start");
         Map<String, List<BigDecimal>> collect = invoiceItems.stream()
                 .collect(Collectors.groupingBy(invoiceItem -> invoiceItem.getService().getName(),
@@ -164,15 +135,14 @@ public class StatisticServiceImpl implements StatisticService {
             statisticItems.add(new StatisticItem(serviceName, servicePaidAmount.toString()));
         });
         logger.info("getStatisticItemFromInvoiceItems() -> end, statisticItems: {}", statisticItems);
-        return CompletableFuture.completedFuture(statisticItems);
+        return statisticItems;
     }
 
-    @Async
-    protected CompletableFuture<List<Invoice>> getInvoiceByApartmentAndDateBetween(Apartment apartment, Instant dateFrom, Instant dateTo) {
+    private List<Invoice> getInvoiceByApartmentAndDateBetween(Apartment apartment, Instant dateFrom, Instant dateTo) {
         logger.info("getInvoiceByApartmentAndDateBetween() -> start, apartmentId: {}", apartment.getId());
-        CompletableFuture<List<Invoice>> invoicesByApartmentAndCreationDateBetween =
+        List<Invoice> invoicesByApartmentAndCreationDateBetween =
                 invoiceRepo.findInvoicesByApartmentAndCreationDateBetween(apartment, dateFrom, dateTo);
-        logger.info("getInvoiceByApartmentAndDateBetween() -> end, result is done: {}", invoicesByApartmentAndCreationDateBetween.isDone());
+        logger.info("getInvoiceByApartmentAndDateBetween() -> end, result is done: {}", invoicesByApartmentAndCreationDateBetween);
         return invoicesByApartmentAndCreationDateBetween;
     }
 
