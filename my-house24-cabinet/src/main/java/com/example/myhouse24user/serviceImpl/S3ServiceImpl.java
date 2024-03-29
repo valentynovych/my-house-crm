@@ -3,6 +3,7 @@ package com.example.myhouse24user.serviceImpl;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.example.myhouse24user.service.S3Service;
 import org.apache.logging.log4j.LogManager;
@@ -31,7 +32,12 @@ public class S3ServiceImpl implements S3Service {
     @Override
     public void uploadMultipartFile(String keyName, MultipartFile file) throws IOException {
         logger.info("uploadMultipartFile() -> start uploading multipart file to AWS bucket {file: {}}", file);
-        var putObjectResult = s3client.putObject(bucketName, keyName, file.getInputStream(), null);
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());
+        metadata.setContentLength(file.getSize());
+        metadata.setContentDisposition(file.getOriginalFilename());
+        metadata.setCacheControl("no-cache, no-store, must-revalidate");
+        var putObjectResult = s3client.putObject(bucketName, keyName, file.getInputStream(), metadata);
         logger.info("uploadMultipartFile() -> end, success upload multipart file to AWS, putObjectMetadata: {}", putObjectResult.getMetadata());
     }
 
