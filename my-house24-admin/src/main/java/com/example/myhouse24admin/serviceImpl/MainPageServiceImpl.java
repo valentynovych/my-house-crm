@@ -67,9 +67,9 @@ public class MainPageServiceImpl implements MainPageService {
     @Override
     public void updateMainPage(MainPageRequest mainPageRequest) {
         logger.info("updateMainPage - Updating main page");
+        MainPage mainPage = mainPageRepo.findById(1L).orElseThrow(() -> new EntityNotFoundException("Main page was not found by id 1"));
         deleteMainPageBlocks(mainPageRequest.getIdsToDelete());
         updateMainPageBlocks(mainPageRequest.getMainPageBlocks());
-        MainPage mainPage = mainPageRepo.findById(1L).orElseThrow(() -> new EntityNotFoundException("Main page was not found by id 1"));
         String image1Name = updateMainPageImage(mainPageRequest.getImage1(), mainPage.getImage1());
         String image2Name = updateMainPageImage(mainPageRequest.getImage2(), mainPage.getImage2());
         String image3Name = updateMainPageImage(mainPageRequest.getImage3(), mainPage.getImage3());
