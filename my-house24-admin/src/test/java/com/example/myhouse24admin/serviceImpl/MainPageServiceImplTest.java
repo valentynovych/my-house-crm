@@ -212,4 +212,16 @@ class MainPageServiceImplTest {
         verifyNoMoreInteractions(uploadFileUtil);
         verifyNoMoreInteractions(mainPageMapper);
     }
+
+    @Test
+    void updateMainPage_Should_Throw_EntityNotFoundException() {
+        when(mainPageRepo.findById(anyLong())).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(EntityNotFoundException.class, () -> mainPageService
+                .updateMainPage(mainPageRequest));
+
+        verify(mainPageRepo, times(1)).findById(anyLong());
+
+        verifyNoMoreInteractions(mainPageRepo);
+    }
 }
