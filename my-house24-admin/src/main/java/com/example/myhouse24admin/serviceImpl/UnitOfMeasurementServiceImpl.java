@@ -10,7 +10,6 @@ import com.example.myhouse24admin.repository.UnitOfMeasurementRepo;
 import com.example.myhouse24admin.service.UnitOfMeasurementService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +22,13 @@ public class UnitOfMeasurementServiceImpl implements UnitOfMeasurementService {
 
     private final UnitOfMeasurementRepo unitOfMeasurementRepo;
     private final InvoiceItemRepo invoiceItemRepo;
+    private final UnitOfMeasurementMapper mapper;
     private final Logger logger = LogManager.getLogger(UnitOfMeasurementServiceImpl.class);
-    private final UnitOfMeasurementMapper mapper = Mappers.getMapper(UnitOfMeasurementMapper.class);
 
-    public UnitOfMeasurementServiceImpl(UnitOfMeasurementRepo unitOfMeasurementRepo, InvoiceItemRepo invoiceItemRepo) {
+    public UnitOfMeasurementServiceImpl(UnitOfMeasurementRepo unitOfMeasurementRepo, InvoiceItemRepo invoiceItemRepo, UnitOfMeasurementMapper mapper) {
         this.unitOfMeasurementRepo = unitOfMeasurementRepo;
         this.invoiceItemRepo = invoiceItemRepo;
+        this.mapper = mapper;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class UnitOfMeasurementServiceImpl implements UnitOfMeasurementService {
             List<Long> unitsToDelete = measurementListWrap.getUnitsToDelete();
             checkUsedMeasurementUnistInInvoices(unitsToDelete);
 
-            logger.info("updateMeasurementUnist() -> To have unitsToDelete: " + unitsToDelete.toString());
+            logger.info("updateMeasurementUnist() -> To have unitsToDelete: " + unitsToDelete);
             List<UnitOfMeasurement> allById = unitOfMeasurementRepo.findAllById(unitsToDelete);
             allById.forEach(unitOfMeasurement -> unitOfMeasurement.setDeleted(true));
             unitOfMeasurementRepo.deleteAll(allById);
