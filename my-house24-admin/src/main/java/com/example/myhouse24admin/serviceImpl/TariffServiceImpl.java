@@ -70,9 +70,7 @@ public class TariffServiceImpl implements TariffService {
     @Override
     public TariffResponse getTariffById(Long tariffId) {
         logger.info("getTariffById() -> start");
-        Optional<Tariff> byId = tariffRepo.findById(tariffId);
-        Tariff tariff = byId.orElseThrow(() ->
-                new EntityNotFoundException(String.format("Tariff with id: %s not found", tariffId)));
+        Tariff tariff = findTariffById(tariffId);
         TariffResponse tariffResponse = mapper.tariffToTariffResponse(tariff);
         logger.info("getTariffById() -> exit, return TariffResponse");
         return tariffResponse;
@@ -88,9 +86,7 @@ public class TariffServiceImpl implements TariffService {
             tariffItemRepo.deleteAllById(tariffItemToDelete);
         }
 
-        Optional<Tariff> byId = tariffRepo.findById(tariffId);
-        Tariff tariff = byId.orElseThrow(() ->
-                new EntityNotFoundException(String.format("Tariff with id: %s not found", tariffId)));
+        Tariff tariff = findTariffById(tariffId);
         mapper.updateTariffFromTariffRequest(tariff, tariffRequest.getTariffRequest());
 
         tariff.getTariffItems().forEach(tariffItem -> tariffItem.setTariff(tariff));
@@ -148,11 +144,13 @@ public class TariffServiceImpl implements TariffService {
     }
 
     private Tariff findTariffById(Long tariffId) {
+        logger.info("findTariffById() -> start with id: {}", tariffId);
         Optional<Tariff> byId = tariffRepo.findById(tariffId);
         Tariff tariff = byId.orElseThrow(() -> {
             logger.info("findTariffById() -> Tariff by id: {} not found", tariffId);
             return new EntityNotFoundException(String.format("findTariffById() -> Tariff by id: %s not found", tariffId));
         });
+        logger.info("findTariffById() -> tariff with id: {} was found", tariffId);
         return tariff;
     }
 }
