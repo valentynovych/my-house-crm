@@ -34,13 +34,13 @@ class AuthenticationControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private RecaptchaService recaptchaService;
-    @MockBean
+    @Autowired
     private OwnerPasswordResetTokenService ownerPasswordResetTokenService;
-    @MockBean
+    @Autowired
     private MailService mailService;
-    @MockBean
+    @Autowired
     private ApartmentOwnerService apartmentOwnerService;
-    @MockBean
+    @Autowired
     private ApartmentOwnerRepo apartmentOwnerRepo;
 
 
@@ -65,7 +65,7 @@ class AuthenticationControllerTest {
         when(ownerPasswordResetTokenService.createOrUpdatePasswordResetToken(any(EmailRequest.class)))
                 .thenReturn("token");
         doNothing().when(mailService).sendToken(anyString(), any(EmailRequest.class), anyString());
-        when(apartmentOwnerRepo.existsApartmentOwnerByEmail(anyString())).thenReturn(true);
+//        when(apartmentOwnerRepo.existsApartmentOwnerByEmail(anyString())).thenReturn(true);
         this.mockMvc.perform(post("/cabinet/forgotPassword")
                         .flashAttr("emailRequest",new EmailRequest("email")))
                 .andDo(print())

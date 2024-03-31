@@ -36,7 +36,7 @@ class MessagesControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private UserDetails userDetails;
-    @MockBean
+    @Autowired
     private MessagesService messagesService;
 
     @BeforeEach

@@ -33,7 +33,7 @@ class ApartmentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
+    @Autowired
     private ApartmentService apartmentService;
     @Autowired
     private UserDetails userDetails;

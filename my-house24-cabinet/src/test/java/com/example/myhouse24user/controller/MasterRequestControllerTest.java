@@ -39,7 +39,7 @@ class MasterRequestControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private UserDetails userDetails;
-    @MockBean
+    @Autowired
     private MasterRequestService masterRequestService;
     private Pageable pageable;
 

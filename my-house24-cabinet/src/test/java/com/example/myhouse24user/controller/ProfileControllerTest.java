@@ -49,9 +49,9 @@ class ProfileControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private UserDetails userDetails;
-    @MockBean
+    @Autowired
     private ApartmentOwnerService apartmentOwnerService;
-    @MockBean
+    @Autowired
     private ApartmentOwnerRepo apartmentOwnerRepo;
     private static ViewOwnerResponse expectedViewOwnerResponse;
     private static EditOwnerResponse expectedEditOwnerResponse;
@@ -125,10 +125,10 @@ class ProfileControllerTest {
         apartmentOwner.setId(1L);
 
         doNothing().when(apartmentOwnerService).updateProfile(any(ApartmentOwnerRequest.class), any(MultipartFile.class));
-        when(apartmentOwnerRepo.findByTelegramUsernameAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
-        when(apartmentOwnerRepo.findByEmailAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
-        when(apartmentOwnerRepo.findByPhoneNumberAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
-        when(apartmentOwnerRepo.findByViberNumberAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
+//        when(apartmentOwnerRepo.findByTelegramUsernameAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
+//        when(apartmentOwnerRepo.findByEmailAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
+//        when(apartmentOwnerRepo.findByPhoneNumberAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
+//        when(apartmentOwnerRepo.findByViberNumberAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
 
 
         this.mockMvc.perform(multipart("/cabinet/profile/edit")
@@ -153,10 +153,10 @@ class ProfileControllerTest {
         apartmentOwner.setId(2L);
 
         doNothing().when(apartmentOwnerService).updateProfile(any(ApartmentOwnerRequest.class), any(MultipartFile.class));
-        when(apartmentOwnerRepo.findByTelegramUsernameAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
-        when(apartmentOwnerRepo.findByEmailAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
-        when(apartmentOwnerRepo.findByPhoneNumberAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
-        when(apartmentOwnerRepo.findByViberNumberAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
+//        when(apartmentOwnerRepo.findByTelegramUsernameAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
+//        when(apartmentOwnerRepo.findByEmailAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
+//        when(apartmentOwnerRepo.findByPhoneNumberAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
+//        when(apartmentOwnerRepo.findByViberNumberAndDeletedIsFalse(anyString())).thenReturn(Optional.of(apartmentOwner));
 
 
         this.mockMvc.perform(multipart("/cabinet/profile/edit")

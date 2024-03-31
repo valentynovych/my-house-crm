@@ -5,10 +5,9 @@ import com.example.myhouse24user.entity.Apartment;
 import com.example.myhouse24user.entity.ApartmentOwner;
 import com.example.myhouse24user.entity.House;
 import com.example.myhouse24user.model.owner.ApartmentOwnerDetails;
+import com.example.myhouse24user.repository.ApartmentOwnerRepo;
 import com.example.myhouse24user.securityFilter.RecaptchaFilter;
-import com.example.myhouse24user.service.RecaptchaService;
-import com.example.myhouse24user.service.S3Service;
-import com.example.myhouse24user.serviceImpl.RecaptchaServiceImpl;
+import com.example.myhouse24user.service.*;
 import com.example.myhouse24user.util.UploadFileUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -81,4 +80,64 @@ public class TestConfig {
         return new UploadFileUtil(s3Service());
     }
 
+    // Mock Services for testing
+
+    // For ApartmentController
+    @Bean
+    public ApartmentService apartmentService() {
+        return mock(ApartmentService.class);
+    }
+
+    //    For AuthenticationController
+    @Bean
+    public OwnerPasswordResetTokenService ownerPasswordResetTokenService() {
+        return mock(OwnerPasswordResetTokenService.class);
+    }
+
+    @Bean
+    public MailService mailService() {
+        return mock(MailService.class);
+    }
+
+    @Bean
+    public ApartmentOwnerService apartmentOwnerService() {
+        return mock(ApartmentOwnerService.class);
+    }
+
+    @Bean
+    public ApartmentOwnerRepo apartmentOwnerRepo() {
+        return mock(ApartmentOwnerRepo.class);
+    }
+
+    // For InvoiceController
+    @Bean
+    public InvoiceService invoiceService() {
+        return mock(InvoiceService.class);
+    }
+
+    // For MasterRequestController
+    @Bean
+    public MasterRequestService masterRequestService() {
+        return mock(MasterRequestService.class);
+    }
+
+    // For MessagesController
+    @Bean
+    public MessagesService messagesService() {
+        return mock(MessagesService.class);
+    }
+
+    // For ProfileController
+
+    // For StatisticsController
+    @Bean
+    public StatisticService statisticService() {
+        return mock(StatisticService.class);
+    }
+
+    // For TariffController
+    @Bean
+    public TariffService tariffService() {
+        return mock(TariffService.class);
+    }
 }

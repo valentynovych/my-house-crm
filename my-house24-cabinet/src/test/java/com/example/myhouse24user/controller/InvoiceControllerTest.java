@@ -42,7 +42,7 @@ class InvoiceControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private UserDetails userDetails;
-    @MockBean
+    @Autowired
     private InvoiceService invoiceService;
     private static InvoiceResponse expectedInvoiceResponse;
     private static ViewInvoiceResponse expectedViewInvoiceResponse;

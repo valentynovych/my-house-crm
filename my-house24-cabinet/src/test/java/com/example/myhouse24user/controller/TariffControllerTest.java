@@ -30,7 +30,7 @@ class TariffControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private UserDetails userDetails;
-    @MockBean
+    @Autowired
     private TariffService tariffService;
 
     @Test

@@ -36,7 +36,7 @@ class StatisticControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private UserDetails userDetails;
-    @MockBean
+    @Autowired
     private StatisticService statisticService;
 
     @Test
