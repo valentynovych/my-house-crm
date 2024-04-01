@@ -11,7 +11,6 @@ import com.example.myhouse24admin.specification.PaymentItemSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,12 +24,13 @@ public class PaymentItemServiceImpl implements PaymentItemService {
 
     private final PaymentItemRepo paymentItemRepo;
     private final CashSheetRepo cashSheetRepo;
+    private final PaymentItemMapper mapper;
     private final Logger log = LogManager.getLogger(PaymentItemServiceImpl.class);
-    private final PaymentItemMapper mapper = Mappers.getMapper(PaymentItemMapper.class);
 
-    public PaymentItemServiceImpl(PaymentItemRepo paymentItemRepo, CashSheetRepo cashSheetRepo) {
+    public PaymentItemServiceImpl(PaymentItemRepo paymentItemRepo, CashSheetRepo cashSheetRepo, PaymentItemMapper mapper) {
         this.paymentItemRepo = paymentItemRepo;
         this.cashSheetRepo = cashSheetRepo;
+        this.mapper = mapper;
     }
 
     @Override
@@ -96,10 +96,17 @@ public class PaymentItemServiceImpl implements PaymentItemService {
         }
         return paymentTypes;
     }
+
     @Override
     public PaymentItem getDefaultPaymentItemForInvoices() {
-        PaymentItem paymentItemById = findPaymentItemById(1L);
-        return paymentItemById;
+        log.info("getDefaultPaymentItemForInvoices() -> start");
+        try {
+            log.info("getDefaultPaymentItemForInvoices() -> exit, return PaymentItem with id: 1");
+            return findPaymentItemById(1L);
+        } catch (EntityNotFoundException e) {
+            log.info("getDefaultPaymentItemForInvoices() -> exit, return default PaymentItem");
+            return createAndSaveDefaultPaymentItem();
+        }
     }
 
     private PaymentItem findPaymentItemById(Long paymentItemId) {
@@ -111,5 +118,15 @@ public class PaymentItemServiceImpl implements PaymentItemService {
         });
         log.info("findPaymentItemById() -> end, return PaymentItem with id: {}", paymentItemId);
         return paymentItem;
+    }
+
+    private PaymentItem createAndSaveDefaultPaymentItem() {
+        log.info("createAndSaveDefaultPaymentItem() -> start");
+        PaymentItem paymentItem = new PaymentItem();
+        paymentItem.setName("Оплата коммунальних послуг");
+        paymentItem.setPaymentType(PaymentType.INCOME);
+        PaymentItem save = paymentItemRepo.save(paymentItem);
+        log.info("createAndSaveDefaultPaymentItem() -> end, return PaymentItem: {}", save);
+        return save;
     }
 }

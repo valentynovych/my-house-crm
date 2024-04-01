@@ -3,12 +3,13 @@ package com.example.myhouse24admin.mapper;
 
 import com.example.myhouse24admin.entity.PaymentItem;
 import com.example.myhouse24admin.model.paymentItem.PaymentItemDto;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface PaymentItemMapper {
     PaymentItemMapper MAPPER = Mappers.getMapper(PaymentItemMapper.class);
 
