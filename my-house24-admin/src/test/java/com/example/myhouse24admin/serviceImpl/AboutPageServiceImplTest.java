@@ -56,7 +56,7 @@ class AboutPageServiceImplTest {
         aboutPageRequest.setNewDocuments(List.of(multipartFile));
         aboutPageRequest.setNewImages(List.of(multipartFile));
         aboutPageRequest.setAdditionalNewImages(List.of(multipartFile));
-        aboutPageRequest.setDirectorImage(multipartFile);
+//        aboutPageRequest.setDirectorImage(multipartFile);
     }
 
     @Test
@@ -127,7 +127,34 @@ class AboutPageServiceImplTest {
         verifyNoMoreInteractions(aboutPageRepo);
     }
     @Test
-    void updateAboutPage_Should_Update_AboutPage() {
+    void updateAboutPage_Should_Update_AboutPage_And_Update_Image() {
+        mockForUpdateAboutPage();
+
+        MockMultipartFile multipartFile = new MockMultipartFile("mainImage","file.jpg", MediaType.TEXT_PLAIN_VALUE,"some text".getBytes());
+        aboutPageRequest.setDirectorImage(multipartFile);
+        aboutPageService.updateAboutPage(aboutPageRequest);
+
+        verifyForUpdateAboutPage();
+        verify(uploadFileUtil, times(4)).deleteFile(anyString());
+        verify(uploadFileUtil, times(4)).saveMultipartFile(any(MultipartFile.class));
+
+        verifyInteractionsForUpdateAboutPage();
+    }
+    @Test
+    void updateAboutPage_Should_Update_AboutPage_And_Image_To_Update_Empty() {
+        mockForUpdateAboutPage();
+
+        MockMultipartFile multipartFile = new MockMultipartFile("mainImage","file.jpg", MediaType.TEXT_PLAIN_VALUE,new byte[0]);
+        aboutPageRequest.setDirectorImage(multipartFile);
+        aboutPageService.updateAboutPage(aboutPageRequest);
+
+        verifyForUpdateAboutPage();
+        verify(uploadFileUtil, times(3)).deleteFile(anyString());
+        verify(uploadFileUtil, times(3)).saveMultipartFile(any(MultipartFile.class));
+
+        verifyInteractionsForUpdateAboutPage();
+    }
+    private void mockForUpdateAboutPage(){
         AboutPage aboutPage = new AboutPage();
         aboutPage.setDirectorImage("image");
         when(aboutPageRepo.findById(anyLong())).thenReturn(Optional.of(aboutPage));
@@ -158,12 +185,11 @@ class AboutPageServiceImplTest {
         doNothing().when(aboutPageMapper).updateAboutPage(any(AboutPage.class),
                 any(AboutPageRequest.class), anyString());
         when(aboutPageRepo.save(any(AboutPage.class))).thenReturn(new AboutPage());
+    }
 
-        aboutPageService.updateAboutPage(aboutPageRequest);
-
+    private void verifyForUpdateAboutPage(){
         verify(aboutPageRepo, times(1)).findById(anyLong());
         verify(documentRepo, times(1)).findAllById(anyIterable());
-        verify(uploadFileUtil, times(4)).deleteFile(anyString());
         verify(documentRepo, times(1)).deleteAllById(anyIterable());
 
         verify(additionalGalleryRepo, times(1)).findAllById(anyIterable());
@@ -172,7 +198,6 @@ class AboutPageServiceImplTest {
         verify(galleryRepo, times(1)).findAllById(anyIterable());
         verify(galleryRepo, times(1)).deleteAllById(anyIterable());
 
-        verify(uploadFileUtil, times(4)).saveMultipartFile(any(MultipartFile.class));
         verify(documentRepo, times(1)).save(any(Document.class));
 
         verify(galleryRepo, times(1)).save(any(Gallery.class));
@@ -181,14 +206,15 @@ class AboutPageServiceImplTest {
         verify(aboutPageMapper, times(1))
                 .updateAboutPage(any(AboutPage.class), any(AboutPageRequest.class), anyString());
         verify(aboutPageRepo, times(1)).save(any(AboutPage.class));
+    }
 
+    private void verifyInteractionsForUpdateAboutPage(){
         verifyNoMoreInteractions(aboutPageRepo);
         verifyNoMoreInteractions(documentRepo);
         verifyNoMoreInteractions(uploadFileUtil);
         verifyNoMoreInteractions(additionalGalleryRepo);
         verifyNoMoreInteractions(galleryRepo);
         verifyNoMoreInteractions(aboutPageMapper);
-
     }
     @Test
     void updateAboutPage_Should_Throw_EntityNotFoundException() {
