@@ -69,10 +69,10 @@ public class ServicesPageServiceImpl implements ServicesPageService {
     @Override
     public void updateServicesPage(ServicePageRequest servicePageRequest) {
         logger.info("updateServicesPage - Updating services page");
-        deleteServicePageBlocks(servicePageRequest.getIdsToDelete());
-        updateOrCreateServicePageBlocks(servicePageRequest.getServicePageBlocks());
         ServicesPage servicesPage = servicesPageRepo.findById(1L)
                 .orElseThrow(() -> new EntityNotFoundException("Services page was not found by id 1"));
+        deleteServicePageBlocks(servicePageRequest.getIdsToDelete());
+        updateOrCreateServicePageBlocks(servicePageRequest.getServicePageBlocks());
         servicesPageMapper.updateServicesPage(servicesPage, servicePageRequest.getSeoRequest());
         servicesPageRepo.save(servicesPage);
         logger.info("getServicesPageResponse - Services page was updated");
