@@ -145,7 +145,8 @@ public class StaffServiceImpl implements StaffService {
     public boolean deleteStaffById(Long staffId) {
         logger.info("deleteStaffById() -> Start with id: " + staffId);
         Staff staff = findStaffById(staffId);
-        if (!staff.getRole().getName().equals("DIRECTOR")) {
+        if (!staff.getRole().getName().equals("DIRECTOR") &&
+                !isCurrentStaff(staff)) {
             staff.setStatus(StaffStatus.DISABLED);
             staff.setDeleted(true);
             staffRepo.save(staff);
