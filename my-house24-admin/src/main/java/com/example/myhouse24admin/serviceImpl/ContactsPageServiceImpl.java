@@ -16,13 +16,11 @@ import org.springframework.stereotype.Service;
 public class ContactsPageServiceImpl implements ContactsPageService {
     private final ContactsPageRepo contactsPageRepo;
     private final ContactsPageMapper contactsPageMapper;
-    private final SeoRepo seoRepo;
     private final Logger logger = LogManager.getLogger(ApartmentOwnerServiceImpl.class);
 
-    public ContactsPageServiceImpl(ContactsPageRepo contactsPageRepo, ContactsPageMapper contactsPageMapper, SeoRepo seoRepo) {
+    public ContactsPageServiceImpl(ContactsPageRepo contactsPageRepo, ContactsPageMapper contactsPageMapper) {
         this.contactsPageRepo = contactsPageRepo;
         this.contactsPageMapper = contactsPageMapper;
-        this.seoRepo = seoRepo;
     }
 
     @Override
@@ -55,7 +53,7 @@ public class ContactsPageServiceImpl implements ContactsPageService {
             logger.info("createContactsPageIfNotExist - Contacts page has already been created");
         }
     }
-    boolean isTableEmpty(){
+    private boolean isTableEmpty(){
         return contactsPageRepo.count() == 0;
     }
 }
