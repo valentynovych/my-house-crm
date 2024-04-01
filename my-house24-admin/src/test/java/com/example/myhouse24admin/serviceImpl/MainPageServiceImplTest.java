@@ -152,13 +152,13 @@ class MainPageServiceImplTest {
 
         verify(mainPageRepo, times(1)).findById(anyLong());
         verify(mainPageBlockRepo, times(1)).deleteAllById(anyIterable());
-        verify(mainPageBlockRepo, times(1)).findById(anyLong());
-        verify(uploadFileUtil, times(1))
+        verify(mainPageBlockRepo, times(2)).findById(anyLong());
+        verify(uploadFileUtil, times(4))
                 .saveMultipartFile(any(MultipartFile.class));
-        verify(mainPageMapper, times(1))
+        verify(mainPageMapper, times(2))
                 .createMainPageBlock(any(MainPageBlockRequest.class), anyString());
-        verify(mainPageBlockRepo, times(1)).save(any(MainPageBlock.class));
-        verify(uploadFileUtil, times(1)).deleteFile(anyString());
+        verify(mainPageBlockRepo, times(2)).save(any(MainPageBlock.class));
+        verify(uploadFileUtil, times(2)).deleteFile(anyString());
         verify(mainPageMapper, times(1)).updateMainPage(any(MainPage.class),
                 any(MainPageRequest.class), anyString(), anyString(), anyString());
         verify(mainPageRepo, times(1)).save(any(MainPage.class));
