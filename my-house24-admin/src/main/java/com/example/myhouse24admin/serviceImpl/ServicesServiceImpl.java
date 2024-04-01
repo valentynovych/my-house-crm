@@ -45,8 +45,7 @@ public class ServicesServiceImpl implements ServicesService {
     @Override
     public List<ServiceResponse> getAllServices() {
         logger.info("getAllServices() -> start");
-        List<Service> services = servicesRepo.findAll(Specification.where(
-                (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("deleted"), false)));
+        List<Service> services = servicesRepo.findAll(getServicesSpecification(""));
         List<ServiceResponse> serviceResponses = mapper.serviceListToServiceResponseList(services);
         logger.info("getAllServices() -> exit, return list size: {}", serviceResponses.size());
         return serviceResponses;
