@@ -36,8 +36,7 @@ public class StatisticServiceImpl implements StatisticService {
     private final CashSheetRepo cashSheetRepo;
     private final InvoiceRepo invoiceRepo;
     private final InvoiceItemRepo invoiceItemRepo;
-    private final int year = LocalDate.now().getYear();
-    private final Month currentMonth = LocalDate.now().getMonth();
+    private volatile int year;
     private final Logger logger = LogManager.getLogger(StatisticServiceImpl.class);
 
     public StatisticServiceImpl(PersonalAccountRepo personalAccountRepo, HouseRepo houseRepo,
@@ -65,7 +64,7 @@ public class StatisticServiceImpl implements StatisticService {
             accountsBalanceArrears = getAccountsBalanceArrears().get();
             accountsBalanceOverpayments = getAccountsBalanceOverpayments().get();
             cashRegisterBalance = getCashRegisterBalance().get();
-            logger.info("getPersonalAccountsMetrics() -> Get personal accounts metrics completed");
+            logger.info("getPersonalAccountsMetrics() -> Get all metrics completed");
         } catch (InterruptedException | ExecutionException e) {
             logger.error("getPersonalAccountsMetrics() -> Get personal accounts metrics failed", e);
             throw new RuntimeException(e);
@@ -102,7 +101,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public List<IncomeExpenseStatistic> getIncomeExpenseStatisticPerYear() {
         logger.info("getIncomeExpenseStatisticPerYear() -> Get income expense statistic per year");
-
+        year = LocalDate.now().getYear();
         return IntStream.rangeClosed(1, 12)
                 .parallel()
                 .mapToObj(month -> {
@@ -134,6 +133,7 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public List<InvoicePaidArrearsStatistic> getInvoicesPaidArrearsStatisticPerYear() {
         logger.info("getInvoicesPaidArrearsStatisticPerYear() -> Get invoices paid arrears statistic per year");
+        year = LocalDate.now().getYear();
         return IntStream.rangeClosed(1, 12)
                 .parallel()
                 .mapToObj(month -> {
@@ -169,6 +169,9 @@ public class StatisticServiceImpl implements StatisticService {
     @Async
     protected CompletableFuture<BigDecimal> getCashRegisterBalance() throws ExecutionException, InterruptedException {
         logger.info("Get cash register balance");
+        Month currentMonth = LocalDate.now().getMonth();
+        year = LocalDate.now().getYear();
+
         LocalDate localDate = LocalDate.of(year, currentMonth, 1);
         List<CashSheet> cashSheets = cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalse(
                 getInstantFromLocalDate(localDate).get(),
