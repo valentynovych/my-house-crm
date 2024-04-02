@@ -18,10 +18,11 @@ public class PaymentDetailsServiceImpl implements PaymentDetailsService {
 
     private final PaymentDetailRepo paymentDetailRepo;
     private final Logger log = LogManager.getLogger(PaymentItemServiceImpl.class);
-    private final PaymentDetailsMapper mapper = Mappers.getMapper(PaymentDetailsMapper.class);
+    private final PaymentDetailsMapper mapper;
 
-    public PaymentDetailsServiceImpl(PaymentDetailRepo paymentDetailRepo) {
+    public PaymentDetailsServiceImpl(PaymentDetailRepo paymentDetailRepo, PaymentDetailsMapper mapper) {
         this.paymentDetailRepo = paymentDetailRepo;
+        this.mapper = mapper;
     }
 
     @Override
