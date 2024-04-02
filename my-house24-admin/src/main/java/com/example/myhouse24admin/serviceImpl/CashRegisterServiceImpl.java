@@ -3,7 +3,6 @@ package com.example.myhouse24admin.serviceImpl;
 import com.example.myhouse24admin.entity.CashSheet;
 import com.example.myhouse24admin.entity.Invoice;
 import com.example.myhouse24admin.mapper.CashSheetMapper;
-import com.example.myhouse24admin.mapper.InvoiceMapper;
 import com.example.myhouse24admin.model.cashRegister.*;
 import com.example.myhouse24admin.repository.CashSheetRepo;
 import com.example.myhouse24admin.service.CashRegisterService;
@@ -24,13 +23,11 @@ public class CashRegisterServiceImpl implements CashRegisterService {
 
     private final CashSheetRepo cashSheetRepo;
     private final CashSheetMapper cashSheetMapper;
-    private final InvoiceMapper invoiceMapper;
     private final Logger logger = LogManager.getLogger(CashRegisterServiceImpl.class);
 
-    public CashRegisterServiceImpl(CashSheetRepo cashSheetRepo, CashSheetMapper cashSheetMapper, InvoiceMapper invoiceMapper) {
+    public CashRegisterServiceImpl(CashSheetRepo cashSheetRepo, CashSheetMapper cashSheetMapper) {
         this.cashSheetRepo = cashSheetRepo;
         this.cashSheetMapper = cashSheetMapper;
-        this.invoiceMapper = invoiceMapper;
     }
 
     @Override
