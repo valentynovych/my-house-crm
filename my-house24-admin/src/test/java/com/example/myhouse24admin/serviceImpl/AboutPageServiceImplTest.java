@@ -56,7 +56,6 @@ class AboutPageServiceImplTest {
         aboutPageRequest.setNewDocuments(List.of(multipartFile));
         aboutPageRequest.setNewImages(List.of(multipartFile));
         aboutPageRequest.setAdditionalNewImages(List.of(multipartFile));
-//        aboutPageRequest.setDirectorImage(multipartFile);
     }
 
     @Test

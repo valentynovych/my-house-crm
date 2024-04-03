@@ -40,10 +40,8 @@ public class MeterReadingController {
         return new ModelAndView("meter-readings/meter-readings");
     }
     @GetMapping("/get")
-    public @ResponseBody Page<TableMeterReadingResponse> getMeterReadings(@RequestParam(name = "page") int page,
-                                                                          @RequestParam(name = "pageSize") int pageSize,
-                                                                          FilterRequest filterRequest) {
-        return meterReadingService.getMeterReadingResponsesForTable(page, pageSize, filterRequest);
+    public @ResponseBody Page<TableMeterReadingResponse> getMeterReadings(@RequestParam Map<String, String> requestMap) {
+        return meterReadingService.getMeterReadingResponsesForTable(requestMap);
     }
 
     @GetMapping("/add")
@@ -131,10 +129,8 @@ public class MeterReadingController {
     }
     @GetMapping("/get-by-apartment/{apartmentId}")
     public @ResponseBody Page<ApartmentMeterReadingResponse> getMeterReadingsForApartment(@PathVariable Long apartmentId,
-                                                                                          @RequestParam(name = "page") int page,
-                                                                                          @RequestParam(name = "pageSize") int pageSize,
-                                                                                          ApartmentFilterRequest apartmentFilterRequest) {
-        return meterReadingService.getApartmentMeterReadingResponses(apartmentId,page,pageSize, apartmentFilterRequest);
+                                                                                          @RequestParam Map<String, String> requestMap) {
+        return meterReadingService.getApartmentMeterReadingResponses(apartmentId,requestMap);
     }
     @GetMapping("/delete/{id}")
     public @ResponseBody ResponseEntity<?> deleteReading(@PathVariable Long id) {
