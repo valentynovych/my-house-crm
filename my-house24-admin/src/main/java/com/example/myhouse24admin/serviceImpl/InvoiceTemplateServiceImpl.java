@@ -9,8 +9,6 @@ import com.example.myhouse24admin.repository.InvoiceTemplateRepo;
 import com.example.myhouse24admin.service.InvoiceTemplateService;
 import com.example.myhouse24admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.ServletContext;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -26,18 +24,14 @@ public class InvoiceTemplateServiceImpl implements InvoiceTemplateService {
     private final InvoiceTemplateRepo invoiceTemplateRepo;
     private final InvoiceTemplateMapper invoiceTemplateMapper;
     private final UploadFileUtil uploadFileUtil;
-    private final ServletContext servletContext;
     private final Logger logger = LogManager.getLogger(InvoiceTemplateServiceImpl.class);
 
     public InvoiceTemplateServiceImpl(InvoiceTemplateRepo invoiceTemplateRepo,
                                       InvoiceTemplateMapper invoiceTemplateMapper,
-                                      UploadFileUtil uploadFileUtil,
-                                      ServletContext servletContext) {
+                                      UploadFileUtil uploadFileUtil) {
         this.invoiceTemplateRepo = invoiceTemplateRepo;
         this.invoiceTemplateMapper = invoiceTemplateMapper;
-        this.uploadFileUtil = uploadFileUtil;
-        this.servletContext = servletContext;
-    }
+        this.uploadFileUtil = uploadFileUtil;}
 
     @Override
     public List<InvoiceTemplateResponse> getInvoiceTemplatesResponses() {
@@ -98,7 +92,7 @@ public class InvoiceTemplateServiceImpl implements InvoiceTemplateService {
         InputStream inputStream = uploadFileUtil.getFileInputStreamByName(fileName);
         byte[] bytes = null;
         try {
-            bytes = IOUtils.toByteArray(inputStream);
+            bytes = inputStream.readAllBytes();
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
