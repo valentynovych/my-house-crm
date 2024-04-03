@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.example.myhouse24admin.specification.ApartmentInterfaceSpecification.*;
 
@@ -71,11 +70,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     @Override
     public ApartmentExtendResponse getApartmentById(Long apartmentId) {
         logger.info("getApartments() -> start with id: {}", apartmentId);
-        Optional<Apartment> byId = apartmentRepo.findById(apartmentId);
-        Apartment apartment = byId.orElseThrow(() -> {
-            logger.error("Apartment with Id: {} not found", apartmentId);
-            return new EntityNotFoundException(String.format("Apartment with Id: %s not found", apartmentId));
-        });
+        Apartment apartment = findApartmentById(apartmentId);
         ApartmentExtendResponse apartmentResponse = apartmentMapper.apartmentToApartmentExtendResponse(apartment);
         logger.info("getApartments() -> exit, return ApartmentExtendResponse");
         return apartmentResponse;
@@ -85,11 +80,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     public void updateApartment(Long apartmentId, ApartmentAddRequest apartmentRequest) {
         logger.info("updateApartment() -> start");
         if (apartmentRequest.getId() != null) {
-            Optional<Apartment> byId = apartmentRepo.findById(apartmentId);
-            Apartment apartment = byId.orElseThrow(() -> {
-                logger.error("Apartment with id: {} not found", apartmentId);
-                return new EntityNotFoundException(String.format("Apartment with id: %s not found", apartmentId));
-            });
+            Apartment apartment = findApartmentById(apartmentId);
             apartmentMapper.updateApartmentFromApartmentRequest(apartment, apartmentRequest);
             logger.info("updateApartment() -> set PersonalAccount to Apartment");
             setPersonalAccountToApartment(apartment, apartmentRequest);
@@ -141,6 +132,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     private void updateApartmentPersonalAccount(Apartment apartment, PersonalAccount personalAccount) {
+        logger.info("updateApartmentPersonalAccount() -> start");
         if (apartment.getPersonalAccount() != null
                 && !apartment.getPersonalAccount().getId().equals(personalAccount.getId())) {
             PersonalAccount toDeleteApartmentId = apartment.getPersonalAccount();
@@ -158,8 +150,8 @@ public class ApartmentServiceImpl implements ApartmentService {
         logger.info("getApartmentsForSelect - Getting apartment name responses for select " + selectSearchRequest.toString());
         Pageable pageable = PageRequest.of(selectSearchRequest.page() - 1, 10);
         Page<Apartment> apartments = getFilteredApartmentsForSelect(selectSearchRequest, pageable, houseId, sectionId);
-        List<ApartmentNumberResponse> apartmentNumberRespons = apartmentMapper.apartmentListToApartmentNameResponse(apartments.getContent());
-        Page<ApartmentNumberResponse> apartmentNameResponsePage = new PageImpl<>(apartmentNumberRespons, pageable, apartments.getTotalElements());
+        List<ApartmentNumberResponse> apartmentNumberResponses = apartmentMapper.apartmentListToApartmentNameResponse(apartments.getContent());
+        Page<ApartmentNumberResponse> apartmentNameResponsePage = new PageImpl<>(apartmentNumberResponses, pageable, apartments.getTotalElements());
         logger.info("getApartmentsForSelect - Apartment name responses were got");
         return apartmentNameResponsePage;
     }
@@ -168,11 +160,14 @@ public class ApartmentServiceImpl implements ApartmentService {
     public List<Apartment> getAllApartmentsBy(Pageable pageable,
                                               List<Apartment> apartments,
                                               ApartmentSpecification specification) {
+        logger.info("getAllApartmentsBy() -> Fetching all apartments by specification: {}", specification.toString());
         Page<Apartment> all = apartmentRepo.findAll(specification, pageable);
         apartments.addAll(all.getContent());
         if (all.hasNext()) {
+            logger.info("getAllApartmentsBy() -> Fetching next page of apartments by specification: {}", specification.toString());
             getAllApartmentsBy(pageable.next(), apartments, specification);
         }
+        logger.info("getAllApartmentsBy() -> Fetching all apartments by specification: {}", specification.toString());
         return apartments;
     }
 
@@ -190,5 +185,14 @@ public class ApartmentServiceImpl implements ApartmentService {
             apartmentSpecification = apartmentSpecification.and(bySectionId(sectionId));
         }
         return apartmentRepo.findAll(apartmentSpecification, pageable);
+    }
+
+    private Apartment findApartmentById(Long apartmentId) {
+        logger.info("findApartmentById() -> Fetching apartment with id: {}", apartmentId);
+        return apartmentRepo.findById(apartmentId)
+                .orElseThrow(() -> {
+                    logger.error("Apartment with id: {} not found", apartmentId);
+                    return new EntityNotFoundException(String.format("Apartment with id: %s not found", apartmentId));
+                });
     }
 }
