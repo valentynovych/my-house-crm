@@ -2,6 +2,7 @@ package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.MeterReading;
+import com.example.myhouse24admin.entity.MeterReadingStatus;
 import com.example.myhouse24admin.entity.Service;
 import com.example.myhouse24admin.mapper.MeterReadingMapper;
 import com.example.myhouse24admin.model.meterReadings.*;
@@ -10,11 +11,12 @@ import com.example.myhouse24admin.repository.MeterReadingRepo;
 import com.example.myhouse24admin.repository.ServicesRepo;
 import com.example.myhouse24admin.service.MeterReadingService;
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.query.Order;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.math.BigDecimal;
 import java.time.*;
@@ -22,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.example.myhouse24admin.specification.MeterReadingSpecification.*;
@@ -60,40 +63,24 @@ public class MeterReadingServiceImpl implements MeterReadingService {
         return meterReading.map(reading -> formNumber(reading.getNumber())).orElse("0000000001");
     }
     private String formNumber(String lastNumber){
-        Integer numberPart = Integer.valueOf(lastNumber);
-        numberPart += 1;
-        String newNumber = "";
-        for (int i = 0; i < 10 - numberPart.toString().length(); i++) {
-            newNumber += "0";
-        }
-        return newNumber + numberPart;
+        int numberPart = Integer.parseInt(lastNumber);
+        return StringUtils.leftPad(Integer.toString(numberPart + 1), 10, "0");
     }
 
     @Override
-    public Page<TableMeterReadingResponse> getMeterReadingResponsesForTable(int page, int pageSize, FilterRequest filterRequest) {
-        logger.info("getMeterReadingResponseForTable - Getting meter reading responses for table, page: "+page+" pageSize: "+pageSize+" "+filterRequest.toString());
-        Pageable pageable = PageRequest.of(page, pageSize);
-        Page<MeterReading> meterReadings = getFilteredReadings(filterRequest, pageable);
+    public Page<TableMeterReadingResponse> getMeterReadingResponsesForTable(Map<String, String> requestMap) {
+        logger.info("getMeterReadingResponseForTable - Getting meter reading responses for table, "+requestMap.toString());
+        Pageable pageable = PageRequest.of(Integer.parseInt(requestMap.get("page")), Integer.parseInt(requestMap.get("pageSize")));
+        Page<MeterReading> meterReadings = getFilteredReadings(requestMap, pageable);
         List<TableMeterReadingResponse> tableMeterReadingResponses = meterReadingMapper.meterReadingListToTableMeterReadingResponseList(meterReadings.getContent());
         Page<TableMeterReadingResponse> tableMeterReadingResponsePage = new PageImpl<>(tableMeterReadingResponses, pageable, meterReadings.getTotalElements());
         logger.info("getMeterReadingResponseForTable - Meter reading responses was got");
         return tableMeterReadingResponsePage;
     }
 
-    private Page<MeterReading> getFilteredReadings(FilterRequest filterRequest, Pageable pageable) {
+    private Page<MeterReading> getFilteredReadings(Map<String, String> requestMap, Pageable pageable) {
         Specification<MeterReading> meterReadingSpecification = Specification.where(byDeleted().and(byMaxCreationDate()));
-        if(filterRequest.sectionId() != null){
-            meterReadingSpecification = meterReadingSpecification.and(bySectionId(filterRequest.sectionId()));
-        }
-        if(filterRequest.houseId() != null){
-            meterReadingSpecification = meterReadingSpecification.and(byHouseId(filterRequest.houseId()));
-        }
-        if(filterRequest.serviceId() != null){
-            meterReadingSpecification = meterReadingSpecification.and(byServiceId(filterRequest.serviceId()));
-        }
-        if(!filterRequest.apartment().isEmpty()){
-            meterReadingSpecification = meterReadingSpecification.and(byApartmentNumber(filterRequest.apartment()));
-        }
+        meterReadingSpecification = formSpecification(meterReadingSpecification, requestMap);
         return meterReadingRepo.findAll(meterReadingSpecification, pageable);
     }
 
@@ -118,46 +105,21 @@ public class MeterReadingServiceImpl implements MeterReadingService {
     }
 
     @Override
-    public Page<ApartmentMeterReadingResponse> getApartmentMeterReadingResponses(Long apartmentId, int page, int pageSize, ApartmentFilterRequest apartmentFilterRequest) {
-        logger.info("getApartmentMeterReadingResponses - Getting apartment meter reading responses for apartment with id "+apartmentId+" "+apartmentFilterRequest.toString());
-        Pageable pageable = PageRequest.of(page, pageSize);
-        Page<MeterReading> meterReadings = getFilteredReadingsForApartment(apartmentId,apartmentFilterRequest, pageable);
-        List<ApartmentMeterReadingResponse> meterReadingResponses = meterReadingMapper.meterReadingListToApartmentMeterReadingResponseList(meterReadings.getContent());
-        Page<ApartmentMeterReadingResponse> meterReadingResponsePage = new PageImpl<>(meterReadingResponses, pageable, meterReadings.getTotalElements());
+    public Page<ApartmentMeterReadingResponse> getApartmentMeterReadingResponses(Long apartmentId, Map<String, String> requestMap) {
+        logger.info("getApartmentMeterReadingResponses - Getting apartment meter reading responses for apartment with id "+apartmentId+" "+requestMap.toString());
+        Pageable pageable = PageRequest.of(Integer.parseInt(requestMap.get("page")), Integer.parseInt(requestMap.get("pageSize")));
+        Page<MeterReading> meterReadings = getFilteredReadingsForApartment(apartmentId,requestMap, pageable);
+        Page<ApartmentMeterReadingResponse> meterReadingResponsePage = createApartmentMeterReadingResponsePage(meterReadings, pageable);
         logger.info("getApartmentMeterReadingResponses - Apartment meter reading responses were got");
         return meterReadingResponsePage;
     }
 
     private Page<MeterReading> getFilteredReadingsForApartment(Long apartmentId,
-                                                               ApartmentFilterRequest apartmentFilterRequest,
+                                                               Map<String, String> requestMap,
                                                                Pageable pageable) {
-        Specification<MeterReading> meterReadingSpecification = Specification.where(byDeleted().and(byApartmentId(apartmentId)));
-        if(!apartmentFilterRequest.number().isEmpty()){
-            meterReadingSpecification = meterReadingSpecification.and(byNumber(apartmentFilterRequest.number()));
-        }
-        if(apartmentFilterRequest.status() != null){
-            meterReadingSpecification = meterReadingSpecification.and(byStatus(apartmentFilterRequest.status()));
-        }
-        if(!apartmentFilterRequest.creationDate().isEmpty()){
-            LocalDateTime localDateTime = LocalDateTime.of(LocalDate.parse(apartmentFilterRequest.creationDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
-                    LocalTime.MIDNIGHT);
-            ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
-            Instant dateFrom = zonedDateTime.toInstant();
-            Instant dateTo = zonedDateTime.toInstant().plus(1, ChronoUnit.DAYS);
-            meterReadingSpecification = meterReadingSpecification.and(byCreationDateGreaterThen(dateFrom)).and(byCreationDateLessThan(dateTo));
-        }
-        if(apartmentFilterRequest.sectionId() != null){
-            meterReadingSpecification = meterReadingSpecification.and(bySectionId(apartmentFilterRequest.sectionId()));
-        }
-        if(apartmentFilterRequest.houseId() != null){
-            meterReadingSpecification = meterReadingSpecification.and(byHouseId(apartmentFilterRequest.houseId()));
-        }
-        if(apartmentFilterRequest.serviceId() != null){
-            meterReadingSpecification = meterReadingSpecification.and(byServiceId(apartmentFilterRequest.serviceId()));
-        }
-        if(!apartmentFilterRequest.apartment().isEmpty()){
-            meterReadingSpecification = meterReadingSpecification.and(byApartmentNumber(apartmentFilterRequest.apartment()));
-        }
+        Specification<MeterReading> meterReadingSpecification = Specification
+                .where(byDeleted().and(byApartmentId(apartmentId)));
+        meterReadingSpecification = formSpecification(meterReadingSpecification, requestMap);
         return meterReadingRepo.findAll(meterReadingSpecification,pageable);
     }
 
@@ -175,8 +137,7 @@ public class MeterReadingServiceImpl implements MeterReadingService {
         logger.info("getMeterReadingResponsesForTableInInvoice - Getting meter reading responses for table in invoice, page: "+page+" pageSize: "+pageSize+" apartmentId: "+apartmentId);
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by("creationDate").descending());
         Page<MeterReading> meterReadings = getFilteredReadingsForTableInInvoice(apartmentId,pageable);
-        List<ApartmentMeterReadingResponse> meterReadingResponses = meterReadingMapper.meterReadingListToApartmentMeterReadingResponseList(meterReadings.getContent());
-        Page<ApartmentMeterReadingResponse> meterReadingResponsePage = new PageImpl<>(meterReadingResponses, pageable, meterReadings.getTotalElements());
+        Page<ApartmentMeterReadingResponse> meterReadingResponsePage = createApartmentMeterReadingResponsePage(meterReadings, pageable);
         logger.info("getMeterReadingResponsesForTableInInvoice - Meter reading responses were got");
         return meterReadingResponsePage;
     }
@@ -189,6 +150,10 @@ public class MeterReadingServiceImpl implements MeterReadingService {
         return meterReadingRepo.findAll(meterReadingSpecification, pageable);
     }
 
+    private Page<ApartmentMeterReadingResponse> createApartmentMeterReadingResponsePage(Page<MeterReading> meterReadings, Pageable pageable){
+        List<ApartmentMeterReadingResponse> meterReadingResponses = meterReadingMapper.meterReadingListToApartmentMeterReadingResponseList(meterReadings.getContent());
+        return new PageImpl<>(meterReadingResponses, pageable, meterReadings.getTotalElements());
+    }
     @Override
     public List<BigDecimal> getAmountOfConsumptions(Long[] serviceIds, Long apartmentId) {
         logger.info("getAmountOfConsumptions - Getting amount of consumptions for service ids "+serviceIds.toString());
@@ -209,5 +174,38 @@ public class MeterReadingServiceImpl implements MeterReadingService {
         }
         logger.info("getAmountOfConsumptions - Amount of consumptions were got");
         return amounts;
+    }
+
+    private Specification<MeterReading> formSpecification(Specification<MeterReading> meterReadingSpecification, Map<String, String> requestMap){
+        if(requestMap.containsKey("number") &&
+                !requestMap.get("number").isEmpty()){
+            meterReadingSpecification = meterReadingSpecification.and(byNumber(requestMap.get("number")));
+        }
+        if(requestMap.containsKey("status") &&
+                !requestMap.get("status").isEmpty()){
+            meterReadingSpecification = meterReadingSpecification.and(byStatus(MeterReadingStatus.valueOf(requestMap.get("status"))));
+        }
+        if(requestMap.containsKey("creationDate") &&
+                !requestMap.get("creationDate").isEmpty()){
+            LocalDateTime localDateTime = LocalDateTime.of(LocalDate.parse(requestMap.get("creationDate"), DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    LocalTime.MIDNIGHT);
+            ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.systemDefault());
+            Instant dateFrom = zonedDateTime.toInstant();
+            Instant dateTo = zonedDateTime.toInstant().plus(1, ChronoUnit.DAYS);
+            meterReadingSpecification = meterReadingSpecification.and(byCreationDateGreaterThen(dateFrom)).and(byCreationDateLessThan(dateTo));
+        }
+        if(!requestMap.get("sectionId").isEmpty()){
+            meterReadingSpecification = meterReadingSpecification.and(bySectionId(Long.valueOf(requestMap.get("sectionId"))));
+        }
+        if(!requestMap.get("houseId").isEmpty()){
+            meterReadingSpecification = meterReadingSpecification.and(byHouseId(Long.valueOf(requestMap.get("houseId"))));
+        }
+        if(!requestMap.get("serviceId").isEmpty()){
+            meterReadingSpecification = meterReadingSpecification.and(byServiceId(Long.valueOf(requestMap.get("serviceId"))));
+        }
+        if(!requestMap.get("apartment").isEmpty()){
+            meterReadingSpecification = meterReadingSpecification.and(byApartmentNumber(requestMap.get("apartment")));
+        }
+        return meterReadingSpecification;
     }
 }

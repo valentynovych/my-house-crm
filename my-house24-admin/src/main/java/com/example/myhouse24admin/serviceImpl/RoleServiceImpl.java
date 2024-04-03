@@ -58,7 +58,8 @@ public class RoleServiceImpl implements RoleService {
         logger.info("getPermissionResponsesByRole() - Getting permission responses by role "+role);
         String[] roles = role.split("_");
         List<Permission> permissions = permissionRepo.findAllByRoleName(roles[1]);
-        List<PermissionResponse> permissionResponses = permissionMapper.permissionListToPermissionResponseList(permissions);
+        List<PermissionResponse> permissionResponses = permissionMapper
+                .permissionListToPermissionResponseList(permissions);
         logger.info("getPermissionResponsesByRole() - Permission responses was got");
         return permissionResponses;
     }
@@ -81,16 +82,6 @@ public class RoleServiceImpl implements RoleService {
             permissionRepo.saveAll(permissions.get(i));
         }
     }
-    private void updateAccountantPermissions(boolean[] accountantPermissions) {
-        List<Permission> permissions = permissionRepo.findAllByRoleName("ACCOUNTANT");
-        int i = 0;
-        for(Permission p: permissions){
-            p.setAllowed(accountantPermissions[i]);
-            i++;
-        }
-        permissionRepo.saveAll(permissions);
-    }
-
 
     @Override
     public String getAllowedEndPoint(String email) {

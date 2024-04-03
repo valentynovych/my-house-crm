@@ -5,19 +5,18 @@ import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 public interface MeterReadingService {
     void createMeterReading(MeterReadingRequest meterReadingRequest);
     String createNumber();
-    Page<TableMeterReadingResponse> getMeterReadingResponsesForTable(int page, int pageSize,
-                                                                     FilterRequest filterRequest);
+    Page<TableMeterReadingResponse> getMeterReadingResponsesForTable(Map<String, String> requestMap);
     Page<ApartmentMeterReadingResponse> getMeterReadingResponsesForTableInInvoice(int page, int pageSize,
                                                                               Long apartmentId);
     MeterReadingResponse getMeterReadingResponse(Long id);
     void updateMeterReading(Long id, MeterReadingRequest meterReadingRequest);
     Page<ApartmentMeterReadingResponse> getApartmentMeterReadingResponses(Long apartmentId,
-                                                                          int page, int pageSize,
-                                                                          ApartmentFilterRequest apartmentFilterRequest);
+                                                                          Map<String, String> requestMap);
     void deleteMeterReading(Long id);
     List<BigDecimal> getAmountOfConsumptions(Long[] serviceIds, Long apartmentId);
 }
