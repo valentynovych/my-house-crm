@@ -140,7 +140,7 @@ public class MailServiceImpl implements MailService {
     }
 
     private String formOwnerInvitationLink() {
-        String fullUrl = ServletUriComponentsBuilder.fromRequestUri(httpServletRequest).build().toUriString();
+        StringBuffer fullUrl = httpServletRequest.getRequestURL();
         int index = fullUrl.indexOf("admin");
         String baseUrl = fullUrl.substring(0, index);
         String link = baseUrl + "cabinet/register";
@@ -227,7 +227,7 @@ public class MailServiceImpl implements MailService {
         return templateEngine.process("email/ownerActivationTemplate", context);
     }
     private String formOwnerActivationLink(String token){
-        String fullUrl = ServletUriComponentsBuilder.fromRequestUri(httpServletRequest).build().toUriString();
+        StringBuffer fullUrl = httpServletRequest.getRequestURL();
         int index = fullUrl.indexOf("admin");
         String baseUrl = fullUrl.substring(0, index);
         String link = baseUrl + "cabinet/changePassword?token=" + token;
