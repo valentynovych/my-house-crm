@@ -6,8 +6,6 @@ import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.staff.StaffDetails;
 import com.example.myhouse24admin.securityFilter.RecaptchaFilter;
 import com.example.myhouse24admin.service.*;
-import com.example.myhouse24admin.serviceImpl.InvoiceServiceImpl;
-import com.example.myhouse24admin.serviceImpl.MailServiceImpl;
 import com.example.myhouse24admin.util.UploadFileUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -81,41 +79,47 @@ public class TestConfig {
     }
 
     @Bean
-    public MailService mailService(){
+    public MailService mailService() {
         return mock(MailService.class);
     }
+
     @Bean
-    public HouseService houseService(){
+    public HouseService houseService() {
         return mock(HouseService.class);
     }
+
     @Bean
-    public SectionService sectionService(){
+    public SectionService sectionService() {
         return mock(SectionService.class);
     }
+
     @Bean
-    public ApartmentService apartmentService(){
+    public ApartmentService apartmentService() {
         return mock(ApartmentService.class);
     }
+
     @Bean
-    public TariffService tariffService(){
+    public TariffService tariffService() {
         return mock(TariffService.class);
     }
+
     @Bean
-    public InvoiceService invoiceService(){
+    public InvoiceService invoiceService() {
         return mock(InvoiceService.class);
     }
+
     @Bean
-    public ServicesService servicesService(){
+    public ServicesService servicesService() {
         return mock(ServicesService.class);
     }
+
     @Bean
-    public MeterReadingService meterReadingService(){
+    public MeterReadingService meterReadingService() {
         return mock(MeterReadingService.class);
-    public MailService mailService() {
-        return mock(MailServiceImpl.class);
     }
+
     @Bean
-    public ApartmentOwnerService apartmentOwnerService(){
+    public ApartmentOwnerService apartmentOwnerService() {
         return mock(ApartmentOwnerService.class);
     }
 
@@ -125,22 +129,10 @@ public class TestConfig {
         return mock(PaymentDetailsService.class);
     }
 
-    // for TariffControllerTest
-    @Bean
-    public TariffService tariffService() {
-        return mock(TariffService.class);
-    }
-
     // for PaymentItemControllerTest
     @Bean
     public PaymentItemService paymentItemService() {
         return mock(PaymentItemService.class);
-    }
-
-    // for ServiceControllerTest
-    @Bean
-    public ServicesService servicesService() {
-        return mock(ServicesService.class);
     }
 
     @Bean
