@@ -47,28 +47,24 @@ public class StaffController {
     }
 
     @PostMapping("add")
-    @ResponseBody
-    public ResponseEntity<?> addNewStaff(@Valid @ModelAttribute StaffEditRequest staffEditRequest) {
+    public ResponseEntity<?> addNewStaff(@Valid @ModelAttribute("staffEditRequest") StaffEditRequest staffEditRequest) {
         staffService.addNewStaff(staffEditRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("get-roles")
-    @ResponseBody
     public ResponseEntity<?> getStaffRoles() {
         List<Role> roles = staffService.getRoles();
         return new ResponseEntity<>(roles, HttpStatus.OK);
     }
 
     @GetMapping("get-statuses")
-    @ResponseBody
     public ResponseEntity<?> getStaffStatuses() {
         List<String> statuses = staffService.getStatuses();
         return new ResponseEntity<>(statuses, HttpStatus.OK);
     }
 
     @GetMapping("get-staff")
-    @ResponseBody
     public ResponseEntity<?> getStaff(@RequestParam @Min(0) int page,
                                       @RequestParam @Min(1) int pageSize,
                                       @RequestParam(required = false) Map<String, String> searchParams) {
@@ -77,7 +73,6 @@ public class StaffController {
     }
 
     @GetMapping("get-staff/{staffId}")
-    @ResponseBody
     public ResponseEntity<?> getStaffById(@PathVariable @Min(1) Long staffId) {
         StaffResponse staffResponse = staffService.getStaffById(staffId);
         return new ResponseEntity<>(staffResponse, HttpStatus.OK);
@@ -85,7 +80,7 @@ public class StaffController {
 
     @PostMapping("edit-staff/{staffId}")
     public ResponseEntity<?> updateStaffById(@PathVariable Long staffId,
-                                             @ModelAttribute @Valid StaffEditRequest staffEditRequest) {
+                                             @ModelAttribute("staffEditRequest") @Valid StaffEditRequest staffEditRequest) {
         staffService.updateStaffById(staffId, staffEditRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }

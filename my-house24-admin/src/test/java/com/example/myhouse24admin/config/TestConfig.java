@@ -113,4 +113,10 @@ public class TestConfig {
         return mock(UnitOfMeasurementService.class);
     }
 
+    // for StaffControllerTest
+    @Bean
+    public StaffService staffService() {
+        return mock(StaffService.class);
+    }
+
 }
