@@ -38,7 +38,6 @@ public class PaymentItemController {
     }
 
     @GetMapping("get-items")
-    @ResponseBody
     public ResponseEntity<?> getAllItems(@RequestParam int page,
                                          @RequestParam int pageSize,
                                          @RequestParam Map<String, String> searchParams) {
@@ -54,22 +53,19 @@ public class PaymentItemController {
         return new ResponseEntity<>(itemById, HttpStatus.OK);
     }
 
-    @ResponseBody
     @PostMapping("edit-item/{itemId}")
     public ResponseEntity<?> editItemById(@PathVariable Long itemId,
-                                          @Valid @ModelAttribute PaymentItemDto paymentItem) {
+                                          @Valid @ModelAttribute("paymentItem") PaymentItemDto paymentItem) {
         paymentItemService.editItemById(itemId, paymentItem);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ResponseBody
     @PostMapping("add-item")
-    public ResponseEntity<?> addItem(@Valid @ModelAttribute PaymentItemDto paymentItem) {
+    public ResponseEntity<?> addItem(@Valid @ModelAttribute("paymentItem") PaymentItemDto paymentItem) {
         paymentItemService.addItem(paymentItem);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @ResponseBody
     @GetMapping("get-item-types")
     public ResponseEntity<?> getAllItemTypes() {
         Map<String, String> itemTypes = paymentItemService.getItemTypes();

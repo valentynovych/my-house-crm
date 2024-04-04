@@ -30,7 +30,7 @@ public class TestConfig {
         role.setName("DIRECTOR");
         Staff staff = new Staff();
         staff.setId(1L);
-        staff.setRole(new Role());
+        staff.setRole(role);
         staff.setEmail(STAFF_EMAIL);
         staff.setPassword(STAFF_PASSWORD);
 
@@ -94,6 +94,12 @@ public class TestConfig {
     @Bean
     public TariffService tariffService() {
         return mock(TariffService.class);
+    }
+
+    // for PaymentItemControllerTest
+    @Bean
+    public PaymentItemService paymentItemService() {
+        return mock(PaymentItemService.class);
     }
 
 }
