@@ -6,6 +6,7 @@ import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.staff.StaffDetails;
 import com.example.myhouse24admin.securityFilter.RecaptchaFilter;
 import com.example.myhouse24admin.service.*;
+import com.example.myhouse24admin.serviceImpl.InvoiceServiceImpl;
 import com.example.myhouse24admin.serviceImpl.MailServiceImpl;
 import com.example.myhouse24admin.util.UploadFileUtil;
 import org.springframework.context.annotation.Bean;
@@ -77,7 +78,38 @@ public class TestConfig {
     }
     @Bean
     public MailService mailService(){
-        return mock(MailServiceImpl.class);
+        return mock(MailService.class);
     }
-
+    @Bean
+    public HouseService houseService(){
+        return mock(HouseService.class);
+    }
+    @Bean
+    public SectionService sectionService(){
+        return mock(SectionService.class);
+    }
+    @Bean
+    public ApartmentService apartmentService(){
+        return mock(ApartmentService.class);
+    }
+    @Bean
+    public TariffService tariffService(){
+        return mock(TariffService.class);
+    }
+    @Bean
+    public InvoiceService invoiceService(){
+        return mock(InvoiceService.class);
+    }
+    @Bean
+    public ServicesService servicesService(){
+        return mock(ServicesService.class);
+    }
+    @Bean
+    public MeterReadingService meterReadingService(){
+        return mock(MeterReadingService.class);
+    }
+    @Bean
+    public ApartmentOwnerService apartmentOwnerService(){
+        return mock(ApartmentOwnerService.class);
+    }
 }
