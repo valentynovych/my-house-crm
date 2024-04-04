@@ -37,7 +37,7 @@ public class ServiceController {
     }
 
     @PostMapping("update-measurement-unist")
-    public ResponseEntity<?> updateMeasurementUnits(@ModelAttribute @Valid UnitOfMeasurementDtoListWrap units) {
+    public ResponseEntity<?> updateMeasurementUnits(@ModelAttribute("units") @Valid UnitOfMeasurementDtoListWrap units) {
         try {
             unitOfMeasurementService.updateMeasurementUnist(units);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -61,7 +61,7 @@ public class ServiceController {
     }
 
     @PostMapping(value = "update-services")
-    public @ResponseBody ResponseEntity<?> updateServices(@ModelAttribute @Valid ServiceDtoListWrap servicesList) {
+    public @ResponseBody ResponseEntity<?> updateServices(@ModelAttribute("servicesList") @Valid ServiceDtoListWrap servicesList) {
         try {
             servicesService.updateServices(servicesList);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -73,7 +73,7 @@ public class ServiceController {
     }
 
     @GetMapping("get-service-by-id/{serviceId}")
-    public ResponseEntity<ServiceResponse> getAllServices(@PathVariable @Min(1) Long serviceId) {
+    public ResponseEntity<ServiceResponse> getServiceById(@PathVariable @Min(1) Long serviceId) {
         ServiceResponse serviceResponse = servicesService.getServiceById(serviceId);
         return new ResponseEntity<>(serviceResponse, HttpStatus.OK);
     }

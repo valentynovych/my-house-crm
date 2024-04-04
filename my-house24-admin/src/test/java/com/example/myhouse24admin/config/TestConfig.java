@@ -102,4 +102,15 @@ public class TestConfig {
         return mock(PaymentItemService.class);
     }
 
+    // for ServiceControllerTest
+    @Bean
+    public ServicesService servicesService() {
+        return mock(ServicesService.class);
+    }
+
+    @Bean
+    public UnitOfMeasurementService unitOfMeasurementService() {
+        return mock(UnitOfMeasurementService.class);
+    }
+
 }
