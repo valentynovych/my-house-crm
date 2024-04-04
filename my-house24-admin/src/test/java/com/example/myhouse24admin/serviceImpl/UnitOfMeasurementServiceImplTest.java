@@ -66,7 +66,7 @@ class UnitOfMeasurementServiceImplTest {
     @Test
     void getAllMeasurementUnits() {
         // when
-        when(unitOfMeasurementRepo.findAll(any(Specification.class)))
+        when(unitOfMeasurementRepo.findAllByDeletedFalse())
                 .thenReturn(unitOfMeasurements);
         when(mapper.unitOfMeasurementListToUnitOfMeasurementDtoList(unitOfMeasurements))
                 .thenReturn(unitOfMeasurementDtos);

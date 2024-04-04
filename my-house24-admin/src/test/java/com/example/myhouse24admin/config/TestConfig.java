@@ -19,17 +19,19 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import java.util.Locale;
 
 import static org.mockito.Mockito.mock;
+
 @Configuration
 public class TestConfig {
     public final static String STAFF_EMAIL = "staff.email@example.com";
     public final static String STAFF_PASSWORD = "Password123!@";
+
     @Bean
     public UserDetails userDetails() {
         Role role = new Role();
         role.setName("DIRECTOR");
         Staff staff = new Staff();
         staff.setId(1L);
-        staff.setRole(new Role());
+        staff.setRole(role);
         staff.setEmail(STAFF_EMAIL);
         staff.setPassword(STAFF_PASSWORD);
 
@@ -72,10 +74,12 @@ public class TestConfig {
     public UploadFileUtil uploadFileUtil() {
         return new UploadFileUtil(s3Service());
     }
+
     @Bean
-    public PasswordResetTokenService passwordResetTokenService(){
+    public PasswordResetTokenService passwordResetTokenService() {
         return mock(PasswordResetTokenService.class);
     }
+
     @Bean
     public MailService mailService(){
         return mock(MailService.class);
@@ -107,9 +111,47 @@ public class TestConfig {
     @Bean
     public MeterReadingService meterReadingService(){
         return mock(MeterReadingService.class);
+    public MailService mailService() {
+        return mock(MailServiceImpl.class);
     }
     @Bean
     public ApartmentOwnerService apartmentOwnerService(){
         return mock(ApartmentOwnerService.class);
     }
+
+    // for PaymentDetailsControllerTest
+    @Bean
+    public PaymentDetailsService paymentDetailsService() {
+        return mock(PaymentDetailsService.class);
+    }
+
+    // for TariffControllerTest
+    @Bean
+    public TariffService tariffService() {
+        return mock(TariffService.class);
+    }
+
+    // for PaymentItemControllerTest
+    @Bean
+    public PaymentItemService paymentItemService() {
+        return mock(PaymentItemService.class);
+    }
+
+    // for ServiceControllerTest
+    @Bean
+    public ServicesService servicesService() {
+        return mock(ServicesService.class);
+    }
+
+    @Bean
+    public UnitOfMeasurementService unitOfMeasurementService() {
+        return mock(UnitOfMeasurementService.class);
+    }
+
+    // for StaffControllerTest
+    @Bean
+    public StaffService staffService() {
+        return mock(StaffService.class);
+    }
+
 }
