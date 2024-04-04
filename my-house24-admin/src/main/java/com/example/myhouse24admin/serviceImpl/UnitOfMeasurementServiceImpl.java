@@ -10,7 +10,6 @@ import com.example.myhouse24admin.repository.UnitOfMeasurementRepo;
 import com.example.myhouse24admin.service.UnitOfMeasurementService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,9 +33,7 @@ public class UnitOfMeasurementServiceImpl implements UnitOfMeasurementService {
     @Override
     public List<UnitOfMeasurementDto> getAllMeasurementUnits() {
         logger.info("getAllMeasurementUnits() -> start");
-        List<UnitOfMeasurement> all = unitOfMeasurementRepo.findAll(
-                Specification.where((root, query, criteriaBuilder) ->
-                        criteriaBuilder.equal(root.get("deleted"), false)));
+        List<UnitOfMeasurement> all = unitOfMeasurementRepo.findAllByDeletedFalse();
         List<UnitOfMeasurementDto> dtoList = mapper.unitOfMeasurementListToUnitOfMeasurementDtoList(all);
         logger.info("getAllMeasurementUnits() -> exit, return list size: {}", dtoList.size());
         return dtoList;
