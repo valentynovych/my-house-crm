@@ -18,10 +18,12 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import java.util.Locale;
 
 import static org.mockito.Mockito.mock;
+
 @Configuration
 public class TestConfig {
     public final static String STAFF_EMAIL = "staff.email@example.com";
     public final static String STAFF_PASSWORD = "Password123!@";
+
     @Bean
     public UserDetails userDetails() {
         Role role = new Role();
@@ -71,13 +73,27 @@ public class TestConfig {
     public UploadFileUtil uploadFileUtil() {
         return new UploadFileUtil(s3Service());
     }
+
     @Bean
-    public PasswordResetTokenService passwordResetTokenService(){
+    public PasswordResetTokenService passwordResetTokenService() {
         return mock(PasswordResetTokenService.class);
     }
+
     @Bean
-    public MailService mailService(){
+    public MailService mailService() {
         return mock(MailServiceImpl.class);
+    }
+
+    // for PaymentDetailsControllerTest
+    @Bean
+    public PaymentDetailsService paymentDetailsService() {
+        return mock(PaymentDetailsService.class);
+    }
+
+    // for TariffControllerTest
+    @Bean
+    public TariffService tariffService() {
+        return mock(TariffService.class);
     }
 
 }
