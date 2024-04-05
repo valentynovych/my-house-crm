@@ -120,4 +120,6 @@ public class TestConfig {
     public MainPageService mainPageService(){
         return mock(MainPageService.class);
     }
+    @Bean
+    public AboutPageService aboutPageService(){return mock(AboutPageService.class);}
 }
