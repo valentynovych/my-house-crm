@@ -34,9 +34,6 @@ class AuthenticationControllerTest {
     private PasswordResetTokenService passwordResetTokenService;
     @Autowired
     private MailService mailService;
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void getLoginPage() throws Exception {
