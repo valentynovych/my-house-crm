@@ -152,4 +152,14 @@ public class TestConfig {
         return mock(StatisticService.class);
     }
 
+    @Bean
+    public OwnerPasswordResetTokenService ownerPasswordResetTokenService(){
+        return mock(OwnerPasswordResetTokenService.class);
+    }
+    @Bean
+    public MainPageService mainPageService(){
+        return mock(MainPageService.class);
+    }
+    @Bean
+    public AboutPageService aboutPageService(){return mock(AboutPageService.class);}
 }

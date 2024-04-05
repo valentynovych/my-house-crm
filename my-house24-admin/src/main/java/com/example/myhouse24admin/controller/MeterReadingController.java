@@ -108,7 +108,7 @@ public class MeterReadingController {
     @PostMapping("/edit/{id}")
     public ResponseEntity<?> updateMeterReading(@PathVariable Long id,
                                                 @RequestParam(name="notReturn", required = false) boolean notReturn,
-                                                MeterReadingRequest meterReadingRequest,
+                                                @Valid @ModelAttribute MeterReadingRequest meterReadingRequest,
                                                 HttpServletRequest request) {
         meterReadingService.updateMeterReading(id, meterReadingRequest);
         String url = request.getRequestURL().toString();

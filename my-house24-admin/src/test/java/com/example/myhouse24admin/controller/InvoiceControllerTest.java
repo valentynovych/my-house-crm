@@ -164,8 +164,7 @@ class InvoiceControllerTest {
     void getStatuses() throws Exception {
         this.mockMvc.perform(get("/my-house/admin/invoices/get-statuses")
                         .contextPath("/my-house")
-                        .with(user(userDetails))
-                        .param("requestMap", String.valueOf(new HashMap<>())))
+                        .with(user(userDetails)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0]").value(InvoiceStatus.PAID.toString()))
