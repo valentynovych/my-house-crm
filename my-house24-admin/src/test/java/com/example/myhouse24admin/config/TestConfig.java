@@ -146,4 +146,10 @@ public class TestConfig {
         return mock(StaffService.class);
     }
 
+    // for StatisticControllerTest
+    @Bean
+    public StatisticService statisticService() {
+        return mock(StatisticService.class);
+    }
+
 }
