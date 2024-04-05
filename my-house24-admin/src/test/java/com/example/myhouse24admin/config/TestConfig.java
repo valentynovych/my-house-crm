@@ -116,4 +116,8 @@ public class TestConfig {
     public OwnerPasswordResetTokenService ownerPasswordResetTokenService(){
         return mock(OwnerPasswordResetTokenService.class);
     }
+    @Bean
+    public MainPageService mainPageService(){
+        return mock(MainPageService.class);
+    }
 }
