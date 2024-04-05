@@ -127,13 +127,18 @@ public class PersonalAccountExelGenerator {
         }
     }
 
-    public void generateExcelFile(HttpServletResponse response) throws IOException {
+    public void generateExcelFile(HttpServletResponse response) {
         writeHeader();
         writeData();
-        ServletOutputStream outputStream = response.getOutputStream();
-        workbook.write(outputStream);
-        workbook.close();
-        outputStream.close();
+        ServletOutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            workbook.write(outputStream);
+            workbook.close();
+            outputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

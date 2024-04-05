@@ -4,11 +4,16 @@ import com.example.myhouse24admin.configuration.awsConfiguration.S3ResourceLoade
 import com.example.myhouse24admin.entity.Role;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.staff.StaffDetails;
+import com.example.myhouse24admin.repository.PersonalAccountRepo;
 import com.example.myhouse24admin.securityFilter.RecaptchaFilter;
 import com.example.myhouse24admin.service.*;
 import com.example.myhouse24admin.util.UploadFileUtil;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.LocaleResolver;
@@ -152,4 +157,21 @@ public class TestConfig {
         return mock(StatisticService.class);
     }
 
+    // for PersonalAccountControllerTest
+    @Bean
+    public PersonalAccountService personalAccountService() {
+        return mock(PersonalAccountService.class);
+    }
+
+    @MockBean
+    public PersonalAccountRepo personalAccountRepo;
+
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
+        resourceBundleMessageSource.setBasenames("localization/messages", "localization/CustomValidationMessages");
+        resourceBundleMessageSource.setDefaultLocale(Locale.forLanguageTag("uk_UA"));
+        resourceBundleMessageSource.setDefaultEncoding("UTF-8");
+        return resourceBundleMessageSource;
+    }
 }

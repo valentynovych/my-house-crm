@@ -15,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -79,7 +78,7 @@ public class PersonalAccountController {
     }
 
     @PostMapping("add")
-    public ResponseEntity<?> addNewPersonalAccount(@ModelAttribute @Valid PersonalAccountAddRequest request) {
+    public ResponseEntity<?> addNewPersonalAccount(@ModelAttribute("request") @Valid PersonalAccountAddRequest request) {
         personalAccountService.addNewPersonalAccount(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -92,7 +91,7 @@ public class PersonalAccountController {
 
     @PostMapping("edit-account/{accountId}")
     public ResponseEntity<?> updatePersonalAccount(@PathVariable Long accountId,
-                                                   @ModelAttribute @Valid PersonalAccountUpdateRequest request) {
+                                                   @ModelAttribute("request") @Valid PersonalAccountUpdateRequest request) {
         personalAccountService.updatePersonalAccount(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -121,13 +120,7 @@ public class PersonalAccountController {
         PersonalAccountExelGenerator generator =
                 new PersonalAccountExelGenerator(accountTableResponses, messageSource, LocaleContextHolder.getLocale());
 
-        try {
-            generator.generateExcelFile(response);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
+        generator.generateExcelFile(response);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
