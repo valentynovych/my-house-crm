@@ -112,4 +112,8 @@ public class TestConfig {
     public ApartmentOwnerService apartmentOwnerService(){
         return mock(ApartmentOwnerService.class);
     }
+    @Bean
+    public OwnerPasswordResetTokenService ownerPasswordResetTokenService(){
+        return mock(OwnerPasswordResetTokenService.class);
+    }
 }
