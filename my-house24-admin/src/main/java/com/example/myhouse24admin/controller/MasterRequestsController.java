@@ -46,7 +46,7 @@ public class MasterRequestsController {
     }
 
     @PostMapping("add-request")
-    public ResponseEntity<?> addNewRequest(@ModelAttribute @Valid MasterRequestAddRequest request) {
+    public ResponseEntity<?> addNewRequest(@ModelAttribute("request") @Valid MasterRequestAddRequest request) {
         masterRequestService.addNewMasterRequest(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -67,7 +67,7 @@ public class MasterRequestsController {
 
     @PostMapping("edit-request/{masterRequestId}")
     public ResponseEntity<?> updateRequest(@PathVariable Long masterRequestId,
-                                           @ModelAttribute @Valid MasterRequestEditRequest request) {
+                                           @ModelAttribute("request") @Valid MasterRequestEditRequest request) {
         masterRequestService.updateMasterRequest(masterRequestId, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }

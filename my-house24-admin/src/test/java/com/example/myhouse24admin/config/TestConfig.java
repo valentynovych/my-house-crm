@@ -190,4 +190,10 @@ public class TestConfig {
     public MessageService messageService() {
         return mock(MessageService.class);
     }
+
+    // for MasterRequestsControllerTest
+    @Bean
+    public MasterRequestService masterRequestService() {
+        return mock(MasterRequestService.class);
+    }
 }
