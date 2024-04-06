@@ -200,4 +200,10 @@ public class TestConfig {
     public MasterRequestService masterRequestService() {
         return mock(MasterRequestService.class);
     }
+
+    // for FloorControllerTest
+    @Bean
+    public FloorService floorService() {
+        return mock(FloorService.class);
+    }
 }
