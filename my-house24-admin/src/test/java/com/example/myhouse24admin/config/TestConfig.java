@@ -174,4 +174,10 @@ public class TestConfig {
         resourceBundleMessageSource.setDefaultEncoding("UTF-8");
         return resourceBundleMessageSource;
     }
+
+    // for MessagesControllerTest
+    @Bean
+    public MessageService messageService() {
+        return mock(MessageService.class);
+    }
 }

@@ -40,7 +40,7 @@ public class MessagesController {
     }
 
     @PostMapping("new-message")
-    public ResponseEntity<?> sendNewMessage(@ModelAttribute @Valid MessageSendRequest messageSendRequest) {
+    public ResponseEntity<?> sendNewMessage(@ModelAttribute("messageSendRequest") @Valid MessageSendRequest messageSendRequest) {
         messageService.sendNewMessage(messageSendRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
