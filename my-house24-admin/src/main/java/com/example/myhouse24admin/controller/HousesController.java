@@ -45,7 +45,7 @@ public class HousesController {
     }
 
     @PostMapping("add")
-    public @ResponseBody ResponseEntity<?> addNewHouse(@ModelAttribute @Valid HouseAddRequest houseAddRequest) {
+    public @ResponseBody ResponseEntity<?> addNewHouse(@ModelAttribute("request") @Valid HouseAddRequest houseAddRequest) {
         houseService.addNewHouse(houseAddRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -83,7 +83,7 @@ public class HousesController {
 
     @PostMapping("edit-house/{houseId}")
     public @ResponseBody ResponseEntity<?> editHouse(@PathVariable Long houseId,
-                                                     @ModelAttribute @Valid HouseEditRequest houseEditRequest) {
+                                                     @ModelAttribute("request") @Valid HouseEditRequest houseEditRequest) {
         houseService.editHouse(houseId, houseEditRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }

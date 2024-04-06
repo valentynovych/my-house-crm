@@ -8,7 +8,6 @@ import com.example.myhouse24admin.repository.PersonalAccountRepo;
 import com.example.myhouse24admin.securityFilter.RecaptchaFilter;
 import com.example.myhouse24admin.service.*;
 import com.example.myhouse24admin.util.UploadFileUtil;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -158,15 +157,20 @@ public class TestConfig {
     }
 
     @Bean
-    public OwnerPasswordResetTokenService ownerPasswordResetTokenService(){
+    public OwnerPasswordResetTokenService ownerPasswordResetTokenService() {
         return mock(OwnerPasswordResetTokenService.class);
     }
+
     @Bean
-    public MainPageService mainPageService(){
+    public MainPageService mainPageService() {
         return mock(MainPageService.class);
     }
+
     @Bean
-    public AboutPageService aboutPageService(){return mock(AboutPageService.class);}
+    public AboutPageService aboutPageService() {
+        return mock(AboutPageService.class);
+    }
+
     // for PersonalAccountControllerTest
     @Bean
     public PersonalAccountService personalAccountService() {
