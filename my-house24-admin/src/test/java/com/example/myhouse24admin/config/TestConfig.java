@@ -206,4 +206,10 @@ public class TestConfig {
     public FloorService floorService() {
         return mock(FloorService.class);
     }
+
+    // for CashRegisterControllerTest
+    @Bean
+    public CashRegisterService cashRegisterService() {
+        return mock(CashRegisterService.class);
+    }
 }

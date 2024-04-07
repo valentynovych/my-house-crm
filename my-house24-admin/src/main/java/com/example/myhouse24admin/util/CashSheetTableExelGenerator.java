@@ -35,13 +35,15 @@ public class CashSheetTableExelGenerator {
         workbook = new XSSFWorkbook();
     }
 
-    public void generateExcelFile(HttpServletResponse response) throws IOException {
+    public void generateExcelFile(HttpServletResponse response) {
         writeHeader();
         writeData();
-        ServletOutputStream outputStream = response.getOutputStream();
-        workbook.write(outputStream);
-        workbook.close();
-        outputStream.close();
+        try (ServletOutputStream outputStream = response.getOutputStream()) {
+            workbook.write(outputStream);
+            workbook.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void createCell(Row row, int columnCount, String value, CellStyle style) {

@@ -16,8 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -74,7 +72,7 @@ public class CashRegisterController {
     }
 
     @PostMapping("add-income-sheet")
-    public ResponseEntity<?> addNewIncomeSheet(@ModelAttribute @Valid CashSheetIncomeAddRequest addRequest) {
+    public ResponseEntity<?> addNewIncomeSheet(@ModelAttribute("addRequest") @Valid CashSheetIncomeAddRequest addRequest) {
         cashRegisterService.addNewIncomeSheet(addRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -93,20 +91,20 @@ public class CashRegisterController {
 
     @PostMapping("edit-income-sheet/{sheetId}")
     public ResponseEntity<?> updateIncomeSheetById(@PathVariable Long sheetId,
-                                                   @ModelAttribute @Valid CashSheetIncomeUpdateRequest updateRequest) {
+                                                   @ModelAttribute("updateRequest") @Valid CashSheetIncomeUpdateRequest updateRequest) {
         cashRegisterService.updateSheetById(sheetId, updateRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("add-expense-sheet")
-    public ResponseEntity<?> addNewExpenseSheet(@ModelAttribute @Valid CashSheetExpenseAddRequest addRequest) {
+    public ResponseEntity<?> addNewExpenseSheet(@ModelAttribute("addRequest") @Valid CashSheetExpenseAddRequest addRequest) {
         cashRegisterService.addNewExpenseSheet(addRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("edit-expense-sheet/{sheetId}")
     public ResponseEntity<?> updateExpenseSheetById(@PathVariable Long sheetId,
-                                                    @ModelAttribute @Valid CashSheetExpenseUpdateRequest updateRequest) {
+                                                    @ModelAttribute("updateRequest") @Valid CashSheetExpenseUpdateRequest updateRequest) {
         cashRegisterService.updateSheetById(sheetId, updateRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -123,12 +121,9 @@ public class CashRegisterController {
 
         CashSheetViewExelGenerator generator =
                 new CashSheetViewExelGenerator(sheetResponse, messageSource, LocaleContextHolder.getLocale());
-        try {
-            generator.generateExcelFile(response);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        generator.generateExcelFile(response);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("export-table-to-exel")
@@ -147,12 +142,8 @@ public class CashRegisterController {
 
         CashSheetTableExelGenerator generator =
                 new CashSheetTableExelGenerator(responseList, messageSource, LocaleContextHolder.getLocale());
-        try {
-            generator.generateExcelFile(response);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        generator.generateExcelFile(response);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("delete-sheet/{sheetId}")
