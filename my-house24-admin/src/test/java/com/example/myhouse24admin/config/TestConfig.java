@@ -162,4 +162,8 @@ public class TestConfig {
     }
     @Bean
     public AboutPageService aboutPageService(){return mock(AboutPageService.class);}
+    @Bean
+    public ServicesPageService servicesPageService(){
+        return mock(ServicesPageService.class);
+    }
 }
