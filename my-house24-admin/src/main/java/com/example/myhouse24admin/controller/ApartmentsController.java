@@ -45,7 +45,7 @@ public class ApartmentsController {
     }
 
     @PostMapping("add")
-    public ResponseEntity<?> addNewApartment(@ModelAttribute @Valid ApartmentAddRequest apartmentAddRequest) {
+    public ResponseEntity<?> addNewApartment(@ModelAttribute("apartmentAddRequest") @Valid ApartmentAddRequest apartmentAddRequest) {
         apartmentService.addNewApartment(apartmentAddRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -66,7 +66,7 @@ public class ApartmentsController {
 
     @PostMapping("edit-apartment/{apartmentId}")
     public ResponseEntity<?> updateApartment(@PathVariable Long apartmentId,
-                                             @ModelAttribute @Valid ApartmentAddRequest apartmentRequest) {
+                                             @ModelAttribute("apartmentAddRequest") @Valid ApartmentAddRequest apartmentRequest) {
         apartmentService.updateApartment(apartmentId, apartmentRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
