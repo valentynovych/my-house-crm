@@ -223,4 +223,7 @@ public class TestConfig {
     }
     @Bean
     public ContactsPageService contactsPageService(){return mock(ContactsPageService.class);}
+
+    @MockBean
+    public RoleService roleService;
 }
