@@ -18,7 +18,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-//@Validated
 @RequestMapping("/admin/site-management/service-page")
 public class ServicesPageController {
     private final ServicesPageService servicesPageService;

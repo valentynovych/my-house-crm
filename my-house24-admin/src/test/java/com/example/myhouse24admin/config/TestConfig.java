@@ -167,11 +167,6 @@ public class TestConfig {
         return mock(MainPageService.class);
     }
 
-    @Bean
-    public AboutPageService aboutPageService() {
-        return mock(AboutPageService.class);
-    }
-
     // for PersonalAccountControllerTest
     @Bean
     public PersonalAccountService personalAccountService() {
@@ -216,4 +211,16 @@ public class TestConfig {
 
     @MockBean
     public ApartmentRepo apartmentRepo;
+
+    @Bean
+    public AboutPageService aboutPageService(){
+        return mock(AboutPageService.class);
+    }
+
+    @Bean
+    public ServicesPageService servicesPageService(){
+        return mock(ServicesPageService.class);
+    }
+    @Bean
+    public ContactsPageService contactsPageService(){return mock(ContactsPageService.class);}
 }
