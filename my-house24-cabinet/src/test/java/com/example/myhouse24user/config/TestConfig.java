@@ -104,10 +104,6 @@ public class TestConfig {
         return mock(ApartmentOwnerService.class);
     }
 
-    @Bean
-    public ApartmentOwnerRepo apartmentOwnerRepo() {
-        return mock(ApartmentOwnerRepo.class);
-    }
 
     // For InvoiceController
     @Bean

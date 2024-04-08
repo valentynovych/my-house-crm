@@ -40,9 +40,6 @@ class AuthenticationControllerTest {
     private MailService mailService;
     @Autowired
     private ApartmentOwnerService apartmentOwnerService;
-    @Autowired
-    private ApartmentOwnerRepo apartmentOwnerRepo;
-
 
     @Test
     void getLoginPage() throws Exception {
@@ -65,9 +62,8 @@ class AuthenticationControllerTest {
         when(ownerPasswordResetTokenService.createOrUpdatePasswordResetToken(any(EmailRequest.class)))
                 .thenReturn("token");
         doNothing().when(mailService).sendToken(anyString(), any(EmailRequest.class), anyString());
-//        when(apartmentOwnerRepo.existsApartmentOwnerByEmail(anyString())).thenReturn(true);
         this.mockMvc.perform(post("/cabinet/forgotPassword")
-                        .flashAttr("emailRequest",new EmailRequest("email")))
+                        .flashAttr("emailRequest",new EmailRequest("ruduknasta13@gmail.com")))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
