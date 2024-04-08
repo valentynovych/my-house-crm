@@ -166,4 +166,6 @@ public class TestConfig {
     public ServicesPageService servicesPageService(){
         return mock(ServicesPageService.class);
     }
+    @Bean
+    public ContactsPageService contactsPageService(){return mock(ContactsPageService.class);}
 }
