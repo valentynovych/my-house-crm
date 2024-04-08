@@ -111,6 +111,15 @@
             <version>1.12.676</version>
         </dependency>
 
-
     </dependencies>
+
+    <build>
+        <finalName>MyHouse24_Lesyk_Rudiuk_WebSite</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

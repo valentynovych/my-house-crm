@@ -181,6 +181,7 @@
     </dependencies>
 
     <build>
+        <finalName>MyHouse24_Lesyk_Rudiuk_Cabinet</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
