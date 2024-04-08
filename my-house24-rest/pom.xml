@@ -8,12 +8,14 @@
         <version>3.2.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <packaging>jar</packaging>
     <groupId>com.example</groupId>
     <artifactId>my-house24-rest</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
     <name>my-house24-rest</name>
     <description>my-house24-rest</description>
+
     <properties>
         <java.version>17</java.version>
     </properties>
