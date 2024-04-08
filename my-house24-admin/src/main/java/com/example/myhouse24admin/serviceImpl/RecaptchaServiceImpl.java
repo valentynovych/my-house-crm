@@ -31,7 +31,7 @@ public class RecaptchaServiceImpl implements RecaptchaService {
         return recaptchaResponse.success();
     }
 
-    RecaptchaResponse sendCaptchaForVerifying(String recaptcha) {
+    private RecaptchaResponse sendCaptchaForVerifying(String recaptcha) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
