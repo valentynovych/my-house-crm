@@ -226,4 +226,7 @@ public class TestConfig {
 
     @MockBean
     public RoleService roleService;
+
+    @MockBean
+    public InvoiceTemplateService invoiceTemplateService;
 }
