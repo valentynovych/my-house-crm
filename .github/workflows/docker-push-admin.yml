@@ -4,6 +4,8 @@ on:
     branches:
       - main
       - dev-aws
+    paths:
+      - 'my-house24-admin/**'
 jobs:
   build:
     name: Build and Push Docker Image for my-house24-admin
