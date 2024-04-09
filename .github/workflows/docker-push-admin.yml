@@ -30,11 +30,11 @@ jobs:
         env:
           RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCH_KEY_SITE }}
           RECAPTCHA_SECRET_KEY: ${{ secrets.RECAPTCH_KEY_SECRET }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECREST_ACCESS_KEY }}
           AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-          SENDGRID_API_KEY: ${{ secrets.SENDGRID_KEY }}
-          SENDGRID_USER: ${{ secrets.SENDGRID_USER }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRIG_KEY }}
+          SENDGRID_USER: ${{ secrets.SENDGRIG_USER }}
         run: |
           envsubst < src/main/resources/application_temp.yml > src/main/resources/application.yml
           cat src/main/resources/application.yml
