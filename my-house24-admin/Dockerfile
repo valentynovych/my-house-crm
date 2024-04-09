@@ -5,7 +5,7 @@ WORKDIR /app
 COPY my-house24-admin/pom.xml .
 COPY my-house24-admin/src ./src
 
-RUN mvn clean package -DskipTests
+RUN mvn clean package
 
 FROM openjdk:17-alpine
 WORKDIR /app
