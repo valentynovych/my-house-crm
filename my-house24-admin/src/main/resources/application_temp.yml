@@ -6,6 +6,7 @@ google:
     key:
       site: ${RECAPTCHA_SITE_KEY}
       secret: ${RECAPTCHA_SECRET_KEY}
+
 #AWS S3
 aws:
   accessKey: ${AWS_ACCESS_KEY_ID}
