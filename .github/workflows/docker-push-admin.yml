@@ -4,8 +4,8 @@ on:
     branches:
       - main
       - dev-aws
-    paths:
-      - 'my-house24-admin/**'
+#    paths:
+#      - 'my-house24-admin/**'
 jobs:
   build:
     name: Build and Push Docker Image for my-house24-admin
@@ -54,8 +54,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: ./my-house24-admin
-          file: ./Dockerfile
+          context: .
+          file: ./my-house24-admin/Dockerfile
           push: true
           tags: olx09/my-house24-admin:latest
 
