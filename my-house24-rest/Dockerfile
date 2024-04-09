@@ -2,8 +2,8 @@ FROM maven:3.8.4-openjdk-17-slim AS build
 
 WORKDIR /app
 
-COPY my-house24-admin/pom.xml .
-COPY my-house24-admin/src ./src
+COPY my-house24-rest/pom.xml .
+COPY my-house24-rest/src ./src
 
 RUN mvn clean package -DskipTests
 
