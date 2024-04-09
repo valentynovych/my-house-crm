@@ -9,6 +9,7 @@ import com.example.myhouse24user.repository.ApartmentOwnerRepo;
 import com.example.myhouse24user.securityFilter.RecaptchaFilter;
 import com.example.myhouse24user.service.*;
 import com.example.myhouse24user.util.UploadFileUtil;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -136,4 +137,7 @@ public class TestConfig {
     public TariffService tariffService() {
         return mock(TariffService.class);
     }
+
+    @MockBean
+    public ApartmentOwnerRepo apartmentOwnerRepo;
 }
