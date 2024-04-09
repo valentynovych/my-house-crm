@@ -90,7 +90,7 @@ class StaffServiceImplTest {
         // when
         when(staffRepo.count()).thenReturn(0L);
         when(roleRepo.findById(1L)).thenReturn(Optional.of(staffRole));
-        when(staffMapper.createFirstStaff(anyString(), anyString(), anyString(), anyString(), any(Role.class), eq(Language.UKR)))
+        when(staffMapper.createFirstStaff(anyString(), anyString(), anyString(), anyString(), any(Role.class), eq(Language.UKR), any(StaffStatus.class)))
                 .thenReturn(staff);
         when(passwordEncoder.encode(anyString()))
                 .thenReturn(STAFF_PASSWORD);
@@ -113,7 +113,7 @@ class StaffServiceImplTest {
         staffService.createFirstStaff();
         verify(staffRepo).count();
         verify(staffMapper, never())
-                .createFirstStaff(anyString(), anyString(), anyString(), anyString(), any(Role.class), any(Language.class));
+                .createFirstStaff(anyString(), anyString(), anyString(), anyString(), any(Role.class), any(Language.class), any(StaffStatus.class));
         clearInvocations(staffMapper);
     }
 
