@@ -1,16 +1,16 @@
-secret-key:
-sender:
+secret-key: ${SENDGRID_API_KEY}
+sender: ${SENDGRID_USER}
 #ReCaptcha
 google:
   recaptcha:
     key:
-      site:
-      secret:
+      site: ${RECAPTCHA_SITE_KEY}
+      secret: ${RECAPTCHA_SECRET_KEY}
 #AWS S3
 aws:
-  accessKey:
-  secretAccessKey:
-  bucketName:
+  accessKey: ${AWS_ACCESS_KEY_ID}
+  secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+  bucketName: ${AWS_BUCKET_NAME}
 
 spring:
   main:
