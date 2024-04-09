@@ -3,6 +3,7 @@ package com.example.myhouse24admin.mapper;
 import com.example.myhouse24admin.entity.Language;
 import com.example.myhouse24admin.entity.Role;
 import com.example.myhouse24admin.entity.Staff;
+import com.example.myhouse24admin.entity.StaffStatus;
 import com.example.myhouse24admin.model.houses.StaffShortRequest;
 import com.example.myhouse24admin.model.staff.StaffEditRequest;
 import com.example.myhouse24admin.model.staff.StaffResponse;
@@ -20,7 +21,9 @@ public interface StaffMapper {
     @Mapping(target = "phoneNumber", source = "phoneNumber")
     @Mapping(target = "role", source = "role")
     @Mapping(target = "language", source = "language")
-    Staff createFirstStaff(String email, String password, String name, String phoneNumber, Role role, Language language);
+    @Mapping(target = "status", source = "staffStatus")
+    Staff createFirstStaff(String email, String password, String name,
+                           String phoneNumber, Role role, Language language, StaffStatus staffStatus);
 
     @Mapping(target = "role.id", source = "roleId")
     Staff staffEditRequestToStaff(StaffEditRequest staffEditRequest);
