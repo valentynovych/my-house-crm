@@ -2,7 +2,7 @@
 <Configuration>
     <Properties>
         <!-- Add path to storage dir (local or server) -->
-        <Property name="basePath">logs/</Property>
+        <Property name="basePath">logs/admin</Property>
     </Properties>
     <Appenders>
         <Console name="Console">
