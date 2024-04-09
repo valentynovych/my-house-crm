@@ -55,7 +55,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./my-house24-admin
-          file: Dockerfile
+          file: ./Dockerfile
           push: true
           tags: olx09/my-house24-admin:latest
 
