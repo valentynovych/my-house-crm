@@ -1,0 +1,44 @@
+secret-key: ${SENDGRID_API_KEY}
+sender: ${SENDGRID_USER}
+upload:
+  path: D:\SpaceLab\MyHouse24\my-house24-admin\uploads
+#ReCaptcha
+google:
+  recaptcha:
+    key:
+      site: ${RECAPTCHA_SITE_KEY}
+      secret: ${RECAPTCHA_SECRET_KEY}
+#AWS S3
+aws:
+  accessKey: ${AWS_ACCESS_KEY_ID}
+  secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
+  bucketName: ${AWS_BUCKET_NAME}
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  sql:
+    init:
+      mode: always
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost:3306}/${DATABASE_NAME}?createDatabaseIfNotExist=true
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+server:
+  servlet:
+    context-path: /my-house24-ol-ar-rest
+  error:
+    whitelabel:
+      enabled: false
+  port: 8081
