@@ -36,8 +36,8 @@ jobs:
           SENDGRID_API_KEY: ${{ secrets.SENDGRIG_KEY }}
           SENDGRID_USER: ${{ secrets.SENDGRIG_USER }}
         run: |
-          envsubst < src/main/resources/application_temp.yml > src/main/resources/application.yml
-          cat src/main/resources/application.yml
+          envsubst < my-house24-admin/src/main/resources/application_temp.yml > my-house24-admin/src/main/resources/application.yml
+#          cat src/main/resources/application.yml
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
