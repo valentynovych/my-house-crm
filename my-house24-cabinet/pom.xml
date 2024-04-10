@@ -12,8 +12,8 @@
     <packaging>jar</packaging>
     <groupId>com.example</groupId>
     <artifactId>my-house24-cabinet</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>my-house-24-user</name>
+    <version>latest</version>
+    <name>my-house24-cabinet</name>
     <description>my-house24-cabinet</description>
 
     <properties>

@@ -67,7 +67,8 @@ public class StaffServiceImpl implements StaffService {
             Role role = roleRepo.findById(1L).orElseThrow(() -> new EntityNotFoundException("Role not found by id 1"));
             Staff staff = staffMapper.createFirstStaff("admin@gmail.com",
                     passwordEncoder.encode("admin"),
-                    "Директор", "+380991111111", role, Language.UKR);
+                    "Директор", "+380991111111", role, Language.UKR,
+                    StaffStatus.ACTIVE);
             saveStaffInDB(staff);
             logger.info("createFirstStaff() - First staff was created");
         } else {
