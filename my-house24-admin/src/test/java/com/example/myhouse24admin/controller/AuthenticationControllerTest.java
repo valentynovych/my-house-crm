@@ -2,6 +2,7 @@ package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.model.authentication.EmailRequest;
 import com.example.myhouse24admin.model.authentication.ForgotPasswordRequest;
+import com.example.myhouse24admin.repository.StaffRepo;
 import com.example.myhouse24admin.service.MailService;
 import com.example.myhouse24admin.service.PasswordResetTokenService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +17,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,6 +34,8 @@ class AuthenticationControllerTest {
     private PasswordResetTokenService passwordResetTokenService;
     @Autowired
     private MailService mailService;
+    @Autowired
+    private StaffRepo staffRepo;
 
     @Test
     void getLoginPage() throws Exception {
@@ -56,6 +58,7 @@ class AuthenticationControllerTest {
         when(passwordResetTokenService.createOrUpdatePasswordResetToken(any(EmailRequest.class)))
                 .thenReturn("token");
         doNothing().when(mailService).sendToken(anyString(), any(EmailRequest.class), anyString());
+        doReturn(true).when(staffRepo).existsStaffByEmail(eq("ruduknasta13@gmail.com"));
 
         this.mockMvc.perform(post("/admin/forgotPassword")
                         .flashAttr("emailRequest",new EmailRequest("ruduknasta13@gmail.com")))

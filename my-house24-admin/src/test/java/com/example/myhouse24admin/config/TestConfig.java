@@ -237,4 +237,6 @@ public class TestConfig {
     public MainPageRepo mainPageRepo;
     @MockBean
     public AboutPageRepo aboutPageRepo;
+    @MockBean
+    public StaffRepo staffRepo;
 }
