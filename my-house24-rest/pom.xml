@@ -12,7 +12,7 @@
     <packaging>jar</packaging>
     <groupId>com.example</groupId>
     <artifactId>my-house24-rest</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>latest</version>
     <name>my-house24-rest</name>
     <description>my-house24-rest</description>
 

@@ -9,8 +9,8 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>my-house-24-web-site</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>my-house24-web-site</artifactId>
+    <version>latest</version>
     <packaging>jar</packaging>
 
     <name>my-house-24-web-site</name>
