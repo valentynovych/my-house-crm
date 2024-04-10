@@ -1,4 +1,4 @@
-name: Build and Push Admin Docker Image
+name: Build and Push Rest Docker Image
 on:
   push:
     branches:
