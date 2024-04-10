@@ -2,12 +2,12 @@ name: Deploy AWS
 on:
   # manually trigger the workflow
    workflow_dispatch:
-   push:
-     paths:
-       - 'my-house24-admin/**'
-       - 'my-house24-cabinet/**'
-       - 'my-house24-rest/**'
-       - 'my-house24-web-site/**'
+#   push:
+#     paths:
+#       - 'my-house24-admin/**'
+#       - 'my-house24-cabinet/**'
+#       - 'my-house24-rest/**'
+#       - 'my-house24-web-site/**'
 
 jobs:
   build-docker-images:
