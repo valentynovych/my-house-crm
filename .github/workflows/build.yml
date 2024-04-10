@@ -28,6 +28,8 @@ jobs:
         run: |
           envsubst < my-house24-admin/src/main/resources/application_template.yml > my-house24-admin/src/main/resources/application.yml
           cat my-house24-admin/src/main/resources/application.yml
+      - name: Build with Maven
+        run: mvn -B package -Dmaven.test.skip --file /my-house24-admin/pom.xml
       - name: Checkout
         uses: actions/checkout@v4
       - name: Login to Docker Hub
