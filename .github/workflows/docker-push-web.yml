@@ -35,7 +35,7 @@ jobs:
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
         run: |
-          envsubst < my-house24-web-site/src/main/resources/application-temp.yml > my-house24-web-site/src/main/resources/application.yml
+          envsubst < my-house-24-web-site/src/main/resources/application-temp.yml > my-house-24-web-site/src/main/resources/application.yml
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -62,6 +62,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./my-house24-web-site/Dockerfile
+          file: ./my-house-24-web-site/Dockerfile
           push: true
           tags: olx09/my-house24-web-site:latest
