@@ -44,7 +44,7 @@ jobs:
           java-version: '17'
 
       - name: Run tests
-        run: cd my-house24-web-site && mvn test
+        run: cd my-house-24-web-site && mvn test
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
