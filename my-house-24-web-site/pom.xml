@@ -13,8 +13,8 @@
     <version>latest</version>
     <packaging>jar</packaging>
 
-    <name>my-house-24-web-site</name>
-    <description>my-house-24-web-site</description>
+    <name>my-house24-web-site</name>
+    <description>my-house24-web-site</description>
 
     <properties>
         <java.version>17</java.version>
