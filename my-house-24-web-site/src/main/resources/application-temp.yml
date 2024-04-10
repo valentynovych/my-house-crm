@@ -4,6 +4,7 @@ aws:
   secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
   bucketName: ${AWS_BUCKET_NAME}
 
+
 spring:
   main:
     allow-bean-definition-overriding: true

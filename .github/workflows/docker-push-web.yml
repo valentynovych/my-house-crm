@@ -5,7 +5,7 @@ on:
       - main
       - dev-aws
     paths:
-      - 'my-house24-web-site/**'
+      - 'my-house-24-web-site/**'
 jobs:
   build:
     name: Build and Push Docker Image for my-house24-web-site
