@@ -34,3 +34,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+
+server:
+  servlet:
+    context-path: /my-house24-ol-ar
+  error:
+    whitelabel:
+      enabled: false
+  port: 8080

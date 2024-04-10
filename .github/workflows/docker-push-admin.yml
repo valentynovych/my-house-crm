@@ -39,8 +39,7 @@ jobs:
           DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
         run: |
-          envsubst < my-house24-admin/src/main/resources/application_temp.yml > my-house24-admin/src/main/resources/application.yml
-#          cat src/main/resources/application.yml
+          envsubst < my-house24-admin/src/main/resources/application-temp.yml > my-house24-admin/src/main/resources/application.yml
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @Controller
@@ -51,8 +50,12 @@ public class StatisticController {
 
     @GetMapping("get-income-expense-statistic")
     public @ResponseBody ResponseEntity<?> getIncomeExpenseStatistic() {
-        List<IncomeExpenseStatistic> incomeExpenseStatisticPerYear = statisticService.getIncomeExpenseStatisticPerYear();
-        return new ResponseEntity<>(incomeExpenseStatisticPerYear, HttpStatus.OK);
+//        try {
+            List<IncomeExpenseStatistic> incomeExpenseStatisticPerYear = statisticService.getIncomeExpenseStatisticPerYear();
+            return new ResponseEntity<>(incomeExpenseStatisticPerYear, HttpStatus.OK);
+//        } catch (RuntimeException exception) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
     }
 
     @GetMapping("get-paid-arrears-statistic")

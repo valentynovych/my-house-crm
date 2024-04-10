@@ -1,27 +1,30 @@
-server:
-  port: 8083
-  servlet:
-    context-path: /my-house
 spring:
-  application:
-    name: my-house24-rest
   datasource:
-    url:
-    username:
-    password:
+    url: jdbc:mysql://${MYSQL_HOST:localhost:3306}/my_house_24_dev?createDatabaseIfNotExist=true
+    username: myHouseRoot
+    password: myHouseRoot
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    show-sql: true
+    generate-ddl: true
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-logging:
-  level:
-    org:
-      springframework: info
-      hibernate: error
+  main:
+    allow-bean-definition-overriding: true
+  sql:
+    init:
+      mode: always
+server:
+  servlet:
+    context-path: /my-house24-ol-ar-rest
+  error:
+    whitelabel:
+      enabled: false
+  port: 8084
 
 springdoc:
   swagger-ui:
@@ -30,9 +33,6 @@ springdoc:
     tagsSorter: alpha
     operations-sorter: alpha
 
-sendGrid:
-  apiKey:
-  from:
 token:
   secret: secretForJWTWithoutHS256Encoding
   lifetime:
