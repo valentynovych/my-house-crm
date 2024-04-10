@@ -4,8 +4,7 @@ import com.example.myhouse24admin.configuration.awsConfiguration.S3ResourceLoade
 import com.example.myhouse24admin.entity.Role;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.model.staff.StaffDetails;
-import com.example.myhouse24admin.repository.ApartmentRepo;
-import com.example.myhouse24admin.repository.PersonalAccountRepo;
+import com.example.myhouse24admin.repository.*;
 import com.example.myhouse24admin.securityFilter.RecaptchaFilter;
 import com.example.myhouse24admin.service.*;
 import com.example.myhouse24admin.util.UploadFileUtil;
@@ -213,20 +212,31 @@ public class TestConfig {
     public ApartmentRepo apartmentRepo;
 
     @Bean
-    public AboutPageService aboutPageService(){
+    public AboutPageService aboutPageService() {
         return mock(AboutPageService.class);
     }
 
     @Bean
-    public ServicesPageService servicesPageService(){
+    public ServicesPageService servicesPageService() {
         return mock(ServicesPageService.class);
     }
+
     @Bean
-    public ContactsPageService contactsPageService(){return mock(ContactsPageService.class);}
+    public ContactsPageService contactsPageService() {
+        return mock(ContactsPageService.class);
+    }
 
     @MockBean
     public RoleService roleService;
 
     @MockBean
     public InvoiceTemplateService invoiceTemplateService;
+    @MockBean
+    public MainPageBlockRepo mainPageBlockRepo;
+    @MockBean
+    public MainPageRepo mainPageRepo;
+    @MockBean
+    public AboutPageRepo aboutPageRepo;
+    @MockBean
+    public StaffRepo staffRepo;
 }
