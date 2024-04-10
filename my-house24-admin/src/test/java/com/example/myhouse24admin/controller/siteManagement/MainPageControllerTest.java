@@ -1,8 +1,12 @@
 package com.example.myhouse24admin.controller.siteManagement;
 
+import com.example.myhouse24admin.entity.MainPage;
+import com.example.myhouse24admin.entity.MainPageBlock;
 import com.example.myhouse24admin.model.siteManagement.mainPage.MainPageBlockRequest;
 import com.example.myhouse24admin.model.siteManagement.mainPage.MainPageRequest;
 import com.example.myhouse24admin.model.siteManagement.mainPage.MainPageResponse;
+import com.example.myhouse24admin.repository.MainPageBlockRepo;
+import com.example.myhouse24admin.repository.MainPageRepo;
 import com.example.myhouse24admin.service.MainPageService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +19,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,6 +44,10 @@ class MainPageControllerTest {
 
     @Autowired
     private MainPageService mainPageService;
+    @Autowired
+    private MainPageBlockRepo mainPageBlockRepo;
+    @Autowired
+    private MainPageRepo mainPageRepo;
 
     @Test
     void getMainPage() throws Exception {
@@ -80,8 +88,26 @@ class MainPageControllerTest {
         mainPageRequest.setImage1(multipartFile);
         mainPageRequest.setImage2(multipartFile);
         mainPageRequest.setImage3(multipartFile);
+        MainPageBlockRequest pageBlockRequest = new MainPageBlockRequest();
+        pageBlockRequest.setId(1L);
+        pageBlockRequest.setTitle("title");
+        pageBlockRequest.setDescription("description");
+        mainPageRequest.setMainPageBlocks(List.of(pageBlockRequest));
+
+        MainPage mainPage = new MainPage();
+        mainPage.setImage1("image1");
+        mainPage.setImage2("image2");
+        mainPage.setImage3("image3");
+
+        MainPageBlock mainPageBlock = new MainPageBlock();
+        mainPageBlock.setTitle("title");
+        mainPageBlock.setDescription("description");
+        mainPageBlock.setId(1L);
+
 
         doNothing().when(mainPageService).updateMainPage(any(MainPageRequest.class));
+        doReturn(Optional.of(mainPageBlock)).when(mainPageBlockRepo).findById(anyLong());
+        doReturn(Optional.of(mainPage)).when(mainPageRepo).findById(anyLong());
 
         this.mockMvc.perform(post("/my-house/admin/site-management/home-page")
                         .contextPath("/my-house")
@@ -104,12 +130,15 @@ class MainPageControllerTest {
         mainPageRequest.setImage2(emptyMultipartFile);
         mainPageRequest.setImage3(emptyMultipartFile);
 
+        doReturn(Optional.of(new MainPageBlock())).when(mainPageBlockRepo).findById(anyLong());
+        doReturn(Optional.of(new MainPage())).when(mainPageRepo).findById(anyLong());
+
         this.mockMvc.perform(post("/my-house/admin/site-management/home-page")
                         .contextPath("/my-house")
                         .with(user(userDetails))
                         .flashAttr("mainPageRequest", mainPageRequest))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.size()", is(5)));
+                .andExpect(jsonPath("$.size()", is(7)));
     }
 }
