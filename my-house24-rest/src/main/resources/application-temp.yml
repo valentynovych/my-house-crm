@@ -22,7 +22,6 @@ server:
   error:
     whitelabel:
       enabled: false
-  port: 8084
 
 springdoc:
   swagger-ui:
