@@ -2,20 +2,20 @@ upload:
   path: /home/avada/web/slj.demodev.cc/projects/My-house24_Rudiuk_Lesyk/uploads
 
 aws:
-  accessKey:
-  secretAccessKey:
+  accessKey: ${awsAccessKey}
+  secretAccessKey: ${awsSecretAccessKey}
   endpoint: https://testbucket-my-house.s3.us-east-2.amazonaws.com/
   bucketName: testbucket-my-house
 
 #SendGrid
-secret-key:
-sender:
+secret-key: ${sendgridSecretKey}
+sender: ${sendgridSender}
 #ReCaptcha
 google:
   recaptcha:
     key:
-      site:
-      secret:
+      site: ${recaptchaSiteKey}
+      secret: ${recaptchaSecretKey}
 
 spring:
   servlet:
