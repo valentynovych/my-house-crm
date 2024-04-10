@@ -7,21 +7,7 @@ aws:
   endpoint: https://testbucket-my-house.s3.us-east-2.amazonaws.com/
   bucketName: testbucket-my-house
 
-#SendGrid
-secret-key:
-sender:
-#ReCaptcha
-google:
-  recaptcha:
-    key:
-      site:
-      secret:
-
 spring:
-  servlet:
-    multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
   main:
     allow-bean-definition-overriding: true
   sql:
@@ -45,6 +31,3 @@ server:
   error:
     whitelabel:
       enabled: false
-  tomcat:
-    max-swallow-size: 100000000
-    max-http-form-post-size: 100000000
