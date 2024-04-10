@@ -18,7 +18,7 @@ spring:
 
 server:
   servlet:
-    context-path: /my-house24-ol-ar-rest
+    context-path: /my-house24-ol-ar
   error:
     whitelabel:
       enabled: false
