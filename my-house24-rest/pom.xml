@@ -102,6 +102,7 @@
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
         <!-- Log4j2 -->
+
     </dependencies>
 
     <build>
