@@ -1,0 +1,27 @@
+name: Pull and Run admin container
+on:
+  workflow_run:
+    workflows:
+      - "Build and Push Admin Docker Image"
+    types:
+      - completed
+jobs:
+  build:
+    name: Pull and Run admin container
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Pull and Run admin container
+        env:
+          PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          HOSTNAME: ${{secrets.SSH_HOST}}
+          USER_NAME: ${{secrets.SSH_USERNAME}}
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME}
+          sudo docker compose pull
+          sudo docker compose restart my-house24-ol-ar-admin
+          echo "Done"
+          exit
