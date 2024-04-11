@@ -83,7 +83,8 @@ jobs:
         run: |
           echo "$PRIVATE_KEY" > private_key.pem && chmod 400 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME}
-          sudo docker compose pull
-          sudo docker compose restart my-house24-ol-ar-admin
-          echo "Done"
+          echo "Success ssh login"
+          echo "Start pull and restart container"
+          sudo docker compose pull && sudo docker compose restart my-house24-ol-ar-admin
+          echo "Container has been updated and is running"
           exit
