@@ -45,37 +45,31 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Build and push
+      - name: Build and push admin
         uses: docker/build-push-action@v5
         with:
           context: .
           file: my-house24-admin/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-admin:latest
-#      - name: Build with Maven
-#        run: mvn -B package -Dmaven.test.skip --file my-house24-admin/pom.xml
-#      - name: Checkout
-#        uses: actions/checkout@v4
-#      - name: Login to Docker Hub
-#        uses: docker/login-action@v3
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#      - name: Build with Maven
-#        run: mvn -B package -Dmaven.test.skip --file pom.xml spring-boot:build-image
-#      - name: Tag admin image
-#        run: docker tag my-house24-admin ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-admin
-#      - name: Push admin image
-#        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-admin
-#      - name: Tag cabinet image
-#        run: docker tag my-house24-cabinet ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-cabinet
-#      - name: Push cabinet image
-#        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-cabinet
-#      - name: Tag rest image
-#        run: docker tag my-house24-rest ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-rest
-#      - name: Push rest image
-#        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-rest
-#      - name: Tag website image
-#        run: docker tag my-house24-web-site ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-web-site
-#      - name: Push website image
-#        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-web-site
+      - name: Build and push cabinet
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: my-house24-cabinet/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-cabinet:latest
+      - name: Build and push rest
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: my-house24-rest/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-rest:latest
+      - name: Build and push website
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: my-house-24-web-site/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-web-site:latest
