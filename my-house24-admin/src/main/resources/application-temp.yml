@@ -2,6 +2,7 @@ secret-key: ${SENDGRID_API_KEY}
 sender: ${SENDGRID_USER}
 upload:
   path: D:\SpaceLab\MyHouse24\my-house24-admin\uploads
+
 #ReCaptcha
 google:
   recaptcha:
