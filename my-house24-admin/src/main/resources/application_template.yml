@@ -44,7 +44,6 @@ spring:
 server:
   servlet:
     context-path: /my-house24-rudiuk-lesyk
-    port: 8080
   error:
     whitelabel:
       enabled: false
