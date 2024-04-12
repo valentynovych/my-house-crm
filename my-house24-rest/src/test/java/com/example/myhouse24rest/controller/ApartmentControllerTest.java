@@ -43,7 +43,7 @@ public class ApartmentControllerTest {
     @Test
     public void testGetAllApartments_WhenAuthorized() throws Exception {
         // given
-        var request = get("/api/v1/apartments/get-all-apartments")
+        var request = get("/v1/apartments/get-all-apartments")
                 .with(jwt().jwt(builder -> builder.claim("role", "OWNER")))
                 .param("page", String.valueOf(pageable.getPageNumber()))
                 .param("pageSize", String.valueOf(pageable.getPageSize()));
@@ -75,7 +75,7 @@ public class ApartmentControllerTest {
     @Test
     public void testGetAllApartments_Authorized_BadParams() throws Exception {
         // given
-        var request = get("/api/v1/apartments/get-all-apartments")
+        var request = get("/v1/apartments/get-all-apartments")
                 .with(jwt().jwt(builder -> builder.claim("role", "OWNER")))
                 .param("page", "-1")
                 .param("pageSize", "1");
@@ -91,7 +91,7 @@ public class ApartmentControllerTest {
     @Test
     public void testGetAllApartments_WhenNotAuthorized() throws Exception {
         // given
-        var request = get("/api/v1/apartments/get-all-apartments")
+        var request = get("/v1/apartments/get-all-apartments")
                 .param("page", "0")
                 .param("pageSize", "10");
 
