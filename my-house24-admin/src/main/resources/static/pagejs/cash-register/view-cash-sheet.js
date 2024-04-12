@@ -1,4 +1,4 @@
-const sheetId = window.location.pathname.match(/\d+/);
+const sheetId = window.location.pathname.match(/\d+$/);
 let sheetType;
 
 blockCardDody();

@@ -1,7 +1,7 @@
 let lastSectionIndex = 0;
 let lastFloorIndex = 0;
 let lastStaffIndex = 0;
-const houseId = window.location.pathname.match('\\d+');
+const houseId = window.location.pathname.match(/\d+$/);
 let houseToRestore;
 
 $('#add-section').on('click', () => addNewSection({name: '', rangeApartmentNumbers: '', id: ''}));

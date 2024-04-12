@@ -1,7 +1,6 @@
 $(window).on("load", function () {
 
-    const windowPath = window.location.pathname;
-    const itemId = Number(windowPath.substring(windowPath.lastIndexOf('/') + 1, windowPath.length));
+    const itemId = window.location.pathname.match(/\d+$/);
     let itemTypes;
     let $paymentType = $('#paymentType');
 
