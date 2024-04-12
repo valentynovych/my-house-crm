@@ -16,7 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 @Controller
-@RequestMapping("/web-site/about-us")
+@RequestMapping("/about-us")
 public class AboutPageController {
     private final AboutPageService aboutPageService;
 

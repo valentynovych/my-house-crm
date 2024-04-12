@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/web-site/contacts")
+@RequestMapping("/contacts")
 public class ContactsController {
     private final ContactsService contactsService;
 
