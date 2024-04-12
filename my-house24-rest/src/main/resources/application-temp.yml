@@ -30,7 +30,6 @@ springdoc:
     tagsSorter: alpha
     operations-sorter: alpha
 
-
 token:
   secret: secretForJWTWithoutHS256Encoding
   lifetime:
