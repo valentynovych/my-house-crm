@@ -1,4 +1,4 @@
-const sheetId = window.location.pathname.match(/\d+/);
+const sheetId = window.location.pathname.match(/\d+$/);
 const $inputSheetNumber = $('[name="sheetNumber"]');
 const $inputCreationDate = $('[name="creationDate"]');
 const $selectPaymentItem = $('[name="paymentItemId"]');

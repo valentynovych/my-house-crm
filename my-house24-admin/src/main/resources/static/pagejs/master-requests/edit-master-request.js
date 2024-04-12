@@ -1,4 +1,4 @@
-const masterRequestId = window.location.pathname.match(/\d+/);
+const masterRequestId = window.location.pathname.match(/\d+$/);
 let masterRequestToRestore;
 
 const $inputVisitDate = $('[name="visitDate"]');

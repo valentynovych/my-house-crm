@@ -1,4 +1,4 @@
-const personalAccountId = window.location.pathname.match(/\d+/);
+const personalAccountId = window.location.pathname.match(/\d+$/);
 let accountToRestore;
 
 blockCardDody();

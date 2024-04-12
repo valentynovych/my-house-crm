@@ -1,4 +1,4 @@
-const houseId = window.location.pathname.match('\\d+');
+const houseId = window.location.pathname.match(/\d+$/);
 
 $(window).on('load', function () {
     blockCardDody();

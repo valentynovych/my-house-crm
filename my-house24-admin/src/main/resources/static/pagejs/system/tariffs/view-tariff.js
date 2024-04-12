@@ -1,5 +1,4 @@
-const tariffEditPathname = window.location.pathname;
-let tariffId = tariffEditPathname.substring(tariffEditPathname.lastIndexOf('/') + 1, tariffEditPathname.length);
+let tariffId = window.location.pathname.match(/\d+$/);
 let $currentUrl = $('#current-tariff');
 
 $currentUrl.attr('href', $currentUrl.attr('href') + tariffId)
