@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("api/v1/profile")
+@RequestMapping("/v1/profile")
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Profile", description = "Profile API")
 public class ProfileController {
