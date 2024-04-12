@@ -7,7 +7,7 @@ function getMainPage() {
     blockBy('.content-wrapper');
     $.ajax({
         type: "GET",
-        url: "home/get",
+        url: "get",
         success: function (response) {
             console.log(response);
             showPage(response);

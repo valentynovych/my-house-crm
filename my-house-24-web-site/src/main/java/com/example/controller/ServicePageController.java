@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/web-site/services")
+@RequestMapping("/services")
 public class ServicePageController {
     private final ServicePageService servicePageService;
 
