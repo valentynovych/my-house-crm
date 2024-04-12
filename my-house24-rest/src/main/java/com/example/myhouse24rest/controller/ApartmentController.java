@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("api/v1/apartments")
+@RequestMapping("/v1/apartments")
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Apartments", description = "Apartment API")
 public class ApartmentController {

@@ -10,6 +10,9 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
   main:
     allow-bean-definition-overriding: true
   sql:
@@ -17,7 +20,10 @@ spring:
       mode: always
 server:
   servlet:
-    context-path: /my-house24-rudiuk-lesyk
+    context-path: /my-house24-ol-ar/api
+  error:
+    whitelabel:
+      enabled: false
 
 springdoc:
   swagger-ui:
