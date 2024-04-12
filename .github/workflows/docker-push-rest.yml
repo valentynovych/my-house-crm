@@ -78,6 +78,6 @@ jobs:
           echo "Success ssh login"
           echo "Start pull and restart container"
           sleep 20
-          cd ~ && sudo docker compose -f docker-compose.yml pull && sudo docker compose -f docker-compose.yml restart my-house24-ol-ar-rest
+          cd /home/ubuntu/ && sudo docker compose -f docker-compose.yml pull && sudo docker compose -f docker-compose.yml restart my-house24-ol-ar-rest
           echo "Container has been updated and is running"
           exit
