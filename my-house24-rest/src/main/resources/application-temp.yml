@@ -19,7 +19,7 @@ spring:
 
 server:
   servlet:
-    context-path: /my-house24-ol-ar
+    context-path: /my-house24-ol-ar/api
   error:
     whitelabel:
       enabled: false

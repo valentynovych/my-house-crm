@@ -27,10 +27,10 @@ import io.swagger.v3.oas.annotations.servers.Server;
         servers = {
                 @Server(
                         description = "Server",
-                        url = "/my-house/"),
-                @Server(
-                        description = "Local",
-                        url = "http://localhost:8080/my-house")
+                        url = "/my-house24-rudiuk-lesyk/api"),
+//                @Server(
+//                        description = "Local",
+//                        url = "http://localhost:8080/my-house/api")
         })
 @SecurityScheme(
         name = "bearerAuth",
