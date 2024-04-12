@@ -42,7 +42,8 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 server:
-  context-path: /my-house24-rudiuk-lesyk
+  servlet:
+    context-path: /my-house24-rudiuk-lesyk
   error:
     whitelabel:
       enabled: false

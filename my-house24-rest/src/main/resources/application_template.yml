@@ -16,7 +16,8 @@ spring:
     init:
       mode: always
 server:
-  context-path: /my-house24-rudiuk-lesyk
+  servlet:
+    context-path: /my-house24-rudiuk-lesyk
 
 springdoc:
   swagger-ui:
