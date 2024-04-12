@@ -60,8 +60,8 @@ public class SecurityConfiguration {
                         .tokenRepository(persistentTokenRepository()))
                 .logout((logout) -> logout
                         .logoutUrl("/admin/logout")
-                        .permitAll())
-                .addFilterBefore(recaptchaFilter, UsernamePasswordAuthenticationFilter.class);
+                        .permitAll());
+//                .addFilterBefore(recaptchaFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
     public PersistentTokenRepository persistentTokenRepository(){
