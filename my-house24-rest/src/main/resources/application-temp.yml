@@ -16,6 +16,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+
 server:
   servlet:
     context-path: /my-house24-ol-ar

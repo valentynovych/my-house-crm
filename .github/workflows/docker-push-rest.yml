@@ -73,6 +73,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 1m
+          debug: true
           script: |
             echo "Start pull and restart container"
             cd /home/ubuntu/ && sudo docker compose -f docker-compose.yml pull && sudo docker compose -f docker-compose.yml restart my-house24-ol-ar-rest
