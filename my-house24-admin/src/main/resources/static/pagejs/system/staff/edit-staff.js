@@ -16,9 +16,7 @@ let staffToRestore;
 
 $(window).on("load", function () {
 
-
-    let href = window.location.href;
-    staff.id = href.slice(href.lastIndexOf('/') + 1, href.length);
+    staff.id = window.location.pathname.match(/\d+$/);
 
     $role.select2({
         placeholder: roleLabel,

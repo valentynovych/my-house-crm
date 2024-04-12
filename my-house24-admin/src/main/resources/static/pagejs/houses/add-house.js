@@ -307,6 +307,9 @@ $('.save-button').on('click', function () {
         success: function (response) {
             toastr.success(successSaveMessage);
             unblockBy('#houseForm');
+            setTimeout(() => {
+                window.history.back();
+            }, 500)
         },
         error: function (error) {
             console.log(error)

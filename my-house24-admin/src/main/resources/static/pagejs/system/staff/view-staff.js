@@ -12,8 +12,7 @@ $(window).on("load", function () {
         }
     };
 
-    let href = window.location.href;
-    staff.id = href.slice(href.lastIndexOf('/') + 1, href.length);
+    staff.id = window.location.pathname.match(/\d+$/);
 
     function getRoleLabel(role) {
         switch (role) {

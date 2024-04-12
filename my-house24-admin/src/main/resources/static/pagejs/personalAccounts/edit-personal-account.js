@@ -1,4 +1,4 @@
-const accountId = window.location.pathname.match(/\d+/);
+const accountId = window.location.pathname.match(/\d+$/);
 let accountToRestore;
 $(document).ready(function () {
     blockCardDody();
