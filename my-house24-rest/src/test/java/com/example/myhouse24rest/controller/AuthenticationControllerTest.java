@@ -50,7 +50,7 @@ class AuthenticationControllerTest {
     void login_WhenBodyIsCorrect() throws Exception {
 
         // given
-        var request = post("/api/v1/auth/signin")
+        var request = post("/v1/auth/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -86,7 +86,7 @@ class AuthenticationControllerTest {
     void login_WhenBodyIsInCorrect() throws Exception {
 
         // given
-        var request = post("/api/v1/auth/signin")
+        var request = post("/v1/auth/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -106,7 +106,7 @@ class AuthenticationControllerTest {
     void login_WhenBodyIsInCorrect_BadRequest() throws Exception {
 
         // given
-        var request = post("/api/v1/auth/signin")
+        var request = post("/v1/auth/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -128,7 +128,7 @@ class AuthenticationControllerTest {
     @Test
     void refreshToken_WhenBodyIsCorrect() throws Exception {
         // given
-        var request = post("/api/v1/auth/refresh-token")
+        var request = post("/v1/auth/refresh-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -162,7 +162,7 @@ class AuthenticationControllerTest {
     @Test
     void refreshToken_WhenBodyIsInCorrect() throws Exception {
         // given
-        var request = post("/api/v1/auth/refresh-token")
+        var request = post("/v1/auth/refresh-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {
@@ -182,7 +182,7 @@ class AuthenticationControllerTest {
     @Test
     void refreshToken_WhenBodyIsCorrect_RefreshTokenIsNotValid() throws Exception {
         // given
-        var request = post("/api/v1/auth/refresh-token")
+        var request = post("/v1/auth/refresh-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("""
                         {

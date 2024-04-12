@@ -62,7 +62,7 @@ class MessageControllerTest {
 
         // given
         var messageResponse = messages.get(0);
-        var request = get("/api/v1/messages/get-message/%s".formatted(messageResponse.messageId()))
+        var request = get("/v1/messages/get-message/%s".formatted(messageResponse.messageId()))
                 .with(jwt().jwt(builder -> builder.claim("role", "OWNER")));
 
         // when
@@ -93,7 +93,7 @@ class MessageControllerTest {
     void readMessageById() throws Exception {
         // given
         var messageResponse = messages.get(0);
-        var request = patch("/api/v1/messages/read-message/%s".formatted(messageResponse.messageId()))
+        var request = patch("/v1/messages/read-message/%s".formatted(messageResponse.messageId()))
                 .with(jwt().jwt(builder -> builder.claim("role", "OWNER")));
 
         // when
@@ -109,7 +109,7 @@ class MessageControllerTest {
     @Test
     void getUnreadMessages_WhenAuthorized_ShouldReturnAllUnreadMessages() throws Exception {
         // given
-        var request = get("/api/v1/messages/get-unread-messages")
+        var request = get("/v1/messages/get-unread-messages")
                 .with(jwt().jwt(builder -> builder.claim("role", "OWNER")))
                 .param("page", String.valueOf(pageable.getPageNumber()))
                 .param("pageSize", String.valueOf(pageable.getPageSize()));
@@ -139,7 +139,7 @@ class MessageControllerTest {
 
     @Test
     void getAllMessages_WhenAuthorized_ShouldReturnAllMessages() throws Exception {
-        var request = get("/api/v1/messages/get-all-messages")
+        var request = get("/v1/messages/get-all-messages")
                 .with(jwt().jwt(builder -> builder.claim("role", "OWNER")))
                 .param("page", String.valueOf(pageable.getPageNumber()))
                 .param("pageSize", String.valueOf(pageable.getPageSize()));

@@ -35,7 +35,7 @@ class ProfileControllerTest {
     @Test
     void getProfile_WhenAuthorized() throws Exception {
         // given
-        var request = get("/api/v1/profile/get-profile")
+        var request = get("/v1/profile/get-profile")
                 .with(jwt().jwt(builder -> builder.claim("role", "OWNER")));
 
         var apartmentResponse = new ApartmentResponse(
@@ -88,7 +88,7 @@ class ProfileControllerTest {
     @Test
     void getProfile_WhenNotAuthorized() throws Exception {
         // given
-        var request = get("/api/v1/profile/get-profile");
+        var request = get("/v1/profile/get-profile");
 
         // when
         this.mockMvc.perform(request)
