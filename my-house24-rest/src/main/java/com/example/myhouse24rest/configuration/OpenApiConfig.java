@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
         servers = {
                 @Server(
                         description = "Server",
-                        url = "/my-house24-rudiuk-lesyk/api"),
+                        url = "/my-house24-ol-ar/api"),
 //                @Server(
 //                        description = "Local",
 //                        url = "http://localhost:8080/my-house/api")
