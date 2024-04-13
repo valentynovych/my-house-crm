@@ -11,13 +11,26 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Adding secret
+        env:
+          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+        run: |
+          envsubst < docker-compose.yml > docker-compose-temp.yml
 
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@master
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${env.SSH_HOST}
+          username: ${env.SSH_USERNAME}
+          key: ${env.SSH_PRIVATE_KEY}
           source: "docker-compose.yml"
-          target: "/home/${{ secrets.SSH_USERNAME }}/"
+          target: "/home/${env.SSH_USERNAME}/"

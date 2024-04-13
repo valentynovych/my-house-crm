@@ -1,0 +1,98 @@
+version: '3.8'
+services:
+  my-house24-ol-ar-database-mysql:
+    container_name: my-house24-ol-ar-database-mysql
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+    networks:
+      - my-house24-ol-ar-network
+    volumes:
+      - my-house24-ol-ar-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+  my-house24-ol-ar-admin:
+    container_name: my-house24-ol-ar-admin
+    restart: on-failure
+    image: olx09/my-house24-admin:latest
+    ports:
+      - "8091:8080"
+    environment:
+      MYSQL_HOST: my-house24-ol-ar-database-mysql
+    depends_on:
+      my-house24-ol-ar-database-mysql:
+        condition: service_healthy
+    networks:
+      - my-house24-ol-ar-network
+    volumes:
+      - my-house24-ol-ar-uploads:/home/my-house/uploads
+
+  my-house24-ol-ar-cabinet:
+    container_name: my-house24-ol-ar-cabinet
+    restart: on-failure
+    image: olx09/my-house24-cabinet:latest
+    ports:
+      - "8092:8080"
+    environment:
+      MYSQL_HOST: my-house24-ol-ar-database-mysql
+    depends_on:
+      my-house24-ol-ar-database-mysql:
+        condition: service_healthy
+      my-house24-ol-ar-admin:
+        condition: service_started
+    networks:
+      - my-house24-ol-ar-network
+    volumes:
+      - my-house24-ol-ar-uploads:/home/my-house/uploads
+
+  my-house24-ol-ar-web-site:
+    container_name: my-house24-ol-ar-web-site
+    restart: on-failure
+    image: olx09/my-house24-web-site:latest
+    ports:
+      - "8093:8080"
+    environment:
+      MYSQL_HOST: my-house24-ol-ar-database-mysql
+    depends_on:
+      my-house24-ol-ar-database-mysql:
+        condition: service_healthy
+      my-house24-ol-ar-admin:
+        condition: service_started
+    networks:
+      - my-house24-ol-ar-network
+    volumes:
+      - my-house24-ol-ar-uploads:/home/my-house/uploads
+
+  my-house24-ol-ar-rest:
+    container_name: my-house24-ol-ar-rest
+    restart: on-failure
+    image: olx09/my-house24-rest:latest
+    ports:
+      - "8094:8080"
+    environment:
+      MYSQL_HOST: my-house24-ol-ar-database-mysql
+    depends_on:
+      my-house24-ol-ar-database-mysql:
+        condition: service_healthy
+      my-house24-ol-ar-admin:
+        condition: service_started
+    networks:
+      - my-house24-ol-ar-network
+    volumes:
+      - my-house24-ol-ar-uploads:/home/my-house/uploads
+
+networks:
+  my-house24-ol-ar-network:
+    driver: bridge
+
+volumes:
+  my-house24-ol-ar-mysql-data:
+  my-house24-ol-ar-uploads:
