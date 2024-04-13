@@ -62,35 +62,21 @@ jobs:
           file: ./my-house24-rest/Dockerfile
           push: true
           tags: olx09/my-house24-rest:latest
+
   notify:
     name: Pull and Run rest container
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: executing remote ssh commands using ssh key
+      - name: Executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          fingerprint: ${{ secrets.SSH_FINGERPRINT }}
-          timeout: 1m
+          timeout: 3m
           debug: true
           script: |
             echo "Start pull and restart container"
             cd /home/ubuntu/ && sudo docker compose -f docker-compose.yml pull && sudo docker compose -f docker-compose.yml restart my-house24-ol-ar-rest
             echo "Container has been updated and is running"
-#      - name: Pull and Run rest container
-#        env:
-#          PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-#          HOSTNAME: ${{secrets.SSH_HOST}}
-#          USER_NAME: ${{secrets.SSH_USERNAME}}
-#        run: |
-#          echo "$PRIVATE_KEY" > private_key.pem && chmod 400 private_key.pem
-#          ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME}
-#          echo "Success ssh login"
-#          echo "Start pull and restart container"
-#          sleep 20
-#          cd /home/ubuntu/ && sudo docker compose -f docker-compose.yml pull && sudo docker compose -f docker-compose.yml restart my-house24-ol-ar-rest
-#          echo "Container has been updated and is running"
-#          exit

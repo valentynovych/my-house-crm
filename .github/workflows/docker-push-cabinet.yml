@@ -62,3 +62,22 @@ jobs:
           file: ./my-house24-cabinet/Dockerfile
           push: true
           tags: olx09/my-house24-cabinet:latest
+
+  notify:
+    name: Pull and Run cabinet container
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 3m
+          debug: true
+          script: |
+            echo "Start pull and restart container"
+            cd /home/ubuntu/ && sudo docker compose -f docker-compose.yml pull && sudo docker compose -f docker-compose.yml restart my-house24-ol-ar-cabinet
+            echo "Container has been updated and is running"
+            exit

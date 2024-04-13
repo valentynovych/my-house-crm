@@ -71,20 +71,20 @@ jobs:
           tags: olx09/my-house24-admin:latest
 
   notify:
-      name: Pull and Run admin container
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-      - name: Pull and Run admin container
-        env:
-          PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-          HOSTNAME: ${{secrets.SSH_HOST}}
-          USER_NAME: ${{secrets.SSH_USERNAME}}
-        run: |
-          echo "$PRIVATE_KEY" > private_key.pem && chmod 400 private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER_NAME}@${HOSTNAME}
-          echo "Success ssh login"
-          echo "Start pull and restart container"
-          cd ~ && sudo docker compose pull && sudo docker compose restart my-house24-ol-ar-admin
-          echo "Container has been updated and is running"
-          exit
+    name: Pull and Run admin container
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 3m
+          debug: true
+          script: |
+            echo "Start pull and restart container"
+            cd /home/ubuntu/ && sudo docker compose -f docker-compose.yml pull && sudo docker compose -f docker-compose.yml restart my-house24-ol-ar-admin
+            echo "Container has been updated and is running"          
+            exit
