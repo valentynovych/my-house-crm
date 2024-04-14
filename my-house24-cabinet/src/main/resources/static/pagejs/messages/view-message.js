@@ -1,4 +1,4 @@
-const messageId = window.location.pathname.match(/\d+/g);
+const messageId = window.location.pathname.match(/\d+$/g);
 
 $(document).ready(function () {
     blockCardDody();
