@@ -8,7 +8,7 @@ services:
     networks:
       - my-house24-Rudiuk_Lesyk-network
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=${mysqlRootPassword}
       - MYSQL_DATABASE=my_house24
     volumes:
       - my-house24-Rudiuk_Lesyk-db-volume:/var/lib/mysql
@@ -17,13 +17,13 @@ services:
     image: ruduknasta13074/my-house24-admin
     restart: always
     ports:
-      - 9080:8080
+      - 7080:8080
     networks:
       - my-house24-Rudiuk_Lesyk-network
     environment:
       - MYSQL_HOST=my-house24-Rudiuk_Lesyk-db
       - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
+      - MYSQL_PASSWORD=${mysqlPassword}
     depends_on:
       - my-house24-Rudiuk_Lesyk-db
 
@@ -31,13 +31,13 @@ services:
     image: ruduknasta13074/my-house24-cabinet
     restart: always
     ports:
-      - 9081:8081
+      - 7081:8081
     networks:
       - my-house24-Rudiuk_Lesyk-network
     environment:
       - MYSQL_HOST=my-house24-Rudiuk_Lesyk-db
       - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
+      - MYSQL_PASSWORD=${mysqlPassword}
     depends_on:
       - my-house24-Rudiuk_Lesyk-db
 
@@ -45,13 +45,13 @@ services:
     image: ruduknasta13074/my-house24-rest
     restart: always
     ports:
-      - 9082:8082
+      - 7082:8082
     networks:
       - my-house24-Rudiuk_Lesyk-network
     environment:
       - MYSQL_HOST=my-house24-Rudiuk_Lesyk-db
       - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
+      - MYSQL_PASSWORD=${mysqlPassword}
     depends_on:
       - my-house24-Rudiuk_Lesyk-db
 
@@ -59,13 +59,13 @@ services:
     image: ruduknasta13074/my-house24-web-site
     restart: always
     ports:
-      - 9083:8083
+      - 7083:8083
     networks:
       - my-house24-Rudiuk_Lesyk-network
     environment:
       - MYSQL_HOST=my-house24-Rudiuk_Lesyk-db
       - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
+      - MYSQL_PASSWORD=${mysqlPassword}
     depends_on:
       - my-house24-Rudiuk_Lesyk-db
 

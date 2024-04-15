@@ -50,6 +50,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             echo "Restarting container"
+            cd /home/ubuntu/
             docker compose -f docker-compose.yml pull
             docker compose -f docker-compose.yml restart my-house24-Rudiuk_Lesyk-website
             echo "Container has been updated"          
