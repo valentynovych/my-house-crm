@@ -1,0 +1,56 @@
+name: Build and push web-site image and restart container
+
+on:
+  push:
+    branches: [ "dev" ]
+    paths:
+      - 'my-house-24-web-site/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Add secret to website
+        env:
+          awsAccessKey: ${{ secrets.AWS_ACCESS_KEY }}
+          awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          envsubst < my-house-24-web-site/src/main/resources/application_template.yml > my-house-24-web-site/src/main/resources/application.yml
+          cat my-house-24-web-site/src/main/resources/application.yml
+      - name: Build and push website
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: my-house-24-web-site/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-web-site:latest
+
+      - name: Restart container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            echo "Restarting container"
+            docker compose -f docker-compose.yml pull
+            docker compose -f docker-compose.yml restart my-house24-Rudiuk_Lesyk-website
+            echo "Container has been updated"          
+            exit
