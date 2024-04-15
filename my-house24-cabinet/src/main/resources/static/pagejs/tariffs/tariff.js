@@ -1,4 +1,4 @@
-const apartmentId = window.location.pathname.match(/\d+/g);
+const apartmentId = window.location.pathname.match(/\d+$/g);
 
 $(document).ready(function () {
     blockCardDody();

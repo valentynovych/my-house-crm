@@ -20,7 +20,7 @@ spring:
       mode: always
 server:
   servlet:
-    context-path: /my-house24-ol-ar/api
+    context-path: /my-house24-rudiuk-lesyk/api
   error:
     whitelabel:
       enabled: false

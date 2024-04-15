@@ -1,4 +1,4 @@
-const apartmentId = window.location.pathname.match(/\d+/);
+const apartmentId = window.location.pathname.match(/\d+$/);
 
 $(document).ready(function () {
     blockBy('.count-statistic')
@@ -241,20 +241,3 @@ function getListMonthLabels(listDate) {
         return localeMonth.charAt(0).toUpperCase() + localeMonth.slice(1);
     });
 }
-
-//
-// <div className="col-sm-12 col-md-6">
-//     <div className="card" style="height: 300px">
-//         <div className="card-body">
-//             <canvas id="expense-per-month-chart"></canvas>
-//         </div>
-//     </div>
-// </div>
-// <div className="col-sm-12 col-md-6">
-//     <div className="card" style="height: 300px">
-//         <div className="card-body">
-//             <canvas id="expense-per-year-chart"></canvas>
-//         </div>
-//     </div>
-// </div>
-// <canvas id="expense-per-year-on-month-chart"></canvas>
