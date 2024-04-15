@@ -1,10 +1,10 @@
-name: Build and push web-site image and restart container
+name: Build and push admin image and restart container
 
 on:
   push:
     branches: [ "dev" ]
     paths:
-      - 'my-house-24-web-site/**'
+      - 'my-house24-admin/**'
 
 jobs:
   build:
@@ -29,21 +29,25 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Add secret to website
+      - name: Add secret
         env:
           awsAccessKey: ${{ secrets.AWS_ACCESS_KEY }}
           awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          sendgridSecretKey: ${{ secrets.SENDGRID_SECRET_KEY }}
+          sendgridSender: ${{ secrets.SENDGRID_SENDER }}
+          recaptchaSiteKey: ${{ secrets.RECAPTCHA_SITE_KEY }}
+          recaptchaSecretKey: ${{ secrets.RECAPTCHA_SECRET_KEY }}
         run: |
-          envsubst < my-house-24-web-site/src/main/resources/application_template.yml > my-house-24-web-site/src/main/resources/application.yml
-          cat my-house-24-web-site/src/main/resources/application.yml
+          envsubst < my-house24-admin/src/main/resources/application_template.yml > my-house24-admin/src/main/resources/application.yml
+          cat my-house24-admin/src/main/resources/application.yml
 
-      - name: Build and push website
+      - name: Build and push image
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: my-house-24-web-site/Dockerfile
+          file: my-house24-admin/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-web-site:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-admin:latest
 
       - name: Restart container
         uses: appleboy/ssh-action@v1.0.3
@@ -53,9 +57,9 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
             echo "Restarting container"
-            docker stop my-house24-Rudiuk_Lesyk-website
-            docker rm my-house24-Rudiuk_Lesyk-website
-            docker image rm ruduknasta13074/my-house24-web-site
-            docker run -d -p 7083:8080 --name my-house24-Rudiuk_Lesyk-website --net my-house24-Rudiuk_Lesyk-network -e MYSQL_HOST=my-house24-Rudiuk_Lesyk-db -e MYSQL_USER=root -e MYSQL_PASSWORD=${{ secrets.DATABASE_PASSWORD }} ruduknasta13074/my-house24-web-site
+            docker stop my-house24-Rudiuk_Lesyk-admin
+            docker rm my-house24-Rudiuk_Lesyk-admin
+            docker image rm ruduknasta13074/my-house24-admin
+            docker run -d -p 7080:8080 --name my-house24-Rudiuk_Lesyk-admin --net my-house24-Rudiuk_Lesyk-network -e MYSQL_HOST=my-house24-Rudiuk_Lesyk-db -e MYSQL_USER=root -e MYSQL_PASSWORD=${{ secrets.DATABASE_PASSWORD }} ruduknasta13074/my-house24-admin
             echo "Container has been updated"          
             exit

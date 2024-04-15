@@ -1,0 +1,60 @@
+name: Build and push rest image and restart container
+
+on:
+  push:
+    branches: [ "dev" ]
+    paths:
+      - 'my-house24-rest/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Add secret
+        env:
+          tokenSecret: ${{ secrets.TOKEN_SECRET }}
+        run: |
+          envsubst < my-house24-rest/src/main/resources/application_template.yml > my-house24-rest/src/main/resources/application.yml
+          cat my-house24-rest/src/main/resources/application.yml
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: my-house24-rest/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/my-house24-rest:latest
+
+      - name: Restart container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            echo "Restarting container"
+            docker stop my-house24-Rudiuk_Lesyk-rest
+            docker rm my-house24-Rudiuk_Lesyk-rest
+            docker image rm ruduknasta13074/my-house24-rest
+            docker run -d -p 7082:8080 --name my-house24-Rudiuk_Lesyk-rest --net my-house24-Rudiuk_Lesyk-network -e MYSQL_HOST=my-house24-Rudiuk_Lesyk-db -e MYSQL_USER=root -e MYSQL_PASSWORD=${{ secrets.DATABASE_PASSWORD }} ruduknasta13074/my-house24-rest
+            echo "Container has been updated"          
+            exit
