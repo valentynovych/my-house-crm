@@ -18,6 +18,7 @@ spring:
   sql:
     init:
       mode: always
+
 server:
   servlet:
     context-path: /my-house24-rudiuk-lesyk/api
