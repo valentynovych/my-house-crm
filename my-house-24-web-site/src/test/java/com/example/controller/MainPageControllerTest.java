@@ -44,7 +44,7 @@ class MainPageControllerTest {
 
     @Test
     void getMainPage() throws Exception {
-        this.mockMvc.perform(get("/web-site/home")).andDo(print())
+        this.mockMvc.perform(get("/")).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("main/main"));
     }
@@ -52,7 +52,7 @@ class MainPageControllerTest {
     @Test
     void getMainPageResponse() throws Exception {
         when(mainPageService.getMainPageResponse()).thenReturn(expectedMainPageResponse);
-        this.mockMvc.perform(get("/web-site/home/get"))
+        this.mockMvc.perform(get("/get"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(expectedMainPageResponse.getTitle()))

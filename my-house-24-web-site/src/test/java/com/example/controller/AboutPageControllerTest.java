@@ -42,7 +42,7 @@ class AboutPageControllerTest {
     }
     @Test
     void getAboutPage() throws Exception {
-        this.mockMvc.perform(get("/web-site/about-us")).andDo(print())
+        this.mockMvc.perform(get("/about-us")).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("about-us/about-us"));
     }
@@ -50,7 +50,7 @@ class AboutPageControllerTest {
     @Test
     void getAboutPageResponse() throws Exception {
         when(aboutPageService.getAboutPageResponse()).thenReturn(expectedAboutPageResponse);
-        this.mockMvc.perform(get("/web-site/about-us/get"))
+        this.mockMvc.perform(get("/about-us/get"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(expectedAboutPageResponse.getTitle()))
@@ -60,7 +60,7 @@ class AboutPageControllerTest {
     @Test
     void downloadDocument() throws Exception {
         when(aboutPageService.getDocument(anyString())).thenReturn(new byte[]{(byte)0xe0});
-        this.mockMvc.perform(get("/web-site/about-us/download/{document}","document.doc"))
+        this.mockMvc.perform(get("/about-us/download/{document}","document.doc"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(header().stringValues("Content-Disposition","attachment; filename=document.doc"));

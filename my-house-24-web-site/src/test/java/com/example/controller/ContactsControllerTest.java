@@ -41,7 +41,7 @@ class ContactsControllerTest {
     }
     @Test
     void getContactsPage() throws Exception {
-        this.mockMvc.perform(get("/web-site/contacts")).andDo(print())
+        this.mockMvc.perform(get("/contacts")).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("contacts/contacts"));
     }
@@ -49,7 +49,7 @@ class ContactsControllerTest {
     @Test
     void getContactsPageResponse() throws Exception {
         when(contactsService.getContactsPageResponse()).thenReturn(expectedContactsPageResponse);
-        this.mockMvc.perform(get("/web-site/contacts/get"))
+        this.mockMvc.perform(get("/contacts/get"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(expectedContactsPageResponse.title()))

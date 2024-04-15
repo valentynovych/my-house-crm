@@ -50,7 +50,7 @@ class ServicePageControllerTest {
     }
     @Test
     void getServicePage() throws Exception {
-        this.mockMvc.perform(get("/web-site/services")).andDo(print())
+        this.mockMvc.perform(get("/services")).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("service/service"));
     }
@@ -63,7 +63,7 @@ class ServicePageControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("page","0");
         params.add("pageSize", "1");
-        this.mockMvc.perform(get("/web-site/services/get").params(params))
+        this.mockMvc.perform(get("/services/get").params(params))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size",is(1)))
