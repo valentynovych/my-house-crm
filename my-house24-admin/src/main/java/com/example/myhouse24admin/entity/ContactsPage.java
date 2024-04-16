@@ -10,7 +10,7 @@ public class ContactsPage {
     private Long id;
     @Column(length = 100, nullable = false)
     private String title;
-    @Column(length = 300, nullable = false)
+    @Column(length = 2000, nullable = false)
     private String text;
     @Column(name = "link_to_site", length = 200, nullable = false)
     private String linkToSite;

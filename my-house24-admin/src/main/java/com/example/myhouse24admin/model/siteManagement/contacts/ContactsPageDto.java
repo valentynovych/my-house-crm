@@ -9,7 +9,7 @@ public record ContactsPageDto(
         @Size(max = 100, message = "{validation-size-max}")
         String title,
         @NotBlank(message = "{validation-not-empty}")
-        @Size(max = 300, message = "{validation-size-max}")
+        @Size(max = 2000, message = "{validation-size-max}")
         String text,
         @NotBlank(message = "{validation-not-empty}")
         @Size(max = 200, message = "{validation-size-max}")

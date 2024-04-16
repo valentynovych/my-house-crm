@@ -36,7 +36,8 @@ function setFields(response) {
     responseMap.forEach((value, key) => {
         $("#" + key).val(value);
     });
-    fullEditor.setText(response.text);
+    const convertedText = fullEditor.clipboard.convert(response.text);
+    fullEditor.setContents(convertedText, 'silent');
 }
 $("#save-button").on("click", function () {
     blockCardDody();
@@ -49,7 +50,7 @@ function collectData() {
     $("#form").find('input:text, textarea').each(function (){
         formData.append($(this).attr("id"), $(this).val());
     });
-    formData.append("text", fullEditor.getText($("#text")));
+    formData.append("text", fullEditor.root.innerHTML);
     for (var pair of formData.entries()) {
         console.log(pair[0]+ ', ' + pair[1]);
     }
@@ -92,48 +93,14 @@ const fullToolbar = [
     ['bold', 'italic', 'underline', 'strike'],
     [
         {
-            color: []
-        },
-        {
-            background: []
-        }
-    ],
-    [
-        {
-            script: 'super'
-        },
-        {
-            script: 'sub'
-        }
-    ],
-    [
-        {
-            header: '1'
-        },
-        {
-            header: '2'
-        },
-        'blockquote',
-        'code-block'
-    ],
-    [
-        {
-            list: 'ordered'
-        },
-        {
-            list: 'bullet'
-        },
-        {
             indent: '-1'
         },
         {
             indent: '+1'
         }
-    ],
-    [{ direction: 'rtl' }],
-    ['link', 'image', 'video', 'formula'],
-    ['clean']
+    ]
 ];
+
 const fullEditor = new Quill('#text', {
     bounds: '#full-editor',
     placeholder: 'Type Something...',
