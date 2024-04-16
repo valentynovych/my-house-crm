@@ -109,9 +109,14 @@ public class ServicesPageServiceImpl implements ServicesPageService {
         if(image.isEmpty()){
             return servicePageBlockInDb.getImage();
         } else {
-            uploadFileUtil.deleteFile(servicePageBlockInDb.getImage());
+            if(imageNotNull(servicePageBlockInDb)) {
+                uploadFileUtil.deleteFile(servicePageBlockInDb.getImage());
+            }
             return uploadFileUtil.saveMultipartFile(image);
         }
+    }
+    private boolean imageNotNull(ServicePageBlock servicePageBlockInDb){
+        return servicePageBlockInDb.getImage() != null;
     }
 
 }
