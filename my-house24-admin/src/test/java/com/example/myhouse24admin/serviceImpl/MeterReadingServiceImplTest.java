@@ -48,7 +48,7 @@ class MeterReadingServiceImplTest {
     @BeforeAll
     public static void setUp(){
         meterReadingRequest = new MeterReadingRequest("creation",
-                MeterReadingStatus.NEW, BigDecimal.valueOf(23), 1L,
+                MeterReadingStatus.NEW, BigDecimal.valueOf(23), 1L, 1L,
                 1L);
         apartmentMeterReadingResponse = new ApartmentMeterReadingResponse(1L,
                 "number", MeterReadingStatus.NEW, "12.03.1990",

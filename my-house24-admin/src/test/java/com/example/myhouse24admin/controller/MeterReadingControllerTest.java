@@ -201,7 +201,7 @@ class MeterReadingControllerTest {
     void createMeterReading_MeterReadingRequest_Valid() throws Exception {
         MeterReadingRequest meterReadingRequest =
                 new MeterReadingRequest("12.03.1990", MeterReadingStatus.NEW,
-                        BigDecimal.valueOf(22), 1L, 1L);
+                        BigDecimal.valueOf(22), 1L, 1L, 1L);
 
         doNothing().when(meterReadingService).createMeterReading(any(MeterReadingRequest.class));
 
@@ -218,7 +218,7 @@ class MeterReadingControllerTest {
     void createMeterReading_MeterReadingRequest_Not_Valid() throws Exception {
         MeterReadingRequest meterReadingRequest =
                 new MeterReadingRequest(null, null,
-                        null, null, null);
+                        null, null, null, null);
 
         this.mockMvc.perform(post("/my-house/admin/meter-readings/add")
                         .contextPath("/my-house")
@@ -271,7 +271,7 @@ class MeterReadingControllerTest {
     void updateMeterReading_MeterReadingRequest_Valid() throws Exception {
         MeterReadingRequest meterReadingRequest =
                 new MeterReadingRequest("12.03.1990", MeterReadingStatus.NEW,
-                        BigDecimal.valueOf(22), 1L, 1L);
+                        BigDecimal.valueOf(22), 1L, 1L, 1L);
 
         doNothing().when(meterReadingService).updateMeterReading(anyLong(),any(MeterReadingRequest.class));
 
@@ -289,7 +289,7 @@ class MeterReadingControllerTest {
     void updateMeterReading_MeterReadingRequest_Not_Valid() throws Exception {
         MeterReadingRequest meterReadingRequest =
                 new MeterReadingRequest(null, null,
-                        null, null, null);
+                        null, null, null, null);
 
         this.mockMvc.perform(post("/my-house/admin/meter-readings/edit/{id}",1)
                         .contextPath("/my-house")

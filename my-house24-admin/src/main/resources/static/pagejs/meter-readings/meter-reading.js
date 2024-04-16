@@ -270,6 +270,8 @@ function collectData() {
     let status = $("#status").val() == null? '': $("#status").val();
     formData.append("status", status);
     formData.append("readings", $("#readings").val());
+    let house = $("#house").val() == null? '': $("#house").val();
+    formData.append("house", house);
     let apartment = $("#apartmentId").val() == null? '': $("#apartmentId").val();
     formData.append("apartmentId", apartment);
     let service = $("#serviceId").val() == null? '': $("#serviceId").val();

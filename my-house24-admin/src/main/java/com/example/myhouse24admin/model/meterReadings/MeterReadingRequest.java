@@ -17,6 +17,8 @@ public record MeterReadingRequest(
         @Digits(integer = 5, fraction = 4, message = "{validation-price-max-length}")
         BigDecimal readings,
         @NotNull(message = "{validation-not-empty}")
+        Long house,
+        @NotNull(message = "{validation-not-empty}")
         Long apartmentId,
         @NotNull(message = "{validation-not-empty}")
         Long serviceId
