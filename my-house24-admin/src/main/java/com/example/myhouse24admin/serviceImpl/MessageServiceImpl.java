@@ -51,13 +51,14 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void sendNewMessage(MessageSendRequest messageSendRequest) {
+    public int sendNewMessage(MessageSendRequest messageSendRequest) {
         logger.info("sendNewMessage() -> send message: {}", messageSendRequest);
         List<ApartmentOwner> apartmentOwnerForSendMessage = findApartmentOwnerForSendMessage(messageSendRequest);
         Staff currentStaff = staffService.getCurrentStaff();
         Message message = messageMapper.messageSendRequestToMessage(messageSendRequest, currentStaff);
-        sendNewMessageToOwners(message, apartmentOwnerForSendMessage);
+        int countMessagesToSend = sendNewMessageToOwners(message, apartmentOwnerForSendMessage);
         logger.info("sendNewMessage() -> success send messages to apartment owners");
+        return countMessagesToSend;
     }
 
     @Override
@@ -100,16 +101,17 @@ public class MessageServiceImpl implements MessageService {
         return messageResponse;
     }
 
-    private void sendNewMessageToOwners(Message message, List<ApartmentOwner> apartmentOwnerForSendMessage) {
+    private int sendNewMessageToOwners(Message message, List<ApartmentOwner> apartmentOwnerForSendMessage) {
         logger.info("sendNewMessage() -> send message: {}", message);
         for (ApartmentOwner owner : apartmentOwnerForSendMessage) {
             logger.info("sendNewMessage() -> send message to: {}", owner.getEmail());
             mailService.sendMessage(owner.getEmail(), message.getSubject(),
                     message.getText(), message.getStaff());
         }
+        saveOwnerMessages(apartmentOwnerForSendMessage, message);
         logger.info("sendNewMessage() -> success send message to all apartment owners, count: {}",
                 apartmentOwnerForSendMessage.size());
-        saveOwnerMessages(apartmentOwnerForSendMessage, message);
+        return apartmentOwnerForSendMessage.size();
     }
 
     private void saveOwnerMessages(List<ApartmentOwner> apartmentOwnerForSendMessage, Message message) {

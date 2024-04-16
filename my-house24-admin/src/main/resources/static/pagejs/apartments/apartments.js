@@ -295,13 +295,13 @@ function addListenerToRow() {
     })
 }
 
-function addDeleteEvent(staffId) {
+function addDeleteEvent(apartmentId) {
     $('.submit-delete').on('click', function () {
-        if (staffId && staffId > 0) {
+        if (apartmentId && apartmentId > 0) {
 
             $.ajax({
                 type: 'delete',
-                url: 'staff/delete/' + staffId,
+                url: 'apartments/delete-apartment/' + apartmentId,
                 success: function () {
                     $('.close-modal').click();
                     toastr.success(successMessageOnDelete)

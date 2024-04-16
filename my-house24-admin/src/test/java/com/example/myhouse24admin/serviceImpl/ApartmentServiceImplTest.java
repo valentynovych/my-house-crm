@@ -401,4 +401,26 @@ class ApartmentServiceImplTest {
 
         verify(apartmentRepo, times(2)).findAll(any(ApartmentSpecification.class), any(Pageable.class));
     }
+
+    @Test
+    void deleteApartment() {
+        // given
+        Long apartmentId = 1L;
+        ArgumentCaptor<Apartment> argumentCaptor = ArgumentCaptor.forClass(Apartment.class);
+
+        // when
+        when(apartmentRepo.findById(apartmentId)).thenReturn(Optional.of(apartment));
+
+        // call the method
+        apartmentService.deleteApartment(apartmentId);
+
+        // then
+        verify(apartmentRepo, times(1)).findById(apartmentId);
+        verify(apartmentRepo, times(1)).save(argumentCaptor.capture());
+        verify(personalAccountRepo, times(1)).save(any(PersonalAccount.class));
+
+        Apartment savedApartment = argumentCaptor.getValue();
+        assertEquals(true, savedApartment.isDeleted());
+        assertNull(savedApartment.getPersonalAccount());
+    }
 }

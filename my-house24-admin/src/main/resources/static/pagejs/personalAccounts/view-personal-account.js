@@ -7,7 +7,6 @@ $(document).ready(function () {
         url: '../get-account/' + personalAccountId,
         type: 'get',
         success: function (response) {
-            console.log(response)
             accountToRestore = response;
             fillInputs(response);
         },
@@ -36,7 +35,7 @@ function fillInputs(account) {
             ? `<span class="badge rounded-pill bg-danger">${status}</span>`
             : `<span class="badge rounded-pill bg-dark">${status}</span>`;
 
-    const $curr = $('#curr-apartment-title');
+
     const $breadcrumb = $('.breadcrumb-item.active');
     const $edit = $('#edit-link');
     const $decorateAccountNumber = decorateAccountNumber(account.accountNumber);
@@ -88,7 +87,11 @@ function fillInputs(account) {
     $cardFooter.addClass('d-flex flex-column gap-2')
     $(`<a href="../../meter-readings/apartment/${account.id}">${labelLinkViewMeters}</a>`).appendTo($cardFooter);
     $(`<a href="../../cash-register?personalAccount=${account.id}&sheetType=INCOME">${labelLinkViewIncomes}</a>`).appendTo($cardFooter);
-    $(`<a href="../../invoices?apartment=${account.apartment.apartmentNumber}">${labelLinkViewInvoices}</a>`).appendTo($cardFooter);
+    let personalAccountApartment = account.apartment;
+
+    if (personalAccountApartment) {
+        $(`<a href="../../invoices?apartment=${personalAccountApartment.apartmentNumber}">${labelLinkViewInvoices}</a>`).appendTo($cardFooter);
+    }
 }
 
 $('#accept-payment').on('click', function () {

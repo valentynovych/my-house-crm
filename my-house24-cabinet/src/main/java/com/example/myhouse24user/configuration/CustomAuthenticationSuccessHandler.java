@@ -34,6 +34,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     private boolean apartmentOwnerHasApartment(Authentication authentication) {
         ApartmentOwnerDetails apartmentOwner = (ApartmentOwnerDetails) authentication.getPrincipal();
-        return !apartmentOwner.getApartments().isEmpty();
+        return !apartmentOwner.getApartments().stream()
+                .filter(apartment -> !apartment.isDeleted())
+                .toList()
+                .isEmpty();
     }
 }

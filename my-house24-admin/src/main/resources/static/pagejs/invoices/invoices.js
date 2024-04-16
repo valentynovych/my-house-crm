@@ -424,8 +424,8 @@ function checkRequestParams() {
     const apartmentNumberFromUrl = findGetParameter('apartment');
     if (apartmentNumberFromUrl) {
         request.apartmentNumber = apartmentNumberFromUrl;
+        $('#filter-by-apartment').val(('' + apartmentNumberFromUrl).padStart(5, '0'));
     }
-    $('#filter-by-apartment').val(('' + apartmentNumberFromUrl).padStart(5, '0'));
 }
 
 function findGetParameter(parameterName) {

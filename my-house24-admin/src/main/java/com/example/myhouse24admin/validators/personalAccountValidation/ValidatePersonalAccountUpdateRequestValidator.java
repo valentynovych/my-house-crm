@@ -24,11 +24,13 @@ public class ValidatePersonalAccountUpdateRequestValidator
         if (request.getAccountNumber() != null) {
             Optional<PersonalAccount> accountByAccountNumber =
                     personalAccountRepo.findPersonalAccountByAccountNumber(request.getAccountNumber());
-            context.buildConstraintViolationWithTemplate("{validation-apartment-personal-account-number-exists}")
-                    .addPropertyNode("accountNumber")
-                    .addBeanNode()
-                    .addConstraintViolation();
             isValid = accountByAccountNumber.isEmpty() || request.getId().equals(accountByAccountNumber.get().getId());
+            if (!isValid) {
+                context.buildConstraintViolationWithTemplate("{validation-apartment-personal-account-number-exists}")
+                        .addPropertyNode("accountNumber")
+                        .addBeanNode()
+                        .addConstraintViolation();
+            }
         } else {
             context.buildConstraintViolationWithTemplate("{validation-field-required}")
                     .addPropertyNode("accountNumber")
