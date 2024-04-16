@@ -227,7 +227,7 @@ class MeterReadingControllerTest {
                         .flashAttr("meterReadingRequest", meterReadingRequest))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.size()", is(5)));
+                .andExpect(jsonPath("$.size()", is(6)));
     }
 
     @Test
@@ -298,7 +298,7 @@ class MeterReadingControllerTest {
                         .flashAttr("meterReadingRequest", meterReadingRequest))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.size()", is(5)));
+                .andExpect(jsonPath("$.size()", is(6)));
     }
     @Test
     void getNumber() throws Exception {
