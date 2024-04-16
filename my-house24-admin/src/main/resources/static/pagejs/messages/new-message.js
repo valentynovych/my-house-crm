@@ -224,14 +224,13 @@ $('.button-send').on('click', function () {
         contentType: false,
         data: formData,
         success: function (response) {
-            toastr.success(successMessageOnSend);
-            setTimeout(() =>window.history.back(), 1000);
+            toastr.success(successMessageOnSend.toString().replace('{}', response));
+            setTimeout(() =>window.history.back(), 2000);
         },
         error: function (error) {
             printErrorMessageToField(error);
             additionalValidation(error);
             toastr.error(errorMessage);
-            console.log(error);
         }
     })
 });

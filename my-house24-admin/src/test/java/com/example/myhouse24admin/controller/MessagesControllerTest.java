@@ -110,7 +110,7 @@ class MessagesControllerTest {
                 .flashAttr("messageSendRequest", messageSendRequest);
 
         // when
-        doNothing().when(messageService).sendNewMessage(eq(messageSendRequest));
+        doReturn(1).when(messageService).sendNewMessage(eq(messageSendRequest));
         this.mockMvc.perform(request)
 
                 // then
@@ -118,6 +118,7 @@ class MessagesControllerTest {
                 .andExpectAll(
                         status().isOk()
                 );
+
         verify(messageService, times(1)).sendNewMessage(eq(messageSendRequest));
     }
 

@@ -41,8 +41,8 @@ public class MessagesController {
 
     @PostMapping("new-message")
     public ResponseEntity<?> sendNewMessage(@ModelAttribute("messageSendRequest") @Valid MessageSendRequest messageSendRequest) {
-        messageService.sendNewMessage(messageSendRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+        int countSentMessages = messageService.sendNewMessage(messageSendRequest);
+        return new ResponseEntity<>(countSentMessages, HttpStatus.OK);
     }
 
     @GetMapping("get-messages")

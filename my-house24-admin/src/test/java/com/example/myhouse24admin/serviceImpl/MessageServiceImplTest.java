@@ -137,9 +137,11 @@ class MessageServiceImplTest {
                 });
 
         // call the method
-        messageService.sendNewMessage(messageSendRequest);
+        int countSentMessages = messageService.sendNewMessage(messageSendRequest);
 
         // then
+        assertEquals(12, countSentMessages);
+
         verify(apartmentService, times(1)).getAllApartmentsBy(any(Pageable.class), any(), any(ApartmentSpecification.class));
         verify(staffService, times(1)).getCurrentStaff();
         verify(messageMapper, times(1)).messageSendRequestToMessage(messageSendRequest, currentStaff);
