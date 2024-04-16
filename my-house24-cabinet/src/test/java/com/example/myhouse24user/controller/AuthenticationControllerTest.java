@@ -19,8 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,6 +39,8 @@ class AuthenticationControllerTest {
     private MailService mailService;
     @Autowired
     private ApartmentOwnerService apartmentOwnerService;
+    @Autowired
+    private ApartmentOwnerRepo apartmentOwnerRepo;
 
     @Test
     void getLoginPage() throws Exception {
@@ -61,6 +62,7 @@ class AuthenticationControllerTest {
     void sendPasswordResetToken() throws Exception {
         when(ownerPasswordResetTokenService.createOrUpdatePasswordResetToken(any(EmailRequest.class)))
                 .thenReturn("token");
+        doReturn(true).when(apartmentOwnerRepo).existsApartmentOwnerByEmail(anyString());
         doNothing().when(mailService).sendToken(anyString(), any(EmailRequest.class), anyString());
         this.mockMvc.perform(post("/cabinet/forgotPassword")
                         .flashAttr("emailRequest",new EmailRequest("ruduknasta13@gmail.com")))
