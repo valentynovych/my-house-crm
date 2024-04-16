@@ -10,11 +10,11 @@ public class AboutPage {
     private Long id;
     @Column(length = 100, nullable = false)
     private String title;
-    @Column(name = "about_text",length = 500, nullable = false)
+    @Column(name = "about_text",length = 4000, nullable = false)
     private String aboutText;
     @Column(name = "additional_title", length = 100)
     private String additionalTitle;
-    @Column(name = "additional_text",length = 500)
+    @Column(name = "additional_text",length = 2000)
     private String additionalText;
     @Column(name = "director_image",length = 200)
     private String directorImage;

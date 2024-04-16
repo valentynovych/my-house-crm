@@ -21,11 +21,11 @@ function getAboutPage() {
 
 function showPage(response) {
     $("#title").text(response.title);
-    $("#aboutText").text(response.aboutText);
+    $("#aboutText").html(response.aboutText);
     showGallery(response);
     $("#directorImage").append(
         `<div>
-            <img style="max-width: 100%" src="${"../uploads/"+response.directorImage}">
+            <img style="max-width: 100%" src="${"uploads/"+response.directorImage}">
         </div>`
     );
     $("#additionalTitle").text(response.additionalTitle);
@@ -48,7 +48,7 @@ function showGallery(response) {
         for (let galleryImage of response.gallery) {
             $("#gallery").append(
                 `<div class="col">
-                <img style="max-width: 100%" src="${"../uploads/" + galleryImage.image}">
+                <img style="max-width: 100%" src="${"uploads/" + galleryImage.image}">
             </div>`
             )
         }
@@ -63,7 +63,7 @@ function showAdditionalGallery(response) {
         for (let galleryImage of response.additionalGallery) {
             $("#additionalGallery").append(
                 `<div class="col">
-                    <img style="max-width: 100%" src="${"../uploads/" + galleryImage.image}">
+                    <img style="max-width: 100%" src="${"uploads/" + galleryImage.image}">
                 </div>`
             )
         }

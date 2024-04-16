@@ -11,6 +11,9 @@ let documentFileIndex = 0;
 let galleryShift = 0;
 let additionalGalleryShift = 0;
 let documentShift = 0;
+const currentUrl = window.location.href;
+const myArray = currentUrl.split("/");
+var root = myArray[3];
 $(document).ready(function () {
     initializeAutosize();
     getAboutPage();
@@ -43,9 +46,11 @@ function setFields(response) {
         }
         $("#director-img").attr("src", "/"+root+"/uploads/"+response.directorImage);
     });
-    aboutText.setText(response.aboutText);
+    const convertedAboutText = aboutText.clipboard.convert(response.aboutText)
+    aboutText.setContents(convertedAboutText, 'silent');
     if(response.additionalText !== null) {
-        additionalText.setText(response.additionalText);
+        const convertedAdditionalText = additionalText.clipboard.convert(response.additionalText);
+        additionalText.setContents(convertedAdditionalText, 'silent');
     }
     setGallery(response.gallery, "gallery", "deleteGalleryImage");
     setGallery(response.additionalGallery, "additionalGallery", "deleteAdditionalGalleryImage");
@@ -190,8 +195,8 @@ function collectData() {
     $("#form").find('input:text, textarea').each(function (){
         formData.append($(this).attr("id"), $(this).val());
     });
-    formData.append("aboutText", aboutText.getText($("#aboutText")));
-    formData.append("additionalText", additionalText.getText($("#additionalText")));
+    formData.append("aboutText", aboutText.root.innerHTML);
+    formData.append("additionalText", additionalText.root.innerHTML);
     for(let id of galleryIdsToDelete){
         formData.append("galleryIdsToDelete[]", id);
     }
@@ -297,47 +302,12 @@ const fullToolbar = [
     ['bold', 'italic', 'underline', 'strike'],
     [
         {
-            color: []
-        },
-        {
-            background: []
-        }
-    ],
-    [
-        {
-            script: 'super'
-        },
-        {
-            script: 'sub'
-        }
-    ],
-    [
-        {
-            header: '1'
-        },
-        {
-            header: '2'
-        },
-        'blockquote',
-        'code-block'
-    ],
-    [
-        {
-            list: 'ordered'
-        },
-        {
-            list: 'bullet'
-        },
-        {
             indent: '-1'
         },
         {
             indent: '+1'
         }
-    ],
-    [{ direction: 'rtl' }],
-    ['link', 'image', 'video', 'formula'],
-    ['clean']
+    ]
 ];
 const aboutText = new Quill('#aboutText', {
     bounds: '#full-editor',

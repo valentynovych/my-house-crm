@@ -13,11 +13,11 @@ public class AboutPageRequest {
     @Size(max = 100,message = "{validation-size-max}")
     private String title;
     @NotBlank(message = "{validation-not-empty}")
-    @Size(max = 500,message = "{validation-size-max}")
+    @Size(max = 4000,message = "{validation-size-max}")
     private String aboutText;
     @Size(max = 100,message = "{validation-size-max}")
     private String additionalTitle;
-    @Size(max = 500,message = "{validation-size-max}")
+    @Size(max = 2000,message = "{validation-size-max}")
     private String additionalText;
     @ImageNotEmpty(message = "{validation-image-required}")
     private MultipartFile directorImage;
