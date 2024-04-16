@@ -1,5 +1,6 @@
 package com.example.myhouse24admin.serviceImpl;
 
+import com.example.myhouse24admin.entity.AboutPage;
 import com.example.myhouse24admin.entity.MainPage;
 import com.example.myhouse24admin.entity.MainPageBlock;
 import com.example.myhouse24admin.entity.Seo;
@@ -82,7 +83,9 @@ public class MainPageServiceImpl implements MainPageService {
         if(imageFile.isEmpty()){
             return image;
         } else {
-            uploadFileUtil.deleteFile(image);
+            if(image != null) {
+                uploadFileUtil.deleteFile(image);
+            }
             return uploadFileUtil.saveMultipartFile(imageFile);
         }
     }
@@ -120,9 +123,14 @@ public class MainPageServiceImpl implements MainPageService {
         if(image.isEmpty()){
             return mainPageBlock.getImage();
         } else {
-            uploadFileUtil.deleteFile(mainPageBlock.getImage());
+            if(imageNotNull(mainPageBlock)) {
+                uploadFileUtil.deleteFile(mainPageBlock.getImage());
+            }
             return uploadFileUtil.saveMultipartFile(image);
         }
     }
 
+    private boolean imageNotNull(MainPageBlock mainPageBlock){
+        return mainPageBlock.getImage() != null;
+    }
 }
