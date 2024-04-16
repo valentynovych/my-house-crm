@@ -27,8 +27,7 @@ import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -272,5 +271,20 @@ class ApartmentsControllerTest {
 
         verify(apartmentService, times(1))
                 .updateApartment(eq(1L), any(ApartmentAddRequest.class));
+    }
+
+    @Test
+    void deleteApartment() throws Exception {
+        // given
+        var request = delete("/admin/apartments/delete-apartment/1")
+                .with(user(userDetails));
+
+        // when
+        doNothing().when(apartmentService).deleteApartment(eq(1L));
+
+        this.mockMvc.perform(request)
+                // then
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
