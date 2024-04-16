@@ -152,8 +152,13 @@ public class AboutPageServiceImpl implements AboutPageService {
         if(image.isEmpty()){
             return aboutPage.getDirectorImage();
         } else {
-            uploadFileUtil.deleteFile(aboutPage.getDirectorImage());
+            if(imageNotNull(aboutPage)) {
+                uploadFileUtil.deleteFile(aboutPage.getDirectorImage());
+            }
             return uploadFileUtil.saveMultipartFile(image);
         }
+    }
+    private boolean imageNotNull(AboutPage aboutPage){
+        return aboutPage.getDirectorImage() != null;
     }
 }
