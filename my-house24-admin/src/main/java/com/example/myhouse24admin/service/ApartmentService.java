@@ -28,4 +28,6 @@ public interface ApartmentService {
     List<Apartment> getAllApartmentsBy(Pageable pageable,
                                        List<Apartment> apartments,
                                        ApartmentSpecification specification);
+
+    void deleteApartment(Long apartmentId);
 }

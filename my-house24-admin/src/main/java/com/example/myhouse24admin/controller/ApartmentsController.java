@@ -70,4 +70,10 @@ public class ApartmentsController {
         apartmentService.updateApartment(apartmentId, apartmentRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("delete-apartment/{apartmentId}")
+    public ResponseEntity<?> deleteApartment(@PathVariable Long apartmentId) {
+        apartmentService.deleteApartment(apartmentId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

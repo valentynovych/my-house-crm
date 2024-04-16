@@ -172,6 +172,15 @@ public class ApartmentServiceImpl implements ApartmentService {
         return apartments;
     }
 
+    @Override
+    public void deleteApartment(Long apartmentId) {
+        logger.info("deleteApartment() -> start with id: {}", apartmentId);
+        Apartment apartment = findApartmentById(apartmentId);
+        apartment.setDeleted(true);
+        apartmentRepo.save(apartment);
+        logger.info("deleteApartment() -> success with id: {}", apartmentId);
+    }
+
     private Page<Apartment> getFilteredApartmentsForSelect(SelectSearchRequest selectSearchRequest,
                                                            Pageable pageable,
                                                            Long houseId, Long sectionId) {
