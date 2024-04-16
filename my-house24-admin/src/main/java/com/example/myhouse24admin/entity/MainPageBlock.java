@@ -10,7 +10,7 @@ public class MainPageBlock {
     private Long id;
     @Column(length = 100, nullable = false)
     private String title;
-    @Column(length = 300, nullable = false)
+    @Column(length = 1500, nullable = false)
     private String description;
     @Column(length = 200)
     private String image;

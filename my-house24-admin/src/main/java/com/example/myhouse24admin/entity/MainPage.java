@@ -10,7 +10,7 @@ public class MainPage {
     private Long id;
     @Column(length = 100, nullable = false)
     private String title;
-    @Column(length = 500, nullable = false)
+    @Column(length = 4000, nullable = false)
     private String text;
     @Column(name = "show_links", nullable = false)
     private boolean showLinks;

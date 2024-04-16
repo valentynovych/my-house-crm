@@ -17,7 +17,7 @@ public class MainPageRequest {
     @Size(max = 100,message = "{validation-size-max}")
     private String title;
     @NotBlank(message = "{validation-not-empty}")
-    @Size(max = 500,message = "{validation-size-max}")
+    @Size(max = 4000,message = "{validation-size-max}")
     private String text;
     private boolean showLinks;
     @Image1NotEmpty(message = "{validation-image-required}")

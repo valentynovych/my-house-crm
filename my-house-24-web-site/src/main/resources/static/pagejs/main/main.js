@@ -20,11 +20,11 @@ function getMainPage() {
 }
 
 function showPage(response) {
-    $("#image1").attr("src", '../uploads/'+response.image1);
-    $("#image2").attr("src", "../uploads/"+response.image2);
-    $("#image3").attr("src", "../uploads/"+response.image3);
+    $("#image1").attr("src", 'uploads/'+response.image1);
+    $("#image2").attr("src", "uploads/"+response.image2);
+    $("#image3").attr("src", "uploads/"+response.image3);
     $("#title").text(response.title);
-    $("#text").text(response.text);
+    $("#text").html(response.text);
     if(response.showLinks){
         $("#show-links").append(
             `<a href="">
@@ -51,7 +51,7 @@ function showMainBlocks(response) {
     for(let block of response.mainPageBlocks){
         $("#blocks").append(
             `<div class="col-md-4">
-                <img style="max-width: 100%" src="${'../uploads/'+block.image}">
+                <img style="max-width: 100%" src="${'uploads/'+block.image}">
                 <h4 class="mt-2">${block.title}</h4>
                 <div class="mt-3">${block.description}</div>
             </div>`

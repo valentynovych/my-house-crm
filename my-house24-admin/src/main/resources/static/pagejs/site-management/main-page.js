@@ -3,7 +3,10 @@ let i;
 let lastId = 0;
 let deleteId;
 let idsToDelete = [];
-let descriptions = []
+let descriptions = [];
+const currentUrl = window.location.href;
+const myArray = currentUrl.split("/");
+var root = myArray[3];
 $(document).ready(function () {
     initializeAutosize();
     getMainPage();
@@ -32,7 +35,8 @@ function getMainPage() {
 
 function setFields(response) {
     $("#title").val(response.title);
-    text.setText(response.text);
+    const convertedText = text.clipboard.convert(response.text)
+    text.setContents(convertedText, 'silent');
     $("#showLinks").prop("checked", response.showLinks);
     setImages(response);
     drawBlocks(response);
@@ -47,9 +51,6 @@ function setImages(response) {
 }
 
 function drawBlocks(response) {
-    const currentUrl = window.location.href;
-    const myArray = currentUrl.split("/");
-    let root = myArray[3];
     i = 0;
     for (const service of response.mainPageBlocks) {
         $("#blocks").append(
@@ -98,7 +99,8 @@ function initializeQuillAndSetText(descriptionId, description) {
         },
         theme: 'snow'
     });
-    fullEditor.setText(description);
+    const convertedDescription = fullEditor.clipboard.convert(description);
+    fullEditor.setContents(convertedDescription, 'silent');
     descriptions.push(fullEditor);
 }
 
@@ -229,7 +231,7 @@ function sendData(formData) {
 function collectData() {
     let formData = new FormData();
     formData.append("title", $("#title").val());
-    formData.append("text", text.getText($("#text")));
+    formData.append("text", text.root.innerHTML);
     formData.append("showLinks", $("#showLinks").is(':checked'));
     for(let j = 1; j < 4; j++){
         let image = $("#image"+j+"-input").prop("files")[0];
@@ -253,7 +255,7 @@ function collectBlocks(formData) {
         let title = $(this).val();
         formData.append("mainPageBlocks[" + ind + "].title", title);
         $(this).attr("name", "mainPageBlocks[" + ind + "].title");
-        let description = descriptions[ind].getText($("#description" + currentId));
+        let description = descriptions[ind].root.innerHTML;
         formData.append("mainPageBlocks[" + ind + "].description", description);
         $("#description" + currentId).attr("name", "mainPageBlocks[" + ind + "].description")
         let image = $('#image-input' + currentId).prop('files')[0];
@@ -331,47 +333,12 @@ const fullToolbar = [
     ['bold', 'italic', 'underline', 'strike'],
     [
         {
-            color: []
-        },
-        {
-            background: []
-        }
-    ],
-    [
-        {
-            script: 'super'
-        },
-        {
-            script: 'sub'
-        }
-    ],
-    [
-        {
-            header: '1'
-        },
-        {
-            header: '2'
-        },
-        'blockquote',
-        'code-block'
-    ],
-    [
-        {
-            list: 'ordered'
-        },
-        {
-            list: 'bullet'
-        },
-        {
             indent: '-1'
         },
         {
             indent: '+1'
         }
-    ],
-    [{direction: 'rtl'}],
-    ['link', 'image', 'video', 'formula'],
-    ['clean']
+    ]
 ];
 const text = new Quill('#text', {
     bounds: '#full-editor',
