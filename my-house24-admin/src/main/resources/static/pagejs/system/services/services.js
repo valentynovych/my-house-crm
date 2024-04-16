@@ -22,8 +22,8 @@ function getServices() {
 function drawFormServices(listService) {
     $('.service-list').empty();
     const serviceArray = Array.from(listService);
+    lastServiceIndex = listService.length;
     if (listService.length > 0) {
-        lastServiceIndex = listService.length;
         let i = 0;
         for (const service of serviceArray) {
             let $service = $(`<div class="row g-4 service-item" id="service-${i}">
@@ -34,7 +34,7 @@ function drawFormServices(listService) {
                                     <input type="number" class="visually-hidden service-id" name="services[${i}].id"
                                         id="services[${i}].id" value="${service.id}">
                                 </div>
-                                <div class="mb-3 col-md-4">
+                                <div class="mb-3 col-md-4 position-relative">
                                     <label class="form-label" for="services[${i}].unitOfMeasurementId">${unitLabel}</label>
                                     <select class="form-select" type="text" name="services[${i}].unitOfMeasurementId" 
                                         id="services[${i}].unitOfMeasurementId" ></select>
@@ -151,7 +151,6 @@ let serviceToDelete = [];
 function deleteService() {
     const serviceItemBlock = $(this).closest('.service-item');
     let serviceIdToDelete = serviceItemBlock.find('.service-id').attr('value');
-    console.log(serviceIdToDelete);
     if (serviceIdToDelete) {
         serviceToDelete.push(Number(serviceIdToDelete));
     }
@@ -208,11 +207,10 @@ $('#save-services').on('click', function () {
             if (error.status === 409) {
                 toastr.error(errorMessageOnDelete.replace('{}',
                     `<span class="fw-bold">${error.responseText}</span>`));
+                drawFormServices(serviceListToRestore);
             } else {
                 toastr.error(errorSaveMessage)
             }
-            drawFormServices(serviceListToRestore);
-
         }
     });
 });
@@ -244,8 +242,8 @@ $('[aria-controls="navs-units"]').on('click', function () {
 function drawFormUnits(listUnits) {
     $('.unit-item-list').empty();
     const unitsArray = Array.from(listUnits);
+    lastUnitIndex = listUnits.length;
     if (listUnits.length > 0) {
-        lastUnitIndex = listUnits.length;
         let i = 0;
         for (const unit of unitsArray) {
             $(`<div class="row g-4 unit-item" id="item-${i}">
@@ -358,10 +356,10 @@ $('#save-units').on('click', function () {
             if (error.status === 409) {
                 toastr.error(errorMessageOnDeleteUnits.replace('{}',
                     `<span class="fw-bold">${error.responseText}</span>`));
+                drawFormUnits(listUnitsToRestore);
             } else {
                 toastr.error(errorSaveMessage)
             }
-            drawFormUnits(listUnitsToRestore);
         }
     });
 });

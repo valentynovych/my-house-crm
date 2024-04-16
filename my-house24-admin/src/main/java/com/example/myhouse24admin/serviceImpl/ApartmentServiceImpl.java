@@ -106,10 +106,10 @@ public class ApartmentServiceImpl implements ApartmentService {
             return getExistingPersonalAccount(apartmentAddRequest.getPersonalAccountId());
         } else if (apartmentAddRequest.getPersonalAccountNew() != null) {
             logger.info("Creating new personal account");
-            return getOrCreateNewPersonalAccount(apartmentAddRequest.getPersonalAccountNew());
+            return createNewPersonalAccountWithAccountNumber(apartmentAddRequest.getPersonalAccountNew());
         } else {
             logger.info("Creating new personal account with minimal free account number");
-            return getOrCreateNewPersonalAccount(personalAccountRepo.findMinimalFreeAccountNumber());
+            return createNewPersonalAccountWithAccountNumber(personalAccountRepo.findMinimalFreeAccountNumber());
         }
     }
 
@@ -122,18 +122,19 @@ public class ApartmentServiceImpl implements ApartmentService {
                 });
     }
 
-    private PersonalAccount getOrCreateNewPersonalAccount(Long accountNumber) {
+    private PersonalAccount createNewPersonalAccountWithAccountNumber(Long accountNumber) {
         logger.info("Creating new personal account with account number: {}", accountNumber);
         PersonalAccount personalAccount = new PersonalAccount();
         personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
         personalAccount.setAccountNumber(accountNumber);
-        logger.info("Created new personal account with id: {}", personalAccount.getId());
+        personalAccount.setDeleted(false);
+        logger.info("Created new personal account with accountNumber: {}", personalAccount.getAccountNumber());
         return personalAccount;
     }
 
     private void updateApartmentPersonalAccount(Apartment apartment, PersonalAccount personalAccount) {
         logger.info("updateApartmentPersonalAccount() -> start");
-        if (apartment.getPersonalAccount() != null
+        if (apartment.getPersonalAccount().getId() != null
                 && !apartment.getPersonalAccount().getId().equals(personalAccount.getId())) {
             PersonalAccount toDeleteApartmentId = apartment.getPersonalAccount();
             toDeleteApartmentId.setApartment(null);

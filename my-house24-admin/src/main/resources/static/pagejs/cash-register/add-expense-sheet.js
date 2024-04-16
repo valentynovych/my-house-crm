@@ -101,7 +101,7 @@ function initInputAndSelect() {
 
 function fillFromCopy() {
     const url = window.location.search;
-    if (url.search(/copyFrom=/)) {
+    if (url.search(/copyFrom=/) > 0) {
         let sheetId = url.replace(/\?copyFrom=\d+/,
             (substring) => substring.match(/\d+/));
 

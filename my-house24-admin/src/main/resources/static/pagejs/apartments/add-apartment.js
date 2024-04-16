@@ -72,7 +72,6 @@ function initInputAndSelect() {
     });
 
     function initHouseNestedSSelects(houseId) {
-        let mapIdRangeNumber = new Map();
         $sectionSelect.empty();
         $sectionSelect.select2({
             placeholder: chooseSection,
@@ -90,10 +89,10 @@ function initInputAndSelect() {
                 processResults: function (response) {
                     return {
                         results: $.map(response.content, function (section) {
-                            mapIdRangeNumber.set(section.id, section.rangeApartmentNumbers);
                             return {
                                 id: section.id,
-                                text: section.name
+                                text: section.name,
+                                rangeApartmentNumbers: section.rangeApartmentNumbers
                             }
                         }),
                         pagination: {
@@ -105,17 +104,13 @@ function initInputAndSelect() {
         });
 
         $sectionSelect.on("select2:select", function () {
-            mapIdRangeNumber.forEach((value, key) => {
-                console.log(`key: ${key}, value: ${value}`)
-                $('.section-select-wrap').find(`option[value="${key}"]`).attr("data-range", value);
-            });
-
+            const apartmentRangeNumbers = $sectionSelect.select2("data")[0].rangeApartmentNumbers;
             const $label = $('label[for="apartmentNumber"]');
-            const rangeNumbers = $(`option[value="${this.value}"]`).attr("data-range");
-            $label.html(labelApartmentNumber + ` (${rangeNumbers})`);
+            
+            $label.html(labelApartmentNumber + ` (${apartmentRangeNumbers})`);
             $inputApartmentNumber.removeAttr('disabled');
-            $inputApartmentNumber.attr('min', rangeNumbers.split('-')[0]);
-            $inputApartmentNumber.attr('max', rangeNumbers.split('-')[1]);
+            $inputApartmentNumber.attr('min', apartmentRangeNumbers.split('-')[0]);
+            $inputApartmentNumber.attr('max', apartmentRangeNumbers.split('-')[1]);
         });
 
         $floorSelect.select2({
