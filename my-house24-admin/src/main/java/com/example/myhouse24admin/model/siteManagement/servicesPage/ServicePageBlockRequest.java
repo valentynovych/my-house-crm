@@ -18,7 +18,7 @@ public class ServicePageBlockRequest{
         @Size(max = 100,message = "{validation-size-max}")
         private String title;
         @NotBlank(message = "{validation-not-empty}")
-        @Size(max = 300,message = "{validation-size-max}")
+        @Size(max = 1500,message = "{validation-size-max}")
         private String description;
         private MultipartFile image;
 

@@ -77,7 +77,8 @@ function initializeQuillAndSetText(descriptionId, description) {
         },
         theme: 'snow'
     });
-    fullEditor.setText(description);
+    const convertedDescription = fullEditor.clipboard.convert(description);
+    fullEditor.setContents(convertedDescription, 'silent');
     descriptions.push(fullEditor);
 }
 function getButton(id){
@@ -200,7 +201,7 @@ function collectServiceBlocksData() {
         let title = $(this).val();
         formData.append("servicePageBlocks["+ind+"].title",title);
         $(this).attr("name", "servicePageBlocks["+ind+"].title");
-        let description = descriptions[ind].getText($("#description"+currentId));
+        let description = descriptions[ind].root.innerHTML;
         formData.append("servicePageBlocks["+ind+"].description",description);
         $("#description"+currentId).attr("name", "servicePageBlocks["+ind+"].description")
         let image = $('#image-input'+currentId).prop('files')[0];
@@ -288,33 +289,10 @@ const fullToolbar = [
     ['bold', 'italic', 'underline', 'strike'],
     [
         {
-            color: []
-        },
-        {
-            background: []
-        }
-    ],
-    [
-        {
-            script: 'super'
-        },
-        {
-            script: 'sub'
-        }
-    ],
-    [
-        {
-            list: 'ordered'
-        },
-        {
-            list: 'bullet'
-        },
-        {
             indent: '-1'
         },
         {
             indent: '+1'
         }
-    ],
-    [{ direction: 'rtl' }]
+    ]
 ];

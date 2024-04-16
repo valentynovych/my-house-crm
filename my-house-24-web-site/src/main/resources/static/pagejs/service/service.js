@@ -30,7 +30,7 @@ function showPage(response) {
         $("#services").append(
             `<div class="d-flex justify-content-between mt-5">
                 <div class="col-7">
-                    <img style="max-width: 100%" src="${"../uploads/"+service.image}">
+                    <img style="max-width: 100%" src="${"uploads/"+service.image}">
                 </div>
                 <div class="col-4">
                     <h4>${service.title}</h4>
