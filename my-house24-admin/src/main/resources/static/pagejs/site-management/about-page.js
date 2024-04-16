@@ -11,9 +11,6 @@ let documentFileIndex = 0;
 let galleryShift = 0;
 let additionalGalleryShift = 0;
 let documentShift = 0;
-const currentUrl = window.location.href;
-const myArray = currentUrl.split("/");
-var root = myArray[3];
 $(document).ready(function () {
     initializeAutosize();
     getAboutPage();

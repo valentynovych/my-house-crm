@@ -4,9 +4,6 @@ let lastId = 0;
 let deleteId;
 let idsToDelete = [];
 let descriptions = [];
-const currentUrl = window.location.href;
-const myArray = currentUrl.split("/");
-var root = myArray[3];
 $(document).ready(function () {
     initializeAutosize();
     getMainPage();
