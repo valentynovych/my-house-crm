@@ -308,6 +308,7 @@ function setPricePerUnit(select) {
 }
 
 function calculateCost(input) {
+    $(input).val($(input).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1'));
     let perUnitInput = $(input).parent().parent().find(".per-unit");
     let quantityInput = $(input).parent().parent().find(".quantity");
     let costInput = $(input).parent().parent().find(".cost");
@@ -721,3 +722,8 @@ function findGetParameter(parameterName) {
         });
     return result;
 }
+
+// $(".quantity").on("input", function () {
+//     $(this).val(this.value.replace(/[^0-9.]/g, '').replace(/(..*?)..*/g, '$1'));
+//     // oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
+// });

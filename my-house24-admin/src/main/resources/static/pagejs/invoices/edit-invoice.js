@@ -411,6 +411,7 @@ function changePaid() {
     }
 }
 function calculateCost(input) {
+    $(input).val($(input).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1'));
     let perUnitInput = $(input).parent().parent().find(".per-unit");
     let quantityInput = $(input).parent().parent().find(".quantity");
     let costInput = $(input).parent().parent().find(".cost");
