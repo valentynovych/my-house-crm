@@ -11,14 +11,22 @@
 <div layout:fragment="breadcrumb">
     <div class="d-flex justify-content-between px-3 align-items-end">
         <h3 th:text="#{tariff-title}" class="current-tariff"></h3>
-        <h6 class="d-inline-flex">
-            <span class="text-muted fw-light" th:text="#{menu-item-system-settings} + ' / '"></span>
-            <a th:href="@{/admin/system-settings/tariffs}" th:text="#{menu-item-tariffs} + ' / '"></a>
-            <span class="text-muted fw-light current-tariff" th:text="#{breadcrumb-view}"
-                  style="display: block; white-space: nowrap; max-width: 8rem; overflow: hidden; text-overflow: ellipsis;">
-
-            </span>
-        </h6>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/admin/statistic}" th:text="#{menu-item-home-page}"></a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{menu-item-system-settings}"></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{/admin/system-settings/tariffs}" th:text="#{menu-item-tariffs}"></a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{breadcrumb-view}"></span>
+                </li>
+            </ol>
+        </nav>
     </div>
 </div>
 <div layout:fragment="content">

@@ -14,7 +14,7 @@
         <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                    <a th:href="@{/admin/statistic}" th:text="#{menu-item-home-page}"></a>
                 </li>
                 <li class="breadcrumb-item active">
                     <span th:text="#{menu-item-apartments}"></span>
