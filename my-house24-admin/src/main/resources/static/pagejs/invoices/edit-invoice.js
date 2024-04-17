@@ -178,13 +178,15 @@ $("#apartmentId").on("change", function () {
 function setOwnerFields(response) {
     $("#owner").text(response.ownerFullName);
     $("#phone-number").text(response.ownerPhoneNumber);
-    let number = "";
-    for (let j = 0; j < 10 - response.accountNumber.toString().length; j++) {
-        number += "0";
+    if(response.accountNumber !== null) {
+        let number = "";
+        for (let j = 0; j < 10 - response.accountNumber.toString().length; j++) {
+            number += "0";
+        }
+        number += response.accountNumber;
+        let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
+        $("#personalAccount").val(accountNumber);
     }
-    number += response.accountNumber;
-    let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
-    $("#personalAccount").val(accountNumber);
     let houseOption = new Option(response.tariffName, response.tariffId, true, true);
     $('#tariff').append(houseOption).trigger('change');
 }
@@ -216,13 +218,15 @@ function setFields(response) {
     } else {
         $("#number").val(response.number);
     }
-    let number = "";
-    for (let j = 0; j < 10 - response.ownerResponse.accountNumber.toString().length; j++) {
-        number += "0";
+    if(response.ownerResponse.accountNumber !== null) {
+        let number = "";
+        for (let j = 0; j < 10 - response.ownerResponse.accountNumber.toString().length; j++) {
+            number += "0";
+        }
+        number += response.ownerResponse.accountNumber;
+        let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
+        $("#personalAccount").val(accountNumber);
     }
-    number += response.ownerResponse.accountNumber;
-    let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
-    $("#personalAccount").val(accountNumber);
     $("#processed").prop("checked", response.isProcessed);
     $("#owner").text(response.ownerResponse.ownerFullName);
     $("#phone-number").text(response.ownerResponse.ownerPhoneNumber);

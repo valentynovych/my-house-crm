@@ -192,9 +192,11 @@ $("#apartmentId").on("change", function () {
 function setOwnerFields(response) {
     $("#owner").text(response.ownerFullName);
     $("#phone-number").text(response.ownerPhoneNumber);
-    let number = response.accountNumber.toString().padStart(10, '0');
-    let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
-    $("#personalAccount").val(accountNumber);
+    if(response.accountNumber !== null) {
+        let number = response.accountNumber.toString().padStart(10, '0');
+        let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
+        $("#personalAccount").val(accountNumber);
+    }
     let houseOption = new Option(response.tariffName, response.tariffId, true, true);
     $('#tariff').append(houseOption).trigger('change');
 }
