@@ -625,7 +625,7 @@ function appendInvoiceFields(formData) {
     formData.append("paid",$("#paid").val());
     let house = $("#house").val() == null? '': $("#house").val();
     formData.append("house",house);
-    formData.append("isProcessed",$("#processed").is(':checked'));
+    formData.append("processed",$("#processed").is(':checked'));
     formData.append("totalPrice",$("#totalPrice").text());
 }
 function sendData(formData) {
