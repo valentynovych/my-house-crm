@@ -643,7 +643,7 @@ function appendInvoiceFields(formData) {
     formData.append("paid", $("#paid").val());
     let house = $("#house").val() == null ? '' : $("#house").val();
     formData.append("house", house);
-    formData.append("isProcessed", $("#processed").is(':checked'));
+    formData.append("processed", $("#processed").is(':checked'));
     formData.append("totalPrice", $("#totalPrice").text());
 }
 
@@ -722,8 +722,3 @@ function findGetParameter(parameterName) {
         });
     return result;
 }
-
-// $(".quantity").on("input", function () {
-//     $(this).val(this.value.replace(/[^0-9.]/g, '').replace(/(..*?)..*/g, '$1'));
-//     // oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"
-// });

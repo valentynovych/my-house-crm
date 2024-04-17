@@ -227,7 +227,7 @@ function setFields(response) {
         let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
         $("#personalAccount").val(accountNumber);
     }
-    $("#processed").prop("checked", response.isProcessed);
+    $("#processed").prop("checked", response.processed);
     $("#owner").text(response.ownerResponse.ownerFullName);
     $("#phone-number").text(response.ownerResponse.ownerPhoneNumber);
     let statusOption = new Option(getStatus(response.status), response.status, true, true);
