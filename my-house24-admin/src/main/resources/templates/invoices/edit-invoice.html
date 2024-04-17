@@ -8,11 +8,19 @@
 <div layout:fragment="breadcrumb">
     <div class="d-flex justify-content-between px-3 align-items-end">
         <h3 class="breadCrumb" th:text="#{invoices-edit}"></h3>
-        <h6>
-            <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
-            <a th:href="@{/admin/invoices}" th:text="#{menu-item-invoices} + ' / '"></a>
-            <span class="breadCrumb" th:text="#{invoices-edit}"></span>
-        </h6>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{breadcrumb-home}"></span>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{/admin/invoices}" th:text="#{menu-item-invoices}"></a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{invoices-edit}"></span>
+                </li>
+            </ol>
+        </nav>
     </div>
 </div>
 <div layout:fragment="content">

@@ -7,13 +7,29 @@
 <body>
 <div layout:fragment="breadcrumb">
   <div class="d-flex justify-content-between px-3 align-items-end">
-    <h4 th:text="#{invoices-print-breadcrumb}"></h4>
-    <h6>
-      <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
-      <a th:href="@{/admin/invoices}" th:text="#{menu-item-invoices} + ' / '"></a>
-      <a class="text-wrap" href="" id="invoice-number"></a>
-      <span th:text="#{invoices-print-breadcrumb}"></span>
-    </h6>
+    <h5 class="text-wrap" th:text="#{invoices-print-breadcrumb}"></h5>
+    <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'; font-size: 14px;">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <span class="text-muted fw-light" th:text="#{breadcrumb-home}"></span>
+        </li>
+        <li class="breadcrumb-item">
+          <a th:href="@{/admin/invoices}" th:text="#{menu-item-invoices}"></a>
+        </li>
+        <li class="breadcrumb-item">
+          <a class="text-wrap" href="" id="invoice-number"></a>
+        </li>
+        <li class="breadcrumb-item active">
+          <span th:text="#{invoices-print-breadcrumb}"></span>
+        </li>
+      </ol>
+    </nav>
+<!--    <h6>-->
+<!--      <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>-->
+<!--      <a th:href="@{/admin/invoices}" th:text="#{menu-item-invoices} + ' / '"></a>-->
+<!--      <a class="text-wrap" href="" id="invoice-number"></a>-->
+<!--      <span th:text="#{invoices-print-breadcrumb}"></span>-->
+<!--    </h6>-->
   </div>
 </div>
 <div layout:fragment="content">
