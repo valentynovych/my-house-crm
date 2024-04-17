@@ -31,17 +31,21 @@ function setFields(response) {
     responseMap.forEach((value, key) => {
         $("#" + key).text(value);
     });
+    $("#owner").append(`<a href="../../owners/view-owner/${response.ownerNameResponse.id}">${response.ownerNameResponse.name}</a>`);
+    $("#house").append(`<a href="../../houses/view-house/${response.houseNameResponse.id}">${response.houseNameResponse.name}</a>`);
+    $("#apartment").append(`<a href="../../apartments/view-apartment/${response.apartmentNumberResponse.id}">${response.apartmentNumberResponse.apartmentNumber}</a>`);
+    $("#tariff").append(`<a href="../../system-settings/tariffs/view-tariff/${response.tariffNameResponse.id}">${response.tariffNameResponse.name}</a>`);
     $(".invoice-breadcrumb").each(function () {
         $(this).text(breadCrumb + response.number);
     });
-    if(response.accountNumber != null) {
+    if(response.accountNumberResponse.accountNumber != null) {
         let number = "";
-        for (let j = 0; j < 10 - response.accountNumber.toString().length; j++) {
+        for (let j = 0; j < 10 - response.accountNumberResponse.accountNumber.toString().length; j++) {
             number += "0";
         }
-        number += response.accountNumber;
+        number += response.accountNumberResponse.accountNumber;
         let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10);
-        $("#account").text(accountNumber);
+        $("#account").append(`<a href="../../personal-accounts/view-account/${response.accountNumberResponse.id}">${accountNumber}</a>`);
     }
     var parts = response.creationDate.split('.');
     let month = new Date(parts[2], parts[1] - 1, parts[0]).toLocaleString(dateLocale, {month: 'long', year: 'numeric'});

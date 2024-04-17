@@ -1,6 +1,8 @@
 package com.example.myhouse24admin.model.invoices;
 
 import com.example.myhouse24admin.entity.InvoiceStatus;
+import com.example.myhouse24admin.model.meterReadings.ApartmentNumberResponse;
+import com.example.myhouse24admin.model.meterReadings.HouseNameResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -10,13 +12,13 @@ public class ViewInvoiceResponse {
     private String creationDate;
     private boolean isProcessed;
     private InvoiceStatus invoiceStatus;
-    private String owner;
-    private Long accountNumber;
+    private OwnerNameResponse ownerNameResponse;
+    private AccountNumberResponse accountNumberResponse;
     private String phoneNumber;
-    private String house;
-    private String apartment;
+    private HouseNameResponse houseNameResponse;
+    private ApartmentNumberResponse apartmentNumberResponse;
     private String section;
-    private String tariff;
+    private TariffNameResponse tariffNameResponse;
     private List<InvoiceItemResponse> itemResponses;
     private BigDecimal totalPrice;
 
@@ -52,22 +54,6 @@ public class ViewInvoiceResponse {
         this.invoiceStatus = invoiceStatus;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public Long getAccountNumber() {
-        return accountNumber;
-    }
-
-    public void setAccountNumber(Long accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -76,21 +62,6 @@ public class ViewInvoiceResponse {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getHouse() {
-        return house;
-    }
-
-    public void setHouse(String house) {
-        this.house = house;
-    }
-
-    public String getApartment() {
-        return apartment;
-    }
-
-    public void setApartment(String apartment) {
-        this.apartment = apartment;
-    }
 
     public String getSection() {
         return section;
@@ -98,14 +69,6 @@ public class ViewInvoiceResponse {
 
     public void setSection(String section) {
         this.section = section;
-    }
-
-    public String getTariff() {
-        return tariff;
-    }
-
-    public void setTariff(String tariff) {
-        this.tariff = tariff;
     }
 
     public List<InvoiceItemResponse> getItemResponses() {
@@ -122,5 +85,45 @@ public class ViewInvoiceResponse {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public OwnerNameResponse getOwnerNameResponse() {
+        return ownerNameResponse;
+    }
+
+    public void setOwnerNameResponse(OwnerNameResponse ownerNameResponse) {
+        this.ownerNameResponse = ownerNameResponse;
+    }
+
+    public AccountNumberResponse getAccountNumberResponse() {
+        return accountNumberResponse;
+    }
+
+    public void setAccountNumberResponse(AccountNumberResponse accountNumberResponse) {
+        this.accountNumberResponse = accountNumberResponse;
+    }
+
+    public HouseNameResponse getHouseNameResponse() {
+        return houseNameResponse;
+    }
+
+    public void setHouseNameResponse(HouseNameResponse houseNameResponse) {
+        this.houseNameResponse = houseNameResponse;
+    }
+
+    public ApartmentNumberResponse getApartmentNumberResponse() {
+        return apartmentNumberResponse;
+    }
+
+    public void setApartmentNumberResponse(ApartmentNumberResponse apartmentNumberResponse) {
+        this.apartmentNumberResponse = apartmentNumberResponse;
+    }
+
+    public TariffNameResponse getTariffNameResponse() {
+        return tariffNameResponse;
+    }
+
+    public void setTariffNameResponse(TariffNameResponse tariffNameResponse) {
+        this.tariffNameResponse = tariffNameResponse;
     }
 }

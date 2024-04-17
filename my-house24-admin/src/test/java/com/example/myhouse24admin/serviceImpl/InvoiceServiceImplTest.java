@@ -433,7 +433,7 @@ class InvoiceServiceImplTest {
     void getInvoiceResponseForView() {
         ViewInvoiceResponse exxpectedViewInvoiceResponse = new ViewInvoiceResponse();
         exxpectedViewInvoiceResponse.setNumber("number");
-        exxpectedViewInvoiceResponse.setOwner("owner");
+        exxpectedViewInvoiceResponse.setPhoneNumber("phone");
         exxpectedViewInvoiceResponse.setProcessed(true);
 
         when(invoiceRepo.findById(anyLong())).thenReturn(Optional.of(new Invoice()));

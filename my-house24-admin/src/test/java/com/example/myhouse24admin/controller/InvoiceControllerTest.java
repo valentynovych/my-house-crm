@@ -438,7 +438,7 @@ class InvoiceControllerTest {
     void getInvoiceForView() throws Exception {
         ViewInvoiceResponse viewInvoiceResponse = new ViewInvoiceResponse();
         viewInvoiceResponse.setNumber("0001");
-        viewInvoiceResponse.setApartment("apartment");
+        viewInvoiceResponse.setPhoneNumber("+380991234567");
 
         when(invoiceService.getInvoiceResponseForView(anyLong())).thenReturn(viewInvoiceResponse);
 
@@ -447,7 +447,7 @@ class InvoiceControllerTest {
                         .with(user(userDetails)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.apartment").value(viewInvoiceResponse.getApartment()))
+                .andExpect(jsonPath("$.phoneNumber").value(viewInvoiceResponse.getPhoneNumber()))
                 .andExpect(jsonPath("$.number").value(viewInvoiceResponse.getNumber()));
     }
 
