@@ -25,18 +25,16 @@
                 <span th:text="#{staff-button-add}"></span>
             </a>
         </div>
+        <div class="clear-filter-wrap">
+            <div class="d-flex justify-content-end border-top border-start border-end">
+                <button type="button" class="btn btn-outline-secondary clear-filters mx-2 my-1"
+                        th:text="#{general-button-clear-table}">Clear
+                </button>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>
-                <tr>
-                    <th colspan="7" class="p-1">
-                        <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-outline-secondary clear-filters"
-                                    th:text="#{general-button-clear-table}">Clear
-                            </button>
-                        </div>
-                    </th>
-                </tr>
                 <tr class="table-primary text-center">
                     <th>#</th>
                     <th th:text="#{staff-title}"></th>

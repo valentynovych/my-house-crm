@@ -85,19 +85,16 @@
             </div>
         </div>
 
-
+        <div class="clear-filter-wrap">
+            <div class="d-flex justify-content-end border-top border-start border-end">
+                <button type="button" class="btn btn-outline-secondary clear-filters mx-2 my-1"
+                        th:text="#{general-button-clear-table}">Clear
+                </button>
+            </div>
+        </div>
         <div class="table-responsive" id="dropdownParent">
             <table class="table table-bordered table-hover">
                 <thead>
-                <tr>
-                    <th colspan="9" class="p-1">
-                        <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-outline-secondary clear-filters"
-                                    th:text="#{general-button-clear-table}">Clear
-                            </button>
-                        </div>
-                    </th>
-                </tr>
                 <tr class="table-primary text-center">
                     <th th:text="#{cash-register-label-account-number}"></th>
                     <th th:text="#{cash-register-label-date-of-create}"></th>
