@@ -36,8 +36,8 @@ public class CashSheetSpecification implements Specification<CashSheet> {
                 case BY_NUMBER -> predicates.add(criteriaBuilder.like(root.get("sheetNumber"), "%" + value + "%"));
                 case BY_DATE -> {
                     LocalDate date = LocalDate.parse(value, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-                    Instant instant = date.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant();
-                    predicates.add(criteriaBuilder.equal(root.get("creationDate"), instant));
+                    predicates.add(criteriaBuilder.equal(
+                            criteriaBuilder.function("date", LocalDate.class, root.get("creationDate")), date));
                 }
                 case BY_STATUS ->
                         predicates.add(criteriaBuilder.equal(root.get("isProcessed"), Boolean.valueOf(value)));
@@ -60,8 +60,9 @@ public class CashSheetSpecification implements Specification<CashSheet> {
                         predicates.add(criteriaBuilder.equal(root.get("sheetType"), CashSheetType.valueOf(value)));
 
             }
-            predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
         });
+
+        predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 }
