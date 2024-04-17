@@ -34,13 +34,15 @@ function setFields(response) {
     $(".invoice-breadcrumb").each(function () {
         $(this).text(breadCrumb + response.number);
     });
-    let number = "";
-    for (let j = 0; j < 10 - response.accountNumber.toString().length; j++) {
-        number += "0";
+    if(response.accountNumber != null) {
+        let number = "";
+        for (let j = 0; j < 10 - response.accountNumber.toString().length; j++) {
+            number += "0";
+        }
+        number += response.accountNumber;
+        let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10);
+        $("#account").text(accountNumber);
     }
-    number += response.accountNumber;
-    let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10);
-    $("#account").text(accountNumber);
     var parts = response.creationDate.split('.');
     let month = new Date(parts[2], parts[1] - 1, parts[0]).toLocaleString(dateLocale, {month: 'long', year: 'numeric'});
     $("#month").text(month);
