@@ -10,6 +10,10 @@
         .light-style div.account-select-wrap .select2-container--default .select2-selection--single {
             border-radius: 0 0 .375rem .375rem !important;
         }
+
+        .hidden-on-hover:hover > input[name="sheetNumber"] {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -39,7 +43,7 @@
                     <div class="col-md-4 mb-2">
                         <label for="sheetNumber" class="form-label"
                                th:text="#{cash-register-label-account-number}"></label>
-                        <div class="input-group">
+                        <div class="input-group hidden-on-hover">
                             <span class="input-group-text" id="basic-addon11"><i class="ti ti-number"></i></span>
                             <input class="form-control" type="text" id="sheetNumber" name="sheetNumber"
                                    placeholder="0000000000" disabled>

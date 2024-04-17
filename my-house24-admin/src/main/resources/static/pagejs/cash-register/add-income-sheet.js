@@ -16,6 +16,10 @@ const $inputAmountCleave = new Cleave($inputAmount, {
     numeralThousandsGroupStyle: "thousand"
 });
 
+$inputSheetNumber.prop('disabled', true);
+$inputSheetNumber.on('click', function () {
+    $(this).prop('disabled', true);})
+
 function initInputAndSelect() {
 
     $.ajax({
