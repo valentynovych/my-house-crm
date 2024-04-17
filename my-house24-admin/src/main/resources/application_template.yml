@@ -1,6 +1,7 @@
 upload:
   path: /home/avada/web/slj.demodev.cc/projects/My-house24_Rudiuk_Lesyk/uploads
 
+#AWS
 aws:
   accessKey: ${awsAccessKey}
   secretAccessKey: ${awsSecretAccessKey}
@@ -41,6 +42,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+
 server:
   servlet:
     context-path: /my-house24-rudiuk-lesyk
