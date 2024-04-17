@@ -20,15 +20,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Add secret
         env:
           awsAccessKey: ${{ secrets.AWS_ACCESS_KEY }}
@@ -40,6 +31,18 @@ jobs:
         run: |
           envsubst < my-house24-admin/src/main/resources/application_template.yml > my-house24-admin/src/main/resources/application.yml
           cat my-house24-admin/src/main/resources/application.yml
+
+      - name: Run tests
+        run: cd my-house24-admin && mvn test
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Build and push image
         uses: docker/build-push-action@v5

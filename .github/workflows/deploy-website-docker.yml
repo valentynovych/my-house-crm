@@ -20,6 +20,17 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Add secret to website
+        env:
+          awsAccessKey: ${{ secrets.AWS_ACCESS_KEY }}
+          awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          envsubst < my-house-24-web-site/src/main/resources/application_template.yml > my-house-24-web-site/src/main/resources/application.yml
+          cat my-house-24-web-site/src/main/resources/application.yml
+
+      - name: Run tests
+        run: cd my-house-24-web-site && mvn test
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -28,14 +39,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Add secret to website
-        env:
-          awsAccessKey: ${{ secrets.AWS_ACCESS_KEY }}
-          awsSecretAccessKey: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          envsubst < my-house-24-web-site/src/main/resources/application_template.yml > my-house-24-web-site/src/main/resources/application.yml
-          cat my-house-24-web-site/src/main/resources/application.yml
 
       - name: Build and push website
         uses: docker/build-push-action@v5
