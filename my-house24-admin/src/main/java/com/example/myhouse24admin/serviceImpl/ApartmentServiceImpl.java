@@ -8,6 +8,7 @@ import com.example.myhouse24admin.model.apartments.ApartmentAddRequest;
 import com.example.myhouse24admin.model.apartments.ApartmentExtendResponse;
 import com.example.myhouse24admin.model.apartments.ApartmentResponse;
 import com.example.myhouse24admin.model.meterReadings.ApartmentNumberResponse;
+import com.example.myhouse24admin.model.meterReadings.ReadingsApartmentResponse;
 import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.repository.ApartmentRepo;
 import com.example.myhouse24admin.repository.PersonalAccountRepo;
@@ -208,5 +209,14 @@ public class ApartmentServiceImpl implements ApartmentService {
                     logger.error("Apartment with id: {} not found", apartmentId);
                     return new EntityNotFoundException(String.format("Apartment with id: %s not found", apartmentId));
                 });
+    }
+
+    @Override
+    public ReadingsApartmentResponse getReadingsApartmentResponse(Long id) {
+        logger.info("getReadingsApartmentResponse() - Getting ReadingsApartmentResponse by id "+ id);
+        Apartment apartment = apartmentRepo.findById(id).orElseThrow(()-> new EntityNotFoundException("Apartment was not found by id "+id));
+        ReadingsApartmentResponse readingsApartmentResponse = apartmentMapper.apartmentToReadingsApartmentResponse(apartment);
+        logger.info("getReadingsApartmentResponse() - ReadingsApartmentResponse was got");
+        return readingsApartmentResponse;
     }
 }
