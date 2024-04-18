@@ -335,7 +335,7 @@ function deleteEntry() {
 
 $("#mainCheck").on("change", function () {
     $(".checks").each(function () {
-        $(this).prop("checked", !$(this).is(":checked"));
+        $(this).prop("checked", $("#mainCheck").is(":checked"));
     });
 });
 
