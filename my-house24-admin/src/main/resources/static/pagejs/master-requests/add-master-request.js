@@ -71,8 +71,16 @@ function initInputAndSelect() {
         let ownerData = $selectApartmentOwner.select2('data')[0];
         $('#apartment-owner-phone').html(ownerData.phoneNumber);
 
+        resetSelectsAndFields();
         initSelectApartment(ownerData.id, false);
     })
+
+    function resetSelectsAndFields() {
+        $selectApartment.val(null).trigger('change');
+        $('#house').html('');
+        $('#section').html('');
+        $('#floor').html('');
+    }
 
     function initSelectApartment(ownerId, isDisabled) {
         $selectApartment.select2({
@@ -112,7 +120,7 @@ function initInputAndSelect() {
         });
     }
 
-    $selectApartment.on('change', function () {
+    $selectApartment.on('select2:select', function () {
         const apartmentData = $selectApartment.select2('data')[0];
 
         const house = apartmentData.house;
@@ -155,7 +163,7 @@ function initInputAndSelect() {
     $selectStatus.append(doneOption);
     $selectStatus.append(canceledOption);
 
-    $selectMasterType.on('change', function () {
+    $selectMasterType.on('select2:select', function () {
         const status = $selectMasterType.select2('data')[0];
         initSelectStaff(status, false);
     })
