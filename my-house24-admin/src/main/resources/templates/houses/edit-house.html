@@ -30,13 +30,10 @@
         <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <span th:text="#{menu-item-home-page}"></span>
+                    <a th:href="@{/admin/statistic}" th:text="#{menu-item-home-page}"></a>
                 </li>
                 <li class="breadcrumb-item">
                     <a th:href="@{/admin/houses}" th:text="#{menu-item-houses}"></a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a th:href="@{/admin/houses}" id="view-house-link"></a>
                 </li>
                 <li class="breadcrumb-item active">
                     <span th:text="#{breadcrumb-edit}"></span>

@@ -12,6 +12,21 @@
     </style>
 </head>
 <body>
+<div layout:fragment="breadcrumb">
+    <div class="d-flex justify-content-between px-3 align-items-end">
+        <h3 th:text="#{menu-item-master-request}"></h3>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/admin/statistic}" th:text="#{menu-item-home-page}"></a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <a th:href="@{../../master-requests}" th:text="#{menu-item-master-request}"></a>
+                </li>
+            </ol>
+        </nav>
+    </div>
+</div>
 <div layout:fragment="content">
     <div class="card-body">
         <div class="mb-4 d-flex justify-content-end align-items-start">
@@ -20,18 +35,16 @@
                    th:text="#{master-request-button-add-new}"></a>
             </div>
         </div>
+        <div class="clear-filter-wrap">
+            <div class="d-flex justify-content-end border-top border-start border-end">
+                <button type="button" class="btn btn-outline-secondary clear-filters mx-2 my-1"
+                        th:text="#{general-button-clear-table}">Clear
+                </button>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>
-                <tr>
-                    <th colspan="10" class="p-1">
-                        <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-outline-secondary clear-filters"
-                                    th:text="#{general-button-clear-table}">Clear
-                            </button>
-                        </div>
-                    </th>
-                </tr>
                 <tr class="table-primary text-center">
                     <th th:text="#{master-request-label-number}"></th>
                     <th th:text="#{master-request-label-visit-date}"></th>

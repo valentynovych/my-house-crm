@@ -14,7 +14,7 @@
         <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                    <a th:href="@{/admin/statistic}" th:text="#{menu-item-home-page}"></a>
                 </li>
                 <li class="breadcrumb-item active">
                     <span th:text="#{menu-item-apartments}"></span>
@@ -31,18 +31,16 @@
                 <span th:text="#{apartments-button-add}"></span>
             </a>
         </div>
+        <div class="clear-filter-wrap">
+            <div class="d-flex justify-content-end border-top border-start border-end">
+                <button type="button" class="btn btn-outline-secondary clear-filters mx-2 my-1"
+                        th:text="#{general-button-clear-table}">Clear
+                </button>
+            </div>
+        </div>
         <div class="table-responsive" id="dropdownParent">
             <table class="table table-bordered table-hover">
                 <thead>
-                <tr>
-                    <th colspan="7" class="p-1">
-                        <div class="d-flex justify-content-end">
-                            <button type="button" class="btn btn-outline-secondary clear-filters"
-                                    th:text="#{general-button-clear-table}">Clear
-                            </button>
-                        </div>
-                    </th>
-                </tr>
                 <tr class="table-primary text-center">
                     <th th:text="#{apartments-label-apartment-number}"></th>
                     <th th:text="#{apartments-label-house}"></th>
