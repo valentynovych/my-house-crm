@@ -91,7 +91,7 @@ class StatisticServiceImplTest {
         // when
         when(personalAccountRepo.findAll(any(Specification.class)))
                 .thenReturn(negativeAccounts, positiveAccounts);
-        when(cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalse(any(), any()))
+        when(cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalseAndIsProcessedIsTrue(any(), any()))
                 .thenReturn(CompletableFuture.completedFuture(cashSheets));
 
         // call the method
@@ -109,7 +109,7 @@ class StatisticServiceImplTest {
         // when
         when(personalAccountRepo.findAll(any(PersonalAccountSpecification.class)))
                 .thenReturn(new ArrayList<>());
-        when(cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalse(Mockito.any(), Mockito.any()))
+        when(cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalseAndIsProcessedIsTrue(Mockito.any(), Mockito.any()))
                 .thenReturn(CompletableFuture.failedFuture(new InterruptedException("Simulated exception")));
 
         // Call the method (expect exception)
@@ -164,7 +164,7 @@ class StatisticServiceImplTest {
         }
 
         // when
-        when(cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalse(any(Instant.class), any(Instant.class)))
+        when(cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalseAndIsProcessedIsTrue(any(Instant.class), any(Instant.class)))
                 .thenReturn(CompletableFuture.completedFuture(cashSheets));
 
         // call the method
@@ -181,7 +181,7 @@ class StatisticServiceImplTest {
     @Test
     void getIncomeExpenseStatisticPerYear_Exception() {
         // when
-        when(cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalse(any(Instant.class), any(Instant.class)))
+        when(cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalseAndIsProcessedIsTrue(any(Instant.class), any(Instant.class)))
                 .thenReturn(CompletableFuture.failedFuture(new InterruptedException("Simulated exception")));
 
         // call the method
