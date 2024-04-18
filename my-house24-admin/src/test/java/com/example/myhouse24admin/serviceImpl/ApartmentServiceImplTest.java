@@ -5,8 +5,7 @@ import com.example.myhouse24admin.mapper.ApartmentMapper;
 import com.example.myhouse24admin.model.apartments.ApartmentAddRequest;
 import com.example.myhouse24admin.model.apartments.ApartmentExtendResponse;
 import com.example.myhouse24admin.model.apartments.ApartmentResponse;
-import com.example.myhouse24admin.model.meterReadings.ApartmentNumberResponse;
-import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
+import com.example.myhouse24admin.model.meterReadings.*;
 import com.example.myhouse24admin.repository.ApartmentRepo;
 import com.example.myhouse24admin.repository.PersonalAccountRepo;
 import com.example.myhouse24admin.specification.ApartmentSpecification;
@@ -29,6 +28,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -422,5 +422,39 @@ class ApartmentServiceImplTest {
         Apartment savedApartment = argumentCaptor.getValue();
         assertEquals(true, savedApartment.isDeleted());
         assertNull(savedApartment.getPersonalAccount());
+    }
+    @Test
+    void getReadingsApartmentResponse(){
+        ReadingsApartmentResponse expectedReadingsApartmentResponse =
+                new ReadingsApartmentResponse(new HouseNameResponse(1L, "house"),
+                        new SectionNameResponse(1L, "section"),
+                        new ApartmentNumberResponse(1L, "apartment"));
+
+        when(apartmentRepo.findById(anyLong())).thenReturn(Optional.of(new Apartment()));
+        when(apartmentMapper.apartmentToReadingsApartmentResponse(any(Apartment.class)))
+                .thenReturn(expectedReadingsApartmentResponse);
+
+        ReadingsApartmentResponse readingsApartmentResponse = apartmentService.getReadingsApartmentResponse(1L);
+
+        assertThat(readingsApartmentResponse).usingRecursiveComparison().isEqualTo(expectedReadingsApartmentResponse);
+
+        verify(apartmentRepo, times(1)).findById(anyLong());
+        verify(apartmentMapper, times(1))
+                .apartmentToReadingsApartmentResponse(any(Apartment.class));
+
+        verifyNoMoreInteractions(apartmentRepo);
+        verifyNoMoreInteractions(apartmentMapper);
+    }
+    @Test
+    void deleteApartmentsByHouseId(){
+        when(apartmentRepo.findAll(any(Specification.class))).thenReturn(List.of(new Apartment()));
+        when(apartmentRepo.saveAll(anyList())).thenReturn(List.of(new Apartment()));
+
+        apartmentService.deleteApartmentsByHouseId(1L);
+
+        verify(apartmentRepo, times(1)).findAll(any(Specification.class));
+        verify(apartmentRepo, times(1)).saveAll(anyList());
+
+        verifyNoMoreInteractions(apartmentRepo);
     }
 }

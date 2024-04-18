@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
@@ -63,5 +64,18 @@ class FloorServiceImplTest {
 
         assertEquals(3, response.getTotalElements());
         assertEquals(3, response.getContent().size());
+    }
+
+    @Test
+    void deleteFloorsByHouseId(){
+        when(floorRepo.findAll(any(FloorSpecification.class))).thenReturn(List.of(new Floor()));
+        when(floorRepo.saveAll(anyList())).thenReturn(List.of(new Floor()));
+
+        floorService.deleteFloorsByHouseId(1L);
+
+        verify(floorRepo, times(1)).findAll(any(FloorSpecification.class));
+        verify(floorRepo, times(1)).saveAll(anyList());
+
+        verifyNoMoreInteractions(floorRepo);
     }
 }

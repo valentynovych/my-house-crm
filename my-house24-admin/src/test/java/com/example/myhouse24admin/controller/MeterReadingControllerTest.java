@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -56,7 +57,10 @@ class MeterReadingControllerTest {
 
     @Autowired
     private MeterReadingService meterReadingService;
-    private Pageable pageable = PageRequest.of(0,1);;
+    private Pageable pageable = PageRequest.of(0,1);
+    private MeterReadingRequest validMeterReadingRequest =
+            new MeterReadingRequest("12.03.1990", MeterReadingStatus.NEW,
+                    BigDecimal.valueOf(22), 1L, 1L, 1L);
 
     @Test
     void getMeterReadingsPage() throws Exception {
@@ -199,9 +203,6 @@ class MeterReadingControllerTest {
 
     @Test
     void createMeterReading_MeterReadingRequest_Valid() throws Exception {
-        MeterReadingRequest meterReadingRequest =
-                new MeterReadingRequest("12.03.1990", MeterReadingStatus.NEW,
-                        BigDecimal.valueOf(22), 1L, 1L, 1L);
 
         doNothing().when(meterReadingService).createMeterReading(any(MeterReadingRequest.class));
 
@@ -209,7 +210,7 @@ class MeterReadingControllerTest {
                         .contextPath("/my-house")
                         .with(user(userDetails))
                         .param("notReturn", "true")
-                        .flashAttr("meterReadingRequest", meterReadingRequest))
+                        .flashAttr("meterReadingRequest", validMeterReadingRequest))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("http://localhost/my-house/admin/meter-readings/add"));
@@ -269,9 +270,6 @@ class MeterReadingControllerTest {
 
     @Test
     void updateMeterReading_MeterReadingRequest_Valid() throws Exception {
-        MeterReadingRequest meterReadingRequest =
-                new MeterReadingRequest("12.03.1990", MeterReadingStatus.NEW,
-                        BigDecimal.valueOf(22), 1L, 1L, 1L);
 
         doNothing().when(meterReadingService).updateMeterReading(anyLong(),any(MeterReadingRequest.class));
 
@@ -279,7 +277,7 @@ class MeterReadingControllerTest {
                         .contextPath("/my-house")
                         .with(user(userDetails))
                         .param("notReturn", "true")
-                        .flashAttr("meterReadingRequest", meterReadingRequest))
+                        .flashAttr("meterReadingRequest", validMeterReadingRequest))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("http://localhost/my-house/admin/meter-readings/add"));
@@ -354,5 +352,58 @@ class MeterReadingControllerTest {
                         .with(user(userDetails)))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+    @Test
+    void getMeterReadingPageForCreateWithApartment() throws Exception {
+        this.mockMvc.perform(get("/my-house/admin/meter-readings/add/{id}", 1L)
+                        .contextPath("/my-house")
+                        .with(user(userDetails)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(view().name("meter-readings/create-apartment-meter-reading"));
+    }
+    @Test
+    void getApartment() throws Exception {
+        ReadingsApartmentResponse readingsApartmentResponse =
+                new ReadingsApartmentResponse(new HouseNameResponse(1L, "house"),
+                        new SectionNameResponse(1L, "section"),
+                        new ApartmentNumberResponse(1L, "apartment"));
+
+        when(apartmentService.getReadingsApartmentResponse(anyLong()))
+                .thenReturn(readingsApartmentResponse);
+
+        this.mockMvc.perform(get("/my-house/admin/meter-readings/get-apartment/{id}",1)
+                        .contextPath("/my-house")
+                        .with(user(userDetails)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.houseNameResponse.id").value(readingsApartmentResponse.houseNameResponse().id()))
+                .andExpect(jsonPath("$.houseNameResponse.name").value(readingsApartmentResponse.houseNameResponse().name()));
+    }
+    @Test
+    void updateMeterReadingWithApartment_ReturnUrl_To_Add() throws Exception {
+        doNothing().when(meterReadingService).createMeterReading(any(MeterReadingRequest.class));
+
+        this.mockMvc.perform(post("/my-house/admin/meter-readings/add/{id}",1)
+                        .contextPath("/my-house")
+                        .with(user(userDetails))
+                        .param("notReturn", "true")
+                        .flashAttr("meterReadingRequest", validMeterReadingRequest))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("http://localhost/my-house/admin/meter-readings/add"));
+    }
+    @Test
+    void updateMeterReadingWithApartment_ReturnUrl_To_Apartment_Readings() throws Exception {
+        doNothing().when(meterReadingService).createMeterReading(any(MeterReadingRequest.class));
+
+        this.mockMvc.perform(post("/my-house/admin/meter-readings/add/{id}",1)
+                        .contextPath("/my-house")
+                        .with(user(userDetails))
+                        .param("notReturn", "false")
+                        .flashAttr("meterReadingRequest", validMeterReadingRequest))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("http://localhost/my-house/admin/meter-readings/apartment/1"));
     }
 }
