@@ -179,11 +179,7 @@ function setOwnerFields(response) {
     $("#owner").text(response.ownerFullName);
     $("#phone-number").text(response.ownerPhoneNumber);
     if(response.accountNumber !== null) {
-        let number = "";
-        for (let j = 0; j < 10 - response.accountNumber.toString().length; j++) {
-            number += "0";
-        }
-        number += response.accountNumber;
+        let number = response.accountNumber.toString().padStart(10, '0');
         let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
         $("#personalAccount").val(accountNumber);
     }
@@ -219,11 +215,7 @@ function setFields(response) {
         $("#number").val(response.number);
     }
     if(response.ownerResponse.accountNumber !== null) {
-        let number = "";
-        for (let j = 0; j < 10 - response.ownerResponse.accountNumber.toString().length; j++) {
-            number += "0";
-        }
-        number += response.ownerResponse.accountNumber;
+        let number = response.ownerResponse.accountNumber.toString().padStart(10, '0');
         let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
         $("#personalAccount").val(accountNumber);
     }
