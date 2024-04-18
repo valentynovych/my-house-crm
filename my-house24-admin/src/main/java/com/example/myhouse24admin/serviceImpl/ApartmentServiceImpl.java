@@ -219,4 +219,15 @@ public class ApartmentServiceImpl implements ApartmentService {
         logger.info("getReadingsApartmentResponse() - ReadingsApartmentResponse was got");
         return readingsApartmentResponse;
     }
+
+    @Override
+    public void deleteApartmentsByHouseId(Long houseId) {
+        logger.info("deleteApartmentsByHouseId() - Deleting apartments by house id "+ houseId);
+        List<Apartment> apartments = apartmentRepo.findAll(byHouseId(houseId));
+        for(Apartment apartment: apartments){
+            apartment.setDeleted(true);
+        }
+        apartmentRepo.saveAll(apartments);
+        logger.info("deleteApartmentsByHouseId() - Apartments were deleted");
+    }
 }

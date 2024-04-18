@@ -32,4 +32,5 @@ public interface ApartmentService {
 
     void deleteApartment(Long apartmentId);
     ReadingsApartmentResponse getReadingsApartmentResponse(Long id);
+    void deleteApartmentsByHouseId(Long houseId);
 }

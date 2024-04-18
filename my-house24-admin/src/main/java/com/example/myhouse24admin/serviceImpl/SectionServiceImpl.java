@@ -66,4 +66,14 @@ public class SectionServiceImpl implements SectionService {
         return sectionRepo.findAll(sectionSpecification, pageable);
     }
 
+    @Override
+    public void deleteSectionsByHouseId(Long houseId) {
+        logger.info("deleteSectionsByHouseId - Deleting sections by house id " + houseId);
+        List<Section> sections = sectionRepo.findAll(byHouseId(houseId));
+        for(Section section: sections){
+            section.setDeleted(true);
+        }
+        sectionRepo.saveAll(sections);
+        logger.info("deleteSectionsByHouseId - Sections were deleted");
+    }
 }

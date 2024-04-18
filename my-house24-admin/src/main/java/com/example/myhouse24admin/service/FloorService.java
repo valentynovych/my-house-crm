@@ -5,4 +5,5 @@ import org.springframework.data.domain.Page;
 
 public interface FloorService {
     Page<FloorResponse> getFloorsByHouseId(Long houseId, int page, int pageSize, String name);
+    void deleteFloorsByHouseId(Long houseId);
 }
