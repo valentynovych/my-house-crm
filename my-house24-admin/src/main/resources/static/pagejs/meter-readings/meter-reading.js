@@ -344,5 +344,6 @@ $("#save-add-button").on("click", function () {
     sendData(formData);
 });
 
-
-
+$("#readings").on("input", function () {
+    $(this).val($(this).val().replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1'));
+});
