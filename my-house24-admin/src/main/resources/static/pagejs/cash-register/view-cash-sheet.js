@@ -33,7 +33,7 @@ function fillInputs(sheet) {
 
     const personalAccount = sheet.personalAccount;
     const invoice = sheet.invoice;
-    $('#owner').html(personalAccount ? personalAccount.apartmentOwner.fullName : '-');
+    $('#owner').html(personalAccount.apartmentOwner ? personalAccount.apartmentOwner.fullName : '-');
     $('#personalAccount').html(personalAccount ? `<a href="../../personal-accounts/view-account/${personalAccount.id}">${decorateAccountNumber(personalAccount.accountNumber)}</a>` : '-');
     $('#paymentItem').html(sheet.paymentItem.name);
     $('#invoice').html(invoice ? `<a href="../../invoices/view-invoice/${invoice.id}">${invoice.number} ${dividerFrom} ${new Date(invoice.creationDate * 1000).toLocaleDateString()} </a>` : '-');
