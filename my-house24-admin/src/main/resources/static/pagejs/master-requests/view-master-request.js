@@ -62,7 +62,8 @@ function fillInputs(request) {
     $('#master').html(`${masterName}`)
     $('#description').html(request.description);
     $('#comment').html(request.comment);
-    $('#creationDate').html(new Date(request.creationDate * 1000).toLocaleString().slice(0, 17))
+    let localeString = new Date(request.creationDate * 1000).toLocaleString();
+    $('#creationDate').html(localeString.substring(0, localeString.length - 3));
 }
 
 function getMasterTypeLabel(status) {
