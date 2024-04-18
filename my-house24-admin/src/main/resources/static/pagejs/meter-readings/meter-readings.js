@@ -176,7 +176,7 @@ function drawTable(response) {
 $('#filter-by-house').on("change", function () {
     request.houseId = $(this).val();
     $('#filter-by-section').val(null).trigger('change');
-    $('#filter-by-section').prop('disabled', $('#filter-by-section').prop('disabled'));
+    $('#filter-by-section').prop('disabled', !$('#filter-by-section').prop('disabled'));
     searchAfterDelay();
 });
 $('#filter-by-section').on("change", function () {
