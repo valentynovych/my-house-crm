@@ -104,6 +104,7 @@ function initializeApartmentSelect() {
         dropdownParent: $('#apartmentId').parent(),
         maximumInputLength: 100,
         placeholder: chooseApartment,
+        allowClear: true,
         ajax: {
             type: "get",
             url: "get-apartments",
