@@ -8,10 +8,16 @@
 <div layout:fragment="breadcrumb">
     <div class="d-flex justify-content-between px-3 align-items-end">
         <h3 th:text="#{menu-item-meters}"></h3>
-        <h6>
-            <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
-            <span th:text="#{menu-item-meters}"></span>
-        </h6>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span th:text="#{menu-item-meters}"></span>
+                </li>
+            </ol>
+        </nav>
     </div>
 </div>
 <div layout:fragment="content">

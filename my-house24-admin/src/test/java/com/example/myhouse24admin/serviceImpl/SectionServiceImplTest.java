@@ -114,4 +114,17 @@ class SectionServiceImplTest {
         verify(sectionMapper, times(1)).sectionListToSectionNameResponseList(anyList());
 
     }
+    @Test
+    void deleteSectionsByHouseId(){
+        when(sectionRepo.findAll(any(Specification.class))).thenReturn(List.of(new Section()));
+        when(sectionRepo.saveAll(anyList())).thenReturn(List.of(new Section()));
+
+        sectionService.deleteSectionsByHouseId(1L);
+
+        verify(sectionRepo, times(1)).findAll(any(Specification.class));
+        verify(sectionRepo, times(1)).saveAll(anyList());
+
+        verifyNoMoreInteractions(sectionRepo);
+    }
+
 }

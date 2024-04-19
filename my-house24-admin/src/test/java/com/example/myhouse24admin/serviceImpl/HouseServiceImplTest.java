@@ -8,6 +8,9 @@ import com.example.myhouse24admin.model.houses.*;
 import com.example.myhouse24admin.model.meterReadings.HouseNameResponse;
 import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.repository.HouseRepo;
+import com.example.myhouse24admin.service.ApartmentService;
+import com.example.myhouse24admin.service.FloorService;
+import com.example.myhouse24admin.service.SectionService;
 import com.example.myhouse24admin.specification.HouseSpecification;
 import com.example.myhouse24admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
@@ -41,6 +44,12 @@ class HouseServiceImplTest {
     private HouseRepo houseRepo;
     @Mock
     private HouseMapper houseMapper;
+    @Mock
+    private ApartmentService apartmentService;
+    @Mock
+    private SectionService sectionService;
+    @Mock
+    private FloorService floorService;
     @Mock
     private UploadFileUtil fileUtil;
     @InjectMocks
@@ -156,6 +165,9 @@ class HouseServiceImplTest {
         // when
         when(houseRepo.findById(houseId))
                 .thenReturn(Optional.of(house));
+        doNothing().when(apartmentService).deleteApartmentsByHouseId(houseId);
+        doNothing().when(sectionService).deleteSectionsByHouseId(houseId);
+        doNothing().when(floorService).deleteFloorsByHouseId(houseId);
 
         // call the method
         houseService.deleteHouseById(houseId);
@@ -163,6 +175,9 @@ class HouseServiceImplTest {
         // then
         verify(houseRepo, times(1)).findById(houseId);
         verify(houseRepo, times(1)).save(houseCaptor.capture());
+        verify(apartmentService, times(1)).deleteApartmentsByHouseId(houseId);
+        verify(sectionService, times(1)).deleteSectionsByHouseId(houseId);
+        verify(floorService, times(1)).deleteFloorsByHouseId(houseId);
 
         House capturedHouse = houseCaptor.getValue();
         assertTrue(capturedHouse.isDeleted());

@@ -6,7 +6,10 @@ import com.example.myhouse24admin.model.houses.*;
 import com.example.myhouse24admin.model.meterReadings.HouseNameResponse;
 import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.repository.HouseRepo;
+import com.example.myhouse24admin.service.ApartmentService;
+import com.example.myhouse24admin.service.FloorService;
 import com.example.myhouse24admin.service.HouseService;
+import com.example.myhouse24admin.service.SectionService;
 import com.example.myhouse24admin.specification.HouseSpecification;
 import com.example.myhouse24admin.util.UploadFileUtil;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,12 +32,21 @@ public class HouseServiceImpl implements HouseService {
 
     private final HouseRepo houseRepo;
     private final HouseMapper houseMapper;
+    private final ApartmentService apartmentService;
+    private final SectionService sectionService;
+    private final FloorService floorService;
     private final UploadFileUtil fileUtil;
     private final Logger logger = LogManager.getLogger(HouseServiceImpl.class);
 
-    public HouseServiceImpl(HouseRepo houseRepo, HouseMapper houseMapper, UploadFileUtil fileUtil) {
+    public HouseServiceImpl(HouseRepo houseRepo, HouseMapper houseMapper,
+                            ApartmentService apartmentService,
+                            SectionService sectionService,
+                            FloorService floorService, UploadFileUtil fileUtil) {
         this.houseRepo = houseRepo;
         this.houseMapper = houseMapper;
+        this.apartmentService = apartmentService;
+        this.sectionService = sectionService;
+        this.floorService = floorService;
         this.fileUtil = fileUtil;
     }
 
@@ -72,6 +84,9 @@ public class HouseServiceImpl implements HouseService {
         House house = findHouseById(houseId);
         house.setDeleted(true);
         houseRepo.save(house);
+        apartmentService.deleteApartmentsByHouseId(houseId);
+        sectionService.deleteSectionsByHouseId(houseId);
+        floorService.deleteFloorsByHouseId(houseId);
         logger.info("deleteHouseById() - exit, house with id: {} marked deleted", houseId);
         return true;
     }

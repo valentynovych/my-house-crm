@@ -54,6 +54,11 @@ public class MeterReadingController {
         modelAndView.addObject("serviceLink", "get-services");
         return modelAndView;
     }
+    @GetMapping("/add/{id}")
+    public ModelAndView getMeterReadingPageForCreateWithApartment() {
+        ModelAndView modelAndView = new ModelAndView("meter-readings/create-apartment-meter-reading");
+        return modelAndView;
+    }
     @GetMapping("/get-statuses")
     public @ResponseBody MeterReadingStatus[] getStatuses() {
         return MeterReadingStatus.values();
@@ -136,5 +141,25 @@ public class MeterReadingController {
     public @ResponseBody ResponseEntity<?> deleteReading(@PathVariable Long id) {
         meterReadingService.deleteMeterReading(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/get-apartment/{id}")
+    public @ResponseBody ReadingsApartmentResponse getApartment(@PathVariable Long id) {
+        return apartmentService.getReadingsApartmentResponse(id);
+    }
+    @PostMapping("/add/{id}")
+    public ResponseEntity<?> updateMeterReadingWithApartment(@PathVariable Long id,
+                                                @RequestParam(name="notReturn", required = false) boolean notReturn,
+                                                @Valid @ModelAttribute MeterReadingRequest meterReadingRequest,
+                                                HttpServletRequest request) {
+        meterReadingService.createMeterReading(meterReadingRequest);
+        String url = request.getRequestURL().toString();
+        int index = url.lastIndexOf("/");
+        String returnUrl = url.substring(0, index - 4);
+        if(notReturn) {
+            returnUrl += "/add";
+        } else {
+            returnUrl += "/apartment/"+id;
+        }
+        return new ResponseEntity<>(returnUrl, HttpStatus.OK);
     }
 }

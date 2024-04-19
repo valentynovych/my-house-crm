@@ -176,15 +176,14 @@ function drawTable(response) {
 $('#filter-by-house').on("change", function () {
     request.houseId = $(this).val();
     $('#filter-by-section').val(null).trigger('change');
-    $('#filter-by-section').prop('disabled', false);
-    $('#filter-by-apartment').val("");
-    $('#filter-by-apartment').prop('disabled', false);
+    $('#filter-by-section').prop('disabled', !$('#filter-by-section').prop('disabled'));
     searchAfterDelay();
 });
 $('#filter-by-section').on("change", function () {
+    console.log($('#filter-by-apartment').prop('disabled'));
     request.sectionId = $(this).val();
     $('#filter-by-apartment').val("");
-    $('#filter-by-apartment').prop('disabled', false);
+    $('#filter-by-apartment').prop('disabled', !$('#filter-by-apartment').prop('disabled'));
     searchAfterDelay();
 });
 $('#filter-by-service').on("change", function () {

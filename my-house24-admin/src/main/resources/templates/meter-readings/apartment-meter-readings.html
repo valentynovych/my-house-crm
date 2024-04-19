@@ -8,15 +8,21 @@
 <div layout:fragment="breadcrumb">
     <div class="d-flex justify-content-between px-3 align-items-end">
         <h3 class="reading"></h3>
-        <h6>
-            <span class="text-muted fw-light" th:text="#{breadcrumb-home} + ' / '"></span>
-            <span class="reading"></span>
-        </h6>
+        <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                </li>
+                <li class="breadcrumb-item active">
+                    <span class="reading"></span>
+                </li>
+            </ol>
+        </nav>
     </div>
 </div>
 <div layout:fragment="content">
     <div class="d-flex justify-content-end my-4 px-3">
-        <a th:href="@{../add}" class="btn btn-primary me-2">
+        <a href="" class="btn btn-primary me-2" id="add-link">
             <span class="tf-icons ti-xs ti ti-plus me-1"></span>
             <span th:text="#{meter-readings-add}"></span>
         </a>

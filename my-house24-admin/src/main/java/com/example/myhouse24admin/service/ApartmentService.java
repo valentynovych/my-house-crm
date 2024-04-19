@@ -5,6 +5,7 @@ import com.example.myhouse24admin.model.apartments.ApartmentAddRequest;
 import com.example.myhouse24admin.model.apartments.ApartmentExtendResponse;
 import com.example.myhouse24admin.model.apartments.ApartmentResponse;
 import com.example.myhouse24admin.model.meterReadings.ApartmentNumberResponse;
+import com.example.myhouse24admin.model.meterReadings.ReadingsApartmentResponse;
 import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
 import com.example.myhouse24admin.specification.ApartmentSpecification;
 import org.springframework.data.domain.Page;
@@ -30,4 +31,6 @@ public interface ApartmentService {
                                        ApartmentSpecification specification);
 
     void deleteApartment(Long apartmentId);
+    ReadingsApartmentResponse getReadingsApartmentResponse(Long id);
+    void deleteApartmentsByHouseId(Long houseId);
 }

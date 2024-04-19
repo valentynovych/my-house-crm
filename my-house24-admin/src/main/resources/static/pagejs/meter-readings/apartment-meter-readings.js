@@ -13,6 +13,9 @@ let request = {
     serviceId: ''
 };
 $(document).ready(function () {
+    let url = window.location.pathname;
+    let id = url.substring(url.lastIndexOf('/') + 1);
+    $("#add-link").attr("href", "../add/"+id);
     getApartmentReadings(0);
     initializeFlatPickr();
     initializeSelects();

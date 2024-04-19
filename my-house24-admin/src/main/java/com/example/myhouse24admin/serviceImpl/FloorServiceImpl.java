@@ -38,4 +38,17 @@ public class FloorServiceImpl implements FloorService {
         logger.info("getFloorsByHouseId() -> success with parameters: {}, {}, {}", houseId, page, pageSize);
         return responsePage;
     }
+
+    @Override
+    public void deleteFloorsByHouseId(Long houseId) {
+        logger.info("deleteFloorsByHouseId() - Deleting floors by house id "+houseId);
+        FloorSpecification specification =
+                new FloorSpecification(Map.of("houseId", houseId.toString()));
+        List<Floor> floors = floorRepo.findAll(specification);
+        for(Floor floor: floors){
+            floor.setDeleted(true);
+        }
+        floorRepo.saveAll(floors);
+        logger.info("deleteFloorsByHouseId() - Floors were deleted");
+    }
 }

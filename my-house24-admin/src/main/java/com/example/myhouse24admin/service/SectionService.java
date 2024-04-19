@@ -10,4 +10,5 @@ import java.util.Map;
 public interface SectionService {
     Page<SectionResponse> getSectionsByHouseId(Long houseId, int page, int pageSize, String name);
     Page<SectionNameResponse> getSectionForSelect(Map<String, String> requestMap);
+    void deleteSectionsByHouseId(Long houseId);
 }

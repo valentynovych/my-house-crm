@@ -6,6 +6,7 @@ import com.example.myhouse24admin.model.apartments.ApartmentAddRequest;
 import com.example.myhouse24admin.model.apartments.ApartmentExtendResponse;
 import com.example.myhouse24admin.model.apartments.ApartmentResponse;
 import com.example.myhouse24admin.model.meterReadings.ApartmentNumberResponse;
+import com.example.myhouse24admin.model.meterReadings.ReadingsApartmentResponse;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -82,4 +83,11 @@ public interface ApartmentMapper {
     @Mapping(target = "house", source = "house.name")
     @Mapping(target = "apartment", source = "apartmentNumber")
     HouseApartmentResponse apartmentToHouseApartmentResponse(Apartment apartment);
+    @Mapping(target = "houseNameResponse.id", source = "house.id")
+    @Mapping(target = "houseNameResponse.name", source = "house.name")
+    @Mapping(target = "sectionNameResponse.id", source = "section.id")
+    @Mapping(target = "sectionNameResponse.name", source = "section.name")
+    @Mapping(target = "apartmentNumberResponse.id", source = "id")
+    @Mapping(target = "apartmentNumberResponse.apartmentNumber", source = "apartmentNumber")
+    ReadingsApartmentResponse apartmentToReadingsApartmentResponse(Apartment apartment);
 }

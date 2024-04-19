@@ -26,15 +26,15 @@
     <div class="card-body">
         <form enctype="multipart/form-data" id="form" class="row g-3">
             <div class="col-md-3">
-            <div class="input-group">
-                <span class="input-group-text">№</span>
-                <input type="text" class="form-control" id="number" disabled name="number"/>
-            </div>
+                <div class="input-group">
+                    <span class="input-group-text">№</span>
+                    <input type="text" class="form-control" id="number" disabled name="number"/>
+                </div>
             </div>
             <div class="col-md-1 d-flex justify-content-center align-items-center">від</div>
             <div class="col-md-3">
                 <div class="input-group">
-                <input type="text" class="form-control" id="creationDate" name="creationDate">
+                    <input type="text" class="form-control" id="creationDate" name="creationDate">
                     <span class="input-group-text"><i class="ti ti-calendar"></i></span>
                 </div>
             </div>
@@ -72,19 +72,13 @@
     </div>
 </div>
 </body>
-<script layout:fragment="script" th:src="@{/pagejs/meter-readings/meter-reading.js}"></script>
+<script layout:fragment="script" th:src="@{/pagejs/meter-readings/create-apartment-meter-reading.js}"></script>
 <script  layout:fragment="initThymeleafVarianle" th:inline="javascript">
     const newStatus = [[#{meter-readings-status-new}]];
     const includedStatus = [[#{meter-readings-status-included}]];
     const includedPaidStatus = [[#{meter-readings-status-included-paid}]]
     const zeroStatus = [[#{meter-readings-status-zero}]];
-    const houseLink = [[${houseLink}]];
-    const sectionLink = [[${sectionLink}]];
-    const apartmentLink = [[${apartmentLink}]];
-    const serviceLink = [[${serviceLink}]];
-    const statusLink = [[${statusLink}]];
     const newReading = [[#{meter-readings-new}]];
-    const editReading = [[#{meter-readings-edit}]];
     const chooseHouse = [[#{apartment-choose-house}]];
     const chooseSection = [[#{apartment-choose-section}]];
     const chooseService = [[#{meter-readings-choose-service}]];
