@@ -45,7 +45,7 @@ function getSheetsTypeLabel(sheetType) {
 $flatpickrDate = flatpickr($filterByDate, {dateFormat: "d.m.Y"})
 
 $filterByStatus.select2({
-    dropdownParent: $('#filter-by-status-wrap'),
+    dropdownParent: $('#dropdownParent'),
     placeholder: '',
     allowClear: true,
     minimumResultsForSearch: -1,
@@ -53,7 +53,7 @@ $filterByStatus.select2({
 });
 
 $filterByPaymentItemName.select2({
-    dropdownParent: $('#filter-by-payment-item-name-wrap'),
+    dropdownParent: $('#dropdownParent'),
     placeholder: '',
     allowClear: true,
     dropdownCssClass: 'select2-width',
@@ -83,7 +83,7 @@ $filterByPaymentItemName.select2({
 });
 
 $filterByOwner.select2({
-    dropdownParent: $('#filter-by-owner-wrap'),
+    dropdownParent: $('#dropdownParent'),
     placeholder: '',
     allowClear: true,
     dropdownCssClass: 'select2-width',
@@ -114,7 +114,7 @@ $filterByOwner.select2({
 });
 
 $filterByPersonalAccount.select2({
-    dropdownParent: $('#filter-by-personal-account-wrap'),
+    dropdownParent: $('#dropdownParent'),
     placeholder: '',
     allowClear: true,
     dropdownCssClass: 'select2-width',
@@ -146,7 +146,7 @@ $filterByPersonalAccount.select2({
 });
 
 $filterByPaymentType.select2({
-    dropdownParent: $('#filter-by-payment-type-wrap'),
+    dropdownParent: $('#dropdownParent'),
     minimumResultsForSearch: -1,
     placeholder: '',
     allowClear: true,

@@ -16,7 +16,7 @@ let $filterByOwner = $('#filter-by-owner');
 let $filterByBalance = $('#filter-by-balance');
 
 $filterByHouse.select2({
-    dropdownParent: $filterByHouse.parent(),
+    dropdownParent: $("#dropdownParent"),
     placeholder: '',
     allowClear: true,
     ajax: {

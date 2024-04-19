@@ -42,7 +42,7 @@
                 </button>
             </div>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" id="dropdownParent">
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr class="table-primary text-center">
@@ -58,10 +58,14 @@
                     <th th:text="#{general-table-action}"></th>
                 </tr>
                 <tr>
-                    <td style="min-width: 7rem"><input type="text" class="form-control" id="filter-by-number"></td>
-                    <td style="min-width: 11rem"><input type="text" class="form-control" id="filter-by-date"></td>
+                    <td style="min-width: 7rem">
+                        <input type="text" class="form-control" id="filter-by-number">
+                    </td>
+                    <td style="min-width: 11rem">
+                        <input type="text" class="form-control" id="filter-by-date">
+                    </td>
                     <td style="min-width: 9rem">
-                        <div id="filter-by-master-type-wrap">
+                        <div id="filter-by-master-type-wrap" style="position: relative">
                             <select class="form-select select2" id="filter-by-master-type">
                                 <option value=""></option>
                                 <option value="ELECTRICIAN" th:text="#{staff-role-electrician}"></option>
@@ -69,23 +73,27 @@
                             </select>
                         </div>
                     </td>
-                    <td style="min-width: 14rem"><input type="text" class="form-control" id="filter-by-description">
+                    <td style="min-width: 14rem">
+                        <input type="text" class="form-control" id="filter-by-description">
                     </td>
-                    <td style="min-width: 10rem"><input type="text" class="form-control" id="filter-by-apartment"></td>
+                    <td style="min-width: 10rem">
+                        <input type="text" class="form-control" id="filter-by-apartment">
+                    </td>
                     <td style="min-width: 11rem">
-                        <div id="filter-by-apartment-owner-wrap">
+                        <div id="filter-by-apartment-owner-wrap" style="position: relative">
                             <select class="form-select select2" id="filter-by-apartment-owner"></select>
                         </div>
                     </td>
-                    <td style="min-width: 9rem"><input type="text" class="form-control"
-                                                        id="filter-by-apartment-owner-phone"></td>
+                    <td style="min-width: 9rem">
+                        <input type="text" class="form-control" id="filter-by-apartment-owner-phone">
+                    </td>
                     <td style="min-width: 10rem">
-                        <div id="filter-by-master-wrap">
+                        <div id="filter-by-master-wrap" style="position: relative">
                             <select class="form-select select2" id="filter-by-master"></select>
                         </div>
                     </td>
                     <td style="min-width: 7rem">
-                        <div id="filter-by-status-wrap">
+                        <div id="filter-by-status-wrap" style="position: relative">
                             <select class="form-select select2" id="filter-by-status">
                                 <option value=""></option>
                                 <option value="NEW" th:text="#{master-request-label-status-new}"></option>

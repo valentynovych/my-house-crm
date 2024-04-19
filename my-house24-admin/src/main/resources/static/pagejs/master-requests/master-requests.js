@@ -52,7 +52,7 @@ function getMasterRequestStatus(sheetType) {
 const $flatpickrDate = flatpickr($filterByDate, {dateFormat: "d.m.Y"})
 
 $filterByMasterType.select2({
-    dropdownParent: $('#filter-by-master-type-wrap'),
+    dropdownParent: $('#dropdownParent'),
     placeholder: '',
     allowClear: true,
     minimumResultsForSearch: -1,
@@ -60,7 +60,7 @@ $filterByMasterType.select2({
 });
 
 $filterByApartmentOwner.select2({
-    dropdownParent: $('#filter-by-apartment-owner-wrap'),
+    dropdownParent: $('#dropdownParent'),
     placeholder: '',
     allowClear: true,
     dropdownCssClass: 'select2-width',
@@ -91,7 +91,7 @@ $filterByApartmentOwner.select2({
 })
 
 $filterByMaster.select2({
-    dropdownParent: $('#filter-by-master-wrap'),
+    dropdownParent: $('#dropdownParent'),
     placeholder: '',
     allowClear: true,
     dropdownCssClass: 'select2-width',
@@ -124,7 +124,7 @@ $filterByMaster.select2({
 });
 
 $filterByStatus.select2({
-    dropdownParent: $('#filter-by-status-wrap'),
+    dropdownParent: $('#dropdownParent'),
     dropdownCssClass: 'select2-width',
     minimumResultsForSearch: -1,
     placeholder: '',

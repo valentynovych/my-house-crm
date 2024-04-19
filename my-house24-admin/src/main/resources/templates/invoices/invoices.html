@@ -14,7 +14,7 @@
         <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                    <a th:href="@{/admin/statistic}" th:text="#{menu-item-home-page}"></a>
                 </li>
                 <li class="breadcrumb-item active">
                     <span th:text="#{menu-item-invoices}"></span>
@@ -129,9 +129,13 @@
                     <td></td>
                     <td style="min-width: 9rem"><input type="text" id="filter-by-number" class="form-control"></td>
                     <td style="min-width: 13rem">
-                        <select class="form-select select2" id="filter-by-status"></select>
+                        <div id="status-wrapper" style="position: relative">
+                        <select class="form-select" id="filter-by-status"></select>
+                        </div>
                     </td>
-                    <td style="min-width: 10rem"><input type="text" id="filter-by-date" class="form-control"></td>
+                    <td style="min-width: 10rem">
+                        <input type="text" id="filter-by-date" class="form-control">
+                    </td>
                     <td style="min-width: 13rem">
                         <input type="text" id="filter-by-month" class="form-control">
                     </td>
@@ -139,14 +143,18 @@
                         <input type="text" id="filter-by-apartment" class="form-control">
                     </td>
                     <td style="min-width: 13rem">
-                        <select class="form-select select2" id="filter-by-owner"></select>
+                        <div id="owner-wrapper" style="position: relative">
+                            <select class="form-select" id="filter-by-owner"></select>
+                        </div>
                     </td>
                     <td style="min-width: 12rem">
+                        <div id="processed-wrapper" style="position: relative">
                         <select class="form-select" id="filter-by-processed">
                             <option value=""></option>
                             <option value="true" th:text="#{invoice-processed}"></option>
                             <option value="false" th:text="#{invoice-not-processed}"></option>
                         </select>
+                        </div>
                     </td>
                     <td></td>
                     <td></td>

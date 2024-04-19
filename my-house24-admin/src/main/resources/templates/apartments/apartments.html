@@ -51,29 +51,31 @@
                     <th th:text="#{general-table-action}"></th>
                 </tr>
                 <tr>
-                    <td style="width: 9rem"><input type="text" id="filter-by-number" class="form-control"></td>
+                    <td style="width: 9rem">
+                        <input type="text" id="filter-by-number" class="form-control">
+                    </td>
                     <td style="min-width: 13rem">
-                        <div>
+                        <div style="position: relative">
                             <select class="form-select select2" id="filter-by-house"></select>
                         </div>
                     </td>
                     <td style="min-width: 13rem">
-                        <div>
+                        <div style="position: relative">
                             <select class="form-select select2" id="filter-by-section" disabled></select>
                         </div>
                     </td>
                     <td style="min-width: 13rem">
-                        <div>
+                        <div style="position: relative">
                             <select class="form-select select2" id="filter-by-floor" disabled></select>
                         </div>
                     </td>
                     <td style="min-width: 13rem">
-                        <div>
+                        <div style="position: relative">
                             <select class="form-select select2" id="filter-by-owner"></select>
                         </div>
                     </td>
                     <td style="min-width: 12rem">
-                        <div>
+                        <div style="position: relative">
                             <select class="form-select select2" id="filter-by-balance">
                                 <option value="arrears" th:text="#{apartment-balance-arrears}"></option>
                                 <option value="overpayment" th:text="#{apartment-balance-overpayment}"></option>

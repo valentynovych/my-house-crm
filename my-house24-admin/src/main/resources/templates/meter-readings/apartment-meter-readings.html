@@ -11,7 +11,7 @@
         <nav aria-level="breadcrumb" style="--bs-breadcrumb-divider: '/'">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <span class="text-muted fw-light" th:text="#{menu-item-home-page}"></span>
+                    <a th:href="@{/admin/statistic}" th:text="#{menu-item-home-page}"></a>
                 </li>
                 <li class="breadcrumb-item active">
                     <span class="reading"></span>
@@ -51,25 +51,35 @@
                     <th th:text="#{general-table-action}"></th>
                 </tr>
                 <tr>
-                    <td class="px-2"><input type="text" id="filter-by-number"
-                                            class="form-control"></td>
-                    <td class="px-2" style="min-width: 13rem">
-                        <select class="form-select" id="filter-by-status"></select>
+                    <td class="px-2">
+                        <input type="text" id="filter-by-number" class="form-control">
                     </td>
-                    <td class="px-2"><input type="text" id="filter-by-creationDate"
-                                            class="form-control"></td>
+                    <td class="px-2" style="min-width: 13rem">
+                        <div style="position: relative">
+                            <select class="form-select" id="filter-by-status"></select>
+                        </div>
+                    </td>
+                    <td class="px-2">
+                        <input type="text" id="filter-by-creationDate" class="form-control">
+                    </td>
                     <td></td>
                     <td class="px-2" style="min-width: 13rem">
-                        <select class="form-select" id="filter-by-house"></select>
+                        <div style="position: relative">
+                            <select class="form-select" id="filter-by-house"></select>
+                        </div>
                     </td>
                     <td class="px-2" style="min-width: 9rem">
-                        <select class="form-select" id="filter-by-section" disabled></select>
+                        <div style="position: relative">
+                            <select class="form-select" id="filter-by-section" disabled></select>
+                        </div>
                     </td>
-                    <td class="px-2"><input type="text" id="filter-by-apartment"
-                                            class="form-control" disabled></td>
+                    <td class="px-2">
+                        <input type="text" id="filter-by-apartment" class="form-control" disabled>
+                    </td>
                     <td class="px-2" style="min-width: 13rem">
-                        <select class="form-select" id="filter-by-service">
-                        </select>
+                        <div style="position: relative">
+                            <select class="form-select" id="filter-by-service"></select>
+                        </div>
                     </td>
                     <td></td>
                     <td></td>
