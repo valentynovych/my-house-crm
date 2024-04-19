@@ -25,7 +25,8 @@ public class PersonalAccountSpecification implements Specification<PersonalAccou
             switch (key) {
                 case "accountNumber" -> {
                     if (!value.isEmpty()) {
-                        predicates.add(criteriaBuilder.equal(root.get("accountNumber"), Long.valueOf(value)));
+                        String replace = value.replace("-", "");
+                        predicates.add(criteriaBuilder.equal(root.get("accountNumber"), Long.valueOf(replace)));
                     }
                 }
                 case "status" -> predicates.add(
