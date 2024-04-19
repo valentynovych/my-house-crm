@@ -29,7 +29,7 @@ function fillInputs(sheet) {
             : 'edit-expense-sheet/') + sheetId);
 
     $('#sheetNumber').val(sheet.sheetNumber);
-    $('#creationDate').val(new Date(sheet.creationDate * 1000).toLocaleDateString())
+    $('#creationDate').val(new Date(sheet.creationDate * 1000).toLocaleDateString('uk-UA'));
 
     const personalAccount = sheet.personalAccount;
     const invoice = sheet.invoice;

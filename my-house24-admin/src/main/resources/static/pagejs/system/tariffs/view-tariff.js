@@ -21,7 +21,7 @@ function fillInputs(tariff) {
     $('.current-tariff').html(` ${tariffTitle} : ${tariff.name} `)
     $('#tariff-name').html(tariff.name);
     $('#tariff-description').html(tariff.description);
-    const lastModify = new Date(tariff.lastModify * 1000).toLocaleString()
+    const lastModify = new Date(tariff.lastModify * 1000).toLocaleString('uk-UA');
     $('#tariff-edit-date').html(lastModify);
     let index = 0;
     for (let tariffItem of tariff.tariffItems) {

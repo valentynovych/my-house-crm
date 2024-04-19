@@ -80,7 +80,7 @@ function checkAllChecked() {
 function drawTable(result) {
     if (result.content && result.content.length > 0) {
         for (const message of result.content) {
-            const sendDate = new Date(message.sendDate * 1000).toLocaleString()
+            const sendDate = new Date(message.sendDate * 1000).toLocaleString('uk-UA');
             const recipientsLinks = message.apartmentOwners
                 .map(owner => `<a href="owners/view-owner/${owner.id}">${owner.fullName}</a>`)
                 .join(', ');

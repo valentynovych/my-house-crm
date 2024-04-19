@@ -62,7 +62,7 @@ function fillInputs(request) {
     $('#master').html(`${masterName}`)
     $('#description').html(request.description);
     $('#comment').html(request.comment);
-    let localeString = new Date(request.creationDate * 1000).toLocaleString();
+    let localeString = new Date(request.creationDate * 1000).toLocaleString('uk-UA');
     $('#creationDate').html(localeString.substring(0, localeString.length - 3));
 }
 

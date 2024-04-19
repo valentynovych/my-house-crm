@@ -243,7 +243,7 @@ function drawTable(result) {
         for (const request of result.content) {
 
             const date = new Date(request.visitDate * 1000);
-            let toLocaleString = date.toLocaleString();
+            let toLocaleString = date.toLocaleString('uk-UA');
             const dateString = toLocaleString.substring(0, toLocaleString.length - 3);
             const apartment = request.apartment;
             const masterName = request.master ? `${request.master.lastName} ${request.master.firstName}` : '---';
