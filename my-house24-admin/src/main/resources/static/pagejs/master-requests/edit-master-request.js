@@ -43,7 +43,8 @@ function fillInputs(request) {
         minTime: '9:30',
         maxTime: '21:30',
     });
-    const apartment = request.apartment;
+
+    let apartment = request.apartment;
 
     $flatpickrDate.setDate(date);
     $flatpickrTime.setDate(date);
@@ -84,12 +85,25 @@ function fillInputs(request) {
         }
     });
 
+    let count = 0;
     $selectApartmentOwner.on('change', function () {
         let ownerData = $selectApartmentOwner.select2('data')[0];
         $('#apartment-owner-phone').html(ownerData.phoneNumber);
         initSelectApartment(ownerData.id, false);
+        if (count > 0) {
+            clearSelectsAndFields();
+        }
+        count++;
     })
+
     $selectApartmentOwner.trigger('change');
+
+    function clearSelectsAndFields() {
+        $selectApartment.val(null).trigger('change');
+        $('#house').html('');
+        $('#section').html('');
+        $('#floor').html('');
+    }
 
     function initSelectApartment(ownerId, isDisabled) {
         $selectApartment.select2({
@@ -135,7 +149,7 @@ function fillInputs(request) {
         });
     }
 
-    $selectApartment.on('change', function () {
+    $selectApartment.on('select2:select', function () {
         const apartmentData = $selectApartment.select2('data')[0];
 
         const house = apartmentData.house;
@@ -145,7 +159,7 @@ function fillInputs(request) {
         $('#section').html(apartmentData.section.name);
         $('#floor').html(apartmentData.floor.name);
     })
-    $selectApartment.trigger('change');
+    $selectApartment.trigger('select2:select');
 
 
     $selectMasterType.select2({
@@ -313,4 +327,11 @@ function restoreInputs(request) {
 
     $inputComment.val(request.comment).trigger('change');
     $inputDescription.val(request.description).trigger('change');
+
+    const house = apartment.house;
+    const houseLink = `<a href="../../houses/view-house/${house.id}">${house.name}</a>`
+    $('#house').html(houseLink);
+
+    $('#section').html(apartment.section.name);
+    $('#floor').html(apartment.floor.name);
 }

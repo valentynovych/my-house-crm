@@ -29,11 +29,11 @@ function fillInputs(sheet) {
             : 'edit-expense-sheet/') + sheetId);
 
     $('#sheetNumber').val(sheet.sheetNumber);
-    $('#creationDate').val(new Date(sheet.creationDate * 1000).toLocaleDateString())
+    $('#creationDate').val(new Date(sheet.creationDate * 1000).toLocaleDateString('uk-UA'));
 
     const personalAccount = sheet.personalAccount;
     const invoice = sheet.invoice;
-    $('#owner').html(personalAccount ? personalAccount.apartmentOwner.fullName : '-');
+    $('#owner').html(personalAccount.apartmentOwner ? personalAccount.apartmentOwner.fullName : '-');
     $('#personalAccount').html(personalAccount ? `<a href="../../personal-accounts/view-account/${personalAccount.id}">${decorateAccountNumber(personalAccount.accountNumber)}</a>` : '-');
     $('#paymentItem').html(sheet.paymentItem.name);
     $('#invoice').html(invoice ? `<a href="../../invoices/view-invoice/${invoice.id}">${invoice.number} ${dividerFrom} ${new Date(invoice.creationDate * 1000).toLocaleDateString()} </a>` : '-');

@@ -121,7 +121,7 @@ $(window).on("load", function () {
             error: function (error) {
                 console.log(error);
                 printErrorMessageToField(error);
-                toastr.error(errorMessage);
+                toastr.error(errorAddMessage);
             }
         })
     })

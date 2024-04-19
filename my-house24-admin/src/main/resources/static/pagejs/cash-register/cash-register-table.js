@@ -312,7 +312,7 @@ function drawTable(result) {
                 ? `<span class="text-success">${numberFormat.format(balance)}</span>`
                 : `<span class="text-danger">-${numberFormat.format(balance)}</span>`;
 
-            const date = new Date(sheet.creationDate * 1000).toLocaleDateString();
+            const date = new Date(sheet.creationDate * 1000).toLocaleDateString('uk-UA');
             $(`<tr data-href="cash-register/view-sheet/${sheet.id}" class="cursor-pointer">
             <td>${sheet.sheetNumber}</td>
             <td class="text-center">${date}</td>

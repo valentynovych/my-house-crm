@@ -28,7 +28,7 @@ function drawTable(result) {
     const page = result.pageable.pageNumber;
     for (const tariff of result.content) {
 
-        const lastModify = new Date(tariff.lastModify * 1000).toLocaleString();
+        const lastModify = new Date(tariff.lastModify * 1000).toLocaleString('uk-UA');
         $(`<tr data-href="tariffs/view-tariff/${tariff.id}" class="cursor-pointer">
             <td>${tariff.name}</td>
             <td>${tariff.description}</td>

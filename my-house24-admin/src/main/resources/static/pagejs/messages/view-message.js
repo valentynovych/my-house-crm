@@ -18,7 +18,7 @@ $(document).ready(function () {
 function fill(response) {
     $('#subject').html(response.subject);
     $('#staff').html(`${response.staff.firstName} ${response.staff.lastName}`);
-    const date = new Date(response.sendDate * 1000).toLocaleString();
+    const date = new Date(response.sendDate * 1000).toLocaleString('uk-UA');
     $('#sendDate').html(date);
     $('.message-text').html(response.text);
 }

@@ -115,7 +115,7 @@ public class StatisticServiceImpl implements StatisticService {
                     BigDecimal totalIncome;
                     BigDecimal totalExpense;
                     try {
-                        cashSheets = cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalse(dateFrom, dateTo).get();
+                        cashSheets = cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalseAndIsProcessedIsTrue(dateFrom, dateTo).get();
                         totalIncome = getAmountValueFromCashSheetsBySheetType(cashSheets, CashSheetType.INCOME).get();
                         totalExpense = getAmountValueFromCashSheetsBySheetType(cashSheets, CashSheetType.EXPENSE).get();
                         logger.info("getIncomeExpenseStatisticPerYear() -> " +
@@ -173,7 +173,7 @@ public class StatisticServiceImpl implements StatisticService {
         year = LocalDate.now().getYear();
 
         LocalDate localDate = LocalDate.of(year, currentMonth, 1);
-        List<CashSheet> cashSheets = cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalse(
+        List<CashSheet> cashSheets = cashSheetRepo.findByCreationDateBetweenAndDeletedIsFalseAndIsProcessedIsTrue(
                 getInstantFromLocalDate(localDate).get(),
                 getInstantFromLocalDate(localDate.plusMonths(1)).get()).get();
 

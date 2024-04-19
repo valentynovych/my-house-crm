@@ -10,17 +10,35 @@ const $selectMasterType = $('[name="masterType"]');
 const $selectStatus = $('[name="status"]');
 const $selectStaff = $('[name="masterId"]');
 const $inputComment = $('[name="comment"]');
+
+const timeStart = '9:30';
+const timeEnd = '21:30';
+
 Date.prototype.addMinutes = function (minutes) {
     this.setMinutes((Math.round(this.getMinutes() / 10) * 10) + minutes)
 }
 
-const date = new Date();
-date.addMinutes(40);
+const getClosestDate = function () {
+    console.log('init')
+    const minTimeArr = timeStart.split(':');
+    const maxTimeArr = timeEnd.split(':');
+    let currentDate = new Date();
+    if (currentDate.getHours() > maxTimeArr[0] && currentDate.getMinutes() > maxTimeArr[1]
+        || currentDate.getHours() < minTimeArr[0] && currentDate.getMinutes() > minTimeArr[1]) {
+        currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1,
+            +minTimeArr[0], +minTimeArr[1]);
+    } else {
+        currentDate.addMinutes(40);
+    }
+    return currentDate;
+}
+
+const closestDate = getClosestDate();
 
 const $flatpickrDate = flatpickr($inputVisitDate, {
     dateFormat: "d.m.Y",
-    minDate: 'today',
-    defaultDate: date
+    minDate: closestDate,
+    defaultDate: closestDate
 });
 
 const $flatpickrTime = flatpickr($inputVisitTime, {
@@ -28,11 +46,11 @@ const $flatpickrTime = flatpickr($inputVisitTime, {
     noCalendar: true,
     minuteIncrement: 10,
     time_24hr: true,
-    minTime: '9:30',
-    maxTime: '21:30',
-    // defaultDate: date,
+    minTime: timeStart,
+    maxTime: timeEnd
 });
-$flatpickrTime.setDate(date);
+
+$flatpickrTime.setDate(closestDate);
 
 function initInputAndSelect() {
 
@@ -71,8 +89,16 @@ function initInputAndSelect() {
         let ownerData = $selectApartmentOwner.select2('data')[0];
         $('#apartment-owner-phone').html(ownerData.phoneNumber);
 
+        resetSelectsAndFields();
         initSelectApartment(ownerData.id, false);
     })
+
+    function resetSelectsAndFields() {
+        $selectApartment.val(null).trigger('change');
+        $('#house').html('');
+        $('#section').html('');
+        $('#floor').html('');
+    }
 
     function initSelectApartment(ownerId, isDisabled) {
         $selectApartment.select2({
@@ -112,7 +138,7 @@ function initInputAndSelect() {
         });
     }
 
-    $selectApartment.on('change', function () {
+    $selectApartment.on('select2:select', function () {
         const apartmentData = $selectApartment.select2('data')[0];
 
         const house = apartmentData.house;
@@ -155,7 +181,7 @@ function initInputAndSelect() {
     $selectStatus.append(doneOption);
     $selectStatus.append(canceledOption);
 
-    $selectMasterType.on('change', function () {
+    $selectMasterType.on('select2:select', function () {
         const status = $selectMasterType.select2('data')[0];
         initSelectStaff(status, false);
     })
