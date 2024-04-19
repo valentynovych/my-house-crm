@@ -30,7 +30,7 @@ function getAccountStatusLabel(status) {
 }
 
 $filterByStatus.select2({
-    dropdownParent: $('#filter-by-status-wrap'),
+    dropdownParent: $('#dropdownParent'),
     placeholder: '',
     allowClear: true,
     ajax: {
@@ -50,7 +50,7 @@ $filterByStatus.select2({
 });
 
 $filterByHouse.select2({
-    dropdownParent: $('#filter-by-house-wrap'),
+    dropdownParent: $('#dropdownParent'),
     placeholder: '',
     allowClear: true,
     ajax: {
@@ -91,7 +91,7 @@ $filterByHouse.on('change', function () {
 function initHouseNestedSelects(houseId) {
     $filterBySection.select2({
         debug: true,
-        dropdownParent: $('#filter-by-section-wrap'),
+        dropdownParent: $('#dropdownParent'),
         placeholder: '',
         allowClear: true,
         ajax: {
@@ -123,7 +123,7 @@ function initHouseNestedSelects(houseId) {
 
 $filterByOwner.select2({
     debug: true,
-    dropdownParent: $('#filter-by-owner-wrap'),
+    dropdownParent: $('#dropdownParent'),
     placeholder: '',
     allowClear: true,
     ajax: {

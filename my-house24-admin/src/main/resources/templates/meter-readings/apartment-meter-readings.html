@@ -51,25 +51,35 @@
                     <th th:text="#{general-table-action}"></th>
                 </tr>
                 <tr>
-                    <td class="px-2"><input type="text" id="filter-by-number"
-                                            class="form-control"></td>
-                    <td class="px-2" style="min-width: 13rem">
-                        <select class="form-select" id="filter-by-status"></select>
+                    <td class="px-2">
+                        <input type="text" id="filter-by-number" class="form-control">
                     </td>
-                    <td class="px-2"><input type="text" id="filter-by-creationDate"
-                                            class="form-control"></td>
+                    <td class="px-2" style="min-width: 13rem">
+                        <div style="position: relative">
+                            <select class="form-select" id="filter-by-status"></select>
+                        </div>
+                    </td>
+                    <td class="px-2">
+                        <input type="text" id="filter-by-creationDate" class="form-control">
+                    </td>
                     <td></td>
                     <td class="px-2" style="min-width: 13rem">
-                        <select class="form-select" id="filter-by-house"></select>
+                        <div style="position: relative">
+                            <select class="form-select" id="filter-by-house"></select>
+                        </div>
                     </td>
                     <td class="px-2" style="min-width: 9rem">
-                        <select class="form-select" id="filter-by-section" disabled></select>
+                        <div style="position: relative">
+                            <select class="form-select" id="filter-by-section" disabled></select>
+                        </div>
                     </td>
-                    <td class="px-2"><input type="text" id="filter-by-apartment"
-                                            class="form-control" disabled></td>
+                    <td class="px-2">
+                        <input type="text" id="filter-by-apartment" class="form-control" disabled>
+                    </td>
                     <td class="px-2" style="min-width: 13rem">
-                        <select class="form-select" id="filter-by-service">
-                        </select>
+                        <div style="position: relative">
+                            <select class="form-select" id="filter-by-service"></select>
+                        </div>
                     </td>
                     <td></td>
                     <td></td>
