@@ -3,6 +3,8 @@ package com.example.myhouse24admin.controller.system;
 import com.example.myhouse24admin.entity.Role;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.entity.StaffStatus;
+import com.example.myhouse24admin.exception.StaffIllegalStateAdminException;
+import com.example.myhouse24admin.exception.StaffIllegalStateException;
 import com.example.myhouse24admin.model.staff.StaffEditRequest;
 import com.example.myhouse24admin.model.staff.StaffResponse;
 import com.example.myhouse24admin.service.StaffService;
@@ -270,7 +272,7 @@ class StaffControllerTest {
     }
 
     @Test
-    void updateStaffById_WhenRequestIsValid() throws Exception {
+    void updateStaffById_WhenRequestIsValid() throws Exception, StaffIllegalStateException, StaffIllegalStateAdminException {
         // given
         var staffEditRequest = new StaffEditRequest(
                 staff.getId(),
@@ -300,7 +302,7 @@ class StaffControllerTest {
     }
 
     @Test
-    void updateStaffById_WhenRequestIsNotValid() throws Exception {
+    void updateStaffById_WhenRequestIsNotValid() throws Exception, StaffIllegalStateException, StaffIllegalStateAdminException {
         // given
         var staffEditRequest = new StaffEditRequest(
                 staff.getId(),
@@ -327,6 +329,68 @@ class StaffControllerTest {
                 .andExpect(status().isBadRequest());
 
         verify(staffService, never()).updateStaffById(eq(1L), any(StaffEditRequest.class));
+    }
+
+    @Test
+    void updateStaffById_WhenRequestIsValidAndThrowsStaffIllegalStateException() throws Exception, StaffIllegalStateException, StaffIllegalStateAdminException {
+        staff.setPhoneNumber("+380500000000");
+        // given
+        var staffEditRequest = new StaffEditRequest(
+                staff.getId(),
+                staff.getFirstName(),
+                staff.getLastName(),
+                staff.getPhoneNumber(),
+                staff.getEmail(),
+                staff.getPassword(),
+                staff.getPassword(),
+                staff.getRole().getId(),
+                staff.getStatus()
+        );
+        var request = post("/admin/system-settings/staff/edit-staff/1")
+                .with(user(userDetails))
+                .flashAttr("staffEditRequest", staffEditRequest);
+
+        // when
+        doThrow(new StaffIllegalStateException("Staff is not allowed to edit"))
+                .when(staffService).updateStaffById(eq(1L), any(StaffEditRequest.class));
+        this.mockMvc.perform(request)
+
+                // then
+                .andDo(print())
+                .andExpect(status().isConflict());
+
+        verify(staffService, times(1)).updateStaffById(eq(1L), any(StaffEditRequest.class));
+    }
+
+    @Test
+    void updateStaffById_WhenRequestIsValidAndThrowsStaffIllegalStateAdminException() throws Exception, StaffIllegalStateException, StaffIllegalStateAdminException {
+        // given
+        staff.setPhoneNumber("+380500000000");
+        var staffEditRequest = new StaffEditRequest(
+                staff.getId(),
+                staff.getFirstName(),
+                staff.getLastName(),
+                staff.getPhoneNumber(),
+                staff.getEmail(),
+                staff.getPassword(),
+                staff.getPassword(),
+                staff.getRole().getId(),
+                staff.getStatus()
+        );
+        var request = post("/admin/system-settings/staff/edit-staff/1")
+                .with(user(userDetails))
+                .flashAttr("staffEditRequest", staffEditRequest);
+
+        // when
+        doThrow(new StaffIllegalStateAdminException("Admin cannot change role or status"))
+                .when(staffService).updateStaffById(eq(1L), any(StaffEditRequest.class));
+        this.mockMvc.perform(request)
+
+                // then
+                .andDo(print())
+                .andExpect(status().isLocked());
+
+        verify(staffService, times(1)).updateStaffById(eq(1L), any(StaffEditRequest.class));
     }
 
     @Test

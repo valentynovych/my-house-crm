@@ -5,6 +5,8 @@ import com.example.myhouse24admin.entity.Role;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.entity.StaffStatus;
 import com.example.myhouse24admin.exception.StaffAlreadyActiveException;
+import com.example.myhouse24admin.exception.StaffIllegalStateAdminException;
+import com.example.myhouse24admin.exception.StaffIllegalStateException;
 import com.example.myhouse24admin.mapper.StaffMapper;
 import com.example.myhouse24admin.model.authentication.EmailRequest;
 import com.example.myhouse24admin.model.staff.StaffEditRequest;
@@ -205,6 +207,10 @@ class StaffServiceImplTest {
         // given
         List<Role> roles = new ArrayList<>();
         roles.add(staffRole);
+        Role plumberRole = new Role();
+        plumberRole.setId(2L);
+        plumberRole.setName("PLUMBER");
+        roles.add(plumberRole);
 
         // when
         when(roleRepo.findAll()).thenReturn(roles);
@@ -213,7 +219,8 @@ class StaffServiceImplTest {
         List<Role> result = staffService.getRoles();
         verify(roleRepo).findAll();
         assertFalse(result.isEmpty());
-        assertEquals(roles, result);
+        assertEquals(1, result.size());
+        assertTrue(result.contains(plumberRole));
     }
 
     @Test
@@ -326,7 +333,11 @@ class StaffServiceImplTest {
 
 
         // then
-        staffService.updateStaffById(1L, staffEditRequest);
+        try {
+            staffService.updateStaffById(1L, staffEditRequest);
+        } catch (StaffIllegalStateException | StaffIllegalStateAdminException e) {
+            throw new RuntimeException(e);
+        }
         verify(staffRepo).save(any(Staff.class));
         verify(passwordEncoder).encode(anyString());
         verify(staffMapper).updateWithPassword(any(Staff.class), any(StaffEditRequest.class));
@@ -366,7 +377,11 @@ class StaffServiceImplTest {
 
 
         // then
-        staffService.updateStaffById(1L, staffEditRequest);
+        try {
+            staffService.updateStaffById(1L, staffEditRequest);
+        } catch (StaffIllegalStateException | StaffIllegalStateAdminException e) {
+            throw new RuntimeException(e);
+        }
         verify(staffRepo).save(any(Staff.class));
         verify(passwordEncoder).encode(anyString());
         verify(staffMapper).updateWithPassword(any(Staff.class), any(StaffEditRequest.class));
@@ -388,19 +403,166 @@ class StaffServiceImplTest {
                 staff.getRole().getId(),
                 staff.getStatus()
         );
+        SecurityContextHolder.setContext(
+                new SecurityContextImpl(new UsernamePasswordAuthenticationToken(
+                        STAFF_EMAIL, STAFF_PASSWORD, List.of(new SimpleGrantedAuthority("DIRECTOR")))));
 
         // when
         when(staffRepo.findById(eq(1L)))
+                .thenReturn(Optional.of(staff));
+        when(staffRepo.findByEmail(eq(STAFF_EMAIL)))
                 .thenReturn(Optional.of(staff));
         doNothing().when(staffMapper).updateWithoutPassword(any(Staff.class), any(StaffEditRequest.class));
 
 
         // then
-        staffService.updateStaffById(1L, staffEditRequest);
+        try {
+            staffService.updateStaffById(1L, staffEditRequest);
+        } catch (StaffIllegalStateException | StaffIllegalStateAdminException e) {
+            throw new RuntimeException(e);
+        }
         verify(staffRepo).save(any(Staff.class));
         verify(passwordEncoder, never()).encode(anyString());
         verify(staffMapper).updateWithoutPassword(any(Staff.class), any(StaffEditRequest.class));
         verify(mailService, never()).sendNewPassword(anyString(), anyString());
+    }
+
+    @Test
+    void updateStaffById_WhenChangeRoleOfAdmin() {
+        clearInvocations(passwordEncoder, mailService, staffRepo);
+        // given
+        StaffEditRequest staffEditRequest = new StaffEditRequest(
+                1L,
+                staff.getFirstName(),
+                staff.getLastName(),
+                staff.getPhoneNumber(),
+                "admin@gmail.com",
+                null,
+                null,
+                2L,
+                StaffStatus.ACTIVE
+        );
+
+        staff.setEmail("admin@gmail.com");
+        SecurityContextHolder.setContext(
+                new SecurityContextImpl(new UsernamePasswordAuthenticationToken(
+                        STAFF_EMAIL, STAFF_PASSWORD, List.of(new SimpleGrantedAuthority("DIRECTOR")))));
+
+        Staff otherStaff = new Staff();
+        otherStaff.setId(2L);
+        otherStaff.setEmail(STAFF_EMAIL + "other");
+        Role role = new Role();
+        role.setId(2L);
+        staff.setRole(role);
+        staff.setStatus(StaffStatus.NEW);
+
+        // when
+        when(staffRepo.findById(eq(1L)))
+                .thenReturn(Optional.of(staff));
+        when(staffRepo.findByEmail(eq(STAFF_EMAIL)))
+                .thenReturn(Optional.of(otherStaff));
+
+        // then
+        assertThrows(StaffIllegalStateAdminException.class, () -> staffService.updateStaffById(1L, staffEditRequest));
+    }
+
+    @Test
+    void updateStaffById_WhenChangeStatusOfAdmin() {
+        clearInvocations(passwordEncoder, mailService, staffRepo);
+        // given
+        StaffEditRequest staffEditRequest = new StaffEditRequest(
+                1L,
+                staff.getFirstName(),
+                staff.getLastName(),
+                staff.getPhoneNumber(),
+                "admin@gmail.com",
+                null,
+                null,
+                staff.getRole().getId(),
+                StaffStatus.NEW
+        );
+
+        staff.setEmail("admin@gmail.com");
+        SecurityContextHolder.setContext(
+                new SecurityContextImpl(new UsernamePasswordAuthenticationToken(
+                        STAFF_EMAIL, STAFF_PASSWORD, List.of(new SimpleGrantedAuthority("DIRECTOR")))));
+
+        Staff otherStaff = new Staff();
+        otherStaff.setId(2L);
+        otherStaff.setEmail(STAFF_EMAIL + "other");
+        Role role = new Role();
+        role.setId(2L);
+        staff.setRole(role);
+        staff.setStatus(StaffStatus.NEW);
+
+        // when
+        when(staffRepo.findById(eq(1L)))
+                .thenReturn(Optional.of(staff));
+        when(staffRepo.findByEmail(eq(STAFF_EMAIL)))
+                .thenReturn(Optional.of(otherStaff));
+
+        // then
+        assertThrows(StaffIllegalStateAdminException.class, () -> staffService.updateStaffById(1L, staffEditRequest));
+    }
+
+    @Test
+    void updateStaffById_WhenChangeRoleOfStaff() {
+        clearInvocations(passwordEncoder, mailService, staffRepo);
+        // given
+        StaffEditRequest staffEditRequest = new StaffEditRequest(
+                1L,
+                staff.getFirstName(),
+                staff.getLastName(),
+                staff.getPhoneNumber(),
+                staff.getEmail(),
+                null,
+                null,
+                2L,
+                staff.getStatus()
+        );
+
+        SecurityContextHolder.setContext(
+                new SecurityContextImpl(new UsernamePasswordAuthenticationToken(
+                        staff.getEmail(), STAFF_PASSWORD, List.of(new SimpleGrantedAuthority("DIRECTOR")))));
+
+        // when
+        when(staffRepo.findById(eq(1L)))
+                .thenReturn(Optional.of(staff));
+        when(staffRepo.findByEmail(eq(STAFF_EMAIL)))
+                .thenReturn(Optional.of(staff));
+
+        // then
+        assertThrows(StaffIllegalStateException.class, () -> staffService.updateStaffById(1L, staffEditRequest));
+    }
+
+    @Test
+    void updateStaffById_WhenChangeStatusOfStaff() {
+        clearInvocations(passwordEncoder, mailService, staffRepo);
+        // given
+        StaffEditRequest staffEditRequest = new StaffEditRequest(
+                1L,
+                staff.getFirstName(),
+                staff.getLastName(),
+                staff.getPhoneNumber(),
+                staff.getEmail(),
+                null,
+                null,
+                staff.getRole().getId(),
+                StaffStatus.DISABLED
+        );
+
+        SecurityContextHolder.setContext(
+                new SecurityContextImpl(new UsernamePasswordAuthenticationToken(
+                        staff.getEmail(), STAFF_PASSWORD, List.of(new SimpleGrantedAuthority("DIRECTOR")))));
+
+        // when
+        when(staffRepo.findById(eq(1L)))
+                .thenReturn(Optional.of(staff));
+        when(staffRepo.findByEmail(eq(STAFF_EMAIL)))
+                .thenReturn(Optional.of(staff));
+
+        // then
+        assertThrows(StaffIllegalStateException.class, () -> staffService.updateStaffById(1L, staffEditRequest));
     }
 
     @Test

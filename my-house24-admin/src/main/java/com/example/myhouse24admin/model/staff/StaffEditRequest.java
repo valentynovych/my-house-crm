@@ -25,6 +25,7 @@ public record StaffEditRequest(
         String confirmPassword,
         @NotNull(message = "{validation-role-required}")
         Long roleId,
+        @NotNull(message = "{validation-field-required}")
         StaffStatus status
 ) {
 }

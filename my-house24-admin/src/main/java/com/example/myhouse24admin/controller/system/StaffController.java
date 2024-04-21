@@ -1,6 +1,8 @@
 package com.example.myhouse24admin.controller.system;
 
 import com.example.myhouse24admin.entity.Role;
+import com.example.myhouse24admin.exception.StaffIllegalStateAdminException;
+import com.example.myhouse24admin.exception.StaffIllegalStateException;
 import com.example.myhouse24admin.model.staff.StaffEditRequest;
 import com.example.myhouse24admin.model.staff.StaffResponse;
 import com.example.myhouse24admin.service.StaffService;
@@ -81,7 +83,13 @@ public class StaffController {
     @PostMapping("edit-staff/{staffId}")
     public ResponseEntity<?> updateStaffById(@PathVariable Long staffId,
                                              @ModelAttribute("staffEditRequest") @Valid StaffEditRequest staffEditRequest) {
-        staffService.updateStaffById(staffId, staffEditRequest);
+        try {
+            staffService.updateStaffById(staffId, staffEditRequest);
+        } catch (StaffIllegalStateException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (StaffIllegalStateAdminException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.LOCKED);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

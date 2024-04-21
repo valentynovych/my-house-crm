@@ -5,6 +5,8 @@ import com.example.myhouse24admin.entity.Role;
 import com.example.myhouse24admin.entity.Staff;
 import com.example.myhouse24admin.entity.StaffStatus;
 import com.example.myhouse24admin.exception.StaffAlreadyActiveException;
+import com.example.myhouse24admin.exception.StaffIllegalStateAdminException;
+import com.example.myhouse24admin.exception.StaffIllegalStateException;
 import com.example.myhouse24admin.mapper.StaffMapper;
 import com.example.myhouse24admin.model.authentication.EmailRequest;
 import com.example.myhouse24admin.model.staff.StaffEditRequest;
@@ -43,6 +45,7 @@ public class StaffServiceImpl implements StaffService {
     private final HttpServletRequest httpServletRequest;
     private final PasswordResetTokenService passwordResetTokenService;
     private final Logger logger = LogManager.getLogger(StaffServiceImpl.class);
+    private final String ADMIN_EMAIL = "admin@gmail.com";
 
     public StaffServiceImpl(StaffRepo staffRepo,
                             RoleRepo roleRepo,
@@ -65,7 +68,7 @@ public class StaffServiceImpl implements StaffService {
         logger.info("createFirstStaff() - Creating first staff");
         if (isTableEmpty()) {
             Role role = roleRepo.findById(1L).orElseThrow(() -> new EntityNotFoundException("Role not found by id 1"));
-            Staff staff = staffMapper.createFirstStaff("admin@gmail.com",
+            Staff staff = staffMapper.createFirstStaff(ADMIN_EMAIL,
                     passwordEncoder.encode("admin"),
                     "Директор", "+380991111111", role, Language.UKR,
                     StaffStatus.ACTIVE);
@@ -91,8 +94,11 @@ public class StaffServiceImpl implements StaffService {
     public List<Role> getRoles() {
         logger.info("getRoles() -> Start find all staff roles");
         List<Role> roles = roleRepo.findAll();
-        logger.info("getRoles() -> Success, return list size: " + roles.size());
-        return roles;
+        List<Role> rolesWithoutDirector = roles.stream()
+                .filter(role -> !role.getName().equals("DIRECTOR"))
+                .toList();
+        logger.info("getRoles() -> Success, return list size: {}", rolesWithoutDirector.size());
+        return rolesWithoutDirector;
     }
 
     @Override
@@ -113,7 +119,9 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public List<String> getStatuses() {
         logger.info(("getStatuses() -> Start"));
-        return Arrays.stream(StaffStatus.values()).map(Enum::name).toList();
+        List<String> statusList = Arrays.stream(StaffStatus.values()).map(Enum::name).toList();
+        logger.info(("getStatuses() -> Exit"));
+        return statusList;
     }
 
     @Override
@@ -126,25 +134,54 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public void updateStaffById(Long staffId, StaffEditRequest staffEditRequest) {
-        logger.info("updateStaffById() -> start, with id: " + staffId);
+    public void updateStaffById(Long staffId, StaffEditRequest staffEditRequest)
+            throws StaffIllegalStateException, StaffIllegalStateAdminException {
+        logger.info("updateStaffById() -> start, with id: {}", staffId);
         Staff staff = findStaffById(staffId);
+        boolean isCurrentStaff = isCurrentStaff(staff);
+        checkAllowedToEdit(staffEditRequest, staff, isCurrentStaff);
+
         if (staffEditRequest.password() != null) {
             logger.info("updateStaffById() -> Start update entity with new password");
             staffMapper.updateWithPassword(staff, staffEditRequest);
             staff.setPassword(passwordEncoder.encode(staffEditRequest.password()));
-            if (!isCurrentStaff(staff)) mailService.sendNewPassword(staff.getEmail(), staffEditRequest.password());
+            if (!isCurrentStaff) mailService.sendNewPassword(staff.getEmail(), staffEditRequest.password());
         } else {
             logger.info("updateStaffById() -> Start update entity without password");
             staffMapper.updateWithoutPassword(staff, staffEditRequest);
         }
         staffRepo.save(staff);
-        logger.info("updateStaffById() -> exit, success update Staff with id: " + staffId);
+        logger.info("updateStaffById() -> exit, success update Staff with id: {}", staffId);
+    }
+
+    private void checkAllowedToEdit(StaffEditRequest staffEditRequest, Staff currentStaff, boolean isCurrentStaff)
+            throws StaffIllegalStateException, StaffIllegalStateAdminException {
+        logger.info("checkAllowedToEdit() -> Start");
+        if (currentStaff.getEmail().equals(ADMIN_EMAIL)) checkChangeRoleOrStatusInAdmin(staffEditRequest);
+        else if (isCurrentStaff) checkChangeRoleOrStatusInCurrentStaff(staffEditRequest);
+        logger.info("checkAllowedToEdit() -> Exit");
+    }
+
+    private void checkChangeRoleOrStatusInAdmin(StaffEditRequest staffEditRequest) throws StaffIllegalStateAdminException {
+        if (!staffEditRequest.status().equals(StaffStatus.ACTIVE)
+                || !staffEditRequest.roleId().equals(1L)) {
+            logger.error("Admin cannot change role or status");
+            throw new StaffIllegalStateAdminException("Admin cannot change role or status");
+        }
+    }
+
+    private void checkChangeRoleOrStatusInCurrentStaff(StaffEditRequest staffEditRequest) throws StaffIllegalStateException {
+        Staff currentStaff = getCurrentStaff();
+        if (!currentStaff.getRole().getId().equals(staffEditRequest.roleId())
+                || !currentStaff.getStatus().equals(staffEditRequest.status())) {
+            logger.error("Staff cannot change role");
+            throw new StaffIllegalStateException("Staff cannot change role");
+        }
     }
 
     @Override
     public boolean deleteStaffById(Long staffId) {
-        logger.info("deleteStaffById() -> Start with id: " + staffId);
+        logger.info("deleteStaffById() -> Start with id: {}", staffId);
         Staff staff = findStaffById(staffId);
         if (!staff.getRole().getName().equals("DIRECTOR") &&
                 !isCurrentStaff(staff)) {
