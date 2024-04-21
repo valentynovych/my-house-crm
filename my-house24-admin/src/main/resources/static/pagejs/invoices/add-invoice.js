@@ -667,26 +667,6 @@ function sendData(formData) {
     });
 }
 
-$("#cancel-button").on("click", function () {
-    blockBy(".card-body");
-    clearFields();
-    $('#apartmentId').prop('disabled', true);
-    $('#section').prop('disabled', true);
-    unblockBy(".card-body");
-});
-
-function clearFields() {
-    $("#personalAccount, #paid").val('');
-    $("#owner, #phone-number").text('');
-    $("#form").find('select').val(null).trigger('change');
-    $("#service-table").children().remove();
-    $("#service-table").append(
-        `<tr>
-            <td colSpan="7" class="text-center">${noData}</td>
-        </tr>`
-    );
-}
-
 function checkRequestParams() {
     let apartmentFromUrl = findGetParameter('forApartment');
     if (apartmentFromUrl) {

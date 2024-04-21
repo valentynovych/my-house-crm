@@ -1,4 +1,3 @@
-let defaultOwner;
 $(document).ready(function () {
     initializeInputMasks();
     autosize($("#aboutOwner"));
@@ -166,7 +165,6 @@ function getOwner(){
         url: "get-owner/"+id,
         success: function (response) {
             console.log(response);
-            defaultOwner = response;
             setFields(response);
         },
         error: function () {
@@ -194,14 +192,3 @@ function setFields(response) {
     var option = new Option(getStatus(response.status), response.status, true, true);
     $('#status').append(option).trigger('change');
 }
-$("#cancel-button").on("click", function () {
-    blockBy("#form");
-    $("#form").find('input:text, input:password, input:file, textarea').val('');
-    $("#form").find('select').val(null).trigger('change');
-    if(defaultOwner === undefined){
-        $("#avatar-img").attr("src", "https://static.vecteezy.com/system/resources/previews/004/141/669/non_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg");
-    } else {
-        setFields(defaultOwner);
-    }
-    unblockBy("#form");
-})

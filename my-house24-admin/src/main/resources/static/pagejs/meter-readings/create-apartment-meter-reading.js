@@ -1,6 +1,9 @@
+let url = window.location.pathname;
+let id = url.substring(url.lastIndexOf('/') + 1);
 $(document).ready(function () {
     $("#breadCrumb").text(newReading);
     $("#pageTitle").text(newReading);
+    $("#cancel-button").attr("href", "../apartment/"+id);
     let d = new Date();
     setNumber();
     $("#creationDate").flatpickr({
@@ -8,13 +11,11 @@ $(document).ready(function () {
         dateFormat: "d.m.Y",
         minDate: moment(d).format('DD.MM.YYYY')
     });
-    let url = window.location.pathname;
-    let apartment = url.substring(url.lastIndexOf('/') + 1);
-    getApartment(apartment);
+    getApartment();
     initializeSelects();
 });
 
-function getApartment(id) {
+function getApartment() {
     $.ajax({
         type: "GET",
         url: "../get-apartment/"+id,
@@ -276,17 +277,6 @@ function sendData(formData) {
     });
 }
 
-$("#cancel-button").on("click", function () {
-    blockBy("#form");
-    clearFields();
-    $('#apartmentId').prop('disabled', true);
-    $('#section').prop('disabled', true);
-    unblockBy("#form");
-});
-function clearFields() {
-    $("#form").find('input:text, #readings').val('');
-    $("#form").find('select').val(null).trigger('change');
-}
 
 $("#save-add-button").on("click", function () {
     blockCardDody();
