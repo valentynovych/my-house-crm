@@ -56,7 +56,7 @@ function drawBlocks(response) {
                     <h5 name="serviceName">${block + ' ' + (i + 1)}</h5>
                         <div>
                             <img  src="${service.image == null ? "https://highfield-school.co.uk/wp-content/uploads/2021/02/orionthemes-placeholder-image-600x400.png" : "/" + root + "/uploads/" + service.image}"
-                              style="width: 100%; height: auto;"
+                              style="max-height: 100%; max-width: 100%"
                               id="${"image" + service.id}"
                               name="service-image">
                         <p class="my-2">${recommendedSize}</p>
@@ -110,7 +110,7 @@ $("#add-button").on("click", function () {
                     <h5 name="serviceName">${block + ' ' + (i + 1)}</h5>
                         <div>
                             <img  src="https://highfield-school.co.uk/wp-content/uploads/2021/02/orionthemes-placeholder-image-600x400.png"
-                              style="width: 100%; height: auto;"
+                              style="height: 100%; max-width: 100%"
                               id="${"image" + i}"
                               name="service-image">
                         <p class="my-2">${recommendedSize}</p>

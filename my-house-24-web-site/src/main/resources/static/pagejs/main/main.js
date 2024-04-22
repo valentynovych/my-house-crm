@@ -51,7 +51,7 @@ function showMainBlocks(response) {
     for(let block of response.mainPageBlocks){
         $("#blocks").append(
             `<div class="col-md-4">
-                <img style="max-width: 100%" src="${'uploads/'+block.image}">
+                <img style="height: 50%; max-width: 100%" src="${'uploads/'+block.image}">
                 <h4 class="mt-2">${block.title}</h4>
                 <div class="mt-3">${block.description}</div>
             </div>`

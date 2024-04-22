@@ -58,8 +58,7 @@ function setGallery(gallery, galleryId, method) {
         $("#"+galleryId).append(
             `<div class="col-md-3" style="position: relative;" id="${image.id}">
                     <img src="${"/"+root+"/uploads/"+image.image}"
-                         style="width: 100%; height: auto;"
-                         class="d-block h-auto">
+                         style="height: 100%; max-width: 100%">
                          <button type="button" class="btn rounded-pill btn-icon btn-label-danger" onclick="${method+'(this)'}"  style="position: absolute; float:right; z-index: 1; top: -6%; right: -1%; height: 25px; width: 25px;">
                             <span class="ti ti-x"></span>
                         </button>
@@ -92,8 +91,7 @@ $("#gallery-input").on("change", function () {
             $("#gallery").append(
                 `<div class="col-md-3" style="position: relative;">
                     <img src="${window.URL.createObjectURL(file)}"
-                         style="width: 100%; height: auto;"
-                         class="d-block h-auto"
+                         style="height: 100%; max-width: 100%"
                           id="${galleryFileIndex}">
                          <button type="button" class="btn rounded-pill btn-icon btn-label-danger" onclick="deleteGalleryImage(this)"  style="position: absolute; float:right; z-index: 1; top: -6%; right: -1%; height: 25px; width: 25px;">
                             <span class="ti ti-x"></span>
@@ -113,8 +111,7 @@ $("#additional-gallery-input").on("change", function () {
             $("#additionalGallery").append(
                 `<div class="col-md-3" style="position: relative;">
                     <img src="${window.URL.createObjectURL(file)}"
-                         style="width: 100%; height: auto;"
-                         class="d-block h-auto"
+                         style="height: 100%; max-width: 100%"
                           id="${additionalGalleryFileIndex}">
                          <button type="button" class="btn rounded-pill btn-icon btn-label-danger" onclick="deleteAdditionalGalleryImage(this)"  style="position: absolute; float:right; z-index: 1; top: -6%; right: -1%; height: 25px; width: 25px;">
                             <span class="ti ti-x"></span>
