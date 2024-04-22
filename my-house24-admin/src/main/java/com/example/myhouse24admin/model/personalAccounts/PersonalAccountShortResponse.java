@@ -2,7 +2,7 @@ package com.example.myhouse24admin.model.personalAccounts;
 
 public class PersonalAccountShortResponse {
     private Long id;
-    private Long accountNumber;
+    private String accountNumber;
 
     public Long getId() {
         return id;
@@ -12,11 +12,11 @@ public class PersonalAccountShortResponse {
         this.id = id;
     }
 
-    public Long getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Long accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 }

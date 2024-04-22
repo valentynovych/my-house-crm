@@ -180,9 +180,7 @@ function setOwnerFields(response) {
     $("#owner").text(response.ownerFullName);
     $("#phone-number").text(response.ownerPhoneNumber);
     if(response.accountNumber !== null) {
-        let number = response.accountNumber.toString().padStart(10, '0');
-        let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
-        $("#personalAccount").val(accountNumber);
+        $("#personalAccount").val(response.accountNumber);
     }
     let houseOption = new Option(response.tariffName, response.tariffId, true, true);
     $('#tariff').append(houseOption).trigger('change');
@@ -216,9 +214,7 @@ function setFields(response) {
         $("#number").val(response.number);
     }
     if(response.ownerResponse.accountNumber !== null) {
-        let number = response.ownerResponse.accountNumber.toString().padStart(10, '0');
-        let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10)
-        $("#personalAccount").val(accountNumber);
+        $("#personalAccount").val(response.ownerResponse.accountNumber);
     }
     $("#processed").prop("checked", response.processed);
     $("#owner").text(response.ownerResponse.ownerFullName);

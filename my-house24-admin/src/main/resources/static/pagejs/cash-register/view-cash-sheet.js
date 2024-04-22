@@ -34,7 +34,7 @@ function fillInputs(sheet) {
     const personalAccount = sheet.personalAccount;
     const invoice = sheet.invoice;
     $('#owner').html(personalAccount.apartmentOwner ? personalAccount.apartmentOwner.fullName : '-');
-    $('#personalAccount').html(personalAccount ? `<a href="../../personal-accounts/view-account/${personalAccount.id}">${decorateAccountNumber(personalAccount.accountNumber)}</a>` : '-');
+    $('#personalAccount').html(personalAccount ? `<a href="../../personal-accounts/view-account/${personalAccount.id}">${personalAccount.accountNumber}</a>` : '-');
     $('#paymentItem').html(sheet.paymentItem.name);
     $('#invoice').html(invoice ? `<a href="../../invoices/view-invoice/${invoice.id}">${invoice.number} ${dividerFrom} ${new Date(invoice.creationDate * 1000).toLocaleDateString()} </a>` : '-');
 
@@ -95,8 +95,3 @@ $('.submit-delete').on('click', function () {
         }
     });
 });
-
-function decorateAccountNumber(accountNumber) {
-    let s = (accountNumber + '').padStart(10, '0000000000');
-    return s.substring(0, 5) + '-' + s.substring(5, 10);
-}

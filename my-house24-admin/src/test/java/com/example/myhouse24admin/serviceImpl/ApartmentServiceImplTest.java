@@ -71,7 +71,7 @@ class ApartmentServiceImplTest {
         PersonalAccount personalAccount = new PersonalAccount();
         personalAccount.setId(1L);
         personalAccount.setApartment(apartment);
-        personalAccount.setAccountNumber(1L);
+        personalAccount.setAccountNumber("1L");
         personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
         personalAccount.setDeleted(false);
         apartment.setPersonalAccount(personalAccount);
@@ -92,12 +92,12 @@ class ApartmentServiceImplTest {
         ApartmentAddRequest apartmentAddRequest = new ApartmentAddRequest();
         apartmentAddRequest.setApartmentNumber(apartment.getApartmentNumber());
         apartmentAddRequest.setArea(apartment.getArea());
-        apartmentAddRequest.setPersonalAccountNew(1L);
+        apartmentAddRequest.setPersonalAccountNew("1L");
 
         PersonalAccount personalAccount = new PersonalAccount();
         personalAccount.setId(1L);
         personalAccount.setApartment(apartment);
-        personalAccount.setAccountNumber(1L);
+        personalAccount.setAccountNumber("1L");
         personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
         personalAccount.setDeleted(false);
         apartment.setPersonalAccount(personalAccount);
@@ -132,7 +132,7 @@ class ApartmentServiceImplTest {
         PersonalAccount personalAccount = new PersonalAccount();
         personalAccount.setId(1L);
         personalAccount.setApartment(apartment);
-        personalAccount.setAccountNumber(1L);
+        personalAccount.setAccountNumber("1L");
         personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
         personalAccount.setDeleted(false);
         apartment.setPersonalAccount(personalAccount);
@@ -144,7 +144,7 @@ class ApartmentServiceImplTest {
         when(apartmentRepo.save(apartment))
                 .thenReturn(apartment);
         when(personalAccountRepo.findMinimalFreeAccountNumber())
-                .thenReturn(1L);
+                .thenReturn("1L");
 
         // call the method
         apartmentService.addNewApartment(apartmentAddRequest);
@@ -170,7 +170,7 @@ class ApartmentServiceImplTest {
         PersonalAccount personalAccount = new PersonalAccount();
         personalAccount.setId(1L);
         personalAccount.setApartment(apartment);
-        personalAccount.setAccountNumber(1L);
+        personalAccount.setAccountNumber("1L");
         personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
         personalAccount.setDeleted(false);
         apartment.setPersonalAccount(personalAccount);
@@ -315,7 +315,7 @@ class ApartmentServiceImplTest {
         Long apartmentId = apartment.getId();
         ApartmentAddRequest apartmentRequest = new ApartmentAddRequest();
         apartmentRequest.setId(1L);
-        apartmentRequest.setPersonalAccountNew(1L);
+        apartmentRequest.setPersonalAccountNew("1L");
 
         PersonalAccount personalAccount = new PersonalAccount();
         personalAccount.setId(1L);

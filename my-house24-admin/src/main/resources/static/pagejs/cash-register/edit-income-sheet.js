@@ -109,7 +109,7 @@ function fillInputs(sheet) {
                         results: $.map(response.content, function (account) {
                             return {
                                 id: account.id,
-                                text: decorateAccountNumber(account.accountNumber)
+                                text: account.accountNumber
                             }
                         }),
                         pagination: {
@@ -123,7 +123,7 @@ function fillInputs(sheet) {
             $selectPersonalAccount.select2({
                 data: [{
                     id: personalAccount.id,
-                    text: decorateAccountNumber(personalAccount.accountNumber)
+                    text: personalAccount.accountNumber
                 }]
             })
         }
@@ -210,11 +210,6 @@ function fillInputs(sheet) {
 
     autosize($inputComment);
     $inputComment.val(sheet.comment);
-
-    function decorateAccountNumber(accountNumber) {
-        let s = (accountNumber + '').padStart(10, '0000000000');
-        return s.substring(0, 5) + '-' + s.substring(5, 10);
-    }
 
     $('.button-save').on('click', function () {
         clearAllErrorMessage();

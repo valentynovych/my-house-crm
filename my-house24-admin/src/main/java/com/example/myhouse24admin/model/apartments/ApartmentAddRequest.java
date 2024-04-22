@@ -23,7 +23,7 @@ public class ApartmentAddRequest {
     @NotNull(message = "{validation-field-required}")
     private Double area;
     private Long personalAccountId;
-    private Long personalAccountNew;
+    private String personalAccountNew;
 
     public Long getId() {
         return id;
@@ -97,11 +97,11 @@ public class ApartmentAddRequest {
         this.personalAccountId = personalAccountId;
     }
 
-    public Long getPersonalAccountNew() {
+    public String getPersonalAccountNew() {
         return personalAccountNew;
     }
 
-    public void setPersonalAccountNew(Long personalAccountNew) {
+    public void setPersonalAccountNew(String personalAccountNew) {
         this.personalAccountNew = personalAccountNew;
     }
 }

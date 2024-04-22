@@ -2,18 +2,15 @@ package com.example.myhouse24admin.model.personalAccounts;
 
 import com.example.myhouse24admin.entity.PersonalAccountStatus;
 import com.example.myhouse24admin.validators.personalAccountValidation.ValidatePersonalAccountUpdateRequest;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 @ValidatePersonalAccountUpdateRequest
 public class PersonalAccountUpdateRequest {
     @NotNull(message = "{validation-field-required}")
     private Long id;
     @NotNull(message = "{validation-field-required}")
-    @Min(value = 1, message = "{validation-value-isPositive}")
-    @Max(value = 9_999_999_999L, message = "{validation-size-max}")
-    private Long accountNumber;
+    @Pattern(regexp = "^[0-9]{5}-[0-9]{5}$" , message = "{validation-invalid-value}")
+    private String accountNumber;
     @NotNull(message = "{validation-field-required}")
     private PersonalAccountStatus status;
     private Long houseId;
@@ -28,11 +25,11 @@ public class PersonalAccountUpdateRequest {
         this.id = id;
     }
 
-    public Long getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Long accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 

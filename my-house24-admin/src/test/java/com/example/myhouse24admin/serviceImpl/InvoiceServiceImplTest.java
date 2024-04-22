@@ -70,7 +70,7 @@ class InvoiceServiceImplTest {
     private static Invoice invoice;
     @BeforeAll
     public static void setUp() {
-        expectedOwnerResponse = new OwnerResponse(1L,"name",
+        expectedOwnerResponse = new OwnerResponse("1L","name",
                 "phone", 1L, "tariff");
 
         invoiceRequest = new InvoiceRequest();

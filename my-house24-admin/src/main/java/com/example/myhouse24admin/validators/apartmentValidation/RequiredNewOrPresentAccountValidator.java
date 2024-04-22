@@ -27,7 +27,7 @@ public class RequiredNewOrPresentAccountValidator implements ConstraintValidator
     @Override
     public boolean isValid(ApartmentAddRequest request, ConstraintValidatorContext context) {
         context.disableDefaultConstraintViolation();
-        if (request.getPersonalAccountNew() != null && request.getPersonalAccountNew() > 0) {
+        if (request.getPersonalAccountNew() != null && !request.getPersonalAccountNew().isEmpty()) {
 
             boolean isExists = personalAccountRepo.existsPersonalAccountByAccountNumber(request.getPersonalAccountNew());
             context.buildConstraintViolationWithTemplate("{validation-apartment-personal-account-number-exists}")

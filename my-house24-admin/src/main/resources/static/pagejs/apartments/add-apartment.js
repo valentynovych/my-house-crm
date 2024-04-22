@@ -222,7 +222,7 @@ function initInputAndSelect() {
                     results: $.map(response.content, function (account) {
                         return {
                             id: account.id,
-                            text: decorateAccountNumber(account.accountNumber)
+                            text: account.accountNumber
                         }
                     }),
                     pagination: {
@@ -232,11 +232,6 @@ function initInputAndSelect() {
             }
         }
     });
-
-    function decorateAccountNumber(accountNumber) {
-        let s = (accountNumber + '').padStart(10, '0000000000');
-        return s.substring(0, 5) + '-' + s.substring(5, 10);
-    }
 
     const inputArea = new Cleave(`[name="area"]`, {
         numeral: true,
@@ -286,11 +281,6 @@ function initInputAndSelect() {
         $('button.bg-label-danger').removeClass('bg-label-danger');
 
         let formData = new FormData($('#apartmentForm')[0]);
-
-        let personalAccountNew = formData.get('personalAccountNew');
-        if (personalAccountNew) {
-            formData.set('personalAccountNew', personalAccountNew.replace(/\D/, ''));
-        }
 
         // for (const formDatum of formData.entries()) {
         //     console.log(formDatum)

@@ -42,7 +42,7 @@ class PersonalAccountServiceImplTest {
         for (int i = 0; i < 5; i++) {
             PersonalAccount account = new PersonalAccount();
             account.setId((long) i);
-            account.setAccountNumber((long) i + 1);
+            account.setAccountNumber(String.valueOf(i + 1));
             account.setStatus(PersonalAccountStatus.ACTIVE);
 
             Apartment apartment = new Apartment();
@@ -134,7 +134,7 @@ class PersonalAccountServiceImplTest {
         request.setApartmentId(1L);
         request.setHouseId(1L);
         request.setSectionId(1L);
-        request.setAccountNumber(1L);
+        request.setAccountNumber("1L");
         request.setStatus(PersonalAccountStatus.ACTIVE);
 
         // when
@@ -163,7 +163,7 @@ class PersonalAccountServiceImplTest {
         request.setApartmentId(1L);
         request.setHouseId(1L);
         request.setSectionId(1L);
-        request.setAccountNumber(1L);
+        request.setAccountNumber("1L");
         request.setStatus(PersonalAccountStatus.ACTIVE);
 
         // when
@@ -219,7 +219,7 @@ class PersonalAccountServiceImplTest {
         request.setApartmentId(1L);
         request.setHouseId(1L);
         request.setSectionId(1L);
-        request.setAccountNumber(1L);
+        request.setAccountNumber("1L");
         request.setStatus(PersonalAccountStatus.ACTIVE);
 
         // when
@@ -260,13 +260,14 @@ class PersonalAccountServiceImplTest {
     void getMinimalFreeAccountNumber() {
         // when
         when(accountRepo.findMinimalFreeAccountNumber())
-                .thenReturn(1L);
+                .thenReturn("1");
 
         // call method
-        Long minimalFreeAccountNumber = accountService.getMinimalFreeAccountNumber();
+        String minimalFreeAccountNumber = accountService.getMinimalFreeAccountNumber();
 
         // then
         assertNotNull(minimalFreeAccountNumber);
+        assertEquals("00000-00001", minimalFreeAccountNumber);
         verify(accountRepo, times(1)).findMinimalFreeAccountNumber();
     }
 
@@ -278,7 +279,7 @@ class PersonalAccountServiceImplTest {
         List<PersonalAccountTableResponse> personalAccountTableResponses = new ArrayList<>();
         PersonalAccountTableResponse personalAccountTableResponse = new PersonalAccountTableResponse();
         personalAccountTableResponse.setId(1L);
-        personalAccountTableResponse.setAccountNumber(1L);
+        personalAccountTableResponse.setAccountNumber("1L");
         personalAccountTableResponse.setStatus(PersonalAccountStatus.ACTIVE);
         personalAccountTableResponses.add(personalAccountTableResponse);
 

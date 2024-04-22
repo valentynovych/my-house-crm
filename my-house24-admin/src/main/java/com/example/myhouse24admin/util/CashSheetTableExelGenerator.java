@@ -155,8 +155,7 @@ public class CashSheetTableExelGenerator {
 
             String accountNumber = "-";
             if (response.getPersonalAccount() != null) {
-                accountNumber = String.format("%010d", response.getPersonalAccount().getAccountNumber());
-                accountNumber = accountNumber.substring(0, 5) + "-" + accountNumber.substring(5);
+                accountNumber = response.getPersonalAccount().getAccountNumber();
             }
 
             createCell(row, columCount++, accountNumber, style);

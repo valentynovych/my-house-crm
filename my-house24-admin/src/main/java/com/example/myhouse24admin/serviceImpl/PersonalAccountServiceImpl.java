@@ -8,6 +8,7 @@ import com.example.myhouse24admin.repository.PersonalAccountRepo;
 import com.example.myhouse24admin.service.PersonalAccountService;
 import com.example.myhouse24admin.specification.PersonalAccountSpecification;
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.*;
@@ -112,11 +113,12 @@ public class PersonalAccountServiceImpl implements PersonalAccountService {
     }
 
     @Override
-    public Long getMinimalFreeAccountNumber() {
+    public String getMinimalFreeAccountNumber() {
         logger.info("getMinimalFreeAccountNumber() -> start");
-        Long minimalFreeAccountNumber = accountRepo.findMinimalFreeAccountNumber();
-        logger.info("getMinimalFreeAccountNumber() -> exit, return minimalFreeAccountNumber: {}", minimalFreeAccountNumber);
-        return minimalFreeAccountNumber;
+        String minimalFreeAccountNumber = accountRepo.findMinimalFreeAccountNumber();
+        String leftPad = StringUtils.leftPad(minimalFreeAccountNumber, 11, "00000-00000");
+        logger.info("getMinimalFreeAccountNumber() -> exit, return minimalFreeAccountNumber: {}", leftPad);
+        return leftPad;
     }
 
     @Override

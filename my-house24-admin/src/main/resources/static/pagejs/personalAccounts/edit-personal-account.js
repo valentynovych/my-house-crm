@@ -25,7 +25,7 @@ const $apartmentOwnerPhone = $('#owner-phone');
 const $apartmentOwnerText = $('#apartment-owner');
 
 function fillInputs(account) {
-    $inputAccountNumber.val(decorateAccountNumber(account.accountNumber));
+    $inputAccountNumber.val(account.accountNumber);
 
     function getAccountStatusLabel(status) {
         switch (status) {

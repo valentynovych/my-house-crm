@@ -255,9 +255,6 @@ $('#export-to-exel').on('click', function () {
             toastr.error(errorMessage)
         }
     })
-    // this.href = url;
-    // this.download = true;
-    // this.target = '_blank';
 })
 
 function addParametersToUrl(url) {
@@ -301,8 +298,7 @@ function getPersonalAccounts(page) {
 function drawTable(result) {
     if (result.content && result.content.length > 0) {
         for (const personalAccount of result.content) {
-            let accountNumber = personalAccount.accountNumber.toString().padStart(10, '0000000000');
-            accountNumber = accountNumber.substring(0, 5) + '-' + accountNumber.substring(5, 10);
+            let accountNumber = personalAccount.accountNumber;
             const status = getAccountStatusLabel(personalAccount.status);
             const statusBadge = personalAccount.status === 'ACTIVE'
                 ? `<span class="badge rounded-pill bg-success">${status}</span>`

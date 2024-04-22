@@ -20,7 +20,7 @@ public interface PersonalAccountService {
 
     void updatePersonalAccount(PersonalAccountUpdateRequest request);
 
-    Long getMinimalFreeAccountNumber();
+    String getMinimalFreeAccountNumber();
 
     List<PersonalAccountTableResponse> exportToExcel(int page, int pageSize, Map<String, String> searchParams);
 }

@@ -134,7 +134,7 @@ $filterByPersonalAccount.select2({
                 results: $.map(response.content, function (account) {
                     return {
                         id: account.id,
-                        text: decorateAccountNumber(account.accountNumber)
+                        text: account.accountNumber
                     }
                 }),
                 pagination: {
@@ -207,11 +207,6 @@ $(window).on("load", function () {
     })
 
 })
-
-function decorateAccountNumber(accountNumber) {
-    let s = (accountNumber + '').padStart(10, '0000000000');
-    return s.substring(0, 5) + '-' + s.substring(5, 10);
-}
 
 function getPersonalAccountsStatistic() {
     $.ajax({
@@ -319,7 +314,7 @@ function drawTable(result) {
             <td>${statusBadge}</td>
             <td>${sheet.paymentItem.name}</td>
             <td>${isHaveApartmentOwner ? sheet.apartmentOwner.fullName : '-'}</td>
-            <td>${isHavePersonalAccount ? decorateAccountNumber(sheet.personalAccount.accountNumber) : '-'}</td>
+            <td>${isHavePersonalAccount ? sheet.personalAccount.accountNumber : '-'}</td>
             <td class="text-center">${sheetTypeBadge}</td>
             <td class="text-center">${balanceText}</td>
             <td class="text-center">
@@ -412,7 +407,7 @@ function applySearchParameters() {
                 success: function (response) {
                     const personalAccountData = {
                         id: response.id,
-                        text: decorateAccountNumber(response.accountNumber)
+                        text: response.accountNumber
                     };
                     const newOption = new Option(personalAccountData.text, personalAccountData.id, true, true);
                     $filterByPersonalAccount.append(newOption);

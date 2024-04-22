@@ -25,8 +25,7 @@ public class PersonalAccountSpecification implements Specification<PersonalAccou
             switch (key) {
                 case "accountNumber" -> {
                     if (!value.isEmpty()) {
-                        String replace = value.replace("-", "");
-                        predicates.add(criteriaBuilder.equal(root.get("accountNumber"), Long.valueOf(replace)));
+                        predicates.add(criteriaBuilder.like(root.get("accountNumber"), "%" + value + "%"));
                     }
                 }
                 case "status" -> predicates.add(
@@ -61,11 +60,11 @@ public class PersonalAccountSpecification implements Specification<PersonalAccou
                         predicates.add(criteriaBuilder.greaterThanOrEqualTo(apartmentJoin.get("balance"), BigDecimal.ZERO));
                     }
                 }
-                case "apartmentNull" -> {
-                    predicates.add(criteriaBuilder.isNull(root.get("apartment")));
-                }
+                case "apartmentNull" -> predicates.add(criteriaBuilder.isNull(root.get("apartment")));
             }
         });
+
+        predicates.add(criteriaBuilder.equal(root.get("deleted"), false));
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }

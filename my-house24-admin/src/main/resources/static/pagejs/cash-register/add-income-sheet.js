@@ -103,7 +103,7 @@ function initInputAndSelect() {
                         results: $.map(response.content, function (account) {
                             return {
                                 id: account.id,
-                                text: decorateAccountNumber(account.accountNumber)
+                                text: account.accountNumber
                             }
                         }),
                         pagination: {
@@ -180,11 +180,6 @@ function initInputAndSelect() {
     applyRequestParameters();
 }
 
-function decorateAccountNumber(accountNumber) {
-    let s = (accountNumber + '').padStart(10, '0000000000');
-    return s.substring(0, 5) + '-' + s.substring(5, 10);
-}
-
 $('.button-save').on('click', function () {
     clearAllErrorMessage();
     blockCardDody();
@@ -253,7 +248,7 @@ function fillInputFromCopy(copySheet) {
     $selectOwner.append(apartmentOwnerOption).trigger('change');
 
     const personalAccountOption = new Option(
-        decorateAccountNumber(copySheet.personalAccount.accountNumber),
+        copySheet.personalAccount.accountNumber,
         copySheet.personalAccount.id,
         true, true);
     $selectPersonalAccount.append(personalAccountOption).trigger('change');
@@ -306,7 +301,7 @@ function fillNestedAccountFields(personalAccount) {
     $selectOwner.append(apartmentOwnerOption).trigger('change');
 
     const personalAccountOption =
-        new Option(decorateAccountNumber(personalAccount.accountNumber), personalAccount.id, true, true);
+        new Option(personalAccount.accountNumber, personalAccount.id, true, true);
     $selectPersonalAccount.append(personalAccountOption).trigger('change');
 
     unblockBy("#income-sheet-form");
