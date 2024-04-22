@@ -90,6 +90,7 @@ class InvoiceServiceImplTest {
         owner.setEmail("email");
         apartment.setOwner(owner);
         invoice.setApartment(apartment);
+        invoice.setPaid(BigDecimal.valueOf(23));
     }
 
     @Test
@@ -333,8 +334,9 @@ class InvoiceServiceImplTest {
     }
     @Test
     void updateInvoice_Should_Update_Invoice() {
-        when(invoiceRepo.findById(anyLong())).thenReturn(Optional.of(new Invoice()));
+        when(invoiceRepo.findById(anyLong())).thenReturn(Optional.of(invoice));
         when(apartmentRepo.findById(anyLong())).thenReturn(Optional.of(apartment));
+        when(invoiceItemRepo.getItemsSumByInvoiceId(anyLong())).thenReturn(BigDecimal.valueOf(33));
         doNothing().when(invoiceMapper).updateInvoice(any(Invoice.class), any(InvoiceRequest.class), any(Apartment.class));
         when(invoiceItemRepo.findAll(any(Specification.class)))
                 .thenReturn(List.of(new InvoiceItem()));
@@ -400,8 +402,9 @@ class InvoiceServiceImplTest {
 
     @Test
     void updateInvoice_Service_FindById_Should_Throw_EntityNotFoundException() {
-        when(invoiceRepo.findById(anyLong())).thenReturn(Optional.of(new Invoice()));
+        when(invoiceRepo.findById(anyLong())).thenReturn(Optional.of(invoice));
         when(apartmentRepo.findById(anyLong())).thenReturn(Optional.of(apartment));
+        when(invoiceItemRepo.getItemsSumByInvoiceId(anyLong())).thenReturn(BigDecimal.valueOf(33));
         doNothing().when(invoiceMapper).updateInvoice(any(Invoice.class), any(InvoiceRequest.class), any(Apartment.class));
         when(invoiceItemRepo.findAll(any(Specification.class)))
                 .thenReturn(List.of(new InvoiceItem()));
