@@ -2,6 +2,8 @@ package com.example.myhouse24admin.service;
 
 import com.example.myhouse24admin.entity.Role;
 import com.example.myhouse24admin.entity.Staff;
+import com.example.myhouse24admin.exception.StaffIllegalStateAdminException;
+import com.example.myhouse24admin.exception.StaffIllegalStateException;
 import com.example.myhouse24admin.model.staff.StaffEditRequest;
 import com.example.myhouse24admin.model.staff.StaffResponse;
 import org.springframework.data.domain.Page;
@@ -22,7 +24,7 @@ public interface StaffService {
 
     StaffResponse getStaffById(Long staffId);
 
-    void updateStaffById(Long staffId, StaffEditRequest staffEditRequest);
+    void updateStaffById(Long staffId, StaffEditRequest staffEditRequest) throws StaffIllegalStateException, StaffIllegalStateAdminException;
 
     boolean deleteStaffById(Long staffId);
 

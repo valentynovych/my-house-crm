@@ -1,22 +1,13 @@
 var $role = $("#roleId");
 let $status = $('#status');
-let staff = {
-    // id: 0,
-    // firstName: '',
-    // lastName: '',
-    // phoneNumber: '',
-    // email: '',
-    // password: '',
-    // confirmPassword: '',
-    // roleId: '',
-    // status: ''
-};
+let staff = {};
+const staffId = window.location.pathname.match(/\d+$/);
 
 let staffToRestore;
 
 $(window).on("load", function () {
 
-    staff.id = window.location.pathname.match(/\d+$/);
+    staff.id = staffId;
 
     $role.select2({
         placeholder: roleLabel,
@@ -119,6 +110,12 @@ function fillInputs(staff) {
     $role.trigger('change');
     $('<option value="' + staff.status + '">' + getStatusLabel(staff.status) + '</option>').appendTo('#status');
     $status.trigger('change');
+
+
+    if (staffId === staffToRestore.id || staff.role.id === 1) {
+        $role.prop('disabled', true);
+        $status.prop('disabled', true);
+    }
 }
 
 $(".button-save").on("click", function () {
@@ -141,8 +138,15 @@ $(".button-save").on("click", function () {
             window.history.back();
         },
         error: function (error) {
-            printErrorMessageToField(error);
-            toastr.error(errorMessage);
+            if (error.status === 400) {
+                let errors = error.responseJSON;
+                printErrorMessageToField(errors);
+                toastr.error(errorMessage);
+            } else if (error.status === 409) {
+                toastr.error(errorEditCurrentStaff);
+            } else if (error.status === 423) {
+                toastr.error(errorEditAdminStaff);
+            }
         }
     })
 })
