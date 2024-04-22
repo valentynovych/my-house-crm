@@ -285,7 +285,7 @@ class TariffServiceImplTest {
     void getTariffsForSelect() {
         // given
         SelectSearchRequest selectSearchRequest = new SelectSearchRequest("search", 1);
-        TariffNameResponse tariffNameResponse = new TariffNameResponse(tariff.getId(), tariff.getName());
+        TariffNameResponse tariffNameResponse = new TariffNameResponse(tariff.getId(), tariff.getName(), false);
 
         // when
         when(tariffRepo.findAll(any(Specification.class), any(Pageable.class)))

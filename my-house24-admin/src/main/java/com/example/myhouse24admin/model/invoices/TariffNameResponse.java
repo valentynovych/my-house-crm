@@ -2,6 +2,7 @@ package com.example.myhouse24admin.model.invoices;
 
 public record TariffNameResponse(
         Long id,
-        String name
+        String name,
+        boolean deleted
 ) {
 }

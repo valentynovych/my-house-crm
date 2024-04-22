@@ -4,6 +4,8 @@ import com.example.myhouse24admin.entity.InvoiceStatus;
 import com.example.myhouse24admin.entity.MeterReadingStatus;
 import com.example.myhouse24admin.model.invoices.*;
 import com.example.myhouse24admin.model.meterReadings.*;
+import com.example.myhouse24admin.model.meterReadings.ApartmentNumberResponse;
+import com.example.myhouse24admin.model.meterReadings.HouseNameResponse;
 import com.example.myhouse24admin.service.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -354,7 +356,7 @@ class InvoiceControllerTest {
 
     @Test
     void getOwners() throws Exception {
-        OwnerNameResponse ownerNameResponse = new OwnerNameResponse(1L, "name");
+        OwnerNameResponse ownerNameResponse = new OwnerNameResponse(1L, "name", true);
 
         when(apartmentOwnerService.getOwnerNameResponses(any(SelectSearchRequest.class)))
                 .thenReturn(new PageImpl<>(List.of(ownerNameResponse), pageable, 5));
