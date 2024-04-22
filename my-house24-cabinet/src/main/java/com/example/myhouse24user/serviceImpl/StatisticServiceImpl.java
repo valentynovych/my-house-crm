@@ -47,8 +47,9 @@ public class StatisticServiceImpl implements StatisticService {
         logger.info("getGeneralStatistic() -> start, apartmentId: {}", apartment);
         Apartment apartmentByIdAndOwnerEmail = findApartmentByIdAndOwner_Email(apartment, principal.getName());
         BigDecimal balance = apartmentByIdAndOwnerEmail.getBalance();
-        String accountNumberStr = formatPersonalAccountNumber(
-                apartmentByIdAndOwnerEmail.getPersonalAccount().getAccountNumber());
+        String accountNumberStr = apartmentByIdAndOwnerEmail.getPersonalAccount() != null
+                ? apartmentByIdAndOwnerEmail.getPersonalAccount().getAccountNumber()
+                : "- - - - -";
         BigDecimal averageExpense = getAverageApartmentExpense(apartmentByIdAndOwnerEmail);
         GeneralOwnerStatistic statistic = new GeneralOwnerStatistic(balance, accountNumberStr, averageExpense);
         logger.info("getGeneralStatistic() -> end, apartmentId: {} statistic: {}", apartment, statistic);
