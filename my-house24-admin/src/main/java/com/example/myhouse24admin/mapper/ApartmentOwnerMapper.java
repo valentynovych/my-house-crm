@@ -55,7 +55,7 @@ public interface ApartmentOwnerMapper {
     @Mapping(target = "birthDate", expression = "java(convertDateToInstant(editApartmentOwnerRequest.birthDate()))")
     void setApartmentOwnerWithPassword(@MappingTarget ApartmentOwner apartmentOwner, EditApartmentOwnerRequest editApartmentOwnerRequest, String encodedPassword);
 
-    @Mapping(target = "fullName", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
+    @Mapping(target = "fullName", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getFirstName()+\" \"+apartmentOwner.getMiddleName())")
     @Mapping(target = "creationDate", expression = "java(convertDateToString(apartmentOwner.getCreationDate()))")
     @Mapping(target = "houseApartmentResponses", source = "houseApartmentResponses")
     @Mapping(target = "hasDebt", source = "hasDebt")
@@ -75,9 +75,9 @@ public interface ApartmentOwnerMapper {
     }
 
     List<ApartmentOwnerShortResponse> apartmentOwnerListToTApartmentOwnerShortResponseList(List<ApartmentOwner> apartmentOwners);
-    @Mapping(target = "fullName", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
+    @Mapping(target = "fullName", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getFirstName()+\" \"+apartmentOwner.getMiddleName())")
     ApartmentOwnerShortResponse apartmentOwnerToTApartmentOwnerShortResponse(ApartmentOwner apartmentOwner);
-    @Mapping(target = "ownerFullName", expression = "java(apartment.getOwner().getLastName()+\" \"+apartment.getOwner().getMiddleName()+\" \"+apartment.getOwner().getFirstName())")
+    @Mapping(target = "ownerFullName", expression = "java(apartment.getOwner().getLastName()+\" \"+apartment.getOwner().getFirstName()+\" \"+apartment.getOwner().getMiddleName())")
     @Mapping(target = "ownerPhoneNumber", source = "apartment.owner.phoneNumber")
     @Mapping(target = "accountNumber", source = "apartment.personalAccount.accountNumber")
     @Mapping(target = "tariffId", source = "apartment.tariff.id")
@@ -85,6 +85,6 @@ public interface ApartmentOwnerMapper {
     OwnerResponse apartmentToOwnerResponse(Apartment apartment);
     List<OwnerNameResponse> apartmentOwnerListToOwnerNameResponseList(List<ApartmentOwner> apartmentOwners);
     @Mapping(target = "id", source = "apartmentOwner.id")
-    @Mapping(target = "name", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getMiddleName()+\" \"+apartmentOwner.getFirstName())")
+    @Mapping(target = "name", expression = "java(apartmentOwner.getLastName()+\" \"+apartmentOwner.getFirstName()+\" \"+apartmentOwner.getMiddleName())")
     OwnerNameResponse apartmentOwnerToOwnerNameResponse(ApartmentOwner apartmentOwner);
 }

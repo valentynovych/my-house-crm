@@ -167,9 +167,14 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
             ownerSpecification = ownerSpecification.and(byPhoneNumber(filterRequest.phoneNumber()));
         }
         if (!filterRequest.fullName().isEmpty()) {
-            ownerSpecification = ownerSpecification.and(byFirstName(filterRequest.fullName())
-                    .or(byLastName(filterRequest.fullName()))
-                    .or(byMiddleName(filterRequest.fullName())));
+            String[] name = filterRequest.fullName().split(" ");
+            if(name.length == 1) {
+                ownerSpecification = ownerSpecification.and(byLastName(name[0]));
+            } else if (name.length == 2){
+                ownerSpecification = ownerSpecification.and(byFirstName(name[1]));
+            } else {
+            ownerSpecification = ownerSpecification.and(byMiddleName(name[2]));
+            }
         }
         if (!filterRequest.email().isEmpty()) {
             ownerSpecification = ownerSpecification.and(byEmail(filterRequest.email()));
@@ -248,14 +253,24 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
     public Page<OwnerNameResponse> getOwnerNameResponses(SelectSearchRequest selectSearchRequest) {
         logger.info("getOwnerNameResponses - Getting owner name responses for select " + selectSearchRequest.toString());
         Pageable pageable = PageRequest.of(selectSearchRequest.page()-1, 10);
-        Page<ApartmentOwner> apartmentOwnerPage = apartmentOwnerRepo.findAll(byDeleted()
-                .and(byFirstName(selectSearchRequest.search())
-                        .or(byMiddleName(selectSearchRequest.search()))
-                        .or(byLastName(selectSearchRequest.search()))),pageable);
+        Specification<ApartmentOwner> ownerSpecification = formSpecification(selectSearchRequest.search());
+        Page<ApartmentOwner> apartmentOwnerPage = apartmentOwnerRepo.findAll(ownerSpecification,pageable);
         List<OwnerNameResponse> ownerNameResponses = apartmentOwnerMapper
                 .apartmentOwnerListToOwnerNameResponseList(apartmentOwnerPage.getContent());
         Page<OwnerNameResponse> ownerNameResponsePage = new PageImpl<>(ownerNameResponses, pageable, apartmentOwnerPage.getTotalElements());
         logger.info("getOwnerNameResponses - Owner name responses were got");
         return ownerNameResponsePage;
+    }
+    private Specification<ApartmentOwner> formSpecification(String fullName){
+        Specification<ApartmentOwner> ownerSpecification = Specification.where(byDeleted());
+        String[] name = fullName.split(" ");
+        if(name.length == 1) {
+            ownerSpecification = ownerSpecification.and(byLastName(name[0]));
+        } else if (name.length == 2){
+            ownerSpecification = ownerSpecification.and(byFirstName(name[1]));
+        } else {
+            ownerSpecification = ownerSpecification.and(byMiddleName(name[2]));
+        }
+        return  ownerSpecification;
     }
 }
