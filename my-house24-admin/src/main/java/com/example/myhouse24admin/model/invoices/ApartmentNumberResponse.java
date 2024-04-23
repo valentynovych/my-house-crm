@@ -1,8 +1,8 @@
 package com.example.myhouse24admin.model.invoices;
 
-public record OwnerNameResponse(
+public record ApartmentNumberResponse(
         Long id,
-        String name,
+        String apartmentNumber,
         boolean deleted
 ) {
 }

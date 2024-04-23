@@ -1,8 +1,6 @@
 package com.example.myhouse24admin.model.invoices;
 
 import com.example.myhouse24admin.entity.InvoiceStatus;
-import com.example.myhouse24admin.model.meterReadings.ApartmentNumberResponse;
-import com.example.myhouse24admin.model.meterReadings.HouseNameResponse;
 
 import java.math.BigDecimal;
 import java.util.List;

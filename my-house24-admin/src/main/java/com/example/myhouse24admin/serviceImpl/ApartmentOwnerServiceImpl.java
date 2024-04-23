@@ -2,6 +2,7 @@ package com.example.myhouse24admin.serviceImpl;
 
 import com.example.myhouse24admin.entity.Apartment;
 import com.example.myhouse24admin.entity.ApartmentOwner;
+import com.example.myhouse24admin.entity.OwnerStatus;
 import com.example.myhouse24admin.mapper.ApartmentMapper;
 import com.example.myhouse24admin.mapper.ApartmentOwnerMapper;
 import com.example.myhouse24admin.model.apartmentOwner.*;
@@ -207,6 +208,7 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         if (apartments.isEmpty()) {
             ApartmentOwner apartmentOwner = apartmentOwnerRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Owner was not found with id " + id));
             apartmentOwner.setDeleted(true);
+            apartmentOwner.setStatus(OwnerStatus.DISABLED);
             apartmentOwnerRepo.save(apartmentOwner);
             logger.info("deleteOwnerById - Apartment owner was deleted");
             return true;

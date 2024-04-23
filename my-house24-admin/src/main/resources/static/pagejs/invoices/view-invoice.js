@@ -31,10 +31,26 @@ function setFields(response) {
     responseMap.forEach((value, key) => {
         $("#" + key).text(value);
     });
-    $("#owner").append(`<a href="../../owners/view-owner/${response.ownerNameResponse.id}">${response.ownerNameResponse.name}</a>`);
-    $("#house").append(`<a href="../../houses/view-house/${response.houseNameResponse.id}">${response.houseNameResponse.name}</a>`);
-    $("#apartment").append(`<a href="../../apartments/view-apartment/${response.apartmentNumberResponse.id}">${response.apartmentNumberResponse.apartmentNumber}</a>`);
-    $("#tariff").append(`<a href="../../system-settings/tariffs/view-tariff/${response.tariffNameResponse.id}">${response.tariffNameResponse.name}</a>`);
+    if(response.ownerNameResponse.deleted === false) {
+        $("#owner").append(`<a href="../../owners/view-owner/${response.ownerNameResponse.id}">${response.ownerNameResponse.name}</a>`);
+    } else {
+        $("#owner").text(response.ownerNameResponse.name);
+    }
+    if(response.houseNameResponse.deleted === false) {
+        $("#house").append(`<a href="../../houses/view-house/${response.houseNameResponse.id}">${response.houseNameResponse.name}</a>`);
+    } else {
+        $("#house").text(response.houseNameResponse.name);
+    }
+    if(response.apartmentNumberResponse.deleted === false) {
+        $("#apartment").append(`<a href="../../apartments/view-apartment/${response.apartmentNumberResponse.id}">${response.apartmentNumberResponse.apartmentNumber}</a>`);
+    } else {
+        $("#apartment").text(response.apartmentNumberResponse.apartmentNumber);
+    }
+    if(response.tariffNameResponse.deleted === false) {
+        $("#tariff").append(`<a href="../../system-settings/tariffs/view-tariff/${response.tariffNameResponse.id}">${response.tariffNameResponse.name}</a>`);
+    } else {
+        $("#tariff").text(response.tariffNameResponse.name);
+    }
     $(".invoice-breadcrumb").each(function () {
         $(this).text(breadCrumb + response.number);
     });

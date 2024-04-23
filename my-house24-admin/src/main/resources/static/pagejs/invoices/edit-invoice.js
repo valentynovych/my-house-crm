@@ -1,5 +1,4 @@
 let tableLength = 5;
-let defaultInvoice;
 let i = 0;
 let tariffServices = [];
 let url = window.location.pathname;
@@ -195,7 +194,6 @@ function getInvoice() {
         url: "../get-invoice/"+id,
         success: function (response) {
             console.log(response);
-            defaultInvoice = response;
             setFields(response);
         },
         error: function () {
@@ -673,11 +671,6 @@ function deleteRow() {
     calculateTotal();
     $('#deleteModal').modal('hide');
 }
-$("#cancel-button").on("click", function () {
-    blockBy(".card-body");
-    setFields(defaultInvoice);
-    unblockBy(".card-body");
-});
 function getReadings(currentPage) {
     blockBy("#dropdownParent1");
     $.ajax({

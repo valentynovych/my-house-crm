@@ -197,7 +197,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         logger.info("updateInvoice - Updating invoice with id " + id + " " + invoiceRequest.toString());
         Invoice invoice = invoiceRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Invoice was not found by id " + id));
         Apartment apartment = apartmentRepo.findById(invoiceRequest.getApartmentId()).orElseThrow(() -> new EntityNotFoundException("Apartment was not found by id " + invoiceRequest.getApartmentId()));
-        setNewApartmentBalance(apartment, invoiceRequest);
+        BigDecimal totalPrice = invoiceItemRepo.getItemsSumByInvoiceId(id);
+        updateApartmentBalance(apartment, invoiceRequest, invoice, totalPrice);
         invoiceMapper.updateInvoice(invoice, invoiceRequest, apartment);
         List<InvoiceItem> invoiceItems = invoiceItemRepo.findAll(byInvoiceId(id));
         invoiceItemRepo.deleteAll(invoiceItems);
@@ -207,6 +208,15 @@ public class InvoiceServiceImpl implements InvoiceService {
         logger.info("updateInvoice - Invoice was updated");
     }
 
+    private void updateApartmentBalance(Apartment apartment, InvoiceRequest invoiceRequest,
+                                        Invoice invoice, BigDecimal totalPrice){
+        BigDecimal invoiceInDbRemainder = invoice.getPaid().subtract(totalPrice);
+        BigDecimal balanceWithoutInvoiceInDbRemainder = apartment.getBalance().subtract(invoiceInDbRemainder);
+        apartment.setBalance(balanceWithoutInvoiceInDbRemainder);
+        BigDecimal newRemainder = invoiceRequest.getPaid().subtract(invoiceRequest.getTotalPrice());
+        BigDecimal newBalance = apartment.getBalance().add(newRemainder);
+        apartment.setBalance(newBalance);
+    }
     private void updateInvoiceCashSheet(Invoice invoice) {
         logger.info("updateInvoiceCashSheet - Updating invoice cash sheet for invoice with id " + invoice.getId());
         cashRegisterService.updateCashSheetFromInvoice(invoice);

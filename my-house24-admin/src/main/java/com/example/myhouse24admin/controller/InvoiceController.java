@@ -1,26 +1,23 @@
 package com.example.myhouse24admin.controller;
 
 import com.example.myhouse24admin.entity.InvoiceStatus;
-import com.example.myhouse24admin.model.invoiceTemplate.InvoiceTemplateListRequest;
-import com.example.myhouse24admin.model.invoiceTemplate.InvoiceTemplateResponse;
 import com.example.myhouse24admin.model.invoices.*;
-import com.example.myhouse24admin.model.meterReadings.*;
+import com.example.myhouse24admin.model.meterReadings.ApartmentMeterReadingResponse;
+import com.example.myhouse24admin.model.meterReadings.HouseNameResponse;
+import com.example.myhouse24admin.model.meterReadings.SectionNameResponse;
+import com.example.myhouse24admin.model.meterReadings.SelectSearchRequest;
+import com.example.myhouse24admin.model.meterReadings.ServiceNameResponse;
 import com.example.myhouse24admin.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -95,9 +92,9 @@ public class InvoiceController {
         return sectionService.getSectionForSelect(requestMap);
     }
     @GetMapping("/get-apartments")
-    public @ResponseBody Page<ApartmentNumberResponse> getApartments(SelectSearchRequest selectSearchRequest,
-                                                                     @RequestParam("houseId")Long houseId,
-                                                                     @RequestParam(value = "sectionId", required = false)Long sectionId) {
+    public @ResponseBody Page<com.example.myhouse24admin.model.meterReadings.ApartmentNumberResponse> getApartments(SelectSearchRequest selectSearchRequest,
+                                                                                                                    @RequestParam("houseId")Long houseId,
+                                                                                                                    @RequestParam(value = "sectionId", required = false)Long sectionId) {
         return apartmentService.getApartmentsForSelect(selectSearchRequest, houseId, sectionId);
     }
     @GetMapping("/get-services")

@@ -375,7 +375,7 @@ class ApartmentOwnerServiceImplTest {
     @Test
     void getOwnerNameResponses() {
         Pageable pageable = PageRequest.of(0, 10);
-        OwnerNameResponse ownerNameResponse = new OwnerNameResponse(1L, "name");
+        OwnerNameResponse ownerNameResponse = new OwnerNameResponse(1L, "name", false);
 
         when(apartmentOwnerRepo.findAll(any(Specification.class), any(Pageable.class)))
                 .thenReturn(new PageImpl<>(List.of(new ApartmentOwner()), pageable, 10));

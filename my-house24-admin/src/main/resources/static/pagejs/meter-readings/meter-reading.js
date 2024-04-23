@@ -321,21 +321,6 @@ function sendData(formData) {
     });
 }
 
-$("#cancel-button").on("click", function () {
-    blockBy("#form");
-    clearFields();
-    if(defaultReading !== undefined){
-        setFields(defaultReading);
-    }
-    $('#apartmentId').prop('disabled', true);
-    $('#section').prop('disabled', true);
-    unblockBy("#form");
-});
-function clearFields() {
-    $("#form").find('input:text, #readings').val('');
-    $("#form").find('select').val(null).trigger('change');
-}
-
 $("#save-add-button").on("click", function () {
     blockCardDody();
     clearAllErrorMessage();
