@@ -215,6 +215,7 @@ function initInputAndSelect() {
     $('.button-save').on('click', function () {
         clearAllErrorMessage();
         blockCardDody();
+        trimInputsValue();
 
         let formData = new FormData($('#apartmentForm')[0]);
 

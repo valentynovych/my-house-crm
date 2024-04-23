@@ -334,6 +334,7 @@ function fillInputs(apartment) {
     $('#apartmentForm .button-save, #apartmentForm .button-save-and-add').on('click', function () {
         clearAllErrorMessage();
         blockCardDody();
+        trimInputsValue();
         $('button.bg-label-danger').removeClass('bg-label-danger');
 
         let formData = new FormData($('#apartmentForm')[0]);

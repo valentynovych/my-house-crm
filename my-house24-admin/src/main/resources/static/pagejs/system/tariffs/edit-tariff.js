@@ -262,6 +262,7 @@ function reorderServiceIndexes() {
 $('#save-tariff').on('click', function () {
     blockCardDody();
     clearAllErrorMessage();
+    trimInputsValue();
 
     let formData = new FormData($('#tariffForm')[0]);
 

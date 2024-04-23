@@ -126,6 +126,8 @@ function validateFile(value){
 $("#save-button").on("click", function () {
     blockCardDody();
     clearAllErrorMessage();
+    trimInputsValue();
+
     let formData = collectData();
     sendData(formData);
 });

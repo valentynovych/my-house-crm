@@ -279,6 +279,8 @@ function getStatusLabel(role) {
 $('.button-save').on('click', function () {
     clearAllErrorMessage();
     blockCardDody();
+    trimInputsValue();
+
     const val = $inputVisitTime.val().split(':');
     const visitDate = new Date(Date.parse($flatpickrDate.selectedDates));
     visitDate.setHours(val[0]);

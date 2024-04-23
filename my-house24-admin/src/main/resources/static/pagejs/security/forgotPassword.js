@@ -1,5 +1,6 @@
 function send(){
     clearAllErrorMessage();
+    trimInputsValue();
     $.ajax({
         type : "POST",
         url : "forgotPassword",

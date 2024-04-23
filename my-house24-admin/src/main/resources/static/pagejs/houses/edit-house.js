@@ -338,6 +338,8 @@ $('input[type="file"]').on('change', function () {
 $('.save-button').on('click', function () {
     clearAllErrorMessage();
     blockBy('#houseForm');
+    trimInputsValue();
+
     $('button.bg-label-danger').removeClass('bg-label-danger');
 
     let formData = new FormData($('#houseForm')[0]);

@@ -177,6 +177,7 @@ function reorderServiceIndexes() {
 $('#save-services').on('click', function () {
     blockBy('#servicesForm');
     clearAllErrorMessage();
+    trimInputsValue();
 
     let formData = new FormData($('#servicesForm')[0]);
     $('input.form-check-input').each(function (i, input) {
@@ -328,6 +329,7 @@ function reorderIndexes() {
 $('#save-units').on('click', function () {
     clearAllErrorMessage();
     blockBy('#measurementUnist');
+    trimInputsValue();
 
     let formData = new FormData($('#measurementUnist')[0]);
     for (const unitsToDeleteElement of unitsToDelete) {

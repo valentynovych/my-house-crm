@@ -51,6 +51,8 @@ $(window).on("load", function () {
     $(".button-save").on("click", function () {
         clearAllErrorMessage();
         blockCardDody();
+        trimInputsValue();
+
         let formData = new FormData();
 
         for (var key in paymentItem) {

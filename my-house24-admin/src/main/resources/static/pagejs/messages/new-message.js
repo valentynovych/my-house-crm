@@ -208,6 +208,7 @@ function initEditor() {
 $('.button-send').on('click', function () {
     clearAllErrorMessage();
     blockCardDody();
+    trimInputsValue();
 
     let formData = new FormData($('#message-form')[0]);
     formData.set('text', $('.ql-editor').html());

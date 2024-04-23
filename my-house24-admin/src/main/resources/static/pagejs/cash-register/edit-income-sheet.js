@@ -212,6 +212,7 @@ function fillInputs(sheet) {
     $('.button-save').on('click', function () {
         clearAllErrorMessage();
         blockCardDody();
+        trimInputsValue();
 
         let formData = new FormData($('#income-sheet-form')[0]);
         formData.set("processed", $checkboxIsProcessed.prop('checked'));

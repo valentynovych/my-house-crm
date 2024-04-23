@@ -572,6 +572,7 @@ function drawServiceTable(response) {
 }
 
 $("#save-button").on("click", function () {
+    trimInputsValue();
     let formData = collectItemsData();
     appendInvoiceFields(formData);
     for (var pair of formData.entries()) {
