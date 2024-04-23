@@ -30,7 +30,7 @@ function fillInputs(apartment) {
     $edit.attr('href', $edit.attr('href') + apartment.id);
 
     $('#personal-account').html(`<a href="../../personal-accounts/veiw-account/${apartment.personalAccount.id}">
-                                            ${decorateAccountNumber(apartment.personalAccount.accountNumber)}</a>`);
+                                            ${apartment.personalAccount.accountNumber}</a>`);
     $('#apartment-number').html(apartmentNumber);
     $('#area').html(apartment.area);
 
@@ -54,8 +54,3 @@ $('#accept-payment').on('click', function () {
 $('#create-invoice').on('click', function () {
     window.location = '../../invoices/add?forApartment=' + apartmentToRestore.id;
 });
-
-function decorateAccountNumber(accountNumber) {
-    let s = (accountNumber + '').padStart(10, '0000000000');
-    return s.substring(0, 5) + '-' + s.substring(5, 10);
-}

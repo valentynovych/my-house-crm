@@ -14,7 +14,7 @@ function initInputAndSelect() {
         url: '../personal-accounts/get-minimal-free-account-number',
         type: 'get',
         success: function (response) {
-            $inputAccountNumber.val(decorateAccountNumber(response));
+            $inputAccountNumber.val(response);
         },
         error: function (error) {
             console.log(error);
@@ -218,10 +218,6 @@ function initInputAndSelect() {
 
         let formData = new FormData($('#apartmentForm')[0]);
 
-        let accountNumber = formData.get('accountNumber');
-        if (accountNumber) {
-            formData.set('accountNumber', accountNumber.replace(/\D/, ''));
-        }
 
         // for (const formDatum of formData.entries()) {
         //     console.log(formDatum)

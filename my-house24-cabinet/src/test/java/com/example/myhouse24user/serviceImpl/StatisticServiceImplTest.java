@@ -57,7 +57,7 @@ class StatisticServiceImplTest {
         this.apartment.setBalance(BigDecimal.valueOf(-1552.4));
 
         PersonalAccount personalAccount = new PersonalAccount();
-        personalAccount.setAccountNumber(1L);
+        personalAccount.setAccountNumber("00000-00001");
         this.apartment.setPersonalAccount(personalAccount);
 
         Service invoiceItemService = new Service();

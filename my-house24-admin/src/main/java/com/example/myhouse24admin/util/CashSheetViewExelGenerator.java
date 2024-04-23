@@ -100,10 +100,8 @@ public class CashSheetViewExelGenerator {
         if (sheetResponse.getPersonalAccount() != null) {
             createRow(messageSource.getMessage("cash-register-label-apartment-owner", new Object[0], locale),
                     headerStyle, sheetResponse.getPersonalAccount().apartmentOwner().fullName(), style);
-            String personalAccountNumber = StringUtils.leftPad(sheetResponse.getPersonalAccount().accountNumber().toString(), 10, "0");
-            String string = personalAccountNumber.substring(0, 5) + "-" + personalAccountNumber.substring(5, 10);
             createRow(messageSource.getMessage("cash-register-label-personal-account", new Object[0], locale),
-                    headerStyle, string, style);
+                    headerStyle, sheetResponse.getPersonalAccount().accountNumber(), style);
         }
 
         createRow(messageSource.getMessage("cash-register-label-payment-item-name", new Object[0], locale),

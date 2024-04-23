@@ -6,26 +6,26 @@ import com.example.myhouse24admin.validators.personalAccountValidation.UniquePer
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @NotRequiredApartmentInPersonalAccount
 public class PersonalAccountAddRequest {
 
     @NotNull(message = "{validation-field-required}")
-    @Min(value = 1, message = "{validation-value-isPositive}")
-    @Max(value = 9_999_999_999L, message = "{validation-size-max}")
+    @Pattern(regexp = "^[0-9]{5}-[0-9]{5}$" , message = "{validation-invalid-value}")
     @UniquePersonalAccountNumber
-    private Long accountNumber;
+    private String accountNumber;
     @NotNull(message = "{validation-field-required}")
     private PersonalAccountStatus status;
     private Long houseId;
     private Long sectionId;
     private Long apartmentId;
 
-    public Long getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Long accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 

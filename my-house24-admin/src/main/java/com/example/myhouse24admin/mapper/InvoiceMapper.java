@@ -107,8 +107,7 @@ public interface InvoiceMapper {
     @Mapping(target = "invoiceItems", source = "xmlInvoiceItemsDto")
     @Mapping(target = "total", source = "totalPrice")
     @Mapping(target = "owner", expression = "java(invoice.getApartment().getOwner().getLastName()+\" \"+invoice.getApartment().getOwner().getFirstName()+\" \"+invoice.getApartment().getOwner().getMiddleName())")
-    @Mapping(target = "personalAccount",
-            expression = "java(formAccountNumber(invoice.getApartment().getPersonalAccount().getAccountNumber()))")
+    @Mapping(target = "personalAccount", source = "invoice.apartment.personalAccount.accountNumber")
     @Mapping(target = "house", source = "invoice.apartment.house.name")
     @Mapping(target = "section", source = "invoice.apartment.section.name")
     @Mapping(target = "apartment", source = "invoice.apartment.apartmentNumber")
@@ -117,13 +116,4 @@ public interface InvoiceMapper {
     @Mapping(target = "creationDate", expression = "java(convertInstantToString(invoice.getCreationDate()))")
     XmlInvoiceDto invoiceToXmlInvoiceDto(Invoice invoice, XmlInvoiceItemsDto xmlInvoiceItemsDto,
                                          BigDecimal totalPrice);
-    default String formAccountNumber(Long longNumber){
-        String number = "";
-        for (int i = 0; i < 10 - longNumber.toString().length(); i++){
-            number += "0";
-        }
-        number += longNumber;
-        String accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10);
-        return accountNumber;
-    }
 }

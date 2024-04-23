@@ -112,9 +112,17 @@ function fillInputs(staff) {
     $status.trigger('change');
 
 
-    if (staffId === staffToRestore.id || staff.role.id === 1) {
+    if (staffId === staffToRestore.id) {
         $role.prop('disabled', true);
         $status.prop('disabled', true);
+    }
+    if (staff.role.id === 1) {
+        $role.prop('disabled', true);
+        $status.prop('disabled', true);
+        $('#email').prop('disabled', true);
+        $('#password').prop('disabled', true);
+        $('#confirmPassword').prop('disabled', true);
+        $('.generate-password').prop('disabled', true);
     }
 }
 

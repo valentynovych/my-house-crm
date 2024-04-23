@@ -7,7 +7,7 @@ import jakarta.persistence.Enumerated;
 
 public class PersonalAccountTableResponse {
     private Long id;
-    private Long accountNumber;
+    private String accountNumber;
     @Enumerated(EnumType.STRING)
     private PersonalAccountStatus status;
     private ApartmentResponse apartment;
@@ -20,11 +20,11 @@ public class PersonalAccountTableResponse {
         this.id = id;
     }
 
-    public Long getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Long accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 

@@ -55,8 +55,7 @@ function setFields(response) {
         $(this).text(breadCrumb + response.number);
     });
     if(response.accountNumberResponse.accountNumber != null) {
-        let number = response.accountNumberResponse.accountNumber.toString().padStart(10, '0');
-        let accountNumber = number.substring(0, 5) + "-" + number.substring(5, 10);
+        let accountNumber = response.accountNumberResponse.accountNumber;
         $("#account").append(`<a href="../../personal-accounts/view-account/${response.accountNumberResponse.id}">${accountNumber}</a>`);
     }
     var parts = response.creationDate.split('.');

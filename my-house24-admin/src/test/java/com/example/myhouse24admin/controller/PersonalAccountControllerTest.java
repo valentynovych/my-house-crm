@@ -128,7 +128,7 @@ class PersonalAccountControllerTest {
         // given
         var personalAccountShortResponse = new PersonalAccountShortResponse();
         personalAccountShortResponse.setId(1L);
-        personalAccountShortResponse.setAccountNumber(1L);
+        personalAccountShortResponse.setAccountNumber("1L");
 
         List<PersonalAccountShortResponse> personalAccountShortResponses =
                 List.of(personalAccountShortResponse, personalAccountShortResponse, personalAccountShortResponse);
@@ -160,7 +160,7 @@ class PersonalAccountControllerTest {
         // given
         var personalAccountTableResponse = new PersonalAccountTableResponse();
         personalAccountTableResponse.setId(1L);
-        personalAccountTableResponse.setAccountNumber(1L);
+        personalAccountTableResponse.setAccountNumber("00000-00001");
         personalAccountTableResponse.setStatus(PersonalAccountStatus.ACTIVE);
         personalAccountTableResponse.setApartment(new ApartmentResponse());
 
@@ -218,7 +218,7 @@ class PersonalAccountControllerTest {
     void addNewPersonalAccount_WhenRequestIsValid() throws Exception {
         // given
         var personalAccountAddRequest = new PersonalAccountAddRequest();
-        personalAccountAddRequest.setAccountNumber(2L);
+        personalAccountAddRequest.setAccountNumber("00000-00001");
         personalAccountAddRequest.setStatus(PersonalAccountStatus.ACTIVE);
         personalAccountAddRequest.setApartmentId(1L);
 
@@ -230,7 +230,7 @@ class PersonalAccountControllerTest {
         doNothing()
                 .when(personalAccountService).addNewPersonalAccount(any(PersonalAccountAddRequest.class));
         doReturn(false).
-                when(personalAccountRepo).existsPersonalAccountByAccountNumber(eq(2L));
+                when(personalAccountRepo).existsPersonalAccountByAccountNumber(eq("00000-00001"));
         this.mockMvc.perform(request)
 
                 // then
@@ -238,7 +238,7 @@ class PersonalAccountControllerTest {
                 .andExpect(status().isOk());
 
         verify(personalAccountRepo, times(1))
-                .existsPersonalAccountByAccountNumber(eq(2L));
+                .existsPersonalAccountByAccountNumber(eq("00000-00001"));
         verify(personalAccountService, times(1))
                 .addNewPersonalAccount(any(PersonalAccountAddRequest.class));
     }
@@ -270,7 +270,7 @@ class PersonalAccountControllerTest {
         // given
         var personalAccountResponse = new PersonalAccountResponse();
         personalAccountResponse.setId(1L);
-        personalAccountResponse.setAccountNumber(1L);
+        personalAccountResponse.setAccountNumber("00000-00001");
         personalAccountResponse.setStatus(PersonalAccountStatus.ACTIVE);
         ApartmentResponse apartment = new ApartmentResponse();
         apartment.setId(1L);
@@ -292,7 +292,7 @@ class PersonalAccountControllerTest {
                 .andExpect(content().json("""
                             {
                                 "id": 1,
-                                "accountNumber": 1,
+                                "accountNumber": "00000-00001",
                                 "status": "ACTIVE",
                                 "apartment": {
                                     "id": 1,
@@ -312,7 +312,7 @@ class PersonalAccountControllerTest {
         personalAccount.setId(1L);
         var personalAccountUpdateRequest = new PersonalAccountUpdateRequest();
         personalAccountUpdateRequest.setId(1L);
-        personalAccountUpdateRequest.setAccountNumber(2L);
+        personalAccountUpdateRequest.setAccountNumber("00000-00001");
         personalAccountUpdateRequest.setStatus(PersonalAccountStatus.ACTIVE);
         personalAccountUpdateRequest.setApartmentId(1L);
 
@@ -322,7 +322,7 @@ class PersonalAccountControllerTest {
 
         // when
         doReturn(Optional.of(personalAccount))
-                .when(personalAccountRepo).findPersonalAccountByAccountNumber(eq(2L));
+                .when(personalAccountRepo).findPersonalAccountByAccountNumber(eq("00000-00001"));
         doNothing()
                 .when(personalAccountService).updatePersonalAccount(any(PersonalAccountUpdateRequest.class));
         this.mockMvc.perform(request)
@@ -331,7 +331,7 @@ class PersonalAccountControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        verify(personalAccountRepo, times(1)).findPersonalAccountByAccountNumber(eq(2L));
+        verify(personalAccountRepo, times(1)).findPersonalAccountByAccountNumber(eq("00000-00001"));
         verify(personalAccountService, times(1))
                 .updatePersonalAccount(any(PersonalAccountUpdateRequest.class));
     }
@@ -343,7 +343,7 @@ class PersonalAccountControllerTest {
         personalAccount.setId(2L);
         var personalAccountUpdateRequest = new PersonalAccountUpdateRequest();
         personalAccountUpdateRequest.setId(1L);
-        personalAccountUpdateRequest.setAccountNumber(2L);
+        personalAccountUpdateRequest.setAccountNumber("2L");
         personalAccountUpdateRequest.setStatus(PersonalAccountStatus.ACTIVE);
         personalAccountUpdateRequest.setApartmentId(1L);
 
@@ -353,14 +353,14 @@ class PersonalAccountControllerTest {
 
         // when
         doReturn(Optional.of(personalAccount))
-                .when(personalAccountRepo).findPersonalAccountByAccountNumber(eq(2L));
+                .when(personalAccountRepo).findPersonalAccountByAccountNumber(eq("2L"));
         this.mockMvc.perform(request)
 
                 // then
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
-        verify(personalAccountRepo, times(1)).findPersonalAccountByAccountNumber(eq(2L));
+        verify(personalAccountRepo, times(1)).findPersonalAccountByAccountNumber(eq("2L"));
     }
 
     @Test
@@ -370,14 +370,14 @@ class PersonalAccountControllerTest {
                 .with(user(userDetails));
 
         // when
-        doReturn(1L)
+        doReturn("00000-00001")
                 .when(personalAccountService).getMinimalFreeAccountNumber();
         this.mockMvc.perform(request)
 
                 // then
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value(1L));
+                .andExpect(jsonPath("$").value("00000-00001"));
 
         verify(personalAccountService, times(1)).getMinimalFreeAccountNumber();
     }
@@ -391,7 +391,7 @@ class PersonalAccountControllerTest {
 
         var personalAccountTableResponse = new PersonalAccountTableResponse();
         personalAccountTableResponse.setId(1L);
-        personalAccountTableResponse.setAccountNumber(1L);
+        personalAccountTableResponse.setAccountNumber("1L");
         personalAccountTableResponse.setStatus(PersonalAccountStatus.ACTIVE);
         ApartmentResponse apartment = new ApartmentResponse();
         apartment.setId(1L);

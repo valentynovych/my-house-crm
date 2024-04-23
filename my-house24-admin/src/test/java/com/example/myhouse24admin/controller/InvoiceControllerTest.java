@@ -267,7 +267,7 @@ class InvoiceControllerTest {
 
     @Test
     void getOwner() throws Exception {
-        OwnerResponse ownerResponse = new OwnerResponse(1L, "name", "phone", 1L, "tariff");
+        OwnerResponse ownerResponse = new OwnerResponse("1L", "name", "phone", 1L, "tariff");
         when(invoiceService.getOwnerResponse(anyLong())).thenReturn(ownerResponse);
 
         this.mockMvc.perform(get("/my-house/admin/invoices/get-owner")

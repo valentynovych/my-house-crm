@@ -38,9 +38,8 @@ function fillInputs(account) {
 
     const $breadcrumb = $('.breadcrumb-item.active');
     const $edit = $('#edit-link');
-    const $decorateAccountNumber = decorateAccountNumber(account.accountNumber);
     $breadcrumb.addClass('d-flex flex-wrap gap-2')
-    $breadcrumb.html($breadcrumb.html() + `<span>№${$decorateAccountNumber}</span>`)
+    $breadcrumb.html($breadcrumb.html() + `<span>№${account.accountNumber}</span>`)
     $edit.attr('href', $edit.attr('href') + account.id);
 
     let balanceText = '-';
@@ -58,7 +57,7 @@ function fillInputs(account) {
     }
 
     $('#status').html(statusBadge);
-    $('#accountNumber').val($decorateAccountNumber);
+    $('#accountNumber').val(account.accountNumber);
 
 
     const $house = $('#house');
@@ -101,8 +100,3 @@ $('#accept-payment').on('click', function () {
 $('#create-invoice').on('click', function () {
     window.location = '../../invoices/add?forApartment=' + accountToRestore.apartment.id;
 });
-
-function decorateAccountNumber(accountNumber) {
-    let s = (accountNumber + '').padStart(10, '0000000000');
-    return s.substring(0, 5) + '-' + s.substring(5, 10);
-}

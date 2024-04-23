@@ -115,9 +115,7 @@ public class PersonalAccountExelGenerator {
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
             ApartmentResponse apartment = personalAccount.getApartment();
-            String accountNumber = String.format("%010d", personalAccount.getAccountNumber());
-            accountNumber = accountNumber.substring(0, 5) + "-" + accountNumber.substring(5);
-            createCell(row, columnCount++, accountNumber, style);
+            createCell(row, columnCount++, personalAccount.getAccountNumber(), style);
             createCell(row, columnCount++, personalAccount.getStatus(), style);
             createCell(row, columnCount++, apartment != null ? StringUtils.leftPad(apartment.getApartmentNumber(), 5, "0") : "-", style);
             createCell(row, columnCount++, apartment != null ? apartment.getHouse().getName() : "-", style);

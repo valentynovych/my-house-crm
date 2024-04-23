@@ -381,7 +381,7 @@ class CashRegisterControllerTest {
         sheetResponse.setCreationDate(Instant.now());
         sheetResponse.setPersonalAccount(new PersonalAccountWithApartmentOwnerResponse(
                 1L,
-                1L,
+                "1L",
                 new ApartmentOwnerShortResponse(1L, "testOwner", "+38050000000")
         ));
         PaymentItemDto paymentItem = new PaymentItemDto();
@@ -432,8 +432,7 @@ class CashRegisterControllerTest {
         tableResponse.setApartmentOwner(
                 new ApartmentOwnerShortResponse(1L, "Test Full Name", "+380123456789"));
         PersonalAccountShortResponse personalAccount = new PersonalAccountShortResponse();
-        personalAccount.setAccountNumber(1L);
-        personalAccount.setAccountNumber(1L);
+        personalAccount.setAccountNumber("1L");
         tableResponse.setAmount(BigDecimal.valueOf(100.0));
         tableResponse.setPersonalAccount(personalAccount);
 

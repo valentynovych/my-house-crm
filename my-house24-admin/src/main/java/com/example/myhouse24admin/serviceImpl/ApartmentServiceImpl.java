@@ -123,7 +123,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                 });
     }
 
-    private PersonalAccount createNewPersonalAccountWithAccountNumber(Long accountNumber) {
+    private PersonalAccount createNewPersonalAccountWithAccountNumber(String accountNumber) {
         logger.info("Creating new personal account with account number: {}", accountNumber);
         PersonalAccount personalAccount = new PersonalAccount();
         personalAccount.setStatus(PersonalAccountStatus.ACTIVE);
