@@ -13,7 +13,7 @@ public interface OwnerMessageRepo extends JpaRepository<OwnerMessage, Long> {
 
     Optional<OwnerMessage> findOwnerMessageByMessageIdAndApartmentOwner_Email(Long messageId, String email);
 
-    Page<OwnerMessage> findOwnerMessagesByApartmentOwner_EmailAndReadFalse(String name, int page, int pageSize, Pageable pageable);
+    Page<OwnerMessage> findOwnerMessagesByApartmentOwner_EmailAndIsReadFalse(String name, Pageable pageable);
 
     Page<OwnerMessage> findOwnerMessagesByApartmentOwner_Email(String name, Pageable pageable);
 }

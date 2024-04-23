@@ -51,8 +51,8 @@ public class MessageServiceImpl implements MessageService {
     public Page<MessageResponse> getUnreadMessages(Principal principal, int page, int pageSize) {
         logger.info("getUnreadMessages() - Page: {} and pageSize: {} and ownerEmail: {}", page, pageSize, principal.getName());
         Pageable pageable = Pageable.ofSize(pageSize).withPage(page);
-        Page<OwnerMessage> ownerMessages = ownerMessageRepo.findOwnerMessagesByApartmentOwner_EmailAndReadFalse(
-                principal.getName(), page, pageSize, pageable);
+        Page<OwnerMessage> ownerMessages = ownerMessageRepo.findOwnerMessagesByApartmentOwner_EmailAndIsReadFalse(
+                principal.getName(), pageable);
         Page<MessageResponse> messageResponses = convertPageOwnerMessageToPageMessageResponse(ownerMessages);
         logger.info("getUnreadMessages() - Page: {} and pageSize: {} and ownerEmail: {} converted", page, pageSize, principal.getName());
         return messageResponses;
