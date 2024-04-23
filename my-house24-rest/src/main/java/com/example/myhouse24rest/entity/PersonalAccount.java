@@ -18,7 +18,7 @@ public class PersonalAccount {
     @JoinColumn(name = "apartment_id", referencedColumnName = "id")
     private Apartment apartment;
     @Column(nullable = false, unique = true)
-    private Long accountNumber;
+    private String accountNumber;
 
     public Long getId() {
         return id;
@@ -52,16 +52,11 @@ public class PersonalAccount {
         this.apartment = apartment;
     }
 
-    public void setAccountNumber(Long personalAccountNew) {
+    public void setAccountNumber(String personalAccountNew) {
         this.accountNumber = personalAccountNew;
     }
 
-    public Long getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
-    }
-
-    public String getFormattedPersonalAccountNumber() {
-        String numberOfString = StringUtils.leftPad(String.valueOf(accountNumber), 10, "0");
-        return numberOfString.substring(0, 5) + "-" + numberOfString.substring(5, 10);
     }
 }

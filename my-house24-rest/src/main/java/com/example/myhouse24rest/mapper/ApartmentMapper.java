@@ -20,7 +20,7 @@ public interface ApartmentMapper {
 
     @Mapping(target = "apartmentId", source = "apartment.id")
     @Mapping(target = "apartmentNumber", source = "apartment.apartmentNumber")
-    @Mapping(target = "personalAccountNumber", expression = "java(apartment.getPersonalAccount().getFormattedPersonalAccountNumber())")
+    @Mapping(target = "personalAccountNumber", source = "apartment.personalAccount.accountNumber")
     @Mapping(target = "houseName", source = "apartment.house.name")
     @Mapping(target = "address", source = "apartment.house.address")
     @Mapping(target = "section", source = "apartment.section.name")
