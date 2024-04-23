@@ -17,8 +17,6 @@ const $inputAmountCleave = new Cleave($inputAmount, {
 });
 
 $inputSheetNumber.prop('disabled', true);
-$inputSheetNumber.on('click', function () {
-    $(this).prop('disabled', true);})
 
 function initInputAndSelect() {
 

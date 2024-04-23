@@ -10,8 +10,6 @@ public class CashSheetExpenseUpdateRequest {
     @Min(value = 1, message = "{validation-invalid-value}")
     private Long id;
     @NotEmpty(message = "{validation-field-required}")
-    private String sheetNumber;
-    @NotEmpty(message = "{validation-field-required}")
     private String creationDate;
     @NotNull(message = "{validation-field-required}")
     @Min(value = 1, message = "{validation-invalid-value}")
@@ -33,14 +31,6 @@ public class CashSheetExpenseUpdateRequest {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getSheetNumber() {
-        return sheetNumber;
-    }
-
-    public void setSheetNumber(String sheetNumber) {
-        this.sheetNumber = sheetNumber;
     }
 
     public String getCreationDate() {

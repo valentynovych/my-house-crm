@@ -11,8 +11,6 @@ const $selectStaff = $('[name="staffId"]');
 let sheetToRestore;
 
 $inputSheetNumber.prop('disabled', true);
-$inputSheetNumber.on('click', function () {
-    $(this).prop('disabled', true);})
 
 $(document).ready(function () {
     blockCardDody();

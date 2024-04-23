@@ -46,6 +46,7 @@ public class CashRegisterServiceImpl implements CashRegisterService {
     public void addNewIncomeSheet(CashSheetIncomeAddRequest addRequest) {
         logger.info("addNewIncomeSheet() -> start");
         CashSheet cashSheet = cashSheetMapper.cashSheetIncomeAddRequestToCashSheet(addRequest);
+        cashSheet.setSheetNumber(getNextSheetNumber());
         CashSheet save = cashSheetRepo.save(cashSheet);
         logger.info("addNewIncomeSheet() -> end, save new Income Sheet with id: {}", save.getId());
     }
@@ -84,6 +85,7 @@ public class CashRegisterServiceImpl implements CashRegisterService {
     public void addNewExpenseSheet(CashSheetExpenseAddRequest addRequest) {
         logger.info("addNewExpenseSheet() -> start");
         CashSheet cashSheet = cashSheetMapper.cashSheetExpenseAddRequestToCashSheet(addRequest);
+        cashSheet.setSheetNumber(getNextSheetNumber());
         CashSheet save = cashSheetRepo.save(cashSheet);
         logger.info("addNewExpenseSheet() -> end, save new Expense Sheet with id: {}", save.getId());
     }

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
 public class CashSheetIncomeAddRequest {
-    private String sheetNumber;
+
     @NotEmpty(message = "{validation-field-required}")
     private String creationDate;
     @NotNull(message = "{validation-field-required}")
@@ -86,13 +86,5 @@ public class CashSheetIncomeAddRequest {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public String getSheetNumber() {
-        return sheetNumber;
-    }
-
-    public void setSheetNumber(String sheetNumber) {
-        this.sheetNumber = sheetNumber;
     }
 }
