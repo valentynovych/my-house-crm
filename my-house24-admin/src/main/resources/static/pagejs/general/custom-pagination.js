@@ -106,35 +106,36 @@ function drawPaginationElements(result, method) {
     const to = from + result.numberOfElements - 1;
     const total = result.totalElements;
 
-    if (from === total) {
-        $('<div class="dataTables_info text-nowrap"">' +
-            tableShowing + ' ' + from + ' ' + tableOf + ' ' + total + ' ' + tableEntries +
-            '</div>').appendTo(".details-table");
-    } else {
-        $('<div class="dataTables_info text-nowrap">' +
-            tableShowing + ' ' + from + '-' + to + ' ' + tableOf + ' ' + total + ' ' + tableEntries +
-            '</div>').appendTo(".details-table")
+    if (total > 0) {
+        if (from === total) {
+            $('<div class="dataTables_info text-nowrap"">' +
+                tableShowing + ' ' + from + ' ' + tableOf + ' ' + total + ' ' + tableEntries +
+                '</div>').appendTo(".details-table");
+        } else {
+            $('<div class="dataTables_info text-nowrap">' +
+                tableShowing + ' ' + from + '-' + to + ' ' + tableOf + ' ' + total + ' ' + tableEntries +
+                '</div>').appendTo(".details-table")
+        }
+
+        $('<label class="ms-3 text-nowrap">' + ' ' + tableShow + ' ' + ' </label>' +
+            '<div class="selecte-wrapper col-3 position-relative"><select name="tables_length" class="form-select form-select-sm">\n' +
+            '      <option value="2">2</option>\n' +
+            '      <option value="5">5</option>\n' +
+            '      <option value="10">10</option>\n' +
+            '       <option value="20">20</option>\n' +
+            '</select> </div>').appendTo(".details-table");
+
+        var $select = $('select[name="tables_length"]');
+        $select.select2({
+            language: "uk",
+            minimumResultsForSearch: -1,
+            dropdownParent: $select.parent()
+        });
+        $select.on("change", function () {
+            tableLength = this.value;
+            window[method](0);
+        });
+        $select.val(tableLength);
+        $select.trigger('change.select2');
     }
-
-    $('<label class="ms-3 text-nowrap">'+ ' '+ tableShow + ' ' + ' </label>' +
-        '<div class="selecte-wrapper col-3 position-relative"><select name="tables_length" class="form-select form-select-sm">\n' +
-        '      <option value="2">2</option>\n' +
-        '      <option value="5">5</option>\n' +
-        '      <option value="10">10</option>\n' +
-        '       <option value="20">20</option>\n' +
-        '</select> </div>').appendTo(".details-table");
-
-    var $select = $('select[name="tables_length"]');
-    $select.select2({
-        language: "uk",
-        minimumResultsForSearch: -1,
-        dropdownParent: $select.parent()
-    });
-    $select.on("change", function () {
-        tableLength = this.value;
-        window[method](0);
-    });
-    $select.val(tableLength);
-    $select.trigger('change.select2');
-
 }
