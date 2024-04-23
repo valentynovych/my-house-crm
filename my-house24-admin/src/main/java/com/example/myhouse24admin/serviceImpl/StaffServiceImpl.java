@@ -164,7 +164,9 @@ public class StaffServiceImpl implements StaffService {
 
     private void checkChangeRoleOrStatusInAdmin(StaffEditRequest staffEditRequest) throws StaffIllegalStateAdminException {
         if (!staffEditRequest.status().equals(StaffStatus.ACTIVE)
-                || !staffEditRequest.roleId().equals(1L)) {
+                || !staffEditRequest.roleId().equals(1L)
+                || !staffEditRequest.email().equals(ADMIN_EMAIL)
+                || staffEditRequest.password() != null) {
             logger.error("Admin cannot change role or status");
             throw new StaffIllegalStateAdminException("Admin cannot change role or status");
         }
