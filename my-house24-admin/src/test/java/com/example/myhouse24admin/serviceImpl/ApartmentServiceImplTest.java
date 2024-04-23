@@ -447,7 +447,8 @@ class ApartmentServiceImplTest {
     }
     @Test
     void deleteApartmentsByHouseId(){
-        when(apartmentRepo.findAll(any(Specification.class))).thenReturn(List.of(new Apartment()));
+        when(apartmentRepo.findAll(any(Specification.class))).thenReturn(List.of(apartment));
+        when(personalAccountRepo.save(any(PersonalAccount.class))).thenReturn(new PersonalAccount());
         when(apartmentRepo.saveAll(anyList())).thenReturn(List.of(new Apartment()));
 
         apartmentService.deleteApartmentsByHouseId(1L);

@@ -5,12 +5,14 @@ import com.example.myhouse24admin.model.authentication.ForgotPasswordRequest;
 import com.example.myhouse24admin.repository.StaffRepo;
 import com.example.myhouse24admin.service.MailService;
 import com.example.myhouse24admin.service.PasswordResetTokenService;
+import com.example.myhouse24admin.service.RoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.is;
@@ -36,6 +38,10 @@ class AuthenticationControllerTest {
     private MailService mailService;
     @Autowired
     private StaffRepo staffRepo;
+    @Autowired
+    private UserDetails userDetails;
+    @Autowired
+    private RoleService roleService;
 
     @Test
     void getLoginPage() throws Exception {
@@ -43,6 +49,16 @@ class AuthenticationControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("security/login"));
+    }
+    @Test
+    void getLoginPage_For_Authenticated_User() throws Exception {
+        when(roleService.getAllowedEndPoint(anyString())).thenReturn("statistic");
+
+        this.mockMvc.perform(get("/admin/login")
+                        .with(user(userDetails)))
+                .andDo(print())
+                .andExpect(status().isFound())
+                .andExpect(view().name("redirect:statistic"));
     }
 
     @Test

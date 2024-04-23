@@ -233,7 +233,7 @@ class ApartmentOwnerServiceImplTest {
     }
     @Test
     void getApartmentOwnerResponsesForTable_Debt_In_Filter_Is_False() {
-        FilterRequest filterRequest = new FilterRequest("0001", "name",
+        FilterRequest filterRequest = new FilterRequest("0001", "full name owner",
                 "phone", "email", 1L, "apartment",
                 "12.03.1990", OwnerStatus.NEW, false);
         mockForGetApartmentOwnerResponsesForTable();
@@ -383,7 +383,7 @@ class ApartmentOwnerServiceImplTest {
                 .thenReturn(List.of(ownerNameResponse));
 
         Page<OwnerNameResponse> ownerNameResponsePage = apartmentOwnerService
-                .getOwnerNameResponses(new SelectSearchRequest("search",1));
+                .getOwnerNameResponses(new SelectSearchRequest("full name owner",1));
         assertThat(ownerNameResponsePage.getContent()).hasSize(1);
         assertThat(ownerNameResponsePage.getContent().get(0)).usingRecursiveComparison()
                 .isEqualTo(ownerNameResponse);

@@ -168,12 +168,14 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
         }
         if (!filterRequest.fullName().isEmpty()) {
             String[] name = filterRequest.fullName().split(" ");
-            if(name.length == 1) {
+            if(name.length == 1 || name.length == 3) {
                 ownerSpecification = ownerSpecification.and(byLastName(name[0]));
-            } else if (name.length == 2){
+            }
+            if (name.length == 2 || name.length == 3) {
                 ownerSpecification = ownerSpecification.and(byFirstName(name[1]));
-            } else {
-            ownerSpecification = ownerSpecification.and(byMiddleName(name[2]));
+            }
+            if (name.length == 3) {
+                ownerSpecification = ownerSpecification.and(byMiddleName(name[2]));
             }
         }
         if (!filterRequest.email().isEmpty()) {
@@ -264,11 +266,13 @@ public class ApartmentOwnerServiceImpl implements ApartmentOwnerService {
     private Specification<ApartmentOwner> formSpecification(String fullName){
         Specification<ApartmentOwner> ownerSpecification = Specification.where(byDeleted());
         String[] name = fullName.split(" ");
-        if(name.length == 1) {
+        if(name.length == 1 || name.length == 3) {
             ownerSpecification = ownerSpecification.and(byLastName(name[0]));
-        } else if (name.length == 2){
+        }
+        if (name.length == 2 || name.length == 3) {
             ownerSpecification = ownerSpecification.and(byFirstName(name[1]));
-        } else {
+        }
+        if (name.length == 3) {
             ownerSpecification = ownerSpecification.and(byMiddleName(name[2]));
         }
         return  ownerSpecification;
