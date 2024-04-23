@@ -226,6 +226,10 @@ public class ApartmentServiceImpl implements ApartmentService {
         List<Apartment> apartments = apartmentRepo.findAll(byHouseId(houseId));
         for(Apartment apartment: apartments){
             apartment.setDeleted(true);
+            PersonalAccount personalAccount = apartment.getPersonalAccount();
+            personalAccount.setApartment(null);
+            apartment.setPersonalAccount(null);
+            personalAccountRepo.save(personalAccount);
         }
         apartmentRepo.saveAll(apartments);
         logger.info("deleteApartmentsByHouseId() - Apartments were deleted");
