@@ -57,6 +57,8 @@ function addTariffItem(index) {
 function initButtonAndInputs(item, index) {
     $(item).find('.delete-item').on('click', deleteTariffItem);
     autosize(document.querySelector('textarea'));
+    new Cleave($(item).find('input[name="tariffRequest.tariffItems[' + index + '].servicePrice"]'),
+        { numeral: true});
 
     let serviceSelect = item.find('select');
     serviceSelect.select2({
