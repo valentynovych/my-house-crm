@@ -12,6 +12,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -39,7 +43,12 @@ public class AuthenticationController {
 
     @GetMapping("/login")
     public ModelAndView getLoginPage() {
-        return new ModelAndView("security/login");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || authentication instanceof AnonymousAuthenticationToken){
+            return new ModelAndView("security/login");
+        } else {
+            return new ModelAndView("redirect:statistic");
+        }
     }
     @GetMapping("/forgotPassword")
     public ModelAndView getForgotPasswordPage() {

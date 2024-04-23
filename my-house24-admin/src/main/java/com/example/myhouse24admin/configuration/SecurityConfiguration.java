@@ -52,7 +52,6 @@ public class SecurityConfiguration {
                         .accessDeniedHandler(accessDeniedHandler()))
                 .formLogin((form) -> form
                         .loginPage("/admin/login")
-                        .loginProcessingUrl("/admin/login")
                         .successHandler(authenticationSuccessHandler())
                         .permitAll()
                 )
