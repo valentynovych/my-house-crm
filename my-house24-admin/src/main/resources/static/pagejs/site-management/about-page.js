@@ -190,7 +190,10 @@ function collectData() {
         formData.append($(this).attr("id"), $(this).val());
     });
     formData.append("aboutText", aboutText.root.innerHTML);
+    formData.append("aboutTextWithoutTags", aboutText.getText($("#aboutText")));
     formData.append("additionalText", additionalText.root.innerHTML);
+    formData.append("additionalTextWithoutTags", additionalText.getText($("#additionalText")));
+
     for(let id of galleryIdsToDelete){
         formData.append("galleryIdsToDelete[]", id);
     }
@@ -249,6 +252,7 @@ function sendData(formData) {
             toastr.success(successMessage);
         },
         error: function (error) {
+            toastr.error(errorMessage);
             printErrorMessageToField(error);
         }
     });

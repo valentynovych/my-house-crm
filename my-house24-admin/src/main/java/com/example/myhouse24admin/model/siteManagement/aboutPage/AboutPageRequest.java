@@ -15,10 +15,15 @@ public class AboutPageRequest {
     @NotBlank(message = "{validation-not-empty}")
     @Size(max = 4000,message = "{validation-size-max}")
     private String aboutText;
+    @NotBlank(message = "{validation-not-empty}")
+    @Size(max = 1500,message = "{validation-size-max}")
+    private String aboutTextWithoutTags;
     @Size(max = 100,message = "{validation-size-max}")
     private String additionalTitle;
     @Size(max = 2000,message = "{validation-size-max}")
     private String additionalText;
+    @Size(max = 700,message = "{validation-size-max}")
+    private String additionalTextWithoutTags;
     @ImageNotEmpty(message = "{validation-image-required}")
     private MultipartFile directorImage;
     private List<MultipartFile> newImages;
@@ -45,6 +50,14 @@ public class AboutPageRequest {
         this.aboutText = aboutText;
     }
 
+    public String getAboutTextWithoutTags() {
+        return aboutTextWithoutTags;
+    }
+
+    public void setAboutTextWithoutTags(String aboutTextWithoutTags) {
+        this.aboutTextWithoutTags = aboutTextWithoutTags;
+    }
+
     public String getAdditionalTitle() {
         return additionalTitle;
     }
@@ -59,6 +72,14 @@ public class AboutPageRequest {
 
     public void setAdditionalText(String additionalText) {
         this.additionalText = additionalText;
+    }
+
+    public String getAdditionalTextWithoutTags() {
+        return additionalTextWithoutTags;
+    }
+
+    public void setAdditionalTextWithoutTags(String additionalTextWithoutTags) {
+        this.additionalTextWithoutTags = additionalTextWithoutTags;
     }
 
     public MultipartFile getDirectorImage() {

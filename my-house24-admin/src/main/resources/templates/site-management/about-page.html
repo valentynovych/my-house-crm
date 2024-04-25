@@ -35,9 +35,11 @@
                            th:placeholder="#{site-management-title}" maxlength="100">
                 </div>
                 <div>
+                    <div name="aboutTextWithoutTags">
                     <label for="aboutText" class="form-label mt-3" th:text="#{site-management-short-text}">Короткий
                         текст</label>
                     <div id="aboutText" name="aboutText"></div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-5 px-5">
@@ -79,8 +81,10 @@
                        th:placeholder="#{site-management-title}" maxlength="100">
             </div>
             <div class="col-md-12">
+                <div name="additionalTextWithoutTags">
                 <label for="additionalText" class="form-label" th:text="#{site-management-short-text}">Короткий текст</label>
                 <div id="additionalText" name="additionalText"></div>
+                </div>
             </div>
             <div class="col-md-12 mt-2">
                 <div class="py-3" style="border-bottom-style: solid; border-bottom-color: #dbdade;">

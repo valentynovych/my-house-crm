@@ -72,8 +72,10 @@ function drawBlocks(response) {
                            maxlength="100">
                     </div>
                     <div>
+                        <div name="mainPageBlocks[${i}].descriptionWithoutTags">
                         <label for="description" class="form-label mt-3" >${description}</label>
                         <div id="${"description" + service.id}" name="mainPageBlocks[${i}].description"></div>
+                        </div>
                     </div>
                 </div>
             </div>`
@@ -126,8 +128,10 @@ $("#add-button").on("click", function () {
                            maxlength="100">
                         </div>
                         <div>
+                            <div name="mainPageBlocks[${i}].descriptionWithoutTags">
                             <label for="description" class="form-label mt-3">${description}</label>
                             <div id="${descriptionId}" name="mainPageBlocks[${i}].description"></div>
+                            </div>
                         </div>
                 </div>
         </div>`
@@ -220,6 +224,7 @@ function sendData(formData) {
             toastr.success(successMessage);
         },
         error: function (error) {
+            toastr.error(errorMessage);
             printErrorMessageToField(error);
         }
     });
@@ -229,6 +234,7 @@ function collectData() {
     let formData = new FormData();
     formData.append("title", $("#title").val());
     formData.append("text", text.root.innerHTML);
+    formData.append("textWithoutTags", text.getText($("#text")));
     formData.append("showLinks", $("#showLinks").is(':checked'));
     for(let j = 1; j < 4; j++){
         let image = $("#image"+j+"-input").prop("files")[0];
@@ -254,7 +260,10 @@ function collectBlocks(formData) {
         $(this).attr("name", "mainPageBlocks[" + ind + "].title");
         let description = descriptions[ind].root.innerHTML;
         formData.append("mainPageBlocks[" + ind + "].description", description);
-        $("#description" + currentId).attr("name", "mainPageBlocks[" + ind + "].description")
+        let descriptionWithoutTags = descriptions[ind].getText($("#description" + currentId));
+        formData.append("mainPageBlocks[" + ind + "].descriptionWithoutTags", descriptionWithoutTags);
+        $("#description" + currentId).attr("name", "mainPageBlocks[" + ind + "].description");
+        $("#description" + currentId).parent().attr("name", "mainPageBlocks[" + ind + "].descriptionWithoutTags");
         let image = $('#image-input' + currentId).prop('files')[0];
         if (image === undefined) {
             formData.append("mainPageBlocks[" + ind + "].image", new File([""], "filename"));

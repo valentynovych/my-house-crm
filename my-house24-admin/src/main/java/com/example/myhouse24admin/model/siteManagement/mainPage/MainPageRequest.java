@@ -19,6 +19,9 @@ public class MainPageRequest {
     @NotBlank(message = "{validation-not-empty}")
     @Size(max = 4000,message = "{validation-size-max}")
     private String text;
+    @NotBlank(message = "{validation-not-empty}")
+    @Size(max = 1500,message = "{validation-size-max}")
+    private String textWithoutTags;
     private boolean showLinks;
     @Image1NotEmpty(message = "{validation-image-required}")
     private MultipartFile image1;
@@ -45,6 +48,14 @@ public class MainPageRequest {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getTextWithoutTags() {
+        return textWithoutTags;
+    }
+
+    public void setTextWithoutTags(String textWithoutTags) {
+        this.textWithoutTags = textWithoutTags;
     }
 
     public boolean isShowLinks() {

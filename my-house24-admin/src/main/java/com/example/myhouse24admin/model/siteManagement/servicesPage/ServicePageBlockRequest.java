@@ -20,6 +20,9 @@ public class ServicePageBlockRequest{
         @NotBlank(message = "{validation-not-empty}")
         @Size(max = 1500,message = "{validation-size-max}")
         private String description;
+        @NotBlank(message = "{validation-not-empty}")
+        @Size(max = 500, message = "{validation-size-max}")
+        private String descriptionWithoutTags;
         private MultipartFile image;
 
         public Long getId() {
@@ -44,6 +47,14 @@ public class ServicePageBlockRequest{
 
         public void setDescription(String description) {
                 this.description = description;
+        }
+
+        public String getDescriptionWithoutTags() {
+                return descriptionWithoutTags;
+        }
+
+        public void setDescriptionWithoutTags(String descriptionWithoutTags) {
+                this.descriptionWithoutTags = descriptionWithoutTags;
         }
 
         public MultipartFile getImage() {

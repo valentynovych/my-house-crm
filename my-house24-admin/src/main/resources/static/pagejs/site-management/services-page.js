@@ -53,8 +53,10 @@ function drawServicesPage(response){
                            maxlength="100">
                     </div>
                     <div>
+                        <div name="servicePageBlocks[${i}].descriptionWithoutTags">
                         <label for="description" class="form-label mt-3" >${serviceDescription}</label>
                         <div id="${"description"+service.id}" name="servicePageBlocks[${i}].description"></div>
+                        </div>
                     </div>
                 </div>
             </div>`
@@ -159,8 +161,10 @@ $("#add-button").on("click",function () {
                            maxlength="100">
                         </div>
                         <div>
+                            <div name="servicePageBlocks[${i}].descriptionWithoutTags">
                             <label for="description" class="form-label mt-3">${serviceDescription}</label>
                             <div id="${descriptionId}" name="servicePageBlocks[${i}].description"></div>
+                            </div>
                         </div>
                 </div>
         </div>`
@@ -203,7 +207,10 @@ function collectServiceBlocksData() {
         $(this).attr("name", "servicePageBlocks["+ind+"].title");
         let description = descriptions[ind].root.innerHTML;
         formData.append("servicePageBlocks["+ind+"].description",description);
+        let descriptionWithoutTags = descriptions[ind].getText($("#description" + currentId));
+        formData.append("servicePageBlocks[" + ind + "].descriptionWithoutTags", descriptionWithoutTags);
         $("#description"+currentId).attr("name", "servicePageBlocks["+ind+"].description")
+        $("#description" + currentId).parent().attr("name", "servicePageBlocks[" + ind + "].descriptionWithoutTags");
         let image = $('#image-input'+currentId).prop('files')[0];
         if(image === undefined){
             formData.append("servicePageBlocks["+ind+"].image", new File([""], "filename"));
@@ -243,6 +250,7 @@ function sendData(formData) {
             toastr.success(successMessage);
         },
         error: function (error) {
+            toastr.error(errorMessage);
             printErrorMessageToField(error);
         }
     });
