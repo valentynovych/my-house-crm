@@ -77,6 +77,7 @@ class AboutPageControllerTest {
         AboutPageRequest aboutPageRequest = new AboutPageRequest();
         aboutPageRequest.setTitle("title");
         aboutPageRequest.setAboutText("text");
+        aboutPageRequest.setAboutTextWithoutTags("text");
         aboutPageRequest.setDirectorImage(multipartFile);
 
         AboutPage aboutPage = new AboutPage();
@@ -112,6 +113,6 @@ class AboutPageControllerTest {
                         .flashAttr("aboutPageRequest", aboutPageRequest))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.size()", is(2)));
+                .andExpect(jsonPath("$.size()", is(3)));
     }
 }

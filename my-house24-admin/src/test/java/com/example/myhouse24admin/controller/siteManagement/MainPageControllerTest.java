@@ -84,6 +84,7 @@ class MainPageControllerTest {
         MainPageRequest mainPageRequest = new MainPageRequest();
         mainPageRequest.setTitle("title");
         mainPageRequest.setText("text");
+        mainPageRequest.setTextWithoutTags("text");
         mainPageRequest.setShowLinks(true);
         mainPageRequest.setImage1(multipartFile);
         mainPageRequest.setImage2(multipartFile);
@@ -92,6 +93,7 @@ class MainPageControllerTest {
         pageBlockRequest.setId(1L);
         pageBlockRequest.setTitle("title");
         pageBlockRequest.setDescription("description");
+        pageBlockRequest.setDescriptionWithoutTags("description");
         mainPageRequest.setMainPageBlocks(List.of(pageBlockRequest));
 
         MainPage mainPage = new MainPage();
@@ -139,6 +141,6 @@ class MainPageControllerTest {
                         .flashAttr("mainPageRequest", mainPageRequest))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.size()", is(7)));
+                .andExpect(jsonPath("$.size()", is(9)));
     }
 }

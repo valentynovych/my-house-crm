@@ -79,6 +79,7 @@ class ServicesPageControllerTest {
         ServicePageBlockRequest servicePageBlockRequest = new ServicePageBlockRequest();
         servicePageBlockRequest.setTitle("title");
         servicePageBlockRequest.setDescription("description");
+        servicePageBlockRequest.setDescriptionWithoutTags("description");
         servicePageBlockRequest.setImage(multipartFile);
         servicePageBlockRequest.setId(1L);
         servicePageRequest.setServicePageBlocks(List.of(servicePageBlockRequest));
@@ -109,6 +110,6 @@ class ServicesPageControllerTest {
                         .flashAttr("servicePageRequest", servicePageRequest))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.size()", is(2)));
+                .andExpect(jsonPath("$.size()", is(3)));
     }
 }
