@@ -9,8 +9,6 @@ const $selectStaff = $('[name="staffId"]');
 let sheetToRestore;
 
 $inputSheetNumber.prop('disabled', true);
-$inputSheetNumber.on('click', function () {
-    $(this).prop('disabled', true);})
 
 $(document).ready(function () {
     blockCardDody();
@@ -120,6 +118,7 @@ function fillInputs(sheet) {
     $('.button-save').on('click', function () {
         clearAllErrorMessage();
         blockCardDody();
+        trimInputsValue();
 
         let formData = new FormData($('#expense-sheet-form')[0]);
         formData.set("processed", $checkboxIsProcessed.prop('checked'));

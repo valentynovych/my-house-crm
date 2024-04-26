@@ -55,7 +55,7 @@ public class MessageController {
 
     @Operation(
             summary = "Read message by id",
-            description = "Send read message request by id, id - is a path variable, must be positive")
+            description = "Send request for marking message as read, by id, id - is a path variable, must be positive")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200",
                     description = "Success",

@@ -17,8 +17,6 @@ const $inputAmountCleave = new Cleave($inputAmount, {
 });
 
 $inputSheetNumber.prop('disabled', true);
-$inputSheetNumber.on('click', function () {
-    $(this).prop('disabled', true);})
 
 function initInputAndSelect() {
 
@@ -183,6 +181,7 @@ function initInputAndSelect() {
 $('.button-save').on('click', function () {
     clearAllErrorMessage();
     blockCardDody();
+    trimInputsValue();
 
     let formData = new FormData($('#income-sheet-form')[0]);
     formData.set("processed", $checkboxIsProcessed.prop('checked'));

@@ -6,8 +6,6 @@ import java.math.BigDecimal;
 
 public class CashSheetExpenseAddRequest {
     @NotEmpty(message = "{validation-field-required}")
-    private String sheetNumber;
-    @NotEmpty(message = "{validation-field-required}")
     private String creationDate;
     @NotNull(message = "{validation-field-required}")
     @Min(value = 1, message = "{validation-invalid-value}")
@@ -22,14 +20,6 @@ public class CashSheetExpenseAddRequest {
     private Long staffId;
     @Size(max = 1000, message = "{validation-size-max}")
     private String comment;
-
-    public String getSheetNumber() {
-        return sheetNumber;
-    }
-
-    public void setSheetNumber(String sheetNumber) {
-        this.sheetNumber = sheetNumber;
-    }
 
     public String getCreationDate() {
         return creationDate;

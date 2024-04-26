@@ -92,7 +92,6 @@ class CashRegisterServiceImplTest {
     void addNewIncomeSheet() {
         // given
         CashSheetIncomeAddRequest addRequest = new CashSheetIncomeAddRequest();
-        addRequest.setSheetNumber("0000000001");
         addRequest.setComment("comment");
         addRequest.setAmount(BigDecimal.valueOf(100.0));
         addRequest.setCreationDate("2022.01.01");
@@ -103,6 +102,7 @@ class CashRegisterServiceImplTest {
         // when
         when(cashSheetMapper.cashSheetIncomeAddRequestToCashSheet(addRequest))
                 .thenReturn(cashSheet);
+        when(cashSheetRepo.getMaxId()).thenReturn(1L);
         when(cashSheetRepo.save(cashSheet))
                 .thenReturn(cashSheet);
 
@@ -171,7 +171,6 @@ class CashRegisterServiceImplTest {
         // given
         Long sheetId = cashSheet.getId();
         CashSheetIncomeUpdateRequest updateRequest = new CashSheetIncomeUpdateRequest();
-        updateRequest.setSheetNumber("0000000001");
         updateRequest.setComment("comment");
         updateRequest.setAmount(BigDecimal.valueOf(100.0));
         updateRequest.setCreationDate("2022.01.01");
@@ -203,7 +202,6 @@ class CashRegisterServiceImplTest {
         cashSheet.setProcessed(true);
         Long sheetId = 1L;
         CashSheetIncomeUpdateRequest updateRequest = new CashSheetIncomeUpdateRequest();
-        updateRequest.setSheetNumber("0000000001");
         updateRequest.setComment("comment");
         updateRequest.setAmount(BigDecimal.valueOf(100.0));
         updateRequest.setCreationDate("2022.01.01");
@@ -239,7 +237,6 @@ class CashRegisterServiceImplTest {
     void addNewExpenseSheet() {
         // given
         CashSheetExpenseAddRequest addRequest = new CashSheetExpenseAddRequest();
-        addRequest.setSheetNumber("0000000001");
         addRequest.setComment("comment");
         addRequest.setAmount(BigDecimal.valueOf(100.0));
         addRequest.setCreationDate("2022.01.01");
@@ -249,6 +246,7 @@ class CashRegisterServiceImplTest {
         // when
         when(cashSheetMapper.cashSheetExpenseAddRequestToCashSheet(addRequest))
                 .thenReturn(cashSheet);
+        when(cashSheetRepo.getMaxId()).thenReturn(1L);
         when(cashSheetRepo.save(cashSheet))
                 .thenReturn(cashSheet);
 
@@ -265,7 +263,6 @@ class CashRegisterServiceImplTest {
         // given
         Long sheetId = 1L;
         CashSheetExpenseUpdateRequest updateRequest = new CashSheetExpenseUpdateRequest();
-        updateRequest.setSheetNumber("0000000001");
         updateRequest.setComment("comment");
         updateRequest.setAmount(BigDecimal.valueOf(100.0));
         updateRequest.setCreationDate("2022.01.01");

@@ -129,6 +129,7 @@ function fillInputs(staff) {
 $(".button-save").on("click", function () {
     blockCardDody();
     clearAllErrorMessage();
+    trimInputsValue();
 
     let formData = new FormData();
 

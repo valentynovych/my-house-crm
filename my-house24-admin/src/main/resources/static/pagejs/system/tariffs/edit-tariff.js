@@ -105,6 +105,8 @@ function addTariffItem(index, item) {
 function initButtonAndInputs(itemBlock, index, tariffItem) {
     $(itemBlock).find('.delete-item').on('click', deleteTariffItem);
     autosize(document.querySelector('textarea'));
+    new Cleave(itemBlock.find('input[name="tariffRequest.tariffItems[' + index + '].servicePrice"]'),
+        { numeral: true});
 
     let serviceSelect = itemBlock.find('select');
     const itemService = tariffItem.service;
@@ -190,6 +192,9 @@ function addNewTariffItem(index) {
     $service.appendTo('.tariff-items-list');
 
     $service.find('.delete-item').on('click', deleteTariffItem);
+    new Cleave($service.find('input[name="tariffRequest.tariffItems[' + index + '].servicePrice"]'),
+        { numeral: true});
+
     $service.show('');
     let serviceSelect = $service.find('select');
     serviceSelect.select2({
@@ -262,6 +267,7 @@ function reorderServiceIndexes() {
 $('#save-tariff').on('click', function () {
     blockCardDody();
     clearAllErrorMessage();
+    trimInputsValue();
 
     let formData = new FormData($('#tariffForm')[0]);
 

@@ -203,7 +203,6 @@ class CashRegisterControllerTest {
         // given
         var addRequest = new CashSheetIncomeAddRequest();
         addRequest.setAmount(BigDecimal.valueOf(100.0));
-        addRequest.setSheetNumber("00000-00001");
         addRequest.setCreationDate("02.02.2022");
         addRequest.setStaffId(1L);
         addRequest.setPersonalAccountId(1L);
@@ -284,7 +283,6 @@ class CashRegisterControllerTest {
         // given
         var updateRequest = new CashSheetIncomeUpdateRequest();
         updateRequest.setId(1L);
-        updateRequest.setSheetNumber("00000-00001");
         updateRequest.setCreationDate("02.02.2022");
         updateRequest.setOwnerId(1L);
         updateRequest.setPersonalAccountId(1L);
@@ -316,7 +314,6 @@ class CashRegisterControllerTest {
     void addNewExpenseSheet() throws Exception {
         // given
         var addRequest = new CashSheetExpenseAddRequest();
-        addRequest.setSheetNumber("00000-00001");
         addRequest.setCreationDate("02.02.2022");
         addRequest.setPaymentItemId(1L);
         addRequest.setAmount(BigDecimal.valueOf(100.0));
@@ -347,7 +344,6 @@ class CashRegisterControllerTest {
         // given
         var updateRequest = new CashSheetExpenseUpdateRequest();
         updateRequest.setId(1L);
-        updateRequest.setSheetNumber("00000-00001");
         updateRequest.setCreationDate("02.02.2022");
         updateRequest.setPaymentItemId(1L);
         updateRequest.setAmount(BigDecimal.valueOf(100.0));

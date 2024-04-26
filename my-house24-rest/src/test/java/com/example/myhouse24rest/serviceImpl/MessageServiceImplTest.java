@@ -133,13 +133,13 @@ class MessageServiceImplTest {
 
         Page<OwnerMessage> ownerMessagesPage = new PageImpl<>(ownerMessages);
         when(ownerMessageRepo
-                .findOwnerMessagesByApartmentOwner_EmailAndReadFalse("test@example.com", page, pageSize, Pageable.ofSize(pageSize).withPage(page))).thenReturn(ownerMessagesPage);
+                .findOwnerMessagesByApartmentOwner_EmailAndIsReadFalse("test@example.com", Pageable.ofSize(pageSize).withPage(page))).thenReturn(ownerMessagesPage);
 
         Page<MessageResponse> result = messageService.getUnreadMessages(principal, page, pageSize);
 
         assertEquals(5, result.getContent().size());
-        verify(ownerMessageRepo, times(1)).findOwnerMessagesByApartmentOwner_EmailAndReadFalse(
-                "test@example.com", page, pageSize, Pageable.ofSize(pageSize).withPage(page));
+        verify(ownerMessageRepo, times(1)).findOwnerMessagesByApartmentOwner_EmailAndIsReadFalse(
+                "test@example.com", Pageable.ofSize(pageSize).withPage(page));
     }
 
     @Test
