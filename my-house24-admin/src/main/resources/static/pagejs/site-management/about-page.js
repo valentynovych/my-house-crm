@@ -181,6 +181,9 @@ $("#save-button").on("click", function () {
     blockCardDody();
     clearAllErrorMessage();
     let formData = collectData();
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
     sendData(formData);
 });
 

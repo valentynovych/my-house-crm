@@ -13,14 +13,14 @@ public class AboutPageRequest {
     @Size(max = 100,message = "{validation-size-max}")
     private String title;
     @NotBlank(message = "{validation-not-empty}")
-    @Size(max = 4000,message = "{validation-size-max}")
+    @Size(max = 8000,message = "{validation-size-max}")
     private String aboutText;
     @NotBlank(message = "{validation-not-empty}")
     @Size(max = 1500,message = "{validation-size-max}")
     private String aboutTextWithoutTags;
     @Size(max = 100,message = "{validation-size-max}")
     private String additionalTitle;
-    @Size(max = 2000,message = "{validation-size-max}")
+    @Size(max = 4000,message = "{validation-size-max}")
     private String additionalText;
     @Size(max = 700,message = "{validation-size-max}")
     private String additionalTextWithoutTags;
